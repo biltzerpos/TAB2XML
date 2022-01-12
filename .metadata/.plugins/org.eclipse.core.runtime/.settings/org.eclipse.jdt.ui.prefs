@@ -1,0 +1,17 @@
+CustomFiltersActionGroup.org.eclipse.jdt.ui.PackageExplorer.TAG_DUMMY_TO_TEST_EXISTENCE=storedViewPreferences
+content_assist_proposals_background=255,255,255
+content_assist_proposals_foreground=0,0,0
+eclipse.preferences.version=1
+lastRecentlyUsedFilters=org.eclipse.buildship.ui.packageexplorer.filter.gradle.buildfolder,org.eclipse.jdt.ui.PackageExplorer_patternFilterId_.*,
+org.eclipse.buildship.ui.packageexplorer.filter.gradle.subProject=true
+org.eclipse.jdt.internal.ui.PackageExplorer.EmptyInnerPackageFilter=true
+org.eclipse.jdt.internal.ui.PackageExplorer.HideInnerClassFilesFilter=true
+org.eclipse.jdt.ui.PackageExplorer.EmptyLibraryContainerFilter=true
+org.eclipse.jdt.ui.PackageExplorer.ImportDeclarationFilter=true
+org.eclipse.jdt.ui.PackageExplorer.PackageDeclarationFilter=true
+org.eclipse.jdt.ui.PackageExplorer.SyntheticMembersFilter=true
+org.eclipse.jdt.ui.formatterprofiles.version=21
+spelling_locale_initialized=true
+typefilter_migrated_2=true
+useAnnotationsPrefPage=true
+useQuickDiffPrefPage=true

@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+org.eclipse.jdt.launching.PREF_DEFAULT_ENVIRONMENTS_XML=
+org.eclipse.jdt.launching.PREF_VM_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<vmSettings defaultVM\="52,org.eclipse.jdt.internal.launching.macosx.MacOSXType13,1642030448956" defaultVMConnector\="">\n    <vmType id\="org.eclipse.jdt.internal.launching.macosx.MacOSXType">\n        <vm id\="net.java.openjdk.14.0.2.jdk" name\="OpenJDK 14.0.2 [14.0.2]" path\="/Users/anialin/Library/Java/JavaVirtualMachines/adopt-openj9-14.0.2/Contents/Home"/>\n        <vm id\="1642030448956" name\="JRE [17.0.1]" path\="/Users/anialin/.p2/pool/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.macosx.x86_64_17.0.1.v20211116-1657/jre"/>\n    </vmType>\n</vmSettings>\n
