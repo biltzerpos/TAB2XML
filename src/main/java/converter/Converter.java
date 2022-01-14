@@ -20,18 +20,18 @@ public class Converter {
 	}
 	
 	public void update() {
-		dummyMethod();
+		dummyMethod1();
 		score = new Score(mvc.mainText.getText());
 		mxlc = new MusicXMLCreator(score);
 	}
 	
 	public String getMusicXML() {
-		dummyMethod();
+		dummyMethod2();
 		return mxlc.generateMusicXML();
 	}
 	
 	public Score getScore() {
-		dummyMethod();
+		dummyMethod1();
 		return score;
 	}
 	
@@ -39,7 +39,8 @@ public class Converter {
 		return score.validate();
 	}
     public void saveMusicXMLFile(File file) {
-    	dummyMethod();
+    	dummyMethod1();
+    	
         try {
             PrintWriter writer;
             writer = new PrintWriter(file);
@@ -50,7 +51,11 @@ public class Converter {
         }
     }
     
-    private void dummyMethod() {
+    private void dummyMethod1() {
     	System.out.println("Hello World");
+    }
+    
+    private void dummyMethod2() {
+    	System.out.println("Lol");
     }
 }
