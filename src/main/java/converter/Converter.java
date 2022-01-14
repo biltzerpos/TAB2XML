@@ -20,15 +20,18 @@ public class Converter {
 	}
 	
 	public void update() {
+		dummyMethod();
 		score = new Score(mvc.mainText.getText());
 		mxlc = new MusicXMLCreator(score);
 	}
 	
 	public String getMusicXML() {
+		dummyMethod();
 		return mxlc.generateMusicXML();
 	}
 	
 	public Score getScore() {
+		dummyMethod();
 		return score;
 	}
 	
@@ -36,6 +39,7 @@ public class Converter {
 		return score.validate();
 	}
     public void saveMusicXMLFile(File file) {
+    	dummyMethod();
         try {
             PrintWriter writer;
             writer = new PrintWriter(file);
@@ -46,4 +50,7 @@ public class Converter {
         }
     }
     
+    private void dummyMethod() {
+    	System.out.println("Hello");
+    }
 }
