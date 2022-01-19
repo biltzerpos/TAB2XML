@@ -30,6 +30,8 @@ import utility.Settings;
  * 5. Long L.
  * */
 
+// This is a test for push to origin and push branch master.
+
 public class ScoreTest {
 
     @BeforeEach
