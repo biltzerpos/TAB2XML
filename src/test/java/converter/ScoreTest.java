@@ -26,6 +26,7 @@ import utility.Settings;
  * 1. ElmiraO
  * 2. Daniel D.
  * 3. Harjap R.
+ * 4. Irsa N.
  * */
 
 public class ScoreTest {
