@@ -32,6 +32,7 @@ import utility.Settings;
 
 /* This is a test for push to origin and push branch master.
  * This is second test for push to origin and push branch master.
+ * This is third test for push to origin and push branch master.
  */
 
 public class ScoreTest {
