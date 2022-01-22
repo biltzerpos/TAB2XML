@@ -1,5 +1,5 @@
 package converter;
-// lab 2 : conflicts  version 1
+// lab 2 : conflicts  version 3
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
