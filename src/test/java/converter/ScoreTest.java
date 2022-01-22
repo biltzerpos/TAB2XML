@@ -17,18 +17,7 @@ import converter.measure.TabMeasure;
 import converter.note.TabNote;
 import utility.Settings;
 
-/* Practicing for Lab 1: 
- * 1. pull the project
- * 2. add a comment here
- * 3. push it to the repo
- * 
- * I'll go first :)
- * 1. ElmiraO
- * 2. Daniel D.
- * 3. Harjap R.
- * 4. Irsa N.
- * 5. Long L.
- * */
+
 
 
 public class ScoreTest {
