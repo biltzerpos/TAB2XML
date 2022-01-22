@@ -1,9 +1,6 @@
 package converter;
-<<<<<<< HEAD
 // lab 2 : conflicts  version 6
-=======
-// lab 2 : conflicts  version 5
->>>>>>> branch 'master' of https://github.com/ElmiraOn/EECS2311_group6
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
