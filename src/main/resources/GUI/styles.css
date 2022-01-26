@@ -32,7 +32,7 @@
     -fx-background-color: black;
 }
 
-#borderPane, #menuBar, #convertPane, #settingsPane, #timeSignaturePane, #tabPlayerPane {
+#borderPane, #menuBar, #convertPane, #settingsPane, #timeSignaturePane, #tabPlayerPane, #previewMusicPane {
     -fx-background-color: rgb(50,50,50);
 
 }
