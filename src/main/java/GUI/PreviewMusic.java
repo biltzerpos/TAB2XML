@@ -23,4 +23,12 @@ public class PreviewMusic {
     public void setMainViewController(MainViewController mvcInput) {
     	mvc = mvcInput;
     }
+    
+    public void printHandle() {
+    	System.out.println("Print button is clicked");
+    }
+    public void playHandle() {
+    	System.out.println("Play button is clicked");
+    }
+    public void handleGotoMeasure() {}
 }
