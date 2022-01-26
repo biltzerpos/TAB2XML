@@ -314,7 +314,7 @@ public class MainViewController extends Application {
 			root = loader.load();
 			PreviewMusic controller = loader.getController();
 			controller.setMainViewController(this);
-			convertWindow = this.openNewWindow(root, "MusicXML output");
+			convertWindow = this.openNewWindow(root, "Preview Music Sheet");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
