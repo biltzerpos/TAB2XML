@@ -16,14 +16,15 @@
          <children>
             <ScrollPane layoutX="15.0" layoutY="15.0" prefHeight="600.0" prefWidth="898.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="32.0">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
                      <children>
-                        <Canvas height="600.0" width="950.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="32.0" />
-                     </children>
-                  </AnchorPane>
+                        <Canvas AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children></AnchorPane>
               </content>
             </ScrollPane>
-            <AnchorPane layoutX="13.0" prefHeight="32.0" prefWidth="974.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="0.0" />
             <AnchorPane layoutX="12.0" layoutY="614.0" prefHeight="52.0" prefWidth="977.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0">
                <children>
                   <HBox layoutY="11.0" spacing="5.0" AnchorPane.rightAnchor="0.0">
