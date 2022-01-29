@@ -313,6 +313,8 @@ public class MainViewController extends Application {
 			root = loader.load();
 			PreviewMusic controller = loader.getController();
 			controller.setMainViewController(this);
+			// update method in the PreviewMusic.java is activated
+			controller.update();
 			convertWindow = this.openNewWindow(root, "Preview Music Sheet");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
