@@ -55,10 +55,12 @@ public class ParseXmlString {
 			for (int i = 0; i < nodesList1.getLength(); i++) {
 				Node node = nodesList1.item(i);
 
+				
+				//want to put this into an array instead
 				Element element = (Element) node;
 				parsedXML += element.getNodeName() + "\n";
 				
-
+				//want to put this into an array instead
 				String name = element.getAttribute("name");
 				parsedXML += name + "\n";
 				
