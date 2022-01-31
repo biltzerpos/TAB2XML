@@ -11,11 +11,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class PreviewMusic extends Application{
-    private MainViewController mvc;
+    //merge practice 
+	private MainViewController mvc;
     @FXML private AnchorPane anchorPane;
+    @FXML private GridPane grid;
 
 
 
@@ -37,11 +40,17 @@ public class PreviewMusic extends Application{
     	//Next steps, figuring out how to print multiple measures in such way that it fits in the width of the window
     	FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/drawMeasure.fxml"));
 		AnchorPane ms = loader.load();
+		FXMLLoader noteLoader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/MusicNotes/wholeNote.fxml"));
+		AnchorPane note = noteLoader.load();
+		GridPane.setRowIndex(note, 0);
+		GridPane.setColumnIndex(note, 0);
+		grid.getChildren().add(note);
+		
+		
 		anchorPane.getChildren().add( ms);
-		FXMLLoader loader1 = new FXMLLoader(getClass().getClassLoader().getResource("GUI/drawMeasure.fxml"));
-		AnchorPane ms1 = loader1.load();
-		anchorPane.getChildren().add( ms1);
-		ms1.setLayoutX(ms1.getLayoutX()+400);
+		
+		
+		
 		
 		//ends here
 		
