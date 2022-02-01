@@ -14,6 +14,25 @@ public class ParseXmlString {
 
 	}
 
+//GUITAR
+//------
+//
+//	E  |-----------0-----|-0---------------|   (THINNEST STRING)
+//	B  |---------0---0---|-0---------------|
+//	G  |-------1-------1-|-1---------------|
+//	D  |-----2-----------|-2---------------|
+//	A  |---2-------------|-2---------------|
+//	E  |-0---------------|-0---------------|   (THICKEST STRING)
+//
+//	-THE NUMBER INDICATES THE FRET (WHERE ON THE GUITAR)
+//	-USING THE POSITION OF THE NUMBER ON THE SHEET
+//	 	ALONG WITH THE NUMBER ITSELF (THE FRET)
+//		WILL LET YOU KNOW WHERE ON THE GUITAR
+//
+//  -ONLY WAY TO KNOW ON WHICH LINE TO PLACE (OUT OF THE 6 LINES), IS THROUGH THE DATA
+//  -ALIGN FINGER WITH CORRECT STRING
+//  -THEN ALIGN CORRECT FRET 
+
 	public String parse(MainViewController mvc) {
 		String xmlString = mvc.converter.getMusicXML();
 		String parsedXML = "";
@@ -55,15 +74,15 @@ public class ParseXmlString {
 			for (int i = 0; i < nodesList1.getLength(); i++) {
 				Node node = nodesList1.item(i);
 
-				
+
 				//want to put this into an array instead
 				Element element = (Element) node;
 				parsedXML += element.getNodeName() + "\n";
-				
+
 				//want to put this into an array instead
 				String name = element.getAttribute("name");
 				parsedXML += name + "\n";
-				
+
 			}
 
 //			----------------------------------------------------------------------------------------------------------------------------
