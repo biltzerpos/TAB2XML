@@ -40,16 +40,13 @@ public class PreviewMusic extends Application{
     	//Next steps, figuring out how to print multiple measures in such way that it fits in the width of the window
     	FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/drawMeasure.fxml"));
 		AnchorPane ms = loader.load();
-		FXMLLoader noteLoader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/MusicNotes/wholeNote.fxml"));
-		AnchorPane note = noteLoader.load();
-		GridPane.setRowIndex(note, 0);
-		GridPane.setColumnIndex(note, 0);
-		grid.getChildren().add(note);
-		
 		
 		anchorPane.getChildren().add( ms);
 		
+		FXMLLoader noteLoader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/MusicNotes/wholeNote.fxml"));
+		AnchorPane note = noteLoader.load();
 		
+		anchorPane.getChildren().add(note);
 		
 		
 		//ends here
