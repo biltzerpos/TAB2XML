@@ -11,6 +11,10 @@ public class PartList {
     @JacksonXmlElementWrapper(useWrapping = false)
     public List<ScorePart> scoreParts;
 
+    public PartList() {
+    	
+    }
+    
     public PartList(List<ScorePart> scoreParts) {
         this.scoreParts = scoreParts;
     }

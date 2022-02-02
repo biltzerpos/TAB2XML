@@ -16,6 +16,10 @@ public class Part {
     @JacksonXmlProperty(localName = "measure")
     public List<Measure> measures;
 
+    public Part() {
+    	
+    }
+    
     public Part(String id, List<Measure> measures) {
         this.id = id;
         this.measures = measures;
