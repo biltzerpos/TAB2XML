@@ -14,6 +14,10 @@ public class StaffDetails {
     @JacksonXmlElementWrapper(useWrapping = false)
     public List<StaffTuning> staffTuning;
 
+    public StaffDetails() {
+    	
+    }
+    
     public StaffDetails(int staffLines, List<StaffTuning> staffTuning) {
         this.staffLines = staffLines;
         this.staffTuning = staffTuning;
