@@ -38,18 +38,31 @@ public class PreviewMusic extends Application{
     	//the following code is for the checking only and can be removed 
     	// the following prints two measures using the drawMeasure.fxml file
     	//Next steps, figuring out how to print multiple measures in such way that it fits in the width of the window
+    	//Feel free to play around with the code. 
     	FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/drawMeasure.fxml"));
 		AnchorPane ms = loader.load();
-		FXMLLoader noteLoader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/MusicNotes/wholeNote.fxml"));
-		AnchorPane note = noteLoader.load();
-		GridPane.setRowIndex(note, 0);
-		GridPane.setColumnIndex(note, 0);
-		grid.getChildren().add(note);
-		
 		
 		anchorPane.getChildren().add( ms);
 		
+		FXMLLoader noteLoader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/MusicNotes/wholeNote.fxml"));
+		AnchorPane note = noteLoader.load();
 		
+		anchorPane.getChildren().add(note);
+		
+		// for note E 
+		//		----------------------
+		//		 	O
+		//		----------------------
+		//
+		//		----------------------
+		//
+		//		----------------------
+		//
+		//		----------------------
+		//
+		//		----------------------
+		// for note E for example the pseudo code would something like thi:
+		//if (note = 'E'){ anchorPane.addToGrid(whole note, (0, 0))}
 		
 		
 		//ends here
