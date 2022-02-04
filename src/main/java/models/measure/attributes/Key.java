@@ -3,6 +3,10 @@ package models.measure.attributes;
 public class Key {
     public int fifths;
 
+    public Key() {
+    	
+    }
+    
     public Key(int fifths) {
         this.fifths = fifths;
     }

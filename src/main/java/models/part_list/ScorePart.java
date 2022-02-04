@@ -15,16 +15,20 @@ public class ScorePart {
     private String partName;
 
     @JacksonXmlProperty(localName = "score-instrument")
-    @JacksonXmlElementWrapper(useWrapping = false)
+//    @JacksonXmlElementWrapper(useWrapping = false)
     private List<ScoreInstrument> scoreInstruments;
 
     @JacksonXmlProperty(localName = "midi-device")
     private MIDIDevice midiDevice;
     
     @JacksonXmlProperty(localName = "midi-instrument")
-    @JacksonXmlElementWrapper(useWrapping = false)
+//    @JacksonXmlElementWrapper(useWrapping = false)
     private List<MIDIInstrument> midiInstruments;
 
+    public ScorePart() {
+    	
+    }
+    
     public ScorePart(String id, String partName) {
         this.id = id;
         this.partName = partName;

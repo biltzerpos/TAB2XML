@@ -21,6 +21,11 @@ public class MIDIInstrument {
     @JacksonXmlProperty(localName = "pan")
     private int pan = 0;
     
+    
+    public MIDIInstrument() {
+    	
+    }
+    
     public MIDIInstrument(String id, int midiUnpitched) {
         this.id = id;
         this.midiUnpitched = midiUnpitched;
