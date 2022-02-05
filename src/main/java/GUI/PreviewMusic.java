@@ -15,16 +15,22 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PreviewMusic extends Application{
-    //merge practice 1
+   
 	private MainViewController mvc;
-   // @FXML private Canvas canvas;
-	@FXML private Canvas canvas;
+	@FXML private Pane pane;
     
 
 
@@ -69,22 +75,55 @@ public class PreviewMusic extends Application{
 		//		----------------------
 		// for note E for example the pseudo code would something like thi:
 		//if (note = 'E'){ anchorPane.addToGrid(whole note, (0, 0))}
-    	GraphicsContext gc = canvas.getGraphicsContext2D();
-    	drawMeasure(gc);
-		
     	
+    	//drawing 10 lines of music sheet
+    	double y = 0;
+    	for (int i = 0; i < 10; i++)
+    	{
+    		drawMusicLine(y);
+    		y = y+100;
+    	}
+    	
+    	drawNote("0", 100, 55);
+    	drawNote("2", 150, 45);
     	//ends here
     	
 		
     }
-    private void drawMeasure(GraphicsContext gc) {
-		// TODO Auto-generated method stub
-    	// Set stroke color, width, and global transparency
-    	gc.setFill(Color.GREEN);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(5);
-        gc.strokeLine(0, 0, 0, 3000 );
+    private void drawNote(String note, double positionX, double positionY ) {
+    	Text text = new Text(positionX, positionY, note );
+    	Rectangle textBack = new Rectangle(positionX - 2, positionY - 12, 15, 15);
+    	textBack.setFill(Color.WHITE);
+    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
+    	
+    	pane.getChildren().add(textBack);
+    	pane.getChildren().add(text);
+    	
+    }
+    //method that draws one music line at specific  position
+    private void drawMusicLine(double position) {
+    	double y = position;
+    	double lenght = 20.0;
+    	for (int i = 0; i<6; i++) {
+    		double x = 0.0;
+        	
+        	while ( x+lenght <= pane.getMaxWidth()) {
+        		Line l = drawLine(x, y, x+lenght, y);
+        		pane.getChildren().add(l);
+        		x = x + lenght;
+        	}
+        	y = y + 10;
+    	}
+    }
+    //mehtod that draws lines
+    private Line drawLine(double startX, double startY, double endX, double endY ) {
+    	Line line = new Line();
+    	line.setStartX(startX); 
+    	line.setStartY(startY);         
+    	line.setEndX(endX); 
+    	line.setEndY(endY);
         
+    	return line;
         
 	}
 
