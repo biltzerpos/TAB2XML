@@ -86,9 +86,32 @@ public class PreviewMusic extends Application{
     	
     	drawNote("0", 100, 55);
     	drawNote("2", 150, 45);
+    	drawNote("2", 200, 35);
+    	drawNote("1", 250, 25);
+    	drawNote("0", 300, 15);
+    	drawNote("0", 350, 5);
+    	drawNote("0", 400, 15);
+    	drawNote("1", 450, 25);
+    	
+    	drawBar(500, 0);
+    	
     	//ends here
     	
 		
+    }
+    private void drawBar(double positionX, double positionY) {
+    	Line bar1 = new Line();
+    	bar1.setStartX(positionX);
+    	bar1.setStartY(positionY);
+    	bar1.setEndX(positionX);
+    	bar1.setEndY(positionY + 50);
+    	pane.getChildren().add(bar1);
+    	Line bar2 = new Line();
+    	bar2.setStartX(positionX + 5);
+    	bar2.setStartY(positionY);
+    	bar2.setEndX(positionX + 5);
+    	bar2.setEndY(positionY + 50);
+    	pane.getChildren().add(bar2);
     }
     private void drawNote(String note, double positionX, double positionY ) {
     	Text text = new Text(positionX, positionY, note );
