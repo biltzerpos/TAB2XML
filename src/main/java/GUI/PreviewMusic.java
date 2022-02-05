@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import GUI.draw.DrawClef;
 import GUI.draw.DrawMusicLines;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -28,6 +29,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.measure.attributes.Clef;
 
 public class PreviewMusic extends Application{
    
@@ -112,21 +114,14 @@ public class PreviewMusic extends Application{
     		DrawMusicLines d = new DrawMusicLines(pane, y);
     		y = y+100;
     	}
+    	Clef clef = new Clef("TAB", 5);
+    	DrawClef c = new DrawClef(pane, clef);
     	
     	//ends here
     	
     	
     }
-    private void drawClef(String name, double x, double y) {
-		for(int i = 0; i <name.length(); i++) {
-			char c = name.charAt(i);
-			String s = Character.toString(c);
-			Text text = new Text(x, y,  s);
-			text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
-			pane.getChildren().add(text);
-			y += 15;
-		}
-	}
+ 
 
 	private void drawBar(double positionX, double positionY) {
     	Line bar1 = new Line();
