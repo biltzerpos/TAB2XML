@@ -16,12 +16,18 @@ import org.xml.sax.SAXException;
 import java.io.StringReader;
 import java.io.IOException;
 
+import java.util.List;
+import models.measure.Measure;
+
 public class Parser {
 
-	public Parser() {}
+	private List<Measure> measures;
 
-	public ArrayList<String> parse(String xmlString) {
-		ArrayList<String> notes = null;
+	public Parser() {
+		this.measures = new ArrayList<Measure>();
+	}
+
+	public void parse(String xmlString) {
 		try {
 			// Getting the parser ready
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -35,11 +41,11 @@ public class Parser {
 			// Get the measures from the document
 			NodeList measures = root.getElementsByTagName("measure");
 
-			// This will store the output
-			notes = new ArrayList<String>();
-
 			// Iterate through the measures
 			for (int i = 0; i < measures.getLength(); i++) {
+				// Initialize the measure
+				Measure currentMeasure = new Measure();
+				this.measures.add(currentMeasure);
 
 				// Get the first element of the measure
 				Node currentElement = measures.item(i).getFirstChild();
@@ -67,9 +73,6 @@ public class Parser {
 						while (step.getNodeName() != "step") {
 							step = step.getNextSibling();
 						}
-
-						notes.add(step.getFirstChild().getNodeValue());
-
 					}
 
 					// Get the next element in the measure
@@ -86,8 +89,10 @@ public class Parser {
 		} catch (SAXException e) {
 			System.out.println(e);
 		}
+	}
 
-		return notes;
+	public List<Measure> getMeasures() {
+		return this.measures;
 	}
 
 }
