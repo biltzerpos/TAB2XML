@@ -31,6 +31,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.measure.attributes.Clef;
 
+import java.util.List;
+import parser.Parser;
+import converter.Converter;
+
 public class PreviewMusic extends Application{
    
 	private MainViewController mvc;
@@ -107,9 +111,13 @@ public class PreviewMusic extends Application{
     	drawNote("0", 550, 3);
     	
     	drawClef("TAB", 10, 15);*/
-    	
+
+    	Parser parser = new Parser();
+
+    	parser.parse(mvc.converter.getMusicXML());
+
     	double y = 0;
-    	for (int i = 0; i < 10; i++)
+    	for (int i = 0; i < parser.getMeasures().size(); i++)
     	{
     		DrawMusicLines d = new DrawMusicLines(pane, y);
     		y = y+100;
