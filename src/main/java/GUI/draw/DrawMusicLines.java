@@ -7,15 +7,18 @@ import javafx.scene.shape.Line;
 public class DrawMusicLines {
 	@FXML private Pane pane;
 	private double startY;
-	private final double lenght = 20.0;
+	private double startX;
+	private double lenght; 
+	//private final double lenght = 20.0;
 
-	public DrawMusicLines(Pane pane, double position) {
+	public DrawMusicLines(Pane pane, double x, double y, double length) {
 		super();
 		this.pane = pane;
-		this.startY = position;
+		this.startY = y;
+		this.startX = x;
+		this.lenght = length;
     	for (int i = 0; i < 6; i++) {
-    		double x = 0.0;
-        	MLine l = new MLine(x, this.startY, this.pane.getMaxWidth(), this.startY, i+1);
+        	MLine l = new MLine(this.startX, this.startY, this.lenght, this.startY, i+1);
         	Line line = l.getLine();
         	pane.getChildren().add(line);
         	this.startY = this.startY + 10;

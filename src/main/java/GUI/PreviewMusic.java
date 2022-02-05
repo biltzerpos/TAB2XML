@@ -29,6 +29,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.measure.Measure;
 import models.measure.attributes.Clef;
 
 public class PreviewMusic extends Application{
@@ -109,11 +110,11 @@ public class PreviewMusic extends Application{
     	drawClef("TAB", 10, 15);*/
     	
     	double y = 0;
-    	for (int i = 0; i < 10; i++)
-    	{
-    		DrawMusicLines d = new DrawMusicLines(pane, y);
-    		y = y+100;
-    	}
+    	double x = 0;
+    	double lenght = 20; 
+    	DrawMusicLines d = new DrawMusicLines(pane, x,  y, lenght);
+    		//y = y+100;
+    	
     	Clef clef = new Clef("TAB", 5);
     	DrawClef c = new DrawClef(pane, clef);
     	
