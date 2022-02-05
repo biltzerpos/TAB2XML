@@ -84,16 +84,24 @@ public class PreviewMusic extends Application{
     		y = y+100;
     	}
     	
-    	drawNote("0", 100, 55);
-    	drawNote("2", 150, 45);
-    	drawNote("2", 200, 35);
-    	drawNote("1", 250, 25);
-    	drawNote("0", 300, 15);
-    	drawNote("0", 350, 5);
-    	drawNote("0", 400, 15);
-    	drawNote("1", 450, 25);
+    	drawNote("0", 100, 53);
+    	drawNote("2", 150, 43);
+    	drawNote("2", 200, 33);
+    	drawNote("1", 250, 23);
+    	drawNote("0", 300, 13);
+    	drawNote("0", 350, 3);
+    	drawNote("0", 400, 13);
+    	drawNote("1", 450, 23);
     	
     	drawBar(500, 0);
+    	
+    	drawNote("0", 550, 53);
+    	drawNote("2", 550, 43);
+    	drawNote("2", 550, 33);
+    	drawNote("1", 550, 23);
+    	drawNote("0", 550, 13);
+    	drawNote("0", 550, 3);
+    	
     	
     	//ends here
     	
@@ -117,7 +125,7 @@ public class PreviewMusic extends Application{
     	Text text = new Text(positionX, positionY, note );
     	Rectangle textBack = new Rectangle(positionX - 2, positionY - 12, 15, 15);
     	textBack.setFill(Color.WHITE);
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
+    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
     	
     	pane.getChildren().add(textBack);
     	pane.getChildren().add(text);
