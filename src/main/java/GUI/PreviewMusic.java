@@ -2,7 +2,9 @@ package GUI;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import GUI.draw.DrawMusicLines;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -77,7 +79,7 @@ public class PreviewMusic extends Application{
 		//if (note = 'E'){ anchorPane.addToGrid(whole note, (0, 0))}
     	
     	//drawing 10 lines of music sheet
-    	double y = 0;
+    	/*double y = 0;
     	for (int i = 0; i < 10; i++)
     	{
     		drawMusicLine(y);
@@ -102,12 +104,31 @@ public class PreviewMusic extends Application{
     	drawNote("0", 550, 13);
     	drawNote("0", 550, 3);
     	
+    	drawClef("TAB", 10, 15);*/
+    	
+    	double y = 0;
+    	for (int i = 0; i < 10; i++)
+    	{
+    		DrawMusicLines d = new DrawMusicLines(pane, y);
+    		y = y+100;
+    	}
     	
     	//ends here
     	
-		
+    	
     }
-    private void drawBar(double positionX, double positionY) {
+    private void drawClef(String name, double x, double y) {
+		for(int i = 0; i <name.length(); i++) {
+			char c = name.charAt(i);
+			String s = Character.toString(c);
+			Text text = new Text(x, y,  s);
+			text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+			pane.getChildren().add(text);
+			y += 15;
+		}
+	}
+
+	private void drawBar(double positionX, double positionY) {
     	Line bar1 = new Line();
     	bar1.setStartX(positionX);
     	bar1.setStartY(positionY);
@@ -131,32 +152,7 @@ public class PreviewMusic extends Application{
     	pane.getChildren().add(text);
     	
     }
-    //method that draws one music line at specific  position
-    private void drawMusicLine(double position) {
-    	double y = position;
-    	double lenght = 20.0;
-    	for (int i = 0; i<6; i++) {
-    		double x = 0.0;
-        	
-        	while ( x+lenght <= pane.getMaxWidth()) {
-        		Line l = drawLine(x, y, x+lenght, y);
-        		pane.getChildren().add(l);
-        		x = x + lenght;
-        	}
-        	y = y + 10;
-    	}
-    }
-    //mehtod that draws lines
-    private Line drawLine(double startX, double startY, double endX, double endY ) {
-    	Line line = new Line();
-    	line.setStartX(startX); 
-    	line.setStartY(startY);         
-    	line.setEndX(endX); 
-    	line.setEndY(endY);
-        
-    	return line;
-        
-	}
+
 
 	public void printHandle() {
     	System.out.println("Print button is clicked");
