@@ -1,35 +1,19 @@
 package GUI;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
-
 import GUI.draw.DrawClef;
 import GUI.draw.DrawMusicLines;
 import javafx.application.Application;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import models.measure.Measure;
 import models.measure.attributes.Clef;
 
 public class PreviewMusic extends Application{
@@ -82,13 +66,8 @@ public class PreviewMusic extends Application{
 		//if (note = 'E'){ anchorPane.addToGrid(whole note, (0, 0))}
     	
     	//drawing 10 lines of music sheet
-    	/*double y = 0;
-    	for (int i = 0; i < 10; i++)
-    	{
-    		drawMusicLine(y);
-    		y = y+100;
-    	}
     	
+    	new DrawMusicLines(pane, 0, 0);
     	drawNote("0", 100, 53);
     	drawNote("2", 150, 43);
     	drawNote("2", 200, 33);
@@ -106,14 +85,8 @@ public class PreviewMusic extends Application{
     	drawNote("1", 550, 23);
     	drawNote("0", 550, 13);
     	drawNote("0", 550, 3);
-    	
-    	drawClef("TAB", 10, 15);*/
-    	
-    	double y = 0;
-    	double x = 0;
-    	double lenght = 20; 
-    	DrawMusicLines d = new DrawMusicLines(pane, x,  y, lenght);
-    		//y = y+100;
+    	drawBar(600, 0);
+    	new DrawMusicLines(pane, 600, 0);
     	
     	Clef clef = new Clef("TAB", 5);
     	DrawClef c = new DrawClef(pane, clef);
@@ -131,12 +104,7 @@ public class PreviewMusic extends Application{
     	bar1.setEndX(positionX);
     	bar1.setEndY(positionY + 50);
     	pane.getChildren().add(bar1);
-    	Line bar2 = new Line();
-    	bar2.setStartX(positionX + 5);
-    	bar2.setStartY(positionY);
-    	bar2.setEndX(positionX + 5);
-    	bar2.setEndY(positionY + 50);
-    	pane.getChildren().add(bar2);
+    	
     }
     private void drawNote(String note, double positionX, double positionY ) {
     	Text text = new Text(positionX, positionY, note );
