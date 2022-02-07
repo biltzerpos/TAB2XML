@@ -129,7 +129,7 @@ public class PreviewMusic extends Application{
     	new DrawMusicLines(pane, 600, 0);
     	
 
-    	drawClef("TAB", 10, 15);
+    	//drawClef("TAB", 10, 15);
 
     	Parser parser = new Parser();
 
@@ -171,10 +171,9 @@ public class PreviewMusic extends Application{
     	double y = 0;
     	for (int i = 0; i < parser.getMeasures().size(); i++)
     	{
-    		DrawMusicLines d = new DrawMusicLines(pane, y);
+    		DrawMusicLines d = new DrawMusicLines(pane,0, y);
     		y = y+100;
     	}
->>>>>>> refs/heads/develop_group06
     	Clef clef = new Clef("TAB", 5);
     	DrawClef c = new DrawClef(pane, clef);
     	
