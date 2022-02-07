@@ -1,5 +1,9 @@
 .DS_Store
+
 build.gradle
+.classpath
+/.settings/org.eclipse.buildship.core.prefs
+
 # Ignore Gradle project-specific cache directory
 .gradle
 
@@ -8,5 +12,4 @@ build
 /bin/.gitignore
 /lib/.project
 /.settings/org.eclipse.jdt.core.prefs
-.classpath
-/.settings/org.eclipse.buildship.core.prefs
+
