@@ -9,15 +9,8 @@ import java.util.logging.Logger;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawMusicLines;
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.print.PageLayout;
-import javafx.print.PageOrientation;
-import javafx.print.Paper;
-import javafx.print.Printer;
-import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -209,29 +202,11 @@ public class PreviewMusic extends Application{
     	
     }
 
-    @FXML
-    private Button printButton;
-    
-    final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
-    
-    @FXML
-    public <printButtonPressed> void printHandle() {
-    	printButton.setOnAction( aEvent -> {
-    	    printButtonPressed.set(true);
-    	});
+
+	public void printHandle() {
+    	System.out.println("Print button is clicked");
     	
-    	Printer printer = Printer.getDefaultPrinter();
-        PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
-        PrinterJob printSheet = PrinterJob.createPrinterJob();
-       
-        if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
-          boolean printed = printSheet.printPage(layout, pane);
-          if (printed) {
-        	  printSheet.endJob();
-          }
-        }
     }
-	
 	@FXML
     public void playHandle() {
     	Parent root;
