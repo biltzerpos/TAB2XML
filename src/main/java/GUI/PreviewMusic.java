@@ -35,6 +35,12 @@ import java.util.List;
 import parser.Parser;
 import converter.Converter;
 
+import models.measure.Measure;
+import models.measure.note.Note;
+import models.measure.note.Pitch;
+import models.measure.note.notations.Notations;
+import models.measure.note.notations.technical.Technical;
+
 public class PreviewMusic extends Application{
    
 	private MainViewController mvc;
@@ -115,6 +121,39 @@ public class PreviewMusic extends Application{
     	Parser parser = new Parser();
 
     	parser.parse(mvc.converter.getMusicXML());
+
+    	/*
+    	 * EXAMPLE FOR ACCESSING ELEMENTS FROM MEASURE
+    	 * 
+    	 * This will print out the structure of the measures in the console.
+    	 * Note that if a more complex tablature is used, the complex elements will not be parsed.
+    	 */
+    	System.out.println("Root:");
+    	for (int i1 = 0; i1 < parser.getMeasures().size(); i1++) {
+    		Measure measure = parser.getMeasures().get(i1);
+			System.out.println("\tMeasure " + i1 + ":");
+
+    		for (int i2 = 0; i2 < measure.getNotesBeforeBackup().size(); i2++) {
+    			Note note = measure.getNotesBeforeBackup().get(i2);
+    			System.out.println("\t\tNote " + i2 + ":");
+
+    			System.out.println("\t\t\tPitch:");
+    			System.out.println("\t\t\t\tStep: " + note.getPitch().getStep());
+    			System.out.println("\t\t\t\tAlter: " + note.getPitch().getAlter());
+    			System.out.println("\t\t\t\tOctave: " + note.getPitch().getOctave());
+
+    			System.out.println("\t\t\tDuration: " + note.getDuration());
+
+    			System.out.println("\t\t\tVoice: " + note.getVoice());
+
+    			System.out.println("\t\t\tType: " + note.getType());
+
+    			System.out.println("\t\t\tNotations:");
+    			System.out.println("\t\t\t\tTechnical:");
+    			System.out.println("\t\t\t\t\tString: " + note.getNotations().getTechnical().getString());
+    			System.out.println("\t\t\t\t\tFret: " + note.getNotations().getTechnical().getFret());
+    		}
+    	}
 
     	double y = 0;
     	for (int i = 0; i < parser.getMeasures().size(); i++)
