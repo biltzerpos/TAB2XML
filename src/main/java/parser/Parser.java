@@ -18,6 +18,10 @@ import java.io.IOException;
 
 import java.util.List;
 import models.measure.Measure;
+import models.measure.note.Note;
+import models.measure.note.Pitch;
+import models.measure.note.notations.Notations;
+import models.measure.note.notations.technical.Technical;
 
 public class Parser {
 
@@ -25,6 +29,70 @@ public class Parser {
 
 	public Parser() {
 		this.measures = new ArrayList<Measure>();
+	}
+
+	private Technical getTechnicalFromTechnicalNode(Node technicalNode) {
+		Element technicalElement = (Element) technicalNode;
+
+		Technical technical = new Technical();
+
+		technical.setString(Integer.parseInt(technicalElement.getElementsByTagName("string").item(0).getFirstChild().getNodeValue()));
+		technical.setFret(Integer.parseInt(technicalElement.getElementsByTagName("fret").item(0).getFirstChild().getNodeValue()));
+
+		return technical;
+	}
+
+	private Notations getNotationsFromNotationsNode(Node notationsNode) {
+		Element notationsElement = (Element) notationsNode;
+
+		Notations notations = new Notations();
+
+		notations.setTechnical(getTechnicalFromTechnicalNode(notationsElement.getElementsByTagName("technical").item(0)));
+
+		return notations;
+	}
+
+	private Pitch getPitchFromPitchNode(Node pitchNode) {
+		Element pitchElement = (Element) pitchNode;
+
+		Pitch pitch = new Pitch(
+			pitchElement.getElementsByTagName("step").item(0).getFirstChild().getNodeValue(),
+			Integer.parseInt(
+				pitchElement.getElementsByTagName("alter").item(0) != null
+				? pitchElement.getElementsByTagName("alter").item(0).getFirstChild().getNodeValue()
+				: "0"
+			),
+			Integer.parseInt(pitchElement.getElementsByTagName("octave").item(0).getFirstChild().getNodeValue())
+		);
+
+		return pitch;
+	}
+
+	private Note getNoteFromNoteNode(Node noteNode) {
+		Element noteElement = (Element) noteNode;
+
+		Note note = new Note();
+
+		note.setPitch(getPitchFromPitchNode(noteElement.getElementsByTagName("pitch").item(0)));
+		note.setDuration(Integer.parseInt(noteElement.getElementsByTagName("duration").item(0).getFirstChild().getNodeValue()));
+		note.setVoice(Integer.parseInt(noteElement.getElementsByTagName("voice").item(0).getFirstChild().getNodeValue()));
+		note.setType(noteElement.getElementsByTagName("type").item(0).getFirstChild().getNodeValue());
+		note.setNotations(getNotationsFromNotationsNode(noteElement.getElementsByTagName("notations").item(0)));
+
+		return note;
+	}
+
+	private List<Note> getNotesFromMeasureNode(Node measureNode) {
+		Element measureElement = (Element) measureNode;
+		NodeList noteNodeList = measureElement.getElementsByTagName("note");
+
+		List<Note> notes = new ArrayList<>();
+
+		for (int i = 0; i < noteNodeList.getLength(); i++) {
+			notes.add(getNoteFromNoteNode(noteNodeList.item(i)));
+		}
+
+		return notes;
 	}
 
 	public void parse(String xmlString) {
@@ -39,48 +107,18 @@ public class Parser {
 			Element root = dom.getDocumentElement();
 
 			// Get the measures from the document
-			NodeList measures = root.getElementsByTagName("measure");
+			NodeList measureNodeList = root.getElementsByTagName("measure");
 
 			// Iterate through the measures
-			for (int i = 0; i < measures.getLength(); i++) {
+			for (int i = 0; i < measureNodeList.getLength(); i++) {
 				// Initialize the measure
-				Measure currentMeasure = new Measure();
-				this.measures.add(currentMeasure);
-
-				// Get the first element of the measure
-				Node currentElement = measures.item(i).getFirstChild();
-
-				// --- Iterate through the elements of the measure ---
-				// We iterate goes in order of the document (top to bottom),
-				// so if the current element is null, then we reached the bottom of the document.
-				while (currentElement != null) {
-
-					// We only care about elements that are notes
-					if (currentElement.getNodeName() == "note") {
-
-						// --- Find the pitch of the note ---
-						// Each note element has a pitch element.
-						// We iterate through the note element to find this pitch element.
-						Node pitch = currentElement.getFirstChild();
-						while (pitch.getNodeName() != "pitch") {
-							pitch = pitch.getNextSibling();
-						}
-
-						// --- Find the step of the pitch ---
-						// Each pitch element has a step element.
-						// We iterate through the pitch element to find this step element.
-						Node step = pitch.getFirstChild();
-						while (step.getNodeName() != "step") {
-							step = step.getNextSibling();
-						}
-					}
-
-					// Get the next element in the measure
-					currentElement = currentElement.getNextSibling();
-				}
+				this.measures.add(new Measure());
+				this.measures.get(i).setNotesBeforeBackup(getNotesFromMeasureNode(measureNodeList.item(i)));
 			}
+		}
+
 		// Errors associated with the parser
-		} catch (FactoryConfigurationError e) {
+		catch (FactoryConfigurationError e) {
 			System.out.println(e);
 		} catch (ParserConfigurationException e) {
 			System.out.println(e);
