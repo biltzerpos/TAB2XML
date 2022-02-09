@@ -11,6 +11,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import GUI.MainViewController;
 import models.ScorePartwise;
 
+import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.player.Player;
+import org.staccato.StaccatoParserListener;
 import org.w3c.dom.*;
 import java.io.*;
 
@@ -162,6 +165,24 @@ public class ParseXmlString {
 //	 	objMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		return this.parsedString;
 	}
+	
+	public void playMusic() {
+		try {
+			MusicXmlParser parser = new MusicXmlParser();
+			StaccatoParserListener listener = new StaccatoParserListener();
+			parser.addParserListener(listener);
 
+			parser.parse(xmlString);;
+
+			System.out.println("after parser");
+			Player player = new Player();
+			org.jfugue.pattern.Pattern musicXmlPattern = listener.getPattern().setTempo(400).setInstrument("Guitar");
+			
+			System.out.println("starting to play music");
+			player.play(musicXmlPattern);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}	
+	}
 
 }
