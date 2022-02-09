@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+import custom_exceptions.TXMLException;
+import nu.xom.ParsingException;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -42,6 +44,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import utility.Range;
 import utility.Settings;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class MainViewController extends Application {
 	
@@ -317,6 +321,8 @@ public class MainViewController extends Application {
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
+		} catch (TXMLException e) {
+			e.printStackTrace();
 		}
 	}
 
