@@ -44,6 +44,7 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 import javafx.stage.Stage;
 import models.measure.attributes.Clef;
+import models.measure.barline.BarLine;
 
 import java.util.List;
 import parser.Parser;
@@ -60,7 +61,9 @@ public class PreviewMusic extends Application{
 	private MainViewController mvc;
 	@FXML private Pane pane;
 	public Window convertWindow;
-    
+    @FXML
+    private Button printButton;
+    final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
 
 
 	public PreviewMusic() {}
@@ -76,125 +79,48 @@ public class PreviewMusic extends Application{
     // We can use this method to update the music sheet
     public void update() throws IOException
     {
-    	//the following code is for the checking only and can be removed 
-    	// the following prints two measures using the drawMeasure.fxml file
-    	//Next steps, figuring out how to print multiple measures in such way that it fits in the width of the window
-    	//Feel free to play around with the code. 
-    	/*FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/drawMeasure.fxml"));
-		AnchorPane ms = loader.load();
-		
-		anchorPane.getChildren().add( ms);
-		
-		FXMLLoader noteLoader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/MusicNotes/wholeNote.fxml"));
-		AnchorPane note = noteLoader.load();
-		
-		anchorPane.getChildren().add(note);*/
-		
-		// for note E 
-		//		----------------------
-		//		 	O
-		//		----------------------
-		//
-		//		----------------------
-		//
-		//		----------------------
-		//
-		//		----------------------
-		//
-		//		----------------------
-		// for note E for example the pseudo code would something like thi:
-		//if (note = 'E'){ anchorPane.addToGrid(whole note, (0, 0))}
-    	
-    	//drawing 10 lines of music sheet
-    	
-    	new DrawMusicLines(pane, 0, 0);
-    	drawNote("0", 100, 53);
-    	drawNote("2", 150, 43);
-    	drawNote("2", 200, 33);
-    	drawNote("1", 250, 23);
-    	drawNote("0", 300, 13);
-    	drawNote("0", 350, 3);
-    	drawNote("0", 400, 13);
-    	drawNote("1", 450, 23);
-    	
-    	drawBar(500, 0);
-    	
-    	drawNote("0", 550, 53);
-    	drawNote("2", 550, 43);
-    	drawNote("2", 550, 33);
-    	drawNote("1", 550, 23);
-    	drawNote("0", 550, 13);
-    	drawNote("0", 550, 3);
-    	drawBar(600, 0);
-    	new DrawMusicLines(pane, 600, 0);
-    	
-
-    	//drawClef("TAB", 10, 15);
-
     	Parser parser = new Parser();
-
     	parser.parse(mvc.converter.getMusicXML());
-
-    	/*
-    	 * EXAMPLE FOR ACCESSING ELEMENTS FROM MEASURE
-    	 * 
-    	 * This will print out the structure of the measures in the console.
-    	 * Note that if a more complex tablature is used, the complex elements will not be parsed.
-    	 */
-    	System.out.println("Root:");
-    	for (int i1 = 0; i1 < parser.getMeasures().size(); i1++) {
-    		Measure measure = parser.getMeasures().get(i1);
-			System.out.println("\tMeasure " + i1 + ":");
-
-    		for (int i2 = 0; i2 < measure.getNotesBeforeBackup().size(); i2++) {
-    			Note note = measure.getNotesBeforeBackup().get(i2);
-    			System.out.println("\t\tNote " + i2 + ":");
-
-    			System.out.println("\t\t\tPitch:");
-    			System.out.println("\t\t\t\tStep: " + note.getPitch().getStep());
-    			System.out.println("\t\t\t\tAlter: " + note.getPitch().getAlter());
-    			System.out.println("\t\t\t\tOctave: " + note.getPitch().getOctave());
-
-    			System.out.println("\t\t\tDuration: " + note.getDuration());
-
-    			System.out.println("\t\t\tVoice: " + note.getVoice());
-
-    			System.out.println("\t\t\tType: " + note.getType());
-
-    			System.out.println("\t\t\tNotations:");
-    			System.out.println("\t\t\t\tTechnical:");
-    			System.out.println("\t\t\t\t\tString: " + note.getNotations().getTechnical().getString());
-    			System.out.println("\t\t\t\t\tFret: " + note.getNotations().getTechnical().getFret());
-    		}
-    	}
-
-    	double y = 0;
-    	for (int i = 0; i < parser.getMeasures().size(); i++)
+    	List<Measure> measureList = parser.getMeasures();
+    	double x = 0; 
+    	double y = 0; 
+    	for (int i = 0; i< measureList.size(); i++)
     	{
-    		DrawMusicLines d = new DrawMusicLines(pane,0, y);
-    		y = y+100;
+    		Measure measure = measureList.get(i);
+    		List<Note> noteList = measure.getNotesBeforeBackup();
+    		
+    		for (int j = 0; j < noteList.size(); j++)
+    		{
+    			Note note = noteList.get(j);
+    			DrawMusicLines d = new DrawMusicLines(pane, x, y);
+    			int string = note.getNotations().getTechnical().getString();
+    			int fret = note.getNotations().getTechnical().getFret();
+    			d.draw();
+    			x += 50;
+            	double positionX =  d.getMusicLineList().get(string-1).getStartX(string-1);
+            	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
+            	drawNote(Integer.toString(fret), positionX+25, positionY+3);
+            	
+        		
+        	}		
     	}
-    	Clef clef = new Clef("TAB", 5);
-    	DrawClef c = new DrawClef(pane, clef);
-    	
-    	//ends here
-    	
     	
     }
  
 
-	private void drawBar(double positionX, double positionY) {
+
+	private void drawBar() {
     	Line bar1 = new Line();
-    	bar1.setStartX(positionX);
-    	bar1.setStartY(positionY);
-    	bar1.setEndX(positionX);
-    	bar1.setEndY(positionY + 50);
+    	//bar1.setStartX(positionX);
+    	//bar1.setStartY(positionY);
+    	//bar1.setEndX(positionX);
+    	//bar1.setEndY(positionY + 50);
     	pane.getChildren().add(bar1);
     	
     }
     private void drawNote(String note, double positionX, double positionY ) {
     	Text text = new Text(positionX, positionY, note );
-    	Rectangle textBack = new Rectangle(positionX - 2, positionY - 12, 15, 15);
+    	Rectangle textBack = new Rectangle(positionX -3, positionY - 12, 15, 15);
     	textBack.setFill(Color.WHITE);
     	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
     	
@@ -203,10 +129,6 @@ public class PreviewMusic extends Application{
     	
     }
 
-    @FXML
-    private Button printButton;
-    
-    final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
     
     @FXML
     public <printButtonPressed> void printHandle() {
