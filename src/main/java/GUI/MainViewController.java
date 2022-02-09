@@ -15,9 +15,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
+import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.player.Player;
+import org.staccato.StaccatoParserListener;
 
 import converter.Converter;
 import converter.measure.TabMeasure;
@@ -40,6 +45,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
 
@@ -67,6 +74,7 @@ public class MainViewController extends Application {
 	@FXML  Button saveMXLButton;
 	@FXML  Button showMXLButton;
 	@FXML  Button previewButton;
+	@FXML  Button playMusicButton;
 	@FXML  Button goToline;
 	@FXML  ComboBox<String> cmbScoreType;
 
@@ -81,7 +89,7 @@ public class MainViewController extends Application {
 		s.errorSensitivity = Integer.parseInt(prefs.get("errorSensitivity", "4"));
 	}
 
-	@FXML 
+	@FXML
 	public void initialize() {
 		mainText.setParagraphGraphicFactory(LineNumberFactory.get(mainText));
 		converter = new Converter(this);
@@ -324,6 +332,48 @@ public class MainViewController extends Application {
 
 	}
 
+	@FXML
+	private void playMusicButtonHandle() throws ValidityException, ParsingException, ParserConfigurationException {
+		Parent root;
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/playMusic.fxml"));
+			root = loader.load();
+			PlayMusicController controller = loader.getController();
+			controller.setMainViewController(this);
+
+			//----------------------------------------------------------------------------------------------------------
+			MusicXmlParser parser = new MusicXmlParser();
+			StaccatoParserListener listener = new StaccatoParserListener();
+			parser.addParserListener(listener);
+
+			parser.parse(converter.getMusicXML());
+
+			org.jfugue.pattern.Pattern musicXmlPattern = null;
+			if(converter.getMusicXML().contains("Guitar")) {
+				System.out.println("before contains Guitar");
+				 musicXmlPattern = listener.getPattern().setTempo(400).setInstrument("Guitar");
+			}
+			else if(converter.getMusicXML().contains("Drumset")) {
+				System.out.println("before contains Drumset");
+				 musicXmlPattern = listener.getPattern().setTempo(400).setInstrument(STYLESHEET_MODENA);
+			}
+
+			System.out.println("after parser");
+			Player player = new Player();
+
+
+			System.out.println("starting to play music");
+			player.play(musicXmlPattern);
+			//----------------------------------------------------------------------------------------------------------
+
+
+//			convertWindow = this.openNewWindow(root, "Play Music");
+		} catch (IOException e) {
+			Logger logger = Logger.getLogger(getClass().getName());
+			logger.log(Level.SEVERE, "Failed to create new Window.", e);
+		}
+	}
+
 	public void refresh() {
 		mainText.replaceText(new IndexRange(0, mainText.getText().length()), mainText.getText()+" ");
 	}
@@ -351,7 +401,7 @@ public class MainViewController extends Application {
 	}
 
 	public void listenforTextAreaChanges() {
-		//Subscription cleanupWhenDone = 
+		//Subscription cleanupWhenDone =
 		mainText.multiPlainChanges()
 		.successionEnds(Duration.ofMillis(350))
 		.supplyTask(this::update)
@@ -379,12 +429,14 @@ public class MainViewController extends Application {
 					saveMXLButton.setDisable(true);
 					previewButton.setDisable(true);
 					showMXLButton.setDisable(true);
+					playMusicButton.setDisable(true);
 				}
 				else
 				{
 					saveMXLButton.setDisable(false);
 					previewButton.setDisable(false);
 					showMXLButton.setDisable(false);
+					playMusicButton.setDisable(false);
 				}
 				return highlighter.computeHighlighting(text);
 			}

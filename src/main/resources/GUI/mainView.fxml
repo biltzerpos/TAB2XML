@@ -48,8 +48,9 @@
                      <children>
                         <Button fx:id="showMXLButton" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#showMXLButtonHandle" text="Show MusicXML" />
                         <Button fx:id="saveMXLButton" alignment="CENTER_RIGHT" disable="true" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" onAction="#saveMXLButtonHandle" text="Save MusicXML" />
-                              <Button fx:id="saveTabButton" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#saveTabButtonHandle" text="Save Tablature" />
+                            <Button fx:id="saveTabButton" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#saveTabButtonHandle" text="Save Tablature" />
                         <Button fx:id="previewButton" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#previewButtonHandle" text="Preview Sheet Music" />
+                        <Button fx:id="playMusicButton" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#playMusicButtonHandle" text="Play Music" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
