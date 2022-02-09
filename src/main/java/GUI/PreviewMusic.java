@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-import GUI.draw.DrawClef;
+import GUI.draw.DrawBar;
 import GUI.draw.DrawMusicLines;
+import GUI.draw.DrawNote;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,41 +20,17 @@ import javafx.print.PageOrientation;
 import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 import javafx.stage.Stage;
-import models.measure.attributes.Clef;
-import models.measure.barline.BarLine;
-
-import java.util.List;
 import parser.Parser;
-import converter.Converter;
-
 import models.measure.Measure;
 import models.measure.note.Note;
-import models.measure.note.Pitch;
-import models.measure.note.notations.Notations;
-import models.measure.note.notations.technical.Technical;
 
 public class PreviewMusic extends Application{
    
@@ -79,14 +55,18 @@ public class PreviewMusic extends Application{
     // We can use this method to update the music sheet
     public void update() throws IOException
     {
+    	//initialize parser
     	Parser parser = new Parser();
     	parser.parse(mvc.converter.getMusicXML());
+    	//get the list of measure from parser
     	List<Measure> measureList = parser.getMeasures();
+    	//set initial positions
     	double x = 0; 
     	double y = 0; 
     	for (int i = 0; i< measureList.size(); i++)
     	{
     		Measure measure = measureList.get(i);
+    		// get the list of notes for each measure
     		List<Note> noteList = measure.getNotesBeforeBackup();
     		
     		for (int j = 0; j < noteList.size(); j++)
@@ -94,41 +74,20 @@ public class PreviewMusic extends Application{
     			Note note = noteList.get(j);
     			DrawMusicLines d = new DrawMusicLines(pane, x, y);
     			int string = note.getNotations().getTechnical().getString();
-    			int fret = note.getNotations().getTechnical().getFret();
     			d.draw();
     			x += 50;
             	double positionX =  d.getMusicLineList().get(string-1).getStartX(string-1);
             	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
-            	drawNote(Integer.toString(fret), positionX+25, positionY+3);
-            	
+            	DrawNote noteDrawer = new DrawNote(pane, note, positionX+25, positionY+3 );
+            	noteDrawer.draw();
         		
         	}		
+    		//draw a simple bar at end of each measure
+    		DrawBar barDrawer = new DrawBar(pane, x, y);
+    		barDrawer.draw();
     	}
     	
     }
- 
-
-
-	private void drawBar() {
-    	Line bar1 = new Line();
-    	//bar1.setStartX(positionX);
-    	//bar1.setStartY(positionY);
-    	//bar1.setEndX(positionX);
-    	//bar1.setEndY(positionY + 50);
-    	pane.getChildren().add(bar1);
-    	
-    }
-    private void drawNote(String note, double positionX, double positionY ) {
-    	Text text = new Text(positionX, positionY, note );
-    	Rectangle textBack = new Rectangle(positionX -3, positionY - 12, 15, 15);
-    	textBack.setFill(Color.WHITE);
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
-    	
-    	pane.getChildren().add(textBack);
-    	pane.getChildren().add(text);
-    	
-    }
-
     
     @FXML
     public <printButtonPressed> void printHandle() {
