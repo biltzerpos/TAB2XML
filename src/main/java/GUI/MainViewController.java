@@ -350,20 +350,21 @@ public class MainViewController extends Application {
 
 			org.jfugue.pattern.Pattern musicXmlPattern = null;
 			if(converter.getMusicXML().contains("Guitar")) {
-				System.out.println("before contains Guitar");
+				System.out.println("before contains Guitar.");
 				 musicXmlPattern = listener.getPattern().setTempo(400).setInstrument("Guitar");
 			}
-			else if(converter.getMusicXML().contains("Drumset")) {
+			else if(converter.getMusicXML().contains("Drumset.")) {
 				System.out.println("before contains Drumset");
 				 musicXmlPattern = listener.getPattern().setTempo(400).setInstrument(STYLESHEET_MODENA);
 			}
 
-			System.out.println("after parser");
+			System.out.println("after parser..");
 			Player player = new Player();
 
 
-			System.out.println("starting to play music");
+			System.out.println("starting to play music...");
 			player.play(musicXmlPattern);
+			System.out.println("Done playing music");
 			//----------------------------------------------------------------------------------------------------------
 
 
