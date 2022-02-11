@@ -368,9 +368,9 @@ public class MainViewController extends Application {
 			}
 			else if (Settings.getInstance().getInstrument() == Instrument.GUITAR) {
 				ShortMessage sm = new ShortMessage();
-				sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 42, 0);
+				sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 24, 0);
 				track.add(new MidiEvent(sm, 1));
-				System.out.println(track.size());
+				System.out.println("Size of track: " + track.size());
 			}
 			sequencer.setSequence(sequence);
 			sequencer.start();
