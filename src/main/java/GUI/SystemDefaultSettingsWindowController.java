@@ -24,7 +24,7 @@ public class SystemDefaultSettingsWindowController extends Application {
 	public SystemDefaultSettingsWindowController() {
 		prefs = Preferences.userRoot();
 	}
-	
+
 	public void setMainViewController(MainViewController mvcInput) {
 		mvc = mvcInput;
 	}
@@ -35,26 +35,26 @@ public class SystemDefaultSettingsWindowController extends Application {
 		inputFolderField.setText(inputFolder);
 		String outputFolder = prefs.get("outputFolder", System.getProperty("user.home"));
 		outputFolderField.setText(outputFolder);
-		
+
 		cmbErrorSensitivity.getItems().removeAll(cmbErrorSensitivity.getItems());
 		cmbErrorSensitivity.getItems().addAll("Level 1 - Minimal Error Checking", "Level 2 - Standard Error Checking", "Level 3 - Advanced Error Checking", "Level 4 - Detailed Error Checking");
 		String errStr = prefs.get("errorSensitivity", "2");
 		int err = Integer.parseInt(errStr);
 		cmbErrorSensitivity.getSelectionModel().select(err - 1);
-		
+
 		cmbNumerator.getItems().removeAll(cmbNumerator.getItems());
 		for (int i =1; i<=16; i++) cmbNumerator.getItems().add(i + "");
 		String tsNumStr = prefs.get("tsNum", "4");
 		int tsNum = Integer.parseInt(tsNumStr);
 		cmbNumerator.getSelectionModel().select(tsNum + "");
-		
+
 		cmbDenominator.getItems().removeAll(cmbDenominator.getItems());
 		cmbDenominator.getItems().addAll("2", "4", "8", "16", "32");
 		String tsDenStr = prefs.get("tsDen", "4");
 		int tsDen = Integer.parseInt(tsDenStr);
 		cmbDenominator.getSelectionModel().select(tsDen + "");
 	}
-	
+
 	@FXML private void handleErrorSensitivity() {
 		int err;
 		switch (cmbErrorSensitivity.getValue().toString()) {
@@ -85,13 +85,13 @@ public class SystemDefaultSettingsWindowController extends Application {
 		inputFolderField.setText(selected.getAbsolutePath());
 		prefs.put("inputFolder", selected.getAbsolutePath());
 	}
-	
+
 	@FXML
 	private void handleTSNumerator() {
 		String value = cmbNumerator.getValue().toString();
 		prefs.put("tsNum", value);
 	}
-	
+
 	@FXML
 	private void handleTSDenominator() {
 		String value = cmbDenominator.getValue().toString();

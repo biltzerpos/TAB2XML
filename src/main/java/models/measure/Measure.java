@@ -1,15 +1,16 @@
 package models.measure;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import models.measure.attributes.Attributes;
 import models.measure.barline.BarLine;
 import models.measure.direction.Direction;
 import models.measure.note.Note;
-
-import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"attributes", "noteBefore", "backup", "noteAfter", "barlines", "direction"})

@@ -5,9 +5,9 @@ public class Clef {
     public int line;
 
     public Clef() {
-    	
+
     }
-    
+
     public Clef(String sign, int line){
         this.sign = sign;
         this.line = line;

@@ -11,21 +11,21 @@ public class MIDIInstrument {
 
     @JacksonXmlProperty(localName = "midi-program")
     private int midiProgram = 1;
-    
+
     @JacksonXmlProperty(localName = "midi-unpitched")
     private int midiUnpitched;
-    
+
     @JacksonXmlProperty(localName = "volume")
     private double volume = 78.7402;
-    
+
     @JacksonXmlProperty(localName = "pan")
     private int pan = 0;
-    
-    
+
+
     public MIDIInstrument() {
-    	
+
     }
-    
+
     public MIDIInstrument(String id, int midiUnpitched) {
         this.id = id;
         this.midiUnpitched = midiUnpitched;

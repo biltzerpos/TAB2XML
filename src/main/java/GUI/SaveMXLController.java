@@ -14,21 +14,21 @@ public class SaveMXLController extends Application {
 
     private MainViewController mvc;
     private static Window convertWindow = new Stage();
-    
+
     @FXML private TextField titleField;
     @FXML private TextField artistField;
     @FXML private TextField fileNameField;
-    
+
     public void setMainViewController(MainViewController mvcInput) {
     	mvc = mvcInput;
     }
-    
+
     public void initialize() {
 		Settings s = Settings.getInstance();
 		titleField.setText(s.title);
 		artistField.setText(s.artist);
 	}
-    
+
     @FXML
     private void saveButtonClicked() {
         if (!titleField.getText().isBlank())

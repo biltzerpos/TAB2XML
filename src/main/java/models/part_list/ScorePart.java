@@ -1,10 +1,10 @@
 package models.part_list;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 //import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ScorePart {
@@ -20,20 +20,20 @@ public class ScorePart {
 
     @JacksonXmlProperty(localName = "midi-device")
     private MIDIDevice midiDevice;
-    
+
     @JacksonXmlProperty(localName = "midi-instrument")
 //    @JacksonXmlElementWrapper(useWrapping = false)
     private List<MIDIInstrument> midiInstruments;
 
     public ScorePart() {
-    	
+
     }
-    
+
     public ScorePart(String id, String partName) {
         this.id = id;
         this.partName = partName;
     }
-    
+
     public ScorePart(String id, String partName, List<ScoreInstrument> scoreInstruments) {
         this(id, partName);
         this.scoreInstruments = scoreInstruments;
@@ -50,7 +50,7 @@ public class ScorePart {
     public List<ScoreInstrument> getScoreInstruments() {
         return scoreInstruments;
     }
-    
+
     public List<MIDIInstrument> getMIDIInstruments() {
         return midiInstruments;
     }
@@ -66,7 +66,7 @@ public class ScorePart {
     public void setScoreInstruments(List<ScoreInstrument> scoreInstruments) {
         this.scoreInstruments = scoreInstruments;
     }
-    
+
     public void setMIDIInstruments(List<MIDIInstrument> midiInstruments) {
         this.midiInstruments = midiInstruments;
     }

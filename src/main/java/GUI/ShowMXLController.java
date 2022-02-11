@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class ShowMXLController extends Application {
-	
+
 	public File saveFile;
     private MainViewController mvc;
 	public Highlighter highlighter;
@@ -26,7 +26,7 @@ public class ShowMXLController extends Application {
 
 	public ShowMXLController() {}
 
-	@FXML 
+	@FXML
 	public void initialize() {
 		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
 	}
@@ -34,14 +34,14 @@ public class ShowMXLController extends Application {
     public void setMainViewController(MainViewController mvcInput) {
     	mvc = mvcInput;
     }
-    
+
     public void update() {
 		mxlText.replaceText(mvc.converter.getMusicXML());
 		mxlText.moveTo(0);
 		mxlText.requestFollowCaret();
         mxlText.requestFocus();
 	}
-    
+
 	@FXML
 	private void saveMXLButtonHandle() {
 		mvc.saveMXLButtonHandle();
@@ -63,7 +63,7 @@ public class ShowMXLController extends Application {
     	//Pattern textBreakPattern = Pattern.compile("((\\R|^)[ ]*(?=\\R)){2,}|^|$");
     	Pattern mxlMeasurePattern = Pattern.compile("<measure number=\"" + measureCount + "\">");
         Matcher mxlMeasureMatcher = mxlMeasurePattern.matcher(mxlText.getText());
-        
+
         if (mxlMeasureMatcher.find()) {
         	int pos = mxlMeasureMatcher.start();
         	mxlText.moveTo(pos);
@@ -78,9 +78,9 @@ public class ShowMXLController extends Application {
             mxlText.requestFocus();
             return true;
             }
-        else return false;        
+        else return false;
     }
-    
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {}
 }

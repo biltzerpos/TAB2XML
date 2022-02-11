@@ -19,7 +19,7 @@ public class TieNote extends TabNote {
 	public TabNote copy() {
 		return new TieNote(this);
 	}
-	
+
     @Override
 	protected void setStems(Note noteModel) {
 		// Not stems for fake notes
@@ -31,6 +31,7 @@ public class TieNote extends TabNote {
 	    return noteModel;
 	}
 
+	@Override
 	public List<ValidationError> validate() {
 	    super.validate();
 	    return errors;

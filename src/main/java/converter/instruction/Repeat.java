@@ -14,12 +14,12 @@ import utility.Range;
 import utility.ValidationError;
 
 public class Repeat extends Instruction {
-    
+
 	public static String PATTERN = getPattern();
     private int repeatCount;
     private boolean startApplied = false;
     private boolean endApplied = false;
-    
+
     public Repeat(AnchoredText inputAT, boolean isTop) {
         super(inputAT, isTop);
         Matcher matcher = Pattern.compile("[0-9]+").matcher(at.text);
@@ -27,6 +27,7 @@ public class Repeat extends Instruction {
             this.repeatCount = Integer.parseInt(matcher.group());
     }
 
+	@Override
 	public <E extends ScoreComponent> void applyTo(E scoreComponent) {
 		if ((!isTop) || this.getHasBeenApplied() || this.repeatCount == 0) {
 			this.setHasBeenApplied(true);
@@ -65,6 +66,7 @@ public class Repeat extends Instruction {
         return "("+"(((?<=\\|)|\\||^|"+ Patterns.SPACEORTAB + ")|(?<=\\n))"  +        "[ -]*"       +   repeatTextPattern   +   "[ -]*"     +     "(($|\\s)|\\|)" + ")";
     }
 
+	@Override
 	public List<ValidationError> validate() {
 	    super.validate();
 	    if (!(isTop)) {

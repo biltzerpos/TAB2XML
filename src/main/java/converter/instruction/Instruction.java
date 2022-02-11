@@ -11,7 +11,7 @@ import utility.ValidationError;
 
 public abstract class Instruction extends ScoreComponent{
 	protected boolean isTop;
-    
+
     public static String LINE_PATTERN = getLinePattern();
 
     protected Range rangeInLine;
@@ -41,9 +41,10 @@ public abstract class Instruction extends ScoreComponent{
 		ranges.add(new Range(at.positionInScore, at.positionInScore + at.text.length()));
 		return ranges;
 	}
-	
-    public List<ValidationError> validate() {
-        
+
+    @Override
+	public List<ValidationError> validate() {
+
         if (!this.hasBeenApplied) {
             addError(
                     "This instruction could not be applied to any measure or note.",

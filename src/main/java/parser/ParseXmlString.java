@@ -1,6 +1,17 @@
 package parser;
 
-import javax.xml.parsers.*;
+import java.io.StringReader;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.player.Player;
+import org.staccato.StaccatoParserListener;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,12 +21,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import GUI.MainViewController;
 import models.ScorePartwise;
-
-import org.jfugue.integration.MusicXmlParser;
-import org.jfugue.player.Player;
-import org.staccato.StaccatoParserListener;
-import org.w3c.dom.*;
-import java.io.*;
 
 
 //ScorePartwise value is the object containing the data for the music
@@ -47,7 +52,7 @@ public class ParseXmlString {
 //
 //  -ONLY WAY TO KNOW ON WHICH LINE TO PLACE (OUT OF THE 6 LINES), IS THROUGH THE DATA
 //  -ALIGN FINGER WITH CORRECT STRING
-//  -THEN ALIGN CORRECT FRET 
+//  -THEN ALIGN CORRECT FRET
 
 	public String getXmlString() {
 		return this.xmlString;
@@ -131,9 +136,9 @@ public class ParseXmlString {
 		}
 
 		ObjectMapper objMapper = new XmlMapper();
-		 
+
 		if(this.xmlString.contains("Guitar")) {
-			this.xmlG = this.xmlString; 
+			this.xmlG = this.xmlString;
 			//(Guitar) replace xml Node name with Java Object already created
 			//originally <noteBefore>, prof changed to <note>, here change to <noteAfter>
 			this.xmlG = this.xmlG.replace("note", "noteAfter");
@@ -145,7 +150,7 @@ public class ParseXmlString {
 		}
 		else if(this.xmlString.contains("Drumset")) {
 			this.xmlD = this.xmlString;
-			//(Drum) replace xml Node name with Java Object already created 
+			//(Drum) replace xml Node name with Java Object already created
 			//originally <noteBefore> , prof changed to <note>, here change to <
 			//           <notehead>
 			this.xmlD = this.xmlD.replace("note", "noteBefore");
@@ -155,34 +160,34 @@ public class ParseXmlString {
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
-		}	
+		}
 
 //		xmlD = xmlD.replaceAll("\n", "\\R[ \\t]*<midiinstruments>[\\s\\S]*</midiinstruments>[ \\t]*\\R");
 //	    xmlD = xmlD.replaceAll("\n", "\\R[ \\t]*<timeModification>\\s*<actual-notes>\\d+</actual-notes>\\s*<normal-notes>\\d+</normal-notes>\\s*</timeModification>[ \\t]*\\R");
-	        		 
-		//Options for 
+
+		//Options for
 //		objMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 //	 	objMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		return this.parsedString;
 	}
-	
+
 	public void playMusic() {
 		try {
 			MusicXmlParser parser = new MusicXmlParser();
 			StaccatoParserListener listener = new StaccatoParserListener();
 			parser.addParserListener(listener);
 
-			parser.parse(xmlString);;
+			parser.parse(xmlString);
 
 			System.out.println("after parser");
 			Player player = new Player();
 			org.jfugue.pattern.Pattern musicXmlPattern = listener.getPattern().setTempo(400).setInstrument("Guitar");
-			
+
 			System.out.println("starting to play music");
 			player.play(musicXmlPattern);
 		}catch (Exception e) {
 			// TODO: handle exception
-		}	
+		}
 	}
 
 }

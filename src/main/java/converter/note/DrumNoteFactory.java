@@ -104,7 +104,7 @@ public class DrumNoteFactory extends NoteFactory {
 	protected void setGraceStem(Note noteModel) {
 		assert noteModel.getStem().equals("up");
 	}
-	
+
 	@Override
 	protected void setGraceType(Note noteModel) {
 		noteModel.setType("eighth");

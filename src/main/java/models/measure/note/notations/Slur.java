@@ -2,6 +2,7 @@ package models.measure.note.notations;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import models.ScorePartwise;
 
 public class Slur {

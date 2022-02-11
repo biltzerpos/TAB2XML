@@ -21,10 +21,10 @@ public class TabRow extends ScoreComponent {
     public List<TabMeasure> tabMeasures = new ArrayList<>();
 	public List<AnchoredText> data = new ArrayList<>();
     public TabRow() {}
-    
+
     /**
      * Creates a TabRow object from a List of AnchoredText which represent the lines in the tablature row
-     * @param data a List<AnchoredText> containing the lines which are meant to represent a tablature row. 
+     * @param data a List<AnchoredText> containing the lines which are meant to represent a tablature row.
      */
     public TabRow(List<AnchoredText> inputData) {
     	data = inputData;
@@ -47,7 +47,7 @@ public class TabRow extends ScoreComponent {
             	if (currentNameData.text == "") currentNameData.text = Settings.getInstance().getBassTuning()[i][0];    // Keep using what ever tuning was previously set if this is bass
             	Settings.getInstance().setBassTuning(i, currentNameData.text.toUpperCase());  // Update tuning. Only likely to make a difference for the first measure
             }
-            
+
             int measureCount = 0;
             Matcher measureInsidesMatcher = Pattern.compile(Patterns.insidesPattern()).matcher(currentLine.substring(nameOffset));
             while (measureInsidesMatcher.find()) {
@@ -85,10 +85,10 @@ public class TabRow extends ScoreComponent {
 
     /**
      * Creates an instance of the abstract Measure class whose concrete type depends on the instrument setting
-     * Also deals with in-measure repeat markings 
+     * Also deals with in-measure repeat markings
      */
     private TabMeasure from(List<AnchoredText> measureAT, List<AnchoredText> measureNameAT, boolean isFirstMeasureInGroup) {
-    	
+
         boolean repeatStart = checkRepeatStart(measureAT);
         boolean repeatEnd = checkRepeatEnd(measureAT);
         AnchoredText countAT = extractRepeatCount(measureAT);
@@ -108,7 +108,7 @@ public class TabRow extends ScoreComponent {
 		case NONE -> null;
 		};
 		assert measure != null: "Instrument must be set or detected before creating a TabRow";
-    
+
     int repeatCount = 2;
     if (!countAT.text.isEmpty()) repeatCount = Integer.parseInt(countAT.text);
         if (repeatStart)
@@ -128,7 +128,7 @@ public class TabRow extends ScoreComponent {
         repeatStart &= repeatStartMarkCount>=2;
         return repeatStart;
     }
-	
+
     private boolean checkRepeatEnd(List<AnchoredText> atList) {
         boolean repeatEnd = true;
         int repeatEndMarkCount = 0;
@@ -140,7 +140,7 @@ public class TabRow extends ScoreComponent {
         repeatEnd &= repeatEndMarkCount>=2;
         return repeatEnd;
     }
-    
+
     private AnchoredText extractRepeatCount(List<AnchoredText> lines) {
         if (!checkRepeatEnd(lines)) return new AnchoredText("", 0, 0);
         AnchoredText firstAT = lines.get(0);
@@ -173,9 +173,9 @@ public class TabRow extends ScoreComponent {
             line = tmp1+tmp2;
             lines.get(0).text = line;
         }
-        for(int i=0; i<lines.size(); i++) {
-            String line = lines.get(i).text;
-            int linePosition = lines.get(i).positionInScore;
+        for (AnchoredText line2 : lines) {
+            String line = line2.text;
+            int linePosition = line2.positionInScore;
             if (line.startsWith("|*")){
                 linePosition+=2;
                 line = line.substring(2);
@@ -194,13 +194,13 @@ public class TabRow extends ScoreComponent {
                 else offset = 1;
                 line = line.substring(0, line.length() - offset);
             }
-            lines.get(i).text = line;
-            lines.get(i).positionInScore = linePosition;
+            line2.text = line;
+            line2.positionInScore = linePosition;
             //TODO Should change positionInLine by same amount?
         }
     }
 
-    
+
     public AnchoredText nameOf(String line, int pos) {
     	AnchoredText result;
         Pattern measureLineNamePttrn = Pattern.compile(Patterns.measureNameExtractPattern());
@@ -211,7 +211,7 @@ public class TabRow extends ScoreComponent {
             result = null;
         return result;
     }
-	
+
 	public List<TabMeasure> getMeasureList() {
 		return this.tabMeasures;
 	}
@@ -256,8 +256,9 @@ public class TabRow extends ScoreComponent {
 	 * Validates if all Measure objects aggregated in this TabRow have the same number of measure lines.
 	 * It also validates all its aggregates i.e all Measure objects and Instruction objects that it aggregates.
 	 */
+	@Override
 	public List<ValidationError> validate() {
-	    
+
 	    //--------------Validating yourself--------------------------
 	    //making sure all measures in this measure group have the same number of lines
 	    boolean hasEqualMeasureLineCount = true;
@@ -271,16 +272,16 @@ public class TabRow extends ScoreComponent {
 	            failPositions.addAll(measure.getRanges());
 	        }
 	    }
-	
+
 	    if (!hasEqualMeasureLineCount) {
 	        addError(
 	                "All measures in a tablature row must have the same number of lines",
 	                2,
 	                failPositions
 	        );
-	        
+
 	    }
-	
+
 //	    boolean hasGuitarMeasures = true;
 //	    boolean hasDrumMeasures = true;
 //	    for (TabMeasure measure : this.tabMeasures) {
@@ -293,16 +294,16 @@ public class TabRow extends ScoreComponent {
 //	                2,
 //	                this.getRanges()
 //	        );
-//	        
+//
 //	    }
-	
+
 	    //--------------Validate your aggregates (only if you're valid)-------------------
 	    if (!errors.isEmpty()) return errors;
-	
+
 	    for (TabMeasure measure : this.tabMeasures) {
 	        errors.addAll(measure.validate());
 	    }
-	
+
 	    return errors;
 	}
 

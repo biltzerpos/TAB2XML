@@ -13,16 +13,17 @@ import utility.ValidationError;
 public class TabDrumString extends TabString {
 
     public TabDrumString(int stringNumber, AnchoredText dataAT, AnchoredText nameAT) {
-        super(stringNumber, dataAT, nameAT);    
+        super(stringNumber, dataAT, nameAT);
     }
-    
+
 	@Override
 	protected NoteFactory createNoteFactory() {
 		return new DrumNoteFactory();
 	}
 
-    public List<ValidationError> validate() {
-        
+    @Override
+	public List<ValidationError> validate() {
+
         if (!DrumUtils.getNickNameSet().contains(this.name.strip())) {
             addError("This drum piece is not recognized. Update Settings -> Current Song Settings to include it", 1, getRanges());
         }
