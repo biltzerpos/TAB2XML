@@ -31,70 +31,6 @@ public class Parser {
 		this.measures = new ArrayList<Measure>();
 	}
 
-	private Technical getTechnicalFromTechnicalNode(Node technicalNode) {
-		Element technicalElement = (Element) technicalNode;
-
-		Technical technical = new Technical();
-
-		technical.setString(Integer.parseInt(technicalElement.getElementsByTagName("string").item(0).getFirstChild().getNodeValue()));
-		technical.setFret(Integer.parseInt(technicalElement.getElementsByTagName("fret").item(0).getFirstChild().getNodeValue()));
-
-		return technical;
-	}
-
-	private Notations getNotationsFromNotationsNode(Node notationsNode) {
-		Element notationsElement = (Element) notationsNode;
-
-		Notations notations = new Notations();
-
-		notations.setTechnical(getTechnicalFromTechnicalNode(notationsElement.getElementsByTagName("technical").item(0)));
-
-		return notations;
-	}
-
-	private Pitch getPitchFromPitchNode(Node pitchNode) {
-		Element pitchElement = (Element) pitchNode;
-
-		Pitch pitch = new Pitch(
-			pitchElement.getElementsByTagName("step").item(0).getFirstChild().getNodeValue(),
-			Integer.parseInt(
-				pitchElement.getElementsByTagName("alter").item(0) != null
-				? pitchElement.getElementsByTagName("alter").item(0).getFirstChild().getNodeValue()
-				: "0"
-			),
-			Integer.parseInt(pitchElement.getElementsByTagName("octave").item(0).getFirstChild().getNodeValue())
-		);
-
-		return pitch;
-	}
-
-	private Note getNoteFromNoteNode(Node noteNode) {
-		Element noteElement = (Element) noteNode;
-
-		Note note = new Note();
-
-		note.setPitch(getPitchFromPitchNode(noteElement.getElementsByTagName("pitch").item(0)));
-		note.setDuration(Integer.parseInt(noteElement.getElementsByTagName("duration").item(0).getFirstChild().getNodeValue()));
-		note.setVoice(Integer.parseInt(noteElement.getElementsByTagName("voice").item(0).getFirstChild().getNodeValue()));
-		note.setType(noteElement.getElementsByTagName("type").item(0).getFirstChild().getNodeValue());
-		note.setNotations(getNotationsFromNotationsNode(noteElement.getElementsByTagName("notations").item(0)));
-
-		return note;
-	}
-
-	private List<Note> getNotesFromMeasureNode(Node measureNode) {
-		Element measureElement = (Element) measureNode;
-		NodeList noteNodeList = measureElement.getElementsByTagName("note");
-
-		List<Note> notes = new ArrayList<>();
-
-		for (int i = 0; i < noteNodeList.getLength(); i++) {
-			notes.add(getNoteFromNoteNode(noteNodeList.item(i)));
-		}
-
-		return notes;
-	}
-
 	public void parse(String xmlString) {
 		try {
 			// Getting the parser ready
@@ -109,11 +45,10 @@ public class Parser {
 			// Get the measures from the document
 			NodeList measureNodeList = root.getElementsByTagName("measure");
 
-			// Iterate through the measures
+			// Iterate through the measure nodes in the measure node list
 			for (int i = 0; i < measureNodeList.getLength(); i++) {
-				// Initialize the measure
-				this.measures.add(new Measure());
-				this.measures.get(i).setNotesBeforeBackup(getNotesFromMeasureNode(measureNodeList.item(i)));
+				// Parse the measure from the current measure node and add it to the list of measures
+				this.measures.add((new MeasureParser(measureNodeList.item(i))).getMeasure());
 			}
 		}
 
