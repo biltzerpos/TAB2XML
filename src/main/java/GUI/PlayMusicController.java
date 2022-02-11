@@ -13,14 +13,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import parser.ParseXmlString;
 
 public class PlayMusicController extends Application {
 
 //	public File saveFile;
 //	private MainViewController mvc;
 	public Highlighter highlighter;
-	private ParseXmlString parser;
 
 	@FXML public CodeArea mxlText;
 	@FXML TextField gotoMeasureField;
@@ -33,7 +31,6 @@ public class PlayMusicController extends Application {
 	@FXML
 	public void initialize() {
 		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
-		parser = new ParseXmlString();
 	}
 
     public void setMainViewController(MainViewController mvcInput) {
@@ -41,7 +38,6 @@ public class PlayMusicController extends Application {
     }
 
     public void update() {
-		parser.playMusic();
 		mxlText.moveTo(0);
 		mxlText.requestFollowCaret();
         mxlText.requestFocus();
