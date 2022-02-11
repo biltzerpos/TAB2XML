@@ -1,6 +1,11 @@
 package visualizer;
 
 
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import converter.Score;
 import custom_exceptions.TXMLException;
 import javafx.scene.canvas.Canvas;
@@ -13,6 +18,8 @@ import models.measure.note.Note;
 import models.part_list.PartList;
 import org.jfugue.integration.MusicXmlParserListener;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 /**
  * This Class is use for visualize musicXML file.
@@ -20,17 +27,34 @@ import java.util.List;
  * @author Kuimou
  * */
 public class visualizer {
+	public String temp_dest = "resources/templeFile/tempSheet.pdf";
 	private ScorePartwise score;
 	public visualizer(Score score) throws TXMLException {
 		this.score = score.getModel();
 	}
 	/**
-	 * This method is going to draw musicXML in visualExporter.
-	 * visualExporter will create visualElements in both canvas and a PDF file.
+	 * This method is going to init PDF file.
+	 *
+	 * */
+	public void initPDF() throws FileNotFoundException {
+		File file = new File(temp_dest);
+		file.getParentFile().mkdir();
+		PdfDocument pdf = new PdfDocument(new PdfWriter(temp_dest));
+
+		PageSize pageSize = PageSize.A4.rotate();
+		PdfPage page = pdf.addNewPage(pageSize);
+
+		PdfCanvas canvas = new PdfCanvas(page);
+	}
+	/**
+	 * This method is going to draw musicXML
+	 * visualizer will create a PDF file.
+	 * after drawing is finished, it will project PDF file into preview canvas
 	 *
 	 * @param canvas
 	 * canvas in the "preview page"
 	 * */
+
 	public void draw(Canvas canvas) {
 		// PartList is the instrument information of each Part
 		// Parts is collection of part
