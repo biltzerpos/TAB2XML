@@ -20,7 +20,7 @@ public class RestNote extends TabNote {
 	public TabNote copy() {
 		return new RestNote(this);
 	}
-	
+
     @Override
 	protected void setStems(Note noteModel) {
 		// Not stems for rests
@@ -33,6 +33,7 @@ public class RestNote extends TabNote {
 	    return noteModel;
 	}
 
+	@Override
 	public List<ValidationError> validate() {
 	    super.validate();
 	    return errors;

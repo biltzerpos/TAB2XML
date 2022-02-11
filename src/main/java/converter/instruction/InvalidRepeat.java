@@ -13,9 +13,11 @@ public class InvalidRepeat extends Instruction {
 	}
 
 	// Invalid (nested) repeats only create a validation error
+	@Override
 	public <E extends ScoreComponent> void applyTo(E scoreComponent) {
 	}
 
+	@Override
 	public List<ValidationError> validate() {
 		super.validate();
 		addError("Nested repeats are not supported. Will be ignored.", 3, getRanges());

@@ -28,7 +28,7 @@ public class MainApp extends Application {
         stage.show();
     }
 
-    public static void exit() {   	
+    public static void exit() {
         MainViewController.executor.shutdown();
     }
 

@@ -9,7 +9,7 @@ public class DrumPieceInfo {
 	private String fullName;
 	private String step;
 	private int octave;
-	
+
 	public DrumPieceInfo (List<String> nickNames, String midiID, String fullName, String step, int octave) {
 		this.nickNames = nickNames;
 		this.midiID = midiID;
@@ -17,7 +17,7 @@ public class DrumPieceInfo {
 		this.step = step;
 		this.octave = octave;
 	}
-	
+
 	public List<String> getNickNames() {
 		return nickNames;
 	}
@@ -48,5 +48,5 @@ public class DrumPieceInfo {
 	public void setOctave(int octave) {
 		this.octave = octave;
 	}
-	
+
 }

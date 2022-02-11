@@ -14,17 +14,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class PreviewSheetMusicController extends Application {
+public class PlayMusicController extends Application {
 
 //	public File saveFile;
-    private MainViewController mvc;
+//	private MainViewController mvc;
 	public Highlighter highlighter;
 
 	@FXML public CodeArea mxlText;
 	@FXML TextField gotoMeasureField;
 	@FXML Button goToline;
 
-	public PreviewSheetMusicController() {
+	public PlayMusicController() {
 
 	}
 
@@ -34,11 +34,10 @@ public class PreviewSheetMusicController extends Application {
 	}
 
     public void setMainViewController(MainViewController mvcInput) {
-    	mvc = mvcInput;
+//    	mvc = mvcInput;
     }
 
     public void update() {
-		mxlText.replaceText(mvc.converter.getMusicXML());
 		mxlText.moveTo(0);
 		mxlText.requestFollowCaret();
         mxlText.requestFocus();

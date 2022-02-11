@@ -14,24 +14,24 @@ public class Converter {
 	private Score score;
 	private MusicXMLCreator mxlc;
 	private MainViewController mvc;
-	
+
 	public Converter(MainViewController mvc) {
 		this.mvc = mvc;
 	}
-	
+
 	public void update() {
 		score = new Score(mvc.mainText.getText());
 		mxlc = new MusicXMLCreator(score);
 	}
-	
+
 	public String getMusicXML() {
 		return mxlc.generateMusicXML();
 	}
-	
+
 	public Score getScore() {
 		return score;
 	}
-	
+
 	public List<ValidationError> validate() {
 		return score.validate();
 	}
@@ -45,5 +45,5 @@ public class Converter {
             ex.printStackTrace();
         }
     }
-    
+
 }

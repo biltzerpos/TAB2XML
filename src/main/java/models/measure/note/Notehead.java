@@ -8,10 +8,10 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 public class Notehead {
     @JacksonXmlProperty(isAttribute = true)
     String parentheses;
-    
+
     @JacksonXmlText
     String type;
-    
+
     public Notehead(String t) {
         this.type = t;
     }

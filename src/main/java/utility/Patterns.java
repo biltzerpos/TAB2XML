@@ -18,11 +18,11 @@ public class Patterns {
 	public static final String GUITAR_NOTE_PATTERN = "("+GRACE+"|"+HARMONIC+"|"+ FRET +"|R|T)";
     public static final String GUITAR_NOTE_CONNECTOR = "[hpbsHPBS\\/\\\\]";
     public static final String GUITAR_NOTE_GROUP_PATTERN = "("+GUITAR_NOTE_PATTERN+"(-*"+GUITAR_NOTE_CONNECTOR+ "-*" +GUITAR_NOTE_PATTERN+")*)";
-    
+
     public static final String DRUM_NOTE_PATTERN = "[xXoOdDfbgFRT#]";
 	public static final String DRUM_NOTE_GROUP_PATTERN = DRUM_NOTE_PATTERN +"+";
     public static final String DRUM_NOTE_CONNECTOR = "$a"; //there are no connectors, so this is a regex that never matches anything. an a after the end of the string
-    
+
     // e------------ or |e---------------- or |e|-------------------- when it is the first measure of the measure group (start of line, SOL)
     public static String START_OF_LINE = "(" + startOfLinePattern() + insidesPattern() + ")";
 
@@ -30,7 +30,7 @@ public class Patterns {
     public static String MIDDLE_OF_LINE = "("+Patterns.DIVIDER+"+" + insidesPattern()+")";
 
     private static String INSIDES_PATTERN_SPECIAL_CASE = "$a"; // doesn't match anything
-    
+
     private static String nonDashDividerWhitespace() {
     	//return "(?:" + NoteFactory.GUITAR_NOTE_PATTERN + "|" + NoteFactory.GUITAR_NOTE_CONNECTOR + "|" + NoteFactory.DRUM_NOTE_PATTERN + ")";
         return "[^-\\n" + DIVIDER_COMPONENTS + SPACEORTAB +"+]"; // Added + to exclude drum tab timing
@@ -50,7 +50,7 @@ public class Patterns {
     	pattern.append("("+INSIDES_PATTERN_SPECIAL_CASE);
     	pattern.append("|"+INSIDES_PATTERN_SPECIAL_CASE);
     	pattern.append("|");
-    	
+
     	// Positive lookbehind
     	pattern.append("(?<=");
     			pattern.append("(([ \\r\\n]|^)" + actualName() + ")");   // actualName can be empty string
@@ -58,7 +58,7 @@ public class Patterns {
     		pattern.append("|");
     			pattern.append(DIVIDER);
     	pattern.append(")");
-    	
+
     	// Actual expression to match
     	pattern.append(DIVIDER + "?");
     	pattern.append("(");
@@ -69,7 +69,7 @@ public class Patterns {
     	pattern.append("(" + nonDashDividerWhitespace() + "+-*)*");  // matches multiple notes separated by dashes
     	pattern.append("(" + nonDashDividerWhitespace() + "+ *)?");  // optional note(s) at the end + optional spaces
     	pattern.append("(" + DIVIDER + "?" + "(?=" + DIVIDER + "))");
-    	
+
     	pattern.append(")");
         return pattern.toString();
     }
@@ -85,7 +85,7 @@ public class Patterns {
         pattern.append(")");
         return pattern.toString();
     }
-    
+
     public static String measureNameExtractPattern() {
         StringBuilder pattern = new StringBuilder();
         pattern.append("(?<=^" + DIVIDER + "*" + ")");
@@ -95,7 +95,7 @@ public class Patterns {
         pattern.append("(?=-|" + DIVIDER + ")");  // what's ahead is a dash or a divider
         return pattern.toString();
     }
-    
+
     private static String actualName() {
         Iterator<String> measureLineNames = getValidNames().iterator();
         StringBuilder pattern = new StringBuilder();
@@ -106,7 +106,7 @@ public class Patterns {
         pattern.append(")");
         return pattern.toString();
     }
-    
+
     private static Set<String> getValidNames() {
         HashSet<String> nameSet = new HashSet<>();
         nameSet.addAll(GuitarUtils.getValidGuitarNames());

@@ -14,27 +14,27 @@ public class TimeModification {
         this.actualNotes = an;
         this .normalNotes = nn;
     }
-	
+
 	@JacksonXmlProperty(localName = "actual-notes")
 	private int actualNotes;
 	@JacksonXmlProperty(localName = "normal-notes")
 	private int normalNotes;
-	
+
 	public int getActualNotes() {
 		return actualNotes;
 	}
-	
+
 	public void setActualNotes(int actualNotes) {
 		this.actualNotes = actualNotes;
 	}
-	
+
 	public int getNormalNotes() {
 		return normalNotes;
 	}
-	
+
 	public void setNormalNotes(int normalNotes) {
 		this.normalNotes = normalNotes;
 	}
-	
-	
+
+
 }

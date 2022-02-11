@@ -1,10 +1,10 @@
 package models.measure.attributes;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class StaffDetails {
@@ -15,9 +15,9 @@ public class StaffDetails {
     public List<StaffTuning> staffTuning;
 
     public StaffDetails() {
-    	
+
     }
-    
+
     public StaffDetails(int staffLines, List<StaffTuning> staffTuning) {
         this.staffLines = staffLines;
         this.staffTuning = staffTuning;

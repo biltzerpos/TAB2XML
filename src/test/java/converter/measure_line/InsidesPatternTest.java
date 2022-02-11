@@ -1,14 +1,16 @@
 package converter.measure_line;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import utility.Patterns;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import utility.Patterns;
 @Disabled
 public class InsidesPatternTest {
     Pattern pattern = Pattern.compile(Patterns.insidesPattern());

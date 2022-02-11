@@ -62,11 +62,13 @@ public class GuitarMeasure extends TabMeasure{
 		return duration;
 	}
 
+	@Override
 	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name)
 	{
 		return new TabGuitarString(stringNumber, data, name);
 	}
-	
+
+	@Override
 	protected Attributes getAttributesModel() {
         Attributes attributes = new Attributes();
         attributes.setDivisions(this.divisions);
@@ -82,11 +84,12 @@ public class GuitarMeasure extends TabMeasure{
         }
         return attributes;
     }
-	
+
 	/**
 	 * Validates that the guitar has a supported number of strings. Validates its
 	 * aggregated TabString objects TODO Can be moved to superclass?
 	 */
+	@Override
 	public List<ValidationError> validate() {
 		super.validate();
 

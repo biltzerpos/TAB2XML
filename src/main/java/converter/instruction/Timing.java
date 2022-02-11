@@ -27,7 +27,7 @@ public class Timing extends Instruction {
     private int divisions = 1;
     Set<Integer> divFactors = new HashSet<>();
     List<Integer> missingPositions = new ArrayList<>();
-    
+
     public Timing(AnchoredText inputAT, boolean isTop) {
         super(inputAT, isTop);
         Matcher xqMatcher = Pattern.compile("XQ *").matcher(at.text);
@@ -94,8 +94,7 @@ public class Timing extends Instruction {
 					updateDivisions(measureTimings);
 					measure.setDivisions(this.divisions);
 					for (List<List<TabNote>> chordList : noteList) {
-						for (int i = 0; i < chordList.size(); i++) {
-							List<TabNote> chord = chordList.get(i);
+						for (List<TabNote> chord : chordList) {
 							int currentChordDistance = chord.get(0).distance;
 							int chordPositionInLine = measure.data.get(0).positionInLine + currentChordDistance;
 							String givenTiming = timings.get(chordPositionInLine);
@@ -151,7 +150,7 @@ public class Timing extends Instruction {
 	    for(int i: input) result = lcm(result, i);
 	    return result;
 	}
-	
+
 	private static int gcd(int a, int b)
 	{
 	    while (b > 0)
@@ -162,7 +161,8 @@ public class Timing extends Instruction {
 	    }
 	    return a;
 	}
-	
+
+	@Override
 	public List<ValidationError> validate() {
         if (tab) {
             addError(

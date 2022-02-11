@@ -1,15 +1,15 @@
 package converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import utility.AnchoredText;
 import utility.Range;
 import utility.Settings;
 import utility.ValidationError;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class ScoreComponent {
-	
+
 	public AnchoredText at;
 	public abstract List<ValidationError> validate();
 
@@ -21,6 +21,6 @@ public abstract class ScoreComponent {
 		if (Settings.getInstance().errorSensitivity >= error.getPriority())
 			errors.add(error);
 	}
-	
+
 	public abstract List<Range> getRanges();
 }

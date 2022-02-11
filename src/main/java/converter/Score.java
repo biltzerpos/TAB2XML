@@ -37,7 +37,7 @@ public class Score extends ScoreComponent {
     public List<TabMeasure> tabMeasureList;
 
     public Score(String textInput) {
-    	
+
     	TabMeasure.MEASURE_INDEX = 0;
     	DrumUtils.createDrumSet();
 		DrumUtils.createDrumNickNames();
@@ -120,7 +120,7 @@ public class Score extends ScoreComponent {
         }
         return inputFragments;
     }
-    
+
     /**
      * Creates a List of TabSection objects from the extracted fragments of a String.
      * These TabSection objects are not guaranteed to be valid. You can find out if all the TabSection
@@ -207,8 +207,8 @@ public class Score extends ScoreComponent {
 									if (j < tieCount - 1) newNote.addDecorator(new StartTieDecorator(), message);
 									newNotes.add(newNote);
 								}
-							} 
-							firstVoice.addAll(0, newNotes);							
+							}
+							firstVoice.addAll(0, newNotes);
 						}
 					}
 				}
@@ -219,11 +219,11 @@ public class Score extends ScoreComponent {
 	public List<TabSection> getTabSectionList() {
         return this.tabSectionList;
     }
-    
+
     public List<TabMeasure> getMeasureList() {
         return this.tabMeasureList;
     }
-    
+
     public TabMeasure getMeasure(int measureCount) {
         try {
 			return tabMeasureList.get(measureCount - 1); // -1 due to 0 indexing
@@ -237,7 +237,7 @@ public class Score extends ScoreComponent {
         for (TabSection tabSection : this.tabSectionList) {
             TabRow tabRow = tabSection.getTabRow();
             measureList.addAll(tabRow.getMeasureList());
-            
+
         }
         return measureList;
     }
@@ -247,7 +247,7 @@ public class Score extends ScoreComponent {
         ScorePart scorePart = new ScorePart("P1", "Drumset");
         List<ScoreInstrument> scoreInstruments = new ArrayList<>();
         List<MIDIInstrument> midiInstruments = new ArrayList<>();
-        
+
 
         for (DrumPieceInfo drumPieceInfo : DrumUtils.drumSet.values()) {
         	String partID = drumPieceInfo.getMidiID();
@@ -274,9 +274,9 @@ public class Score extends ScoreComponent {
         scoreParts.add(new ScorePart("P1", "Bass"));
         return new PartList(scoreParts);
     }
-    
+
 	public ScorePartwise getModel() throws TXMLException {
-	
+
 	    List<models.measure.Measure> measures = new ArrayList<>();
 	    for (TabMeasure tabMeasure : this.tabMeasureList) {
 	        measures.add(tabMeasure.getModel());
@@ -284,7 +284,7 @@ public class Score extends ScoreComponent {
 	    Part part = new Part("P1", measures);
 	    List<Part> parts = new ArrayList<>();
 	    parts.add(part);
-	
+
 	    PartList partList;
 	    if (Settings.getInstance().getInstrument() == Instrument.DRUMS)
 	        partList = this.getDrumPartList();
@@ -292,7 +292,7 @@ public class Score extends ScoreComponent {
 	        partList = this.getGuitarPartList();
 	    else
 	        partList = this.getBassPartList();
-	
+
 	    ScorePartwise scorePartwise = new ScorePartwise("3.1", partList, parts);
 	    scorePartwise.setMovementTitle(Settings.getInstance().title);
 	    scorePartwise.setIdentification(new Identification(new Creator("composer", Settings.getInstance().artist)));
@@ -304,12 +304,13 @@ public class Score extends ScoreComponent {
 		return new ArrayList<>(Collections.singletonList(new Range(0, at.text.length())));
 	}
 
-	/** 
+	/**
 	 * Anything outside recognized tab sections is marked as ignored.
 	 * Validates all TabSection objects it aggregates.
 	 */
+	@Override
 	public List<ValidationError> validate() {
-	    
+
 	    int prevEndIdx = 0;
 	    ArrayList<Range> positions = new ArrayList<>();
 	    for (TabSection tabSection : this.tabSectionList) {
@@ -319,22 +320,22 @@ public class Score extends ScoreComponent {
 	    	}
 	    	prevEndIdx = tabSection.endIndex;
 	    }
-	
+
 	    String restOfDocument = at.text.substring(prevEndIdx);
 	    if (!restOfDocument.isBlank()) {
 	        positions.add(new Range(prevEndIdx, prevEndIdx+restOfDocument.length()));
 	    }
-	
+
 	    if (!positions.isEmpty()) {
-	        addError("This text will be ignored.", 4, positions);        
+	        addError("This text will be ignored.", 4, positions);
 	    }
-	
+
 	    // Validate your aggregates (regardless of if you're valid, as there is no significant
 	    // validation performed upon yourself that precludes your aggregates from being valid)
 	    for (TabSection colctn : this.tabSectionList) {
 	        errors.addAll(colctn.validate());
 	    }
-	
+
 	    return errors;
 	}
 

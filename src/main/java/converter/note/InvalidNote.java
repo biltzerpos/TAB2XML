@@ -14,7 +14,7 @@ public class InvalidNote extends TabNote {
     public InvalidNote(InvalidNote n) {
         super(n);
     }
-    
+
     @Override
 	public TabNote copy() {
 		return new InvalidNote(this);
@@ -25,7 +25,8 @@ public class InvalidNote extends TabNote {
         return null;
     }
 
-    public List<ValidationError> validate() {
+    @Override
+	public List<ValidationError> validate() {
 
         addError("Unrecognized text, will be ignored.", 3, getRanges());
         return errors;

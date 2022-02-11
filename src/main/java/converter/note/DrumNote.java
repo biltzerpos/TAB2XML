@@ -36,11 +36,11 @@ public class DrumNote extends TabNote{
     @Override
 	protected void setStems(Note noteModel) {
     	//noteModel.setStem(drumPiece == DrumPiece.Bass_Drum_1 ? "down" : "up");
-        noteModel.setStem("up");	
+        noteModel.setStem("up");
 	}
 
 	@Override
-    public models.measure.note.Note getModel(){ 
+    public models.measure.note.Note getModel(){
     	models.measure.note.Note noteModel = super.getModel();
         noteModel.setUnpitched(new Unpitched(drumPieceInfo.getStep(), drumPieceInfo.getOctave()));
         noteModel.setInstrument(new models.measure.note.Instrument(this.drumPieceInfo.getMidiID()));
@@ -51,7 +51,8 @@ public class DrumNote extends TabNote{
         return noteModel;
     }
 
-    public List<ValidationError> validate() {
+    @Override
+	public List<ValidationError> validate() {
         super.validate();
         return errors;
     }
