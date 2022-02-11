@@ -15,12 +15,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.midi.MidiParserListener;
+import org.jfugue.player.ManagedPlayer;
 import org.jfugue.player.Player;
 import org.staccato.StaccatoParserListener;
 
@@ -333,7 +338,7 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
-	private void playMusicButtonHandle() throws ValidityException, ParsingException, ParserConfigurationException {
+	private void playMusicButtonHandle() throws ParserConfigurationException, ValidityException, ParsingException, InvalidMidiDataException, MidiUnavailableException {
 		Parent root;
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/playMusic.fxml"));
@@ -342,29 +347,19 @@ public class MainViewController extends Application {
 			controller.setMainViewController(this);
 
 			//----------------------------------------------------------------------------------------------------------
-			MusicXmlParser parser = new MusicXmlParser();
-			StaccatoParserListener listener = new StaccatoParserListener();
-			parser.addParserListener(listener);
-
+			MusicXmlParser parser = new MusicXmlParser();		
+			MidiParserListener midilistener = new MidiParserListener();
+			parser.addParserListener(midilistener);
+			
 			parser.parse(converter.getMusicXML());
-
-			org.jfugue.pattern.Pattern musicXmlPattern = null;
-			if(converter.getMusicXML().contains("Guitar")) {
-				System.out.println("before contains Guitar.");
-				 musicXmlPattern = listener.getPattern().setTempo(400).setInstrument("Guitar");
-			}
-			else if(converter.getMusicXML().contains("Drumset.")) {
-				System.out.println("before contains Drumset");
-				 musicXmlPattern = listener.getPattern().setTempo(400).setInstrument(STYLESHEET_MODENA);
-			}
-
-			System.out.println("after parser..");
-			Player player = new Player();
-
-
-			System.out.println("starting to play music...");
-			player.play(musicXmlPattern);
-			System.out.println("Done playing music");
+			
+			ManagedPlayer player = new ManagedPlayer();
+			
+			Sequence seq = midilistener.getSequence();
+			System.out.println(seq.toString());
+			
+			
+			player.start(seq);
 			//----------------------------------------------------------------------------------------------------------
 
 
