@@ -10,6 +10,7 @@ import javafx.scene.canvas.Canvas;
  * @author Kuimou
  * */
 public class visualExporter {
+
 	public visualExporter(){
 
 	}
