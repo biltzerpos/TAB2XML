@@ -31,36 +31,11 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/xmpbox-2.0.25.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/pdfbox-tools-2.0.25.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/fontbox-2.0.25.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/preflight-2.0.25.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/pdfbox-2.0.25.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/pdfbox-app-2.0.25.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/pdfbox-tools-2.0.25.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/fontbox-2.0.25.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/preflight-2.0.25.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/pdfbox-2.0.25.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackS/Downloads/pdfbox-app-2.0.25.jar"/>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>

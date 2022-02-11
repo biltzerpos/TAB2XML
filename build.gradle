@@ -42,7 +42,13 @@ dependencies {
     testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
 
     implementation 'com.github.JensPiegsa:jfugue:5.0.9'
-}
+    
+    implementation "org.apache.pdfbox:pdfbox:2.0.25"
+    implementation "org.apache.pdfbox:preflight:2.0.25"
+    implementation "org.apache.pdfbox:pdfbox-app:2.0.25"
+    implementation "org.apache.pdfbox:pdfbox-tools:2.0.25"
+    implementation "org.apache.pdfbox:fontbox:2.0.25"
+} 
 
 task debug {
     group = "application"
