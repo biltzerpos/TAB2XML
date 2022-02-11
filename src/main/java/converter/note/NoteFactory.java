@@ -26,10 +26,10 @@ public abstract class NoteFactory {
 	protected int position;
     String noteGroupPattern, notePattern;
 	protected String connectorPattern;
-	
-	
+
+
     /** Template method to extract all notes from a composite note pattern
-     * 
+     *
      */
     public List<TabNote> getNotes(int inputStringNumber, String inputNoteText, int inputPosition, String inputLineName, int inputDistance) {
     	this.stringNumber = inputStringNumber;
@@ -37,24 +37,24 @@ public abstract class NoteFactory {
     	this.position = inputPosition;
     	this.lineName = inputLineName;
         this.distanceFromMeasureStart = inputDistance;
-        
+
 	    List<TabNote> noteList = new ArrayList<>();
 	    Matcher noteGroupMatcher = Pattern.compile(noteGroupPattern).matcher(noteText);
 	    if (!noteGroupMatcher.find()) {
 	        noteList.add(new InvalidNote(stringNumber, noteText, position, lineName, distanceFromMeasureStart));
 	        return noteList;
 	    }
-	    
+
 	    Range noteRange = new Range(noteGroupMatcher.start(), noteGroupMatcher.end());
-	    
+
 	    if (noteRange.getStart() > 0) {
 	        noteList.add(new InvalidNote(stringNumber, noteText.substring(0, noteRange.getStart()), position, lineName, distanceFromMeasureStart));
 	    }
-	    
+
 	    if (noteRange.getEnd() < noteText.length()) {
 	        noteList.add(new InvalidNote(stringNumber, noteText.substring(noteRange.getEnd()), position, lineName, distanceFromMeasureStart + noteRange.getEnd()));
 	    }
-	    
+
 	    noteList.addAll(getNotesFromValidRange(noteRange));
 	    return noteList;
 	}
@@ -64,7 +64,7 @@ public abstract class NoteFactory {
 	    int idx = r.getStart();
 	    int endIdx = r.getEnd();
 	    if (idx >= endIdx) return noteList;
-	    
+
 	    Matcher noteMatcher = Pattern.compile(notePattern).matcher(noteText.substring(idx, endIdx));
 	    TabNote note1;
 	    if (!noteMatcher.find()) {
@@ -76,21 +76,21 @@ public abstract class NoteFactory {
 	        note1 = notes.get(notes.size()-1);  //It is always the last note that builds a relationship. e.g you dont wanna get the grace note. you wanna get the grace pair because it is what will be creating a relationship with other notes
 	    }
 	    int endNote = idx + noteMatcher.end();
-	    
+
 	    AnchoredText connectorAT = createConnector(noteList, idx, endIdx, endNote);
-	    
+
 	    Range newRange = new Range(endNote + connectorAT.positionInLine, endIdx);
 	    List<TabNote> remainingNotes = getNotesFromValidRange(newRange);
 	    if (remainingNotes.isEmpty())
 	        return noteList;
 	    TabNote note2 = remainingNotes.get(0);
-	    
-	
+
+
 	    if (!connectorAT.text.isBlank())
 	        addRelationship(note1, note2, connectorAT.text);
-	    
+
 	    if (!connectorAT.text.equals("b")) noteList.addAll(remainingNotes);
-	    
+
 	    return noteList;
 	}
 
@@ -98,10 +98,10 @@ public abstract class NoteFactory {
     	List<TabNote> noteList = new ArrayList<>();
     	if (origin.strip().equalsIgnoreCase("R"))
 			noteList.add(createRest(origin, position, distanceFromMeasureStart));
-    	if (origin.strip().equalsIgnoreCase("T")) 
+    	if (origin.strip().equalsIgnoreCase("T"))
     		noteList.add(createTie(origin, position, distanceFromMeasureStart));
     	return noteList;
-    };
+    }
 
 	private TabNote createRest(String origin, int position, int distanceFromMeasureStart) {
 		return new RestNote(stringNumber, origin, position, lineName, distanceFromMeasureStart);
@@ -114,7 +114,7 @@ public abstract class NoteFactory {
 	protected abstract AnchoredText createConnector(List<TabNote> noteList, int idx, int endIdx, int endNote);
 
 	protected abstract void addRelationship(TabNote note1, TabNote note2, String relationship);
- 
+
     protected boolean slur(TabNote note1, TabNote note2) {
         String message = "success";
 
@@ -125,7 +125,7 @@ public abstract class NoteFactory {
             Notations notations = getNonNullNotations(noteModel);
             Slur slur = new Slur("start");
             slurNum.set(slur.getNumber());
-            
+
             if (note1.stringNumber < 4 && ((noteModel.getStem() == null) || (!noteModel.getStem().equals("up")))) slur.setPlacement("above");
             if (notations.getSlurs()==null) notations.setSlurs(new ArrayList<>());
             notations.getSlurs().add(slur);
@@ -142,7 +142,7 @@ public abstract class NoteFactory {
         }, message);
         return true;
     }
-    
+
     protected boolean grace(TabNote graceNote, TabNote gracePair, int graceDistance) {
         boolean success;
         success = slur(graceNote, gracePair);
@@ -176,7 +176,7 @@ public abstract class NoteFactory {
 	    Technical technical = notations.getTechnical();
 	    return technical;
     }
-    
+
     protected Notations getNonNullNotations(models.measure.note.Note noteModel) {
     	if (noteModel.getNotations() == null) noteModel.setNotations(new Notations());
 	    Notations notations = noteModel.getNotations();

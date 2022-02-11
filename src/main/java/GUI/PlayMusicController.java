@@ -18,7 +18,7 @@ import parser.ParseXmlString;
 public class PlayMusicController extends Application {
 
 //	public File saveFile;
-    private MainViewController mvc;
+//	private MainViewController mvc;
 	public Highlighter highlighter;
 	private ParseXmlString parser;
 
@@ -37,7 +37,7 @@ public class PlayMusicController extends Application {
 	}
 
     public void setMainViewController(MainViewController mvcInput) {
-    	mvc = mvcInput;
+//    	mvc = mvcInput;
     }
 
     public void update() {

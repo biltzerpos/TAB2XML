@@ -7,9 +7,9 @@ public class Instrument {
     String id;
 
     public Instrument() {
-    	
+
     }
-    
+
     public Instrument(String id) {
         this.id = id;
     }

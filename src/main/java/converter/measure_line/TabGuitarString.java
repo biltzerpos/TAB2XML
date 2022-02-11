@@ -40,5 +40,5 @@ public class TabGuitarString extends TabString {
 	protected NoteFactory createNoteFactory() {
 		return new GuitarNoteFactory();
 	}
-    
+
 }

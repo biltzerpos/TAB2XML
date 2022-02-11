@@ -76,13 +76,13 @@ public class TabSection extends ScoreComponent {
 			Settings.getInstance().setDetectedInstrument(Instrument.BASS);
 		this.tabRow = new TabRow(tabRowData);
 	}
-	
+
     private List<Instruction> extractInstructions(AnchoredText instrAT, boolean isTop) {
         List<Instruction> instructionList = new ArrayList<>();
         // Matches the repeat text including any barlines
         Matcher repeatMatcher = Pattern.compile(Repeat.PATTERN).matcher(instrAT.text);
         boolean repeatsAdded = false;
-        
+
         while((repeatMatcher.find())) {
         	AnchoredText repeatAT = new AnchoredText(repeatMatcher.group(), instrAT.positionInScore + repeatMatcher.start(), instrAT.positionInLine + repeatMatcher.start());
         	if (repeatsFound)
@@ -93,10 +93,10 @@ public class TabSection extends ScoreComponent {
         	}
         }
         if (repeatsAdded) repeatsFound = true;
-        
+
         Matcher timeSigMatcher = Pattern.compile(TimeSignature.PATTERN).matcher(instrAT.text);
         while(timeSigMatcher.find()) {
-        	AnchoredText timeSigAT = new AnchoredText(timeSigMatcher.group(), instrAT.positionInScore + timeSigMatcher.start(), instrAT.positionInLine + timeSigMatcher.start());   	
+        	AnchoredText timeSigAT = new AnchoredText(timeSigMatcher.group(), instrAT.positionInScore + timeSigMatcher.start(), instrAT.positionInLine + timeSigMatcher.start());
             instructionList.add(new TimeSignature(timeSigAT, isTop));
         }
 
@@ -105,7 +105,7 @@ public class TabSection extends ScoreComponent {
         	AnchoredText timingAT = new AnchoredText(timingMatcher.group(), instrAT.positionInScore + timingMatcher.start(), instrAT.positionInLine + timingMatcher.start());
             instructionList.add(new Timing(timingAT, isTop));
         }
-        
+
         return instructionList;
     }
 
@@ -126,7 +126,7 @@ public class TabSection extends ScoreComponent {
                 + ")+"                                                                  // the tab row just described is repeated one or more times.
                 + "(\\n" + Instruction.LINE_PATTERN+")*";
     }
-	    
+
 	public TabRow getTabRow() {
 		return this.tabRow;
 	}
@@ -141,6 +141,7 @@ public class TabSection extends ScoreComponent {
 	/**
 	 * Validates the aggregated TabRow objects of this class.
 	 */
+	@Override
 	public List<ValidationError> validate() {
 		errors.addAll(tabRow.validate());
 		for (Instruction instruction : this.instructionList) {

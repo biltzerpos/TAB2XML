@@ -1,13 +1,14 @@
 package models.measure.note;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import models.measure.note.notations.Notations;
 
-import java.util.List;
+import models.measure.note.notations.Notations;
 
 @JsonPropertyOrder({"grace", "chord", "pitch", "rest", "unpitched", "duration", "instrument", "voice", "type", "dot", "time-modification", "stem", "notehead", "beam", "notations"})
 
@@ -32,7 +33,7 @@ public class Note {
     Notehead notehead;
     Beam beam;
     Notations notations;
-    
+
     public Grace getGrace() {
         return grace;
     }

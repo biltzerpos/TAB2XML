@@ -25,39 +25,39 @@ public class CurrentSongSettingsWindowController extends Application {
 	@FXML private ComboBox<String> cmbNumerator;
 	@FXML private ComboBox<String> cmbDenominator;
 	@FXML private GridPane gridGuitarTuning;
-	
+
 	public CurrentSongSettingsWindowController() {
 		//prefs = Preferences.userRoot();
 	}
-	
+
 	public void setMainViewController(MainViewController mvcInput) {
 		mvc = mvcInput;
 	}
 
 	public void initialize() {
 		Settings s = Settings.getInstance();
-		
+
 		String outputFolder = s.outputFolder;
 		if (outputFolder == null)
 			outputFolderField.setPromptText("Not set yet...");
 		else
 			outputFolderField.setText(outputFolder);
-		
+
 		cmbErrorSensitivity.getItems().removeAll(cmbErrorSensitivity.getItems());
 		cmbErrorSensitivity.getItems().addAll("Level 1 - Minimal Error Checking", "Level 2 - Standard Error Checking", "Level 3 - Advanced Error Checking", "Level 4 - Detailed Error Checking");
 		int err = s.errorSensitivity;
 		cmbErrorSensitivity.getSelectionModel().select(err - 1);
-		
+
 		cmbNumerator.getItems().removeAll(cmbNumerator.getItems());
 		for (int i =1; i<=16; i++) cmbNumerator.getItems().add(i + "");
 		int num = s.tsNum;
 		cmbNumerator.getSelectionModel().select(num + "");
-		
+
 		cmbDenominator.getItems().removeAll(cmbDenominator.getItems());
 		cmbDenominator.getItems().addAll("2", "4", "8", "16", "32");
 		int den = s.tsDen;
 		cmbDenominator.getSelectionModel().select(den + "");
-		
+
 		initializeGuitarTuning();
 
 	}
@@ -83,7 +83,7 @@ public class CurrentSongSettingsWindowController extends Application {
 		outputFolderField.setText(selected.getAbsolutePath());
 		Settings.getInstance().outputFolder = selected.getAbsolutePath();
 		//System.out.println(Settings.getInstance().outputFolder);
-		
+
 		//prefs.put("outputFolder", selected.getAbsolutePath());
 	}
 
@@ -99,7 +99,7 @@ public class CurrentSongSettingsWindowController extends Application {
 		//prefs.put("tsDenominator", value);
 		Settings.getInstance().tsDen = Integer.parseInt(value);
 	}
-	
+
 
 	private void initializeGridPaneArray()
     {
@@ -110,9 +110,9 @@ public class CurrentSongSettingsWindowController extends Application {
           this.gridPaneArray[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] = node;
        }
     }
-	
+
 	@FXML private void handleTuning(ActionEvent e) {
-		
+
 		Node n = (Node) e.getSource();
 		if(n instanceof ComboBox<?>)
 	    {
@@ -126,7 +126,7 @@ public class CurrentSongSettingsWindowController extends Application {
 	}
 
 	private void initializeGuitarTuning() {
-		initializeGridPaneArray();	
+		initializeGridPaneArray();
 		for ( int string=0; string < 6; string++ )
 		{
 			Node n = this.gridPaneArray[string][0];

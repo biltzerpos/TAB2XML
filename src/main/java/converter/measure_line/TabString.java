@@ -54,7 +54,7 @@ public abstract class TabString extends ScoreComponent {
         return noteList;
     }
 
-    
+
 	/**
 	 * Generates a list of notes of any type (guitar, bass, drums)
 	 * @param stringNumber
@@ -76,7 +76,7 @@ public abstract class TabString extends ScoreComponent {
 		}
 		return noteList;
 	}
-	
+
 	protected abstract NoteFactory createNoteFactory();
 
 	@Override
@@ -85,21 +85,22 @@ public abstract class TabString extends ScoreComponent {
 		ranges.add(new Range(position,position+line.length()));
 		return null;
 	}
-	
+
 	/**
 	 * Provides a warning for whitespace in the tab
 	 * @return a List<ValidationError> for all locations that contain whitespaces
 	 */
+	@Override
 	public List<ValidationError> validate() {
-	
+
 	    if (this.line.length()-this.line.replaceAll("\s", "").length() != 0) {
 	        addError(
 	                "Adding whitespace might result in different timing than you expect.",
 	                3,
 	                getRanges());
-	        
+
 	    }
-	
+
 	    return errors;
 	}
 

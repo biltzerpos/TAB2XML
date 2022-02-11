@@ -3,6 +3,7 @@ package models.measure.note;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+
 import models.ScorePartwise;
 
 public class Beam {

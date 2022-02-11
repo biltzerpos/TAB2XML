@@ -9,7 +9,7 @@ public class Tied {
 	public Tied(String type) {
         this.type = type;
     }
-	
+
 	public String getType() {
 		return type;
 	}

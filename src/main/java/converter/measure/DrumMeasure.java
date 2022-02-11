@@ -19,12 +19,12 @@ public class DrumMeasure extends TabMeasure {
         super(inputData, inputNameData, isFirstMeasureInGroup);
         allowedPadding = Settings.getInstance().drumsMeasureStartPadding;
     }
-    
+
     @Override
 	protected int adjustDivisionsForSpecialCases(int usefulMeasureLength) {
 		return usefulMeasureLength;
 	}
-    
+
 	@Override
 	protected int adjustDurationForSpecialCases(int duration, List<TabNote> chord, List<TabNote> nextChord) {
 		// Duration should be 1 for choked cymbals
@@ -40,21 +40,23 @@ public class DrumMeasure extends TabMeasure {
 		return duration;
 	}
 
+	@Override
 	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name)
 	{
 		return new TabDrumString(stringNumber, data, name);
 	}
-	
+
+	@Override
 	protected Attributes getAttributesModel() {
         Attributes attributes = new Attributes();
         attributes.setDivisions(this.divisions);
-        
+
         if (this.changesTimeSignature)
             attributes.setTime(new Time(this.beatCount, this.beatType));
 
         if (this.measureCount == 1) {
         	attributes.setKey(new Key(0));
-            attributes.setClef(new Clef("percussion", 2));  
+            attributes.setClef(new Clef("percussion", 2));
         }
         return attributes;
     }
@@ -66,7 +68,7 @@ public class DrumMeasure extends TabMeasure {
 	@Override
 	public List<ValidationError> validate() {
 	    super.validate();
-	    // Validate Aggregates unless there are already critical errors	
+	    // Validate Aggregates unless there are already critical errors
 	    for (ValidationError error : errors) {
 	        if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
 	            return errors;
@@ -75,7 +77,7 @@ public class DrumMeasure extends TabMeasure {
 	    for (TabString measureLine : this.tabStringList) {
 	        errors.addAll(measureLine.validate());
 	    }
-	
+
 	    return errors;
 	}
 }

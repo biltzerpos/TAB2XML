@@ -44,13 +44,13 @@ class SampleInputs {
 	@Disabled
 	@Test
 	void test() throws IOException, URISyntaxException {
-		
+
 		URL outDirURL = this.getClass().getClassLoader().getResource("../../resources/test/outputs");
 		Path outDirPath = Path.of(outDirURL.toURI());
 		File outDir= outDirPath.toFile();
 		File[] outputFiles = outDir.listFiles();
 		for (File file : outputFiles) file.delete();
-		
+
 		URL inputDirURL = this.getClass().getClassLoader().getResource("../../resources/test/system/");
 		Path inputDirPath = Path.of(inputDirURL.toURI());
 		File inputDir = inputDirPath.toFile();

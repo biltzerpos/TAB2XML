@@ -15,16 +15,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jfugue.integration.MusicXmlParser;
-import org.jfugue.player.Player;
-import org.staccato.StaccatoParserListener;
+import org.jfugue.midi.MidiParserListener;
 
 import converter.Converter;
+import converter.Instrument;
 import converter.measure.TabMeasure;
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -333,7 +341,7 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
-	private void playMusicButtonHandle() throws ValidityException, ParsingException, ParserConfigurationException {
+	private void playMusicButtonHandle() throws ParserConfigurationException, ValidityException, ParsingException, InvalidMidiDataException, MidiUnavailableException {
 		Parent root;
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/playMusic.fxml"));
@@ -342,32 +350,32 @@ public class MainViewController extends Application {
 			controller.setMainViewController(this);
 
 			//----------------------------------------------------------------------------------------------------------
-			MusicXmlParser parser = new MusicXmlParser();
-			StaccatoParserListener listener = new StaccatoParserListener();
-			parser.addParserListener(listener);
-
+			MusicXmlParser parser = new MusicXmlParser();		
+			MidiParserListener midilistener = new MidiParserListener();
+			parser.addParserListener(midilistener);
 			parser.parse(converter.getMusicXML());
-
-			org.jfugue.pattern.Pattern musicXmlPattern = null;
-			if(converter.getMusicXML().contains("Guitar")) {
-				System.out.println("before contains Guitar.");
-				 musicXmlPattern = listener.getPattern().setTempo(400).setInstrument("Guitar");
+			
+			// ManagedPlayer or Sequencer (Sequencer can play multiple noes simultaneously
+//			ManagedPlayer player = new ManagedPlayer();
+			Sequencer sequencer = MidiSystem.getSequencer();
+			sequencer.open();
+			
+			Sequence sequence = midilistener.getSequence();
+			Track track = sequence.createTrack();
+			
+			if(Settings.getInstance().getInstrument() == Instrument.DRUMS) {
+				
 			}
-			else if(converter.getMusicXML().contains("Drumset.")) {
-				System.out.println("before contains Drumset");
-				 musicXmlPattern = listener.getPattern().setTempo(400).setInstrument(STYLESHEET_MODENA);
+			else if (Settings.getInstance().getInstrument() == Instrument.GUITAR) {
+				ShortMessage sm = new ShortMessage();
+				sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 42, 0);
+				track.add(new MidiEvent(sm, 1));
+				System.out.println(track.size());
 			}
-
-			System.out.println("after parser..");
-			Player player = new Player();
-
-
-			System.out.println("starting to play music...");
-			player.play(musicXmlPattern);
-			System.out.println("Done playing music");
+			sequencer.setSequence(sequence);
+			sequencer.start();
+			System.out.println("done playing");
 			//----------------------------------------------------------------------------------------------------------
-
-
 //			convertWindow = this.openNewWindow(root, "Play Music");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
