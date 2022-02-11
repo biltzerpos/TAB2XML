@@ -28,7 +28,10 @@ import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 import javafx.stage.Stage;
+
 import parser.Parser;
+
+import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.note.Note;
 
@@ -55,11 +58,16 @@ public class PreviewMusic extends Application{
     // We can use this method to update the music sheet
     public void update() throws IOException
     {
-    	//initialize parser
-    	Parser parser = new Parser();
-    	parser.parse(mvc.converter.getMusicXML());
-    	//get the list of measure from parser
-    	List<Measure> measureList = parser.getMeasures();
+    	// Get the ScorePartwise object directly
+    	ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
+
+    	/* Get the list of measures from the ScorePartwise object.
+    	 *
+    	 * We get the list of Parts, there should be only one Part in this list,
+    	 * so we get the first item, which is the Part, then we get the measures from that Part.
+    	 */
+    	List<Measure> measureList = scorePartwise.getParts().get(0).getMeasures();
+
     	//set initial positions
     	double x = 0; 
     	double y = 0; 
