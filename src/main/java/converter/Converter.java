@@ -10,6 +10,9 @@ import GUI.MainViewController;
 import utility.MusicXMLCreator;
 import utility.ValidationError;
 
+import models.ScorePartwise;
+
+
 public class Converter {
 
 	private Score score;
@@ -28,11 +31,15 @@ public class Converter {
 	public String getMusicXML() {
 		return mxlc.generateMusicXML();
 	}
-	
+
 	public Score getScore() {
 		return score;
 	}
-	
+
+	public ScorePartwise getScorePartwise() {
+		return mxlc.getScorePartwise();
+	}
+
 	public List<ValidationError> validate() {
 		return score.validate();
 	}
