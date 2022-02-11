@@ -29,7 +29,7 @@ import utility.ValidationError;
 
 public abstract class TabMeasure extends ScoreComponent {
     public static int MEASURE_INDEX;
-    
+
     protected int measureCount;
     protected int beatCount = Settings.getInstance().tsNum;
     protected int beatType = Settings.getInstance().tsDen;
@@ -54,8 +54,8 @@ public abstract class TabMeasure extends ScoreComponent {
     protected int[] supportedDivisions = {1,2,3,4,6,8,12,16,24,48};
 
 	public boolean startsWithTiedNote = false;
-    
-    
+
+
     public TabMeasure(List<AnchoredText> inputData, List<AnchoredText> inputNameData, boolean isFirstMeasureInGroup) {
         this.measureCount = ++MEASURE_INDEX;
         this.data = inputData;
@@ -81,10 +81,10 @@ public abstract class TabMeasure extends ScoreComponent {
 
     /**
      * Abstract method to create the corresponding type of TabString
-     * 
+     *
      * @return a TabString either of type TabGuitarString, TabBassString, or TabDrumString
      */
-    protected abstract TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name);    
+    protected abstract TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name);
 
 	protected void setChords() {
 		for (List<TabNote> voice : this.voiceSortedNoteList) {
@@ -112,11 +112,11 @@ public abstract class TabMeasure extends ScoreComponent {
 			    List<TabNote> nextChord = chordList.get(i+1);
 			    int currentChordDistance = chord.get(0).distance;
 			    int nextChordDistance = nextChord.get(0).distance;
-			
+
 			    int duration = nextChordDistance-currentChordDistance;
 			    duration = adjustDurationForSpecialCases(duration, chord, nextChord);
-			    
-			    for (TabNote note : chord) {			    	
+
+			    for (TabNote note : chord) {
 			        note.setDuration(duration);
 			    }
 			}
@@ -124,19 +124,19 @@ public abstract class TabMeasure extends ScoreComponent {
 			if (!chordList.isEmpty()) {
 			    List<TabNote> chord = chordList.get(chordList.size()-1);
 			    int currentChordDistance = chord.get(0).distance;
-			
+
 			    int duration = getMaxMeasureLineLength() - currentChordDistance;
 			    duration = adjustDurationForSpecialCases(duration, chord, null);
-			    
-			    for (TabNote note : chord) {			    	
+
+			    for (TabNote note : chord) {
 			        note.setDuration(duration);
 			    }
 			}
         }
     }
-    
+
     protected abstract int adjustDurationForSpecialCases(int duration, List<TabNote> chord, List<TabNote> nextChord);
-    
+
 	protected boolean isDoubleDigit(List<TabNote> chord) {
     	boolean doubleDigit = false;
     	for (TabNote note : chord) {
@@ -144,7 +144,7 @@ public abstract class TabMeasure extends ScoreComponent {
 	    }
 		return doubleDigit;
 	}
-	
+
 	protected int chordStretch(List<TabNote> chord) {
     	int result = 1;
     	for (TabNote note : chord) {
@@ -152,7 +152,7 @@ public abstract class TabMeasure extends ScoreComponent {
 	    }
 		return result;
 	}
-        
+
     public List<List<List<TabNote>>> getVoiceSortedChordList() {
         List<List<List<TabNote>>> voiceSortedChordList = new ArrayList<>();
         for (List<TabNote> voice : this.voiceSortedNoteList) {
@@ -175,7 +175,7 @@ public abstract class TabMeasure extends ScoreComponent {
     public int getDivisions() {
     	return divisions;
     }
-    
+
 	public void setDivisions() {
 		if (explicitDivisions) {
 			// TODO Add error if divisions and total duration of notes does not match time
@@ -229,7 +229,7 @@ public abstract class TabMeasure extends ScoreComponent {
 			}
 		}
 	}
-    
+
 	// Used by the Timing instructions to set the divisions explicitly
     public void setDivisions(int div) {
 		divisions = div;
@@ -283,12 +283,12 @@ public abstract class TabMeasure extends ScoreComponent {
 		}
 		return somethingToSplit;
 	}
-    
+
 	private int firstNoteDuration(int totalDuration, int duration, int divisions, int den) {
 		int firstNote, secondNote = 0;
-		int beatDuration = divisions * 4 / den;;
+		int beatDuration = divisions * 4 / den;
 		do {
-			
+
 			int beats = totalDuration / beatDuration;
 			int offSet = totalDuration - beats * beatDuration;
 			firstNote = beatDuration - offSet;
@@ -299,11 +299,9 @@ public abstract class TabMeasure extends ScoreComponent {
 		} while ((firstNote < 1) || (secondNote < 1));
 		return firstNote;
 	}
-    
+
     public boolean setRepeat(int repeatCount, RepeatType repeatType) {
-        if (repeatCount<0)
-            return false;
-        if (!(repeatType == RepeatType.START || repeatType == RepeatType.END))
+        if ((repeatCount<0) || !(repeatType == RepeatType.START || repeatType == RepeatType.END))
             return false;
         this.repeatCount = repeatCount;
         if (repeatType == RepeatType.START)
@@ -388,7 +386,7 @@ public abstract class TabMeasure extends ScoreComponent {
 	public int getBeatCount() {
 	    return this.beatCount;
 	}
-	
+
 	public int getBeatType() {
 	    return this.beatType;
 	}
@@ -405,7 +403,7 @@ public abstract class TabMeasure extends ScoreComponent {
 	}
 
 	protected abstract Attributes getAttributesModel();
-	
+
     public models.measure.Measure getModel() {
         models.measure.Measure measureModel = new models.measure.Measure();
         measureModel.setNumber(this.measureCount);
@@ -463,7 +461,7 @@ public abstract class TabMeasure extends ScoreComponent {
             repeat.setDirection("backward");
             repeat.setTimes("" + this.repeatCount);
             barLine.setRepeat(repeat);
-            
+
             Direction direction = new Direction();
             direction.setPlacement("above");
             measureModel.setDirection(direction);
@@ -487,9 +485,10 @@ public abstract class TabMeasure extends ScoreComponent {
 	 *  That job is left up to its concrete classes (this is an abstract class)
 	 *  TODO See if that validation can happen here
 	 */
+	@Override
 	public List<ValidationError> validate() {
-	
-	    
+
+
 	    if (unSupportedDivisions) {
 	        addError(
 	                "Could not determine timing correctly: Unsupported divisions",
@@ -509,27 +508,27 @@ public abstract class TabMeasure extends ScoreComponent {
 	    	addError("Empty space at the beginning of the measure will be ignored"
 	    		+ "\nYou may want to add a rest (R) or a tied note (T) for correct timing",
                 2, getRanges());
-	    
+
 	    boolean hasGuitarMeasureLines = true;
 	    boolean hasDrumMeasureLines = true;
 	    boolean lineSizeEqual = true;
-	
+
 	    int previousLineLength = -1;
 	    for (TabString tabString : this.tabStringList) {
 	        hasGuitarMeasureLines &= tabString instanceof TabGuitarString;
 	        hasDrumMeasureLines &= tabString instanceof TabDrumString;
-	
+
 	        int currentLineLength = tabString.line.replace("\s", "").length();
 	        lineSizeEqual &= (previousLineLength < 0) || previousLineLength == currentLineLength;
 	        previousLineLength = currentLineLength;
 	    }
-	    
+
 	    if (!(hasGuitarMeasureLines || hasDrumMeasureLines)) {
 	        addError(
 	                "All measure lines in a measure must be of the same type (i.e. all guitar measure lines or all drum measure lines)",
 	                1, getRanges());
 	    }
-	
+
 	    if (!lineSizeEqual) {
 	        addError(
 	                "Unequal measure line lengths may lead to incorrect note durations.",

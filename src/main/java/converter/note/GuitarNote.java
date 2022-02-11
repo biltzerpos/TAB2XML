@@ -55,7 +55,7 @@ public class GuitarNote extends TabNote {
         this.fret = n.fret;
     	this.noteDetails = n.noteDetails;
     }
-    
+
     public int getFret() {
         return this.fret;
     }
@@ -135,7 +135,7 @@ public class GuitarNote extends TabNote {
 	public TabNote copy() {
 		return new GuitarNote(this);
 	}
-	
+
     @Override
 	protected void setStems(Note noteModel) {
 		// Not setting stems for guitars at this point
@@ -143,37 +143,38 @@ public class GuitarNote extends TabNote {
 
 	@Override
 	public models.measure.note.Note getModel() {
-    	
+
 	    models.measure.note.Note noteModel = super.getModel();
-	    
+
 	    noteModel.setPitch(new Pitch(this.step, this.alter, this.octave));
 
 	    if (noteModel.getNotations() == null) noteModel.setNotations(new Notations());
 	    Notations notations = noteModel.getNotations();
 	    if (notations.getTechnical() == null) notations.setTechnical(new Technical());
 	    Technical technical = notations.getTechnical();
- 	    
+
 	    technical.setString(this.stringNumber);
 	    technical.setFret(this.fret);
 	    notations.setTechnical(technical);
 	    noteModel.setNotations(notations);
-	    
+
 	    return noteModel;
 	}
 
+	@Override
 	public List<ValidationError> validate() {
 	    super.validate();
-	    
+
 	    for (NoteModelDecorator noteDecor : this.getDecorators().keySet()) {
 	        String resp = getDecorators().get(noteDecor);
 	        if (resp.equals("success")) continue;
 	        Matcher matcher = Pattern.compile("(?<=^\\[)[0-9](?=\\])").matcher(resp);
 	        matcher.find();
 	        int priority = Integer.parseInt(matcher.group());
-	        String message = resp.substring(matcher.end()+1);;
+	        String message = resp.substring(matcher.end()+1);
 	        int startIdx = this.position;
 	        int endIdx = this.position + this.text.length();
-	
+
 	        matcher = Pattern.compile("(?<=^\\[)[0-9]+,[0-9]+(?=\\])").matcher(message);
 	        if (matcher.find()) {
 	            String positions = matcher.group();
@@ -182,11 +183,11 @@ public class GuitarNote extends TabNote {
 	            endIdx = Integer.parseInt(matcher.group());
 	            message = message.substring(matcher.end()+2);
 	        }
-	
+
 	        addError(message, priority, new ArrayList<>(Collections.singleton(new Range(startIdx, endIdx))));
-	        
+
 	    }
-	
+
 	    if (this.noteDetails == null)
 	        addError("this note could not be identified", 1, getRanges());
 

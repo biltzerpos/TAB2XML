@@ -28,7 +28,7 @@ public class TabRowTest {
 		Settings.getInstance().setInstrumentSetting(InstrumentSetting.AUTO);
 		Settings.getInstance().setDefaultTuning();
 	}
-	
+
     @Disabled
     @Test
     void testValidate_validInput1() {

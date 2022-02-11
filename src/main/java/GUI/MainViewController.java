@@ -15,11 +15,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
+import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.midi.MidiParserListener;
 
 import converter.Converter;
+import converter.Instrument;
 import converter.measure.TabMeasure;
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -40,6 +53,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
 
@@ -67,6 +82,7 @@ public class MainViewController extends Application {
 	@FXML  Button saveMXLButton;
 	@FXML  Button showMXLButton;
 	@FXML  Button previewButton;
+	@FXML  Button playMusicButton;
 	@FXML  Button goToline;
 	@FXML  ComboBox<String> cmbScoreType;
 
@@ -81,7 +97,7 @@ public class MainViewController extends Application {
 		s.errorSensitivity = Integer.parseInt(prefs.get("errorSensitivity", "4"));
 	}
 
-	@FXML 
+	@FXML
 	public void initialize() {
 		mainText.setParagraphGraphicFactory(LineNumberFactory.get(mainText));
 		converter = new Converter(this);
@@ -324,6 +340,49 @@ public class MainViewController extends Application {
 
 	}
 
+	@FXML
+	private void playMusicButtonHandle() throws ParserConfigurationException, ValidityException, ParsingException, InvalidMidiDataException, MidiUnavailableException {
+		Parent root;
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/playMusic.fxml"));
+			root = loader.load();
+			PlayMusicController controller = loader.getController();
+			controller.setMainViewController(this);
+
+			//----------------------------------------------------------------------------------------------------------
+			MusicXmlParser parser = new MusicXmlParser();		
+			MidiParserListener midilistener = new MidiParserListener();
+			parser.addParserListener(midilistener);
+			parser.parse(converter.getMusicXML());
+			
+			// ManagedPlayer or Sequencer (Sequencer can play multiple noes simultaneously
+//			ManagedPlayer player = new ManagedPlayer();
+			Sequencer sequencer = MidiSystem.getSequencer();
+			sequencer.open();
+			
+			Sequence sequence = midilistener.getSequence();
+			Track track = sequence.createTrack();
+			
+			if(Settings.getInstance().getInstrument() == Instrument.DRUMS) {
+				
+			}
+			else if (Settings.getInstance().getInstrument() == Instrument.GUITAR) {
+				ShortMessage sm = new ShortMessage();
+				sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 24, 0);
+				track.add(new MidiEvent(sm, 1));
+				System.out.println("Size of track: " + track.size());
+			}
+			sequencer.setSequence(sequence);
+			sequencer.start();
+			System.out.println("done playing");
+			//----------------------------------------------------------------------------------------------------------
+//			convertWindow = this.openNewWindow(root, "Play Music");
+		} catch (IOException e) {
+			Logger logger = Logger.getLogger(getClass().getName());
+			logger.log(Level.SEVERE, "Failed to create new Window.", e);
+		}
+	}
+
 	public void refresh() {
 		mainText.replaceText(new IndexRange(0, mainText.getText().length()), mainText.getText()+" ");
 	}
@@ -351,7 +410,7 @@ public class MainViewController extends Application {
 	}
 
 	public void listenforTextAreaChanges() {
-		//Subscription cleanupWhenDone = 
+		//Subscription cleanupWhenDone =
 		mainText.multiPlainChanges()
 		.successionEnds(Duration.ofMillis(350))
 		.supplyTask(this::update)
@@ -379,12 +438,14 @@ public class MainViewController extends Application {
 					saveMXLButton.setDisable(true);
 					previewButton.setDisable(true);
 					showMXLButton.setDisable(true);
+					playMusicButton.setDisable(true);
 				}
 				else
 				{
 					saveMXLButton.setDisable(false);
 					previewButton.setDisable(false);
 					showMXLButton.setDisable(false);
+					playMusicButton.setDisable(false);
 				}
 				return highlighter.computeHighlighting(text);
 			}

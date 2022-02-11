@@ -16,9 +16,10 @@ public class BassMeasure extends GuitarMeasure {
         tuning = Settings.getInstance().getBassTuning();
     }
 
+	@Override
 	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name)
 	{
 		return new TabBassString(stringNumber, data, name);
 	}
-    
+
 }

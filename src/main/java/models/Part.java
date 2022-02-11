@@ -1,11 +1,12 @@
 package models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import models.measure.Measure;
 
-import java.util.List;
+import models.measure.Measure;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Part {
@@ -15,6 +16,10 @@ public class Part {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "measure")
     public List<Measure> measures;
+
+    public Part() {
+
+    }
 
     public Part(String id, List<Measure> measures) {
         this.id = id;

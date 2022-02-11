@@ -12,6 +12,10 @@ public class StaffTuning {
     @JacksonXmlProperty(localName = "tuning-octave")
     public int tuningOctave;
 
+    public StaffTuning() {
+
+    }
+
     public StaffTuning(int line, String tuningStep, int tuningOctave) {
         this.line = line;
         this.tuningStep = tuningStep;

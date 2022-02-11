@@ -6,9 +6,9 @@ import models.measure.note.notations.technical.Bend;
 import models.measure.note.notations.technical.Technical;
 
 public class BendDecorator implements NoteModelDecorator {
-	
+
 	protected int width;
-	
+
 	public BendDecorator(int width) {
 		this.width = width;
 	}

@@ -14,24 +14,24 @@ import converter.note.TabNote;
 import utility.Settings;
 
 public class NoteFactoryTest {
-	
+
     @BeforeEach
     void init() {
     	Settings.getInstance().setInstrumentSetting(InstrumentSetting.AUTO);
     	Settings.getInstance().setDefaultTuning();
     }
-    
+
 	@AfterEach
 	void tearDown() throws Exception {
 		Settings.getInstance().setInstrumentSetting(InstrumentSetting.AUTO);
 		Settings.getInstance().setDefaultTuning();
 	}
 
-   
+
     @Test
     void graceTest1() {
-        
-        String input = 
+
+        String input =
                 """
 E|-------g4h16p5-------------5-6-5-5---5---|
 B|-------------5---6-------8-------------6-|
@@ -42,7 +42,7 @@ D|---------------------------------0-------|
 
                 """;
 
-        
+
             Score score = new Score(input);
             assertEquals(1, score.tabMeasureList.size(), "one measure was expected but found " + score.tabMeasureList.size() + ".");
             assertTrue(score.validate().size() == 0);
@@ -52,11 +52,11 @@ D|---------------------------------0-------|
             n = measure.getVoiceSortedNoteList().get(0).get(2);
             assertTrue(n.isGrace);
     }
-    
+
     @Test
     void graceTest2() {
-        
-        String input = 
+
+        String input =
                 """
 E|-----------g4h08h15-------------5-6-5-5---5---|
 B|-----------g9h12p11---6-------8-------------6-|
@@ -66,7 +66,7 @@ A|---g3s15--------------8-------7---------------|
 D|--------------------------------------0-------|
 
                 """;
-      
+
             Score score = new Score(input);
             assertEquals(1, score.tabMeasureList.size(), "one measure was expected but found " + score.tabMeasureList.size() + ".");
             assertTrue(score.validate().size() == 0);

@@ -24,7 +24,7 @@ public class ScoreTest {
     	Settings.getInstance().setInstrumentSetting(InstrumentSetting.AUTO);
     	Settings.getInstance().setDefaultTuning();
     }
-    
+
 	@AfterEach
 	void tearDown() throws Exception {
 		Settings.getInstance().setInstrumentSetting(InstrumentSetting.AUTO);

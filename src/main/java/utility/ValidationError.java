@@ -13,15 +13,15 @@ public class ValidationError {
         this.priority = priority;
         this.positions = positions;
     }
-    
+
     public int getPriority() {
     	return this.priority;
     }
-    
+
     public List<Range> getPositions() {
     	return positions;
     }
-    
+
     public String getMessage() {
     	return this.message;
     }

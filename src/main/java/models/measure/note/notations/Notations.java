@@ -1,5 +1,7 @@
 package models.measure.note.notations;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -7,8 +9,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import models.measure.note.notations.technical.Ornaments;
 import models.measure.note.notations.technical.Technical;
-
-import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"tied", "slur", "slide", "technical"})
@@ -22,11 +22,11 @@ public class Notations {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "slide")
     List<Slide> slides;
-    
+
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "tied")
     private List<Tied> tieds;
-    
+
     private Ornaments ornaments;
 
     public List<Slur> getSlurs() {

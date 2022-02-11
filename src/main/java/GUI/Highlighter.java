@@ -22,16 +22,16 @@ import utility.Settings;
 import utility.ValidationError;
 
 public class Highlighter {
-	
+
     private int HOVER_DELAY = 30;
     private TreeMap<Range, ValidationError> activeErrors = new TreeMap<>();
 	private MainViewController mvc;
     private Converter converter;
-    
+
     public Highlighter(MainViewController mvc, Converter conv) {
     	this.mvc = mvc;
     	this.converter = conv;
-		
+
 		Popup popup = new Popup();
 		Label popupMsg = new Label();
 		popupMsg.setStyle(
@@ -54,7 +54,7 @@ public class Highlighter {
 			popup.hide();
 		});
     }
-    
+
     public StyleSpans<Collection<String>> computeHighlighting(String text) {
     	//System.out.println(text.length());
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();

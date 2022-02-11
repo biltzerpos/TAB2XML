@@ -8,10 +8,10 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 public class LoadScreen {
-	JFrame body; 
+	JFrame body;
     JLabel wallpaper = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("image_assets/loading_page_background.jpg")));
     JProgressBar bar = new JProgressBar();
-    
+
     LoadScreen() {
 	    makeScreen();
 	    insertBar();
@@ -47,7 +47,7 @@ public class LoadScreen {
 	            if(load == 100){
 	                body.dispose();
 	            }
-	
+
 	        }
 	    }catch (Exception e) {
 	        e.printStackTrace();

@@ -9,6 +9,10 @@ public class ScoreInstrument {
     @JacksonXmlProperty(localName = "instrument-name")
     public String instrumentName;
 
+    public ScoreInstrument() {
+
+    }
+
     public ScoreInstrument(String id, String instrumentName) {
         this.id = id;
         this.instrumentName = instrumentName;

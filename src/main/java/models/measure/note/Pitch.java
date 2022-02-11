@@ -8,6 +8,10 @@ public class Pitch {
     Integer alter;
     int octave;
 
+    public Pitch() {
+
+    }
+
     public Pitch(String step, int alter, int octave) {
         this.step = step;
         this.alter = alter==0 ? null : alter;

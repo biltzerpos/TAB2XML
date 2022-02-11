@@ -1,15 +1,19 @@
 package models.part_list;
 
+import java.util.List;
+
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-import java.util.List;
 
 public class PartList {
 
     @JacksonXmlProperty(localName = "score-part")
     @JacksonXmlElementWrapper(useWrapping = false)
     public List<ScorePart> scoreParts;
+
+    public PartList() {
+
+    }
 
     public PartList(List<ScorePart> scoreParts) {
         this.scoreParts = scoreParts;

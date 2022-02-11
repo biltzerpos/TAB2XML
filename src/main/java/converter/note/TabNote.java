@@ -38,7 +38,7 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
     public int stretch = 1;
     protected String type = "";
     protected boolean explicitType = false;
-    
+
     // A pattern that matches the note components of a measure line, like (2h7) or 8s3 or 12 or 4/2, etc.
     // It doesn't have to match the correct notation. It should be as vague as possible, so it matches anything that "looks"
     //like a note component (e.g it should match something like e|-------h3(-----|, even though it is invalid ) this makes it so that
@@ -62,13 +62,13 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
         this.distance = distanceFromMeasureStart;
         this.voice = 1;
     }
-    
+
     public TabNote(int stringNumber, String origin, int position, String lineName, int distanceFromMeasureStart, int voice) {
         this(stringNumber, origin, position, lineName, distanceFromMeasureStart);
         this.voice = voice;
     }
-    
-    
+
+
     /** Copy constructor used for tied notes. Does not copy duration or decorators
      * @param n - The note to copy
      */
@@ -93,26 +93,26 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
         this.mustSplit = n.mustSplit;
         this.stretch = n.stretch;
     }
-    
+
     public void setDivisions(int divisions) {
     	this.divisions = divisions;
     	setType();
     	if (type.equals("1024th")) this.mustSplit = true;
     }
-    
+
     public void setBeatType(int bt) {
     	this.beatType = bt;
     }
-    
+
     public void setBeatCount(int bc) {
     	this.beatCount = bc;
     }
-    
+
     public void setDuration(int duration) {
 	    this.duration = duration;
 	    if (divisions > 0) {
 	    	setType();
-	    	if (type.equals("1024th")) 
+	    	if (type.equals("1024th"))
 	    		this.mustSplit = true;
 	    	else
 	    		this.mustSplit = false;
@@ -140,7 +140,7 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
     			tuplet = Integer.parseInt(timing.substring(1));
     			duration = duration * 2 / 3; //TODO Update for 5-tuplets etc.
     		}
-    	}		
+    	}
     }
 
 	public int getDuration() {
@@ -156,7 +156,7 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
     	tuplet = 1;
     	int RESOLUTION = 192;  // 3 x 2^6
     	int noteVal = RESOLUTION * duration / (divisions * 4);
-    	switch (noteVal) { 
+    	switch (noteVal) {
     	case 0: type = ""; break; // Grace note
     	case 3: type = "64th"; break;
     	case 4: tuplet = 3; type = "32nd"; break;
@@ -195,16 +195,17 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
     	}
     }
 
-    public int compareTo(TabNote other) {
+    @Override
+	public int compareTo(TabNote other) {
     	int result = this.distance - other.distance;
     	if (result == 0) result = this.graceDistance - other.graceDistance;
         return result;
     }
-	
+
     public abstract TabNote copy();
-    
+
     protected abstract void setStems(models.measure.note.Note noteModel);
-    
+
 	public Map<NoteModelDecorator, String> getDecorators() {
 		return decorators;
 	}
@@ -214,19 +215,19 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
 	}
 
 	public models.measure.note.Note getModel() {
-		
+
 		models.measure.note.Note noteModel = new models.measure.note.Note();
-		
+
 	    if (this.startsWithPreviousNote) noteModel.setChord(new Chord());
 	    noteModel.setDuration(this.duration);
 	    noteModel.setVoice(this.voice);
-	
-	    
+
+
 	    if (!type.isEmpty())
 	        noteModel.setType(type);
 	    if (tuplet == 3) {
 	       	TimeModification tm = new TimeModification(3,2);
-	    	noteModel.setTimeModification(tm);	
+	    	noteModel.setTimeModification(tm);
 	    }
 	    List<Dot> dots = new ArrayList<>();
 	    for (int i=0; i<this.dotCount; i++){
@@ -234,14 +235,14 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
 	    }
 	    if (!dots.isEmpty())
 	        noteModel.setDots(dots);
-	
+
 	    setStems(noteModel);
-	    
+
 	    for (NoteModelDecorator noteDecor : this.getDecorators().keySet()) {
 	        if (getDecorators().get(noteDecor).equals("success"))
 	            noteDecor.applyTo(noteModel);
 	    }
-	
+
 	    return noteModel;
 	}
 
@@ -251,14 +252,15 @@ public abstract class TabNote extends ScoreComponent implements Comparable<TabNo
 		ranges.add(new Range(position,position+text.length()));
 		return ranges;
 	}
-	
+
+	@Override
 	public List<ValidationError> validate() {
 	    if (!this.text.equals(this.text.strip())) {
 	        addError(
 	                "Adding whitespace might result in different timing than you expect.",
 	                3,
 	                getRanges());
-	        
+
 	    }
 	    return errors;
 	}

@@ -32,21 +32,21 @@ public class GuitarUtils {
 	    result.add("");
 	    return result;
 	}
-	
+
 	public static double isGuitarLineLikelihood(String name, String line) {
 	    double lineNameWeight = 0.5;  // weight attached when the line name is a guitar line name
 	    double noteGroupWeight = 0.5;   // ratio of notes that are guitar notes vs {all other notes, both valid and invalid}
-	
+
 	    if (!GuitarUtils.isValidName(name))
 	        return 0;
 	    double score = lineNameWeight;
 	    line = line.replaceAll("\s", "");
-	
+
 	    int charGroups = 0;
 	    Matcher charGroupMatcher = Pattern.compile("[^-]+").matcher(line);
 	    while (charGroupMatcher.find())
 	        charGroups++;
-	
+
 	    int noteGroups = 0;
 	    Matcher noteGroupMatcher = Pattern.compile(Patterns.GUITAR_NOTE_GROUP_PATTERN).matcher(line);
 	    while (noteGroupMatcher.find()) {

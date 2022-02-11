@@ -10,6 +10,10 @@ public class Creator {
     @JacksonXmlText
     String name;
 
+    public Creator() {
+
+    }
+
     public Creator(String type, String name) {
         this.type = type;
         this.name = name;

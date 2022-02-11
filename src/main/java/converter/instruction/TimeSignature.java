@@ -48,11 +48,12 @@ public class TimeSignature extends Instruction {
                     this.setHasBeenApplied(itWorked);
                     if (itWorked) measure.changesTimeSignature = true;
                 }
-            
+
         }
     }
 
-    public List<ValidationError> validate() {
+    @Override
+	public List<ValidationError> validate() {
         if (!(isTop)) {
             addError(
                     "Time signatures should only be applied to the top of measures.",
