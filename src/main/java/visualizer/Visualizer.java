@@ -16,7 +16,6 @@ import models.measure.attributes.Attributes;
 import models.measure.barline.BarLine;
 import models.measure.note.Note;
 import models.part_list.PartList;
-import org.jfugue.integration.MusicXmlParserListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,10 +25,12 @@ import java.util.List;
  *
  * @author Kuimou
  * */
-public class visualizer {
+public class Visualizer {
 	public String temp_dest = "resources/templeFile/tempSheet.pdf";
 	private ScorePartwise score;
-	public visualizer(Score score) throws TXMLException {
+	private PdfCanvas canvas;
+	private PdfDocument pdf;
+	public Visualizer(Score score) throws TXMLException {
 		this.score = score.getModel();
 	}
 	/**
@@ -39,27 +40,26 @@ public class visualizer {
 	public void initPDF() throws FileNotFoundException {
 		File file = new File(temp_dest);
 		file.getParentFile().mkdir();
-		PdfDocument pdf = new PdfDocument(new PdfWriter(temp_dest));
+		this.pdf = new PdfDocument(new PdfWriter(temp_dest));
 
 		PageSize pageSize = PageSize.A4.rotate();
 		PdfPage page = pdf.addNewPage(pageSize);
 
-		PdfCanvas canvas = new PdfCanvas(page);
+		canvas = new PdfCanvas(page);
 	}
 	/**
 	 * This method is going to draw musicXML
 	 * visualizer will create a PDF file.
 	 * after drawing is finished, it will project PDF file into preview canvas
 	 *
-	 * @param canvas
-	 * canvas in the "preview page"
+	 *
 	 * */
 
-	public void draw(Canvas canvas) {
-		// PartList is the instrument information of each Part
+	public PdfDocument draw() throws FileNotFoundException {
+		initPDF();
 		// Parts is collection of part
-		drawPartList(score.getPartList());
 		drawParts(score.getParts());
+		return pdf;
 	}
 	public void drawParts(List<Part> parts){
 		//draw each part
@@ -76,9 +76,6 @@ public class visualizer {
 			drawMeasure(measure);
 		}
 	}
-	public void drawPartList(PartList partList){
-		// some data to draw
-	}
 
 	public void drawMeasure(Measure measure){
 		// attribute contain metadatas for whole measure
@@ -89,6 +86,7 @@ public class visualizer {
 		// draw Barlines
 		drawBarlines(measure.getBarlines());
 	}
+
 	public void drawAttributes(Attributes attributes){
 
 	}
