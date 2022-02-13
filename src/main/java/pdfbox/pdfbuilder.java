@@ -2,8 +2,10 @@ package pdfbox;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Array;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.prefs.Preferences;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
@@ -11,6 +13,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+
+import utility.Settings;
 
 ////pdf file creation details
 // doc.save(file path)                                               (path = "C/document/etc/...")
@@ -68,16 +72,28 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 public class pdfbuilder {
 	//default builder
 	//variables need to be static
-	private static PDDocument output;
+	private static Preferences pref;
+	private static File file;
+	private static PDDocument doc;
 	private static PDPage page;
 	private static PDImageXObject image;
 	private static PDPageContentStream contentStream;
-	public pdfbuilder() {
-		//creates new document
-		output = new PDDocument();
-		page = new PDPage();
+	//initializer for the document
+	//Assuming we will fit 4 music images per page, hence we will initialize with an array of images we plan to insert, open to modification if needed
+	public pdfbuilder(Object[] imagesToInsert) throws IOException {
+		doc = new PDDocument();
+		pref = Preferences.userRoot();
+        for (int i = 0; i<imagesToInsert.length+1; i++) {
+        	if (i/4 == 0 && i != 0) {
+        		image = new PDImageXObject((PDDocument) imagesToInsert[i-1]);
+        		page = new PDPage();
+        		doc.addPage(page);
+        	}
+        }
+        doc.save(pref.get("outputFolder", System.getProperty("user.home")));
+        //call doc.close() when creation is reached its final stage. Unsure whether doc.close() is a final command.
 	}
-	public static void createFromFileByExtension(File file, PDDocument doc) throws IOException {
-		contentStream.setFont(PDType1Font.TIMES_BOLD, 12);
+	public void insertImages(PDImageXObject[] imagesToInsert) throws IOException {
+		
 	}
 }
