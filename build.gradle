@@ -36,6 +36,7 @@ dependencies {
     testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
 
     implementation 'com.github.JensPiegsa:jfugue:5.0.9'
+    implementation 'com.itextpdf:itext7-core:7.2.1'
 }
 
 task debug {
