@@ -13,12 +13,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import pdfbox.pdfbuilder;
 
 public class PreviewSheetMusicController extends Application {
 
 //	public File saveFile;
     private MainViewController mvc;
 	public Highlighter highlighter;
+	private pdfbuilder pdf;
 
 	@FXML public CodeArea mxlText;
 	@FXML TextField gotoMeasureField;
@@ -38,6 +40,7 @@ public class PreviewSheetMusicController extends Application {
     }
 
     public void update() {
+    	
 		mxlText.replaceText(mvc.converter.getMusicXML());
 		mxlText.moveTo(0);
 		mxlText.requestFollowCaret();

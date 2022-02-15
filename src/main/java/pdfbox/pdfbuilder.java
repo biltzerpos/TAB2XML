@@ -68,7 +68,7 @@ import utility.Settings;
 
 
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class pdfbuilder {
 	//default builder
 	//variables need to be static
@@ -84,10 +84,10 @@ public class pdfbuilder {
 	
     ////Rough method idea
 	//Once you press the preview or save button, you call this method with the PNG files so that it uses them to build it
-	// Don't know how to hook it up to be viewable or interact with the buttons pressed on the GUI, will require help
+	//Don't know how to hook it up to be viewable or interact with the buttons pressed on the GUI, will require help
 
 
-	public pdfbuilder(File[] pngFiles) throws IOException {
+	public void pdfgen(File[] pngFiles) throws IOException {
 		doc = new PDDocument();
 		pref = Preferences.userRoot();
 		s.inputFolder = pref.get("inputFolder", System.getProperty("user.home"));
