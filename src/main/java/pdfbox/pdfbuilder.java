@@ -1,11 +1,14 @@
 package pdfbox;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Array;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.prefs.Preferences;
+
+import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
@@ -90,6 +93,7 @@ public class pdfbuilder {
 	public void pdfgen(File[] pngFiles) throws IOException {
 		doc = new PDDocument();
 		pref = Preferences.userRoot();
+		BufferedImage usingImage;
 		s.inputFolder = pref.get("inputFolder", System.getProperty("user.home"));
 		s.outputFolder = pref.get("outputFolder", System.getProperty("user.home"));
 		for (int i = 0; i<pngFiles.length; i++) {
@@ -98,9 +102,9 @@ public class pdfbuilder {
 					page = new PDPage();
 					doc.addPage(page);
 					image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+					usingImage = ImageIO.read(pngFiles[i]);
 					contentStream = new PDPageContentStream(doc, page);  
-					//The two 100s are placeholder, need to confirm image x and y sizes
-					contentStream.drawImage(image, 100, 100);
+					contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
 					contentStream.close();  
 					doc.save(s.outputFolder);
 					doc.close();
@@ -108,9 +112,9 @@ public class pdfbuilder {
 				}
 				else {
 					image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+					usingImage = ImageIO.read(pngFiles[i]);
 					contentStream = new PDPageContentStream(doc, page);  
-					//The two 100s are placeholder, need to confirm image x and y sizes
-					contentStream.drawImage(image, 100, 100);
+					contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
 					contentStream.close();  
 					doc.save(s.outputFolder);
 					doc.close();
@@ -121,23 +125,23 @@ public class pdfbuilder {
 				page = new PDPage();
 				doc.addPage(page);
 				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+				usingImage = ImageIO.read(pngFiles[i]);
 				contentStream = new PDPageContentStream(doc, page);  
-				//The two 100s are placeholder, need to confirm image x and y sizes
-				contentStream.drawImage(image, 100, 100);
+				contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
 			}
 			if (i%8 == 0 && i != 0) {
 				page = new PDPage();
 				doc.addPage(page);
 				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+				usingImage = ImageIO.read(pngFiles[i]);
 				contentStream = new PDPageContentStream(doc, page);  
-				//The two 100s are placeholder, need to confirm image x and y sizes
-				contentStream.drawImage(image, 100, 100);
+				contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
 			}
 			else {
 				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+				usingImage = ImageIO.read(pngFiles[i]);
 				contentStream = new PDPageContentStream(doc, page);  
-				//The two 100s are placeholder, need to confirm image x and y sizes
-				contentStream.drawImage(image, 100, 100);
+				contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
 			}
 		}
 		doc.save(pref.get("outputFolder", System.getProperty("user.home")));
