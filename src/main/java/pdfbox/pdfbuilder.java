@@ -73,6 +73,7 @@ public class pdfbuilder {
 	//default builder
 	//variables need to be static
 	private static Preferences pref;
+	private static Settings s;
 	private static File file;
 	private static PDDocument doc;
 	private static PDPage page;
@@ -80,20 +81,66 @@ public class pdfbuilder {
 	private static PDPageContentStream contentStream;
 	//initializer for the document
 	//Assuming we will fit 4 music images per page, hence we will initialize with an array of images we plan to insert, open to modification if needed
-	public pdfbuilder(Object[] imagesToInsert) throws IOException {
+	
+    ////Rough method idea
+	//Once you press the preview or save button, you call this method with the PNG files so that it uses them to build it
+	// Don't know how to hook it up to be viewable or interact with the buttons pressed on the GUI, will require help
+
+
+	public pdfbuilder(File[] pngFiles) throws IOException {
 		doc = new PDDocument();
 		pref = Preferences.userRoot();
-        for (int i = 0; i<imagesToInsert.length+1; i++) {
-        	if (i/4 == 0 && i != 0) {
-        		image = new PDImageXObject((PDDocument) imagesToInsert[i-1]);
-        		page = new PDPage();
-        		doc.addPage(page);
-        	}
-        }
-        doc.save(pref.get("outputFolder", System.getProperty("user.home")));
-        //call doc.close() when creation is reached its final stage. Unsure whether doc.close() is a final command.
-	}
-	public void insertImages(PDImageXObject[] imagesToInsert) throws IOException {
-		
+		s.inputFolder = pref.get("inputFolder", System.getProperty("user.home"));
+		s.outputFolder = pref.get("outputFolder", System.getProperty("user.home"));
+		for (int i = 0; i<pngFiles.length; i++) {
+			if (i == pngFiles.length) {
+				if (i%8 == 0) {
+					page = new PDPage();
+					doc.addPage(page);
+					image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+					contentStream = new PDPageContentStream(doc, page);  
+					//The two 100s are placeholder, need to confirm image x and y sizes
+					contentStream.drawImage(image, 100, 100);
+					contentStream.close();  
+					doc.save(s.outputFolder);
+					doc.close();
+					break;
+				}
+				else {
+					image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+					contentStream = new PDPageContentStream(doc, page);  
+					//The two 100s are placeholder, need to confirm image x and y sizes
+					contentStream.drawImage(image, 100, 100);
+					contentStream.close();  
+					doc.save(s.outputFolder);
+					doc.close();
+					break;
+				}
+			}
+			if (i == 0) {
+				page = new PDPage();
+				doc.addPage(page);
+				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+				contentStream = new PDPageContentStream(doc, page);  
+				//The two 100s are placeholder, need to confirm image x and y sizes
+				contentStream.drawImage(image, 100, 100);
+			}
+			if (i%8 == 0 && i != 0) {
+				page = new PDPage();
+				doc.addPage(page);
+				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+				contentStream = new PDPageContentStream(doc, page);  
+				//The two 100s are placeholder, need to confirm image x and y sizes
+				contentStream.drawImage(image, 100, 100);
+			}
+			else {
+				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
+				contentStream = new PDPageContentStream(doc, page);  
+				//The two 100s are placeholder, need to confirm image x and y sizes
+				contentStream.drawImage(image, 100, 100);
+			}
+		}
+		doc.save(pref.get("outputFolder", System.getProperty("user.home")));
+		//call doc.close() when creation is reached its final stage. Unsure whether doc.close() is a final command.
 	}
 }
