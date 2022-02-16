@@ -48,8 +48,17 @@ public class PreviewSheetMusicController extends Application {
     }
 
     public void update() throws IOException, TXMLException {
-    	pdf.sheetpdf(mvc.converter.getScore().getModel().getParts().get(0));
-    	imageview.setImage(pdf.getImage(0));
+//    	pdf.sheetpdf(mvc.converter.getScore().getModel().getParts().get(0));
+//    	imageview.setImage(pdf.getImage(0));
+//    	imageview.setX(78);
+//    	imageview.setY(99);
+    	
+//    	 InputStream stream = new FileInputStream(System);
+//         Image image = new Image(stream);
+//         //Creating the image view
+//         ImageView imageView = new ImageView();
+//         //Setting image to the image view
+//         imageView.setImage(image);
 	}
 
 //	@FXML

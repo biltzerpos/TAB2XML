@@ -206,81 +206,79 @@ public class pdfbuilder {
 			++maxNotesTotal;
 		}
 		//map notes onto sheet
-		for(Measure m : part.getMeasures()) {
-			for(Note n : m.getNotesBeforeBackup()) {
-				String pitchFret = "" + n.getPitch().getStep() + n.getNotations().getTechnical().getFret();
-				switch (pitchFret) {
-				case "E0": //1
-					arbitraryPath("E0", Offset.E0Hoffsety.offset());
-					break;
-				case "F1": //2
-					arbitraryPath("F1", Offset.F1offsety.offset());
-					break;
-				case "G3": //3
-					arbitraryPath("G3", Offset.G3offsety.offset());
-					break;
-				case "A0": //4
-					arbitraryPath("A0", Offset.A0offsety.offset());
-					break;
-				case "B2": //5
-					arbitraryPath("B2", Offset.B2offsety.offset());
-					break;
-				case "C3": //6
-					arbitraryPath("C3", Offset.C3offsety.offset());
-					break;
-				case "D0": //7
-					arbitraryPath("D0", Offset.D0offsety.offset());
-					break;
-				case "E2": //8
-					arbitraryPath("E2", Offset.E2offsety.offset());
-					break;
-				case "F3": //9
-					arbitraryPath("F3", Offset.F3offsety.offset());
-					break;
-				case "G0": //10
-					arbitraryPath("G0", Offset.G0offsety.offset());
-					break;
-				case "A2": //11
-					arbitraryPath("A2", Offset.A2offsety.offset());
-					break;
-				case "B0": //12
-					arbitraryPath("B0", Offset.B0offsety.offset());
-					break;
-				case "C1": //13
-					arbitraryPath("C1", Offset.C1offsety.offset());
-					break;
-				case "D3": //14
-					arbitraryPath("D3", Offset.D3offsety.offset());
-					break;
-				case "A5": //15
-					arbitraryPath("A5H", Offset.A5Hoffsety.offset());
-					break;
-				case "B7": //16
-					arbitraryPath("B7H", Offset.B7Hoffsety.offset());
-					break;
-				case "C8": //17
-					arbitraryPath("C8H", Offset.C8Hoffsety.offset());
-					break;
-				case "D10": //18
-					arbitraryPath("D10H", Offset.D10Hoffsety.offset());
-					break;
-				default:
-					break;
-				}
-			}
-		}
+//		for(Measure m : part.getMeasures()) {
+//			for(Note n : m.getNotesBeforeBackup()) {
+//				String pitchFret = "" + n.getPitch().getStep() + n.getNotations().getTechnical().getFret();
+//				switch (pitchFret) {
+//				case "E0": //1
+//					arbitraryPath("E0", Offset.E0Hoffsety.offset());
+//					break;
+//				case "F1": //2
+//					arbitraryPath("F1", Offset.F1offsety.offset());
+//					break;
+//				case "G3": //3
+//					arbitraryPath("G3", Offset.G3offsety.offset());
+//					break;
+//				case "A0": //4
+//					arbitraryPath("A0", Offset.A0offsety.offset());
+//					break;
+//				case "B2": //5
+//					arbitraryPath("B2", Offset.B2offsety.offset());
+//					break;
+//				case "C3": //6
+//					arbitraryPath("C3", Offset.C3offsety.offset());
+//					break;
+//				case "D0": //7
+//					arbitraryPath("D0", Offset.D0offsety.offset());
+//					break;
+//				case "E2": //8
+//					arbitraryPath("E2", Offset.E2offsety.offset());
+//					break;
+//				case "F3": //9
+//					arbitraryPath("F3", Offset.F3offsety.offset());
+//					break;
+//				case "G0": //10
+//					arbitraryPath("G0", Offset.G0offsety.offset());
+//					break;
+//				case "A2": //11
+//					arbitraryPath("A2", Offset.A2offsety.offset());
+//					break;
+//				case "B0": //12
+//					arbitraryPath("B0", Offset.B0offsety.offset());
+//					break;
+//				case "C1": //13
+//					arbitraryPath("C1", Offset.C1offsety.offset());
+//					break;
+//				case "D3": //14
+//					arbitraryPath("D3", Offset.D3offsety.offset());
+//					break;
+//				case "A5": //15
+//					arbitraryPath("A5H", Offset.A5Hoffsety.offset());
+//					break;
+//				case "B7": //16
+//					arbitraryPath("B7H", Offset.B7Hoffsety.offset());
+//					break;
+//				case "C8": //17
+//					arbitraryPath("C8H", Offset.C8Hoffsety.offset());
+//					break;
+//				case "D10": //18
+//					arbitraryPath("D10H", Offset.D10Hoffsety.offset());
+//					break;
+//				default:
+//					break;
+//				}
+//			}
+//		}
 		//TODO: why save as previreSheetMusic.fxml?
-		doc.save("previewSheetMusic.fxml");
+		doc.save("previewSheetMusic.jpg");
 		renderer = new PDFRenderer(doc);
 //		doc.close();
 
-
-		//getting the image to display
 	}
 
-	public void arbitraryPath(String seqNote, int i) throws IOException {
-		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
-	}
+//	public void arbitraryPath(String seqNote, int i) throws IOException {
+//		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
+//	}
 
 	//creates sheet lines on the page method
 	public void pdfpagegen() throws IOException {
@@ -291,39 +289,40 @@ public class pdfbuilder {
 		doc.addPage(page);
 		pageImage = PDImageXObject.createFromFile(userPath + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg", doc);
 		contentStream = new PDPageContentStream(doc, page);
-		//TODO: (x,y) = (0, 990)
+		//TODO: (x,y) = (0, 990), should be (0,0)
 		contentStream.drawImage(pageImage, 0, 0);
 		contentStream.close();
 		++pageCounter;
 	}
 
 	//inputs notes on sheet music
-	public void pdfnotegen(String imagePath, int offsety) throws IOException {
-		//arbitrary numbers for now
-		x = 91;
-		y = 885;
-		int j = 0;
-		for (int i = 0; i<maxNotesTotal; i++){
-			if (x >= 591){
-				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, doc.getPage(j));
-				contentStream.drawImage(pageImage, x, y - offsety);
-				contentStream.close();
-				x = 91;
-				//y is arbitrary, test later
-				y -= 50;
-			}
-			else{
-				//x is arbitrary, test later
-				x += 50;
-				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, doc.getPage(j));
-				contentStream.drawImage(pageImage, x, y - offsety);
-				contentStream.close();
-			}
-		}
-		contentStream.close();
-	}
+	//TODO: change to append, so that the sheet music isn't overwritten, but instead, display the note on top of the sheet music
+//	public void pdfnotegen(String imagePath, int offsety) throws IOException {
+//		//arbitrary numbers for now
+//		x = 91;
+//		y = 885;
+//		int j = 0;
+//		for (int i = 0; i<maxNotesTotal; i++){
+//			if (x >= 591){
+//				pageImage = PDImageXObject.createFromFile(imagePath, doc);
+//				contentStream = new PDPageContentStream(doc, doc.getPage(j));
+//				contentStream.drawImage(pageImage, x, y - offsety);
+//				contentStream.close();
+//				x = 91;
+//				//y is arbitrary, test later
+//				y -= 50;
+//			}
+//			else{
+//				//x is arbitrary, test later
+//				x += 50;
+//				pageImage = PDImageXObject.createFromFile(imagePath, doc);
+//				contentStream = new PDPageContentStream(doc, doc.getPage(j));
+//				contentStream.drawImage(pageImage, x, y - offsety);
+//				contentStream.close();
+//			}
+//		}
+//		contentStream.close();
+//	}
 
 
 	//---------------------------------------------------------------------------------------------------------------

@@ -268,7 +268,7 @@ public class MainViewController extends Application {
 		stage.setTitle(windowName);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.initOwner(MainApp.STAGE);
-		stage.setResizable(false);
+		stage.setResizable(true);
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
