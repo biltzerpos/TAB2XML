@@ -18,6 +18,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import models.Part;
 import models.measure.Measure;
+import models.measure.note.Note;
 import utility.Settings;
 
 ////pdf file creation details
@@ -131,9 +132,8 @@ public class pdfbuilder {
 	//used to insert image onto page
 	private static PDPageContentStream contentStream;
 	private String userPath;
-	private int pages;
-	private final int notesPerPage = 1000;
-	private int maxNotesTotal = 1000;
+	private final int notesPerPage = 50;
+	private int maxNotesTotal = notesPerPage;
 	private int totalNotes;
 	private int x;
 	private int y;
@@ -151,27 +151,27 @@ public class pdfbuilder {
 	//Second Global y = 726  (change in y 901 - 726 = 175) 
 	//so on.....
 	public enum Offset {
-		EOoffsety (901 - 905),
-		F1offsety (901 - 918),
-		G3offsety (901 - 910),
-		A0offsety (901 - 918),
-		B2offsety (901 - 918),
-		C3offsety (901 - 918),
-		D0offsety (901 - 910),	
-		E2offsety (901 - 913),
-		F3offsety (901 - 918),
-		G0offsety (901 - 922),
-		A2offsety (901 - 925),
-		B0offsety (901 - 918),
-		C1offsety (901 - 918),
-		D3offsety (901 - 918),
-		E0Hoffsety (901 - 918),
-		F1Hoffsety (901 - 921),
-		G3Hoffsety (901 - 926),
-		A5Hoffsety (901 - 930),
-		B7Hoffsety (901 - 933),
-		C8Hoffsety (901 - 937),
-		D10Hoffsety (901 - 940);
+		EOoffsety (901 - 905 - 198),
+		F1offsety (901 - 918 - 198),
+		G3offsety (901 - 910 - 198),
+		A0offsety (901 - 918 - 198),
+		B2offsety (901 - 918 - 198),
+		C3offsety (901 - 918 - 198),
+		D0offsety (901 - 910 - 198),	
+		E2offsety (901 - 913 - 198),
+		F3offsety (901 - 918 - 198),
+		G0offsety (901 - 922 - 198),
+		A2offsety (901 - 925 - 198),
+		B0offsety (901 - 918 - 198),
+		C1offsety (901 - 918 - 198),
+		D3offsety (901 - 918 - 198),
+		E0Hoffsety (901 - 918 - 198),
+		F1Hoffsety (901 - 921 - 198),
+		G3Hoffsety (901 - 926 - 198),
+		A5Hoffsety (901 - 930 - 198),
+		B7Hoffsety (901 - 933 - 198),
+		C8Hoffsety (901 - 937 - 198),
+		D10Hoffsety (901 - 940 - 198);
 
 		protected final Integer offset;
 
@@ -202,80 +202,83 @@ public class pdfbuilder {
 			pdfpagegen();
 			++maxNotesTotal;
 		}
+
+		int mLength = part.getMeasures().size();
+		System.out.println(mLength);
 		//map notes onto sheet
-		//		for(Measure m : part.getMeasures()) {
-		//			for(Note n : m.getNotesBeforeBackup()) {
-		//				String pitchFret = "" + n.getPitch().getStep() + n.getNotations().getTechnical().getFret();
-		//				switch (pitchFret) {
-		//				case "E0": //1
-		//					arbitraryPath("E0", Offset.E0Hoffsety.offset());
-		//					break;
-		//				case "F1": //2
-		//					arbitraryPath("F1", Offset.F1offsety.offset());
-		//					break;
-		//				case "G3": //3
-		//					arbitraryPath("G3", Offset.G3offsety.offset());
-		//					break;
-		//				case "A0": //4
-		//					arbitraryPath("A0", Offset.A0offsety.offset());
-		//					break;
-		//				case "B2": //5
-		//					arbitraryPath("B2", Offset.B2offsety.offset());
-		//					break;
-		//				case "C3": //6
-		//					arbitraryPath("C3", Offset.C3offsety.offset());
-		//					break;
-		//				case "D0": //7
-		//					arbitraryPath("D0", Offset.D0offsety.offset());
-		//					break;
-		//				case "E2": //8
-		//					arbitraryPath("E2", Offset.E2offsety.offset());
-		//					break;
-		//				case "F3": //9
-		//					arbitraryPath("F3", Offset.F3offsety.offset());
-		//					break;
-		//				case "G0": //10
-		//					arbitraryPath("G0", Offset.G0offsety.offset());
-		//					break;
-		//				case "A2": //11
-		//					arbitraryPath("A2", Offset.A2offsety.offset());
-		//					break;
-		//				case "B0": //12
-		//					arbitraryPath("B0", Offset.B0offsety.offset());
-		//					break;
-		//				case "C1": //13
-		//					arbitraryPath("C1", Offset.C1offsety.offset());
-		//					break;
-		//				case "D3": //14
-		//					arbitraryPath("D3", Offset.D3offsety.offset());
-		//					break;
-		//				case "A5": //15
-		//					arbitraryPath("A5H", Offset.A5Hoffsety.offset());
-		//					break;
-		//				case "B7": //16
-		//					arbitraryPath("B7H", Offset.B7Hoffsety.offset());
-		//					break;
-		//				case "C8": //17
-		//					arbitraryPath("C8H", Offset.C8Hoffsety.offset());
-		//					break;
-		//				case "D10": //18
-		//					arbitraryPath("D10H", Offset.D10Hoffsety.offset());
-		//					break;
-		//				default:
-		//					break;
-		//				}
-		//			}
-		//		}
+		for(Measure m : part.getMeasures()) {
+			for(Note n : m.getNotesBeforeBackup()) {
+				String pitchFret = "" + n.getPitch().getStep() + n.getNotations().getTechnical().getFret();
+				switch (pitchFret) {
+				case "E0": //1
+					arbitraryPath("E0", Offset.E0Hoffsety.offset());
+					break;
+				case "F1": //2
+					arbitraryPath("F1", Offset.F1offsety.offset());
+					break;
+				case "G3": //3
+					arbitraryPath("G3", Offset.G3offsety.offset());
+					break;
+				case "A0": //4
+					arbitraryPath("A0", Offset.A0offsety.offset());
+					break;
+				case "B2": //5
+					arbitraryPath("B2", Offset.B2offsety.offset());
+					break;
+				case "C3": //6
+					arbitraryPath("C3", Offset.C3offsety.offset());
+					break;
+				case "D0": //7
+					arbitraryPath("D0", Offset.D0offsety.offset());
+					break;
+				case "E2": //8
+					arbitraryPath("E2", Offset.E2offsety.offset());
+					break;
+				case "F3": //9
+					arbitraryPath("F3", Offset.F3offsety.offset());
+					break;
+				case "G0": //10
+					arbitraryPath("G0", Offset.G0offsety.offset());
+					break;
+				case "A2": //11
+					arbitraryPath("A2", Offset.A2offsety.offset());
+					break;
+				case "B0": //12
+					arbitraryPath("B0", Offset.B0offsety.offset());
+					break;
+				case "C1": //13
+					arbitraryPath("C1", Offset.C1offsety.offset());
+					break;
+				case "D3": //14
+					arbitraryPath("D3", Offset.D3offsety.offset());
+					break;
+				case "A5": //15
+					arbitraryPath("A5H", Offset.A5Hoffsety.offset());
+					break;
+				case "B7": //16
+					arbitraryPath("B7H", Offset.B7Hoffsety.offset());
+					break;
+				case "C8": //17
+					arbitraryPath("C8H", Offset.C8Hoffsety.offset());
+					break;
+				case "D10": //18
+					arbitraryPath("D10H", Offset.D10Hoffsety.offset());
+					break;
+				default:
+					break;
+				}
+			}
+		}
 		//TODO: why save as previreSheetMusic.fxml?
 		doc.save("previewSheetMusic.jpg");
 		renderer = new PDFRenderer(doc);
-//		doc.close();
+		//		doc.close();
 
 	}
 
-	//	public void arbitraryPath(String seqNote, int i) throws IOException {
-	//		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
-	//	}
+	public void arbitraryPath(String seqNote, int i) throws IOException {
+		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
+	}
 
 	//creates sheet lines on the page method
 	public void pdfpagegen() throws IOException {
@@ -302,32 +305,36 @@ public class pdfbuilder {
 
 	//inputs notes on sheet music
 	//TODO: change to append, so that the sheet music isn't overwritten, but instead, display the note on top of the sheet music
-	//	public void pdfnotegen(String imagePath, int offsety) throws IOException {
-	//		//arbitrary numbers for now
-	//		x = 91;
-	//		y = 885;
-	//		int j = 0;
-	//		for (int i = 0; i<maxNotesTotal; i++){
-	//			if (x >= 591){
-	//				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-	//				contentStream = new PDPageContentStream(doc, doc.getPage(j));
-	//				contentStream.drawImage(pageImage, x, y - offsety);
-	//				contentStream.close();
-	//				x = 91;
-	//				//y is arbitrary, test later
-	//				y -= 50;
-	//			}
-	//			else{
-	//				//x is arbitrary, test later
-	//				x += 50;
-	//				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-	//				contentStream = new PDPageContentStream(doc, doc.getPage(j));
-	//				contentStream.drawImage(pageImage, x, y - offsety);
-	//				contentStream.close();
-	//			}
-	//		}
-	//		contentStream.close();
-	//	}
+	public void pdfnotegen(String imagePath, int offsety) throws IOException {
+		PDDocument tempDoc = new PDDocument();
+		PDPage tempPage = new PDPage();
+		tempDoc.addPage(tempPage);
+		//arbitrary numbers for now
+		x = 91;
+		y = 885 - 198 - 100;
+		int j = 0;
+		for (int i = 0; i<maxNotesTotal; i++){
+			if (x >= 591){
+				pageImage = PDImageXObject.createFromFile(imagePath, doc);
+				contentStream = new PDPageContentStream(doc, doc.getPage(j));
+				contentStream.drawImage(pageImage, x, y - offsety);
+				contentStream.close();
+				x = 91;
+				//y is arbitrary, test later
+				y -= 50;
+			}
+			else{
+				//x is arbitrary, test later
+				x += 50;
+				pageImage = PDImageXObject.createFromFile(imagePath, doc);
+				contentStream = new PDPageContentStream(doc, doc.getPage(j));
+				contentStream.drawImage(pageImage, x, y - offsety);
+				contentStream.close();
+			}
+		}
+		contentStream.close();
+	}
+
 
 
 	//---------------------------------------------------------------------------------------------------------------
@@ -340,42 +347,12 @@ public class pdfbuilder {
 	public Image getImage(int pageNumber) {
 		BufferedImage pageImage;
 		try {
-			//			pageImage = renderer.renderImage(pageNumber);
-			//			System.out.println("Buffered" + pageImage.getHeight() + "and" + pageImage.getWidth());
-			//			System.out.println("-------------");
-			//			System.out.println("PDIX" + pdfbuilder.pageImage.getHeight() + "and" + pdfbuilder.pageImage.getWidth());
-			//			System.out.println("Page" + page.getCropBox().getHeight() + "and" + page.getCropBox().getWidth());
-
-
 			PDPage pDPage = doc.getPage(pageNumber);
-
-			float width = pDPage.getCropBox().getWidth();
-			float height = pDPage.getCropBox().getHeight();
-
-			System.out.println("Pdf opening: width: " + width + ", height: " + height);
-
-
-			//			PDFRenderer renderer = new PDFRenderer(doc);
-
-			float dpiRatio =  1.5f;
 
 			pageImage = renderer.renderImage(pageNumber);
 
 			System.out.println("Page" + page.getCropBox().getHeight() + "and" + page.getCropBox().getWidth());
-
-			float dpiXRatio = pageImage.getWidth() / width;
-			float dpiYRatio = pageImage.getHeight()/ height;
-
 			System.out.println("Buffered" + pageImage.getHeight() + "and" + pageImage.getWidth());
-
-
-			System.out.println("dpiXRatio: "+dpiXRatio+", dpiYRatio: "+dpiYRatio);
-
-
-
-			System.out.println("----------------------------");
-			//			int upperRX = page.getCropBox().getWidth() -
-
 
 		} catch (IOException ex) {
 			throw new UncheckedIOException("PDFRenderer throws IOException", ex);
