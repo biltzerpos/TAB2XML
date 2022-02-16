@@ -133,6 +133,7 @@ public class pdfbuilder {
 	private static PDPage page;
 	private static PDImageXObject pageImage;
 	private static PDPageContentStream contentStream;
+	private String userPath;
 	private int pages;
 	private final int notesPerPage = 50;
 	private int maxNotesTotal;
@@ -189,6 +190,10 @@ public class pdfbuilder {
 
 	//Main method to call to create PDF
 	public void sheetpdf(Part part) throws IOException {
+		//set userPath
+		//System.getProperty("user.home") returns a String of the user Path (for example, "C:\Users\ian")
+		userPath = System.getProperty("user.home");
+		
 		//get total notes to draw
 		for(Measure measure : part.getMeasures()) {
 			totalNotes += measure.getNotesBeforeBackup().size();
@@ -264,6 +269,7 @@ public class pdfbuilder {
 				}
 			}
 		}
+		//TODO: why save as previreSheetMusic.fxml?
 		doc.save("previewSheetMusic.fxml");
 		renderer = new PDFRenderer(doc);
 //		doc.close();
@@ -273,7 +279,7 @@ public class pdfbuilder {
 	}
 
 	public void arbitraryPath(String seqNote, int i) throws IOException {
-		pdfnotegen("C:\\Users\\JackS\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
+		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
 	}
 
 	//creates sheet lines on the page method
@@ -283,9 +289,10 @@ public class pdfbuilder {
 		//this command is for finding where to output the pdf;
 		page = new PDPage();
 		doc.addPage(page);
-		pageImage = PDImageXObject.createFromFile("C:\\Users\\JackS\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg", doc);
+		pageImage = PDImageXObject.createFromFile(userPath + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg", doc);
 		contentStream = new PDPageContentStream(doc, page);
-		contentStream.drawImage(pageImage, 0, 989);
+		//TODO: (x,y) = (0, 990)
+		contentStream.drawImage(pageImage, 0, 0);
 		contentStream.close();
 		++pageCounter;
 	}
