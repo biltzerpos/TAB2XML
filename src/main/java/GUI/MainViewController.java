@@ -34,6 +34,7 @@ import org.jfugue.midi.MidiParserListener;
 import converter.Converter;
 import converter.Instrument;
 import converter.measure.TabMeasure;
+import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -321,7 +322,7 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
-	private void previewButtonHandle() throws IOException {
+	private void previewButtonHandle() throws IOException, TXMLException {
 		System.out.println("Preview Button Clicked!");
 		// converter.getMusicXML() returns the MusicXML output as a String
 
