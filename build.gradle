@@ -29,8 +29,8 @@ jacocoTestReport {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+  	testImplementation(platform('org.junit:junit-bom:5.8.2'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
 
     implementation group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.10.5'
 

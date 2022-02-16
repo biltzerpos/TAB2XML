@@ -1,26 +1,32 @@
 package GUI;
 
+import java.io.IOException;
+
 //import java.io.File;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
 
-import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
+//import org.fxmisc.richtext.CodeArea;
+//import org.fxmisc.richtext.LineNumberFactory;
 
+import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 //import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import pdfbox.pdfbuilder;
 
 public class PreviewSheetMusicController extends Application {
 
 //	public File saveFile;
     private MainViewController mvc;
 	public Highlighter highlighter;
+	private pdfbuilder pdf;
 
-	@FXML public CodeArea mxlText;
+	@FXML public ImageView imageview;
 	@FXML TextField gotoMeasureField;
 	@FXML Button goToline;
 
@@ -30,18 +36,16 @@ public class PreviewSheetMusicController extends Application {
 
 	@FXML
 	public void initialize() {
-		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
+		pdf = new pdfbuilder();
 	}
 
     public void setMainViewController(MainViewController mvcInput) {
     	mvc = mvcInput;
     }
 
-    public void update() {
-		mxlText.replaceText(mvc.converter.getMusicXML());
-		mxlText.moveTo(0);
-		mxlText.requestFollowCaret();
-        mxlText.requestFocus();
+    public void update() throws IOException, TXMLException {
+    	pdf.sheetpdf(mvc.converter.getScore().getModel().getParts().get(0));
+    	imageview.setImage(pdf.getImage(0));
 	}
 
 //	@FXML
