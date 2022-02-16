@@ -139,8 +139,10 @@ public class pdfbuilder {
 	private int totalNotes;
 	private int x;
 	private int y;
+	private int pageCounter;
+	private final int maxNotes = 20;
 
-	private PDFRenderer renderer = new PDFRenderer(doc);
+	private PDFRenderer renderer;
 	//initializer for the documen
 
 	////Rough method idea
@@ -193,11 +195,11 @@ public class pdfbuilder {
 		}
 
 		//check if extra page is needed, if so, generate extra page
-//		while(maxNotesTotal <= totalNotes) {
+		while(maxNotesTotal <= totalNotes) {
 			//gen next page of sheet music
 			pdfpagegen();
-//		}
-
+			++maxNotesTotal;
+		}
 		//map notes onto sheet
 		for(Measure m : part.getMeasures()) {
 			for(Note n : m.getNotesBeforeBackup()) {
@@ -262,6 +264,8 @@ public class pdfbuilder {
 				}
 			}
 		}
+		doc.save("previewSheetMusic.fxml");
+		renderer = new PDFRenderer(doc);
 //		doc.close();
 
 
@@ -276,17 +280,14 @@ public class pdfbuilder {
 	public void pdfpagegen() throws IOException {
 		// generates new sheet music on the page
 		doc = new PDDocument();
-		pref = Preferences.userRoot();
 		//this command is for finding where to output the pdf;
-//		s.outputFolder = pref.get("outputFolder", System.getProperty("user.home"));
 		page = new PDPage();
 		doc.addPage(page);
-		//NEED SPECIFIC PATH OF THE IMAGE TO INSERT
 		pageImage = PDImageXObject.createFromFile("C:\\Users\\ahmed\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg", doc);
 		contentStream = new PDPageContentStream(doc, page);
 		contentStream.drawImage(pageImage, 0, 989);
 		contentStream.close();
-		doc.close();
+		++pageCounter;
 	}
 
 	//inputs notes on sheet music
@@ -294,10 +295,11 @@ public class pdfbuilder {
 		//arbitrary numbers for now
 		x = 91;
 		y = 885;
+		int j = 0;
 		for (int i = 0; i<maxNotesTotal; i++){
 			if (x >= 591){
 				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, doc.getPage(i));
+				contentStream = new PDPageContentStream(doc, doc.getPage(j));
 				contentStream.drawImage(pageImage, x, y - offsety);
 				contentStream.close();
 				x = 91;
@@ -308,7 +310,7 @@ public class pdfbuilder {
 				//x is arbitrary, test later
 				x += 50;
 				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, doc.getPage(i));
+				contentStream = new PDPageContentStream(doc, doc.getPage(j));
 				contentStream.drawImage(pageImage, x, y - offsety);
 				contentStream.close();
 			}
