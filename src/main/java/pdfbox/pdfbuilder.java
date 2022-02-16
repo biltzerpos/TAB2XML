@@ -273,7 +273,7 @@ public class pdfbuilder {
 	}
 
 	public void arbitraryPath(String seqNote, int i) throws IOException {
-		pdfnotegen("\\TAB2XML_G14\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
+		pdfnotegen("C:\\Users\\ahmed\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
 	}
 
 	//creates sheet lines on the page method
