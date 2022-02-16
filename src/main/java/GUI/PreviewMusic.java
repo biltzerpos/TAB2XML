@@ -9,7 +9,11 @@ import java.util.logging.Logger;
 import GUI.draw.DrawBar;
 import GUI.draw.DrawMusicLines;
 import GUI.draw.DrawNote;
+<<<<<<< HEAD
 import instruments.Guitar;
+=======
+import custom_exceptions.TXMLException;
+>>>>>>> branch 'develop_group06' of https://github.com/ElmiraOn/EECS2311_group6
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -56,6 +60,7 @@ public class PreviewMusic extends Application{
     public void setMainViewController(MainViewController mvcInput) {
     	mvc = mvcInput;
     }
+
     // We can use this method to update the music sheet
     public void update() throws IOException
     {
@@ -67,12 +72,14 @@ public class PreviewMusic extends Application{
     	 * We get the list of Parts, there should be only one Part in this list,
     	 * so we get the first item, which is the Part, then we get the measures from that Part.
     	 */
+
     	String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
     	if(instrument == "Guitar") {
     		Guitar g = new Guitar(scorePartwise, pane);
     		g.draw();
     	}
-    	
+
+	  
     }
     
     @FXML
