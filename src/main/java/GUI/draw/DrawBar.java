@@ -15,6 +15,7 @@ public class DrawBar {
 		this.startX = startX;
 		this.startY = startY;
 	} 
+	public DrawBar() {}
 	
 	public void draw() {
 		Line bar1 = new Line();
@@ -24,22 +25,26 @@ public class DrawBar {
     	bar1.setEndY(getStartY() + 50);
     	pane.getChildren().add(bar1);
 	}
-
+	public Pane getPane() {
+		return pane;
+	}
+	public void setPane(Pane pane) {
+		this.pane = pane;
+	}
 	public double getStartX() {
 		return startX;
 	}
-
 	public void setStartX(double startX) {
 		this.startX = startX;
 	}
-
 	public double getStartY() {
 		return startY;
 	}
-
 	public void setStartY(double startY) {
 		this.startY = startY;
 	}
+
+
 	
 	
 	

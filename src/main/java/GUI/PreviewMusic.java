@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import GUI.draw.DrawBar;
 import GUI.draw.DrawMusicLines;
 import GUI.draw.DrawNote;
+import instruments.Guitar;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -60,39 +61,16 @@ public class PreviewMusic extends Application{
     {
     	// Get the ScorePartwise object directly
     	ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
-
+    	
     	/* Get the list of measures from the ScorePartwise object.
     	 *
     	 * We get the list of Parts, there should be only one Part in this list,
     	 * so we get the first item, which is the Part, then we get the measures from that Part.
     	 */
-    	List<Measure> measureList = scorePartwise.getParts().get(0).getMeasures();
-
-    	//set initial positions
-    	double x = 0; 
-    	double y = 0; 
-    	for (int i = 0; i< measureList.size(); i++)
-    	{
-    		Measure measure = measureList.get(i);
-    		// get the list of notes for each measure
-    		List<Note> noteList = measure.getNotesBeforeBackup();
-    		
-    		for (int j = 0; j < noteList.size(); j++)
-    		{
-    			Note note = noteList.get(j);
-    			DrawMusicLines d = new DrawMusicLines(pane, x, y);
-    			int string = note.getNotations().getTechnical().getString();
-    			d.draw();
-    			x += 50;
-            	double positionX =  d.getMusicLineList().get(string-1).getStartX(string-1);
-            	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
-            	DrawNote noteDrawer = new DrawNote(pane, note, positionX+25, positionY+3 );
-            	noteDrawer.draw();
-        		
-        	}		
-    		//draw a simple bar at end of each measure
-    		DrawBar barDrawer = new DrawBar(pane, x, y);
-    		barDrawer.draw();
+    	String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+    	if(instrument == "Guitar") {
+    		Guitar g = new Guitar(scorePartwise, pane);
+    		g.draw();
     	}
     	
     }

@@ -9,42 +9,74 @@ import javafx.scene.text.Text;
 import models.measure.attributes.Clef;
 
 public class DrawClef {
+	
 	private Clef clef;
 	@FXML private Pane pane;
-	public DrawClef(Pane pane, Clef clef) {
+	private double x;
+	private double y; 
+	
+	public DrawClef(Pane pane, Clef clef, double x, double y) {
 		super();
 		this.clef = clef;
 		this.pane = pane;
-		draw(pane, clef, 10, 15);
+		this.x = x; 
+		this.y = y;
+	}
+	
+	public DrawClef() {
+		
 	}
 	
 	
-	private void draw(Pane pane, Clef clef, double x, double y) {
-		String name = clef.getSign();
-		for(int i = 0; i <name.length(); i++) {
-			char c = name.charAt(i);
-			String s = Character.toString(c);
-			Text text = new Text(x, y,  s);
-			text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
-			pane.getChildren().add(text);
-			y += 15;
+	public void draw() {
+		String name = this.clef.getSign();
+		if (name == "TAB") {
+			for(int i = 0; i <name.length(); i++) {
+				char c = name.charAt(i);
+				String s = Character.toString(c);
+				Text text = new Text(this.x, this.y,  s);
+				text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+				pane.getChildren().add(text);
+				y += 15;
+			}
 		}
 	}
-		
-
 
 	public Clef getClef() {
 		return clef;
 	}
+
 	public void setClef(Clef clef) {
 		this.clef = clef;
 	}
+
 	public Pane getPane() {
 		return pane;
 	}
+
 	public void setPane(Pane pane) {
 		this.pane = pane;
 	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+	
+	
+		
+
 	
 	
 
