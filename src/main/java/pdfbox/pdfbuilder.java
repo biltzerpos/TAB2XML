@@ -20,13 +20,10 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
-<<<<<<< HEAD
-=======
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
->>>>>>> refs/heads/developGroup3
 import models.Part;
 import models.measure.Measure;
 import models.measure.note.Note;
@@ -82,14 +79,9 @@ import utility.Settings;
 //doc.close()                                                                    (closes document)
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
- * 
- * 	Scans tab like a book:
-=======
  *
  * 	Scans tab like a book:
 
->>>>>>> refs/heads/developGroup3
   1) Start at first measure
   2) Examines first line
   3) Then the next line
@@ -126,11 +118,7 @@ counter maxNotesHoldable
   	maxNotesHOlder += notesPERpage
 	}
  * ------------------------------------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
- * 
-=======
  *
->>>>>>> refs/heads/developGroup3
  */
 
 
@@ -145,16 +133,6 @@ public class pdfbuilder {
 	private static PDPage page;
 	private static PDImageXObject pageImage;
 	private static PDPageContentStream contentStream;
-<<<<<<< HEAD
-	private int pages;
-	private final int notesPerPage = 50;
-	private int maxNotesTotal;
-	private int totalNotes;
-	private int x;
-	private int y;
-	//initializer for the documen
-	
-=======
 	private String userPath;
 	private int pages;
 	private final int notesPerPage = 50;
@@ -168,28 +146,10 @@ public class pdfbuilder {
 	private PDFRenderer renderer;
 	//initializer for the documen
 
->>>>>>> refs/heads/developGroup3
 	////Rough method idea
 	//Once you press the preview or save button, you call this method with the PNG files so that it uses them to build it
 	//Don't know how to hook it up to be viewable or interact with the buttons pressed on the GUI, will require help
-<<<<<<< HEAD
-	
-	//Main method to call to create PDF
-	public void sheetpdf(Part part) throws IOException {
-		//get total notes to draw
-		for(Measure measure : part.getMeasures()) {
-			totalNotes += measure.getNotesAfterBackup().size();
-		}
-=======
->>>>>>> refs/heads/developGroup3
 
-<<<<<<< HEAD
-		//check if extra page is needed, if so, generate extra page
-		while(maxNotesTotal <= totalNotes) {
-			//gen next page of sheet music
-			pdfpagegen();
-		}
-=======
 	//Offset calculated using first group as reference frame
 	//First Global y = 901    
 	//Second Global y = 726  (change in y 901 - 726 = 175) 
@@ -216,21 +176,7 @@ public class pdfbuilder {
 		B7Hoffsety (901 - 933),
 		C8Hoffsety (901 - 937),
 		D10Hoffsety (901 - 940);
->>>>>>> refs/heads/developGroup3
 
-<<<<<<< HEAD
-		//map notes onto sheet 
-		for(Measure m : part.getMeasures()) {
-			for(Note n : m.getNotesAfterBackup()) {
-//				switch (n.getPitch().) {
-//				case :
-//					
-//					break;
-//
-//				default:
-//					break;
-//				}
-=======
 		protected final Integer offset;
 
 		Offset(int i) {
@@ -405,57 +351,9 @@ public class pdfbuilder {
 				for (int y = 0; y < pageImage.getHeight(); y++) {
 					pw.setArgb(x, y, pageImage.getRGB(x, y));
 				}
->>>>>>> refs/heads/developGroup3
 			}
 		}
-<<<<<<< HEAD
-		
-		
-		doc.close();
-	}
-	//creates sheet lines on the page method
-	public void pdfpagegen() throws IOException {
-    // generates new sheet music on the page
-		doc = new PDDocument();
-		pref = Preferences.userRoot();
-		//this command is for finding where to output the pdf;
-		s.outputFolder = pref.get("outputFolder", System.getProperty("user.home"));
-		page = new PDPage();
-		doc.addPage(page);
-		//NEED SPECIFIC PATH OF THE IMAGE TO INSERT
-		image = PDImageXObject.createFromFile("/TAB2XML_G14/src/main/resources/SHEET/blankGuitarSheet.jpg", doc);
-		contentStream = new PDPageContentStream(doc, page);  
-		contentStream.drawImage(image, 0, 989);
-		contentStream.close();
-	}
-	//inputs notes on sheet music
-	public void pdfnotegen(String imagePath, int localy) throws IOException {
-    //arbitrary numbers for now
-    x = 110;
-    y = 885;
-	for (int i = 0; i<maxNotesTotal; i++){
-			if (x >= 660){
-			   image = PDImageXObject.createFromFile(imagePath, doc);
-			   contentStream = new PDPageContentStream(doc, doc.getPage(i));  
-			   contentStream.drawImage(image, x, y - localy);
-			   contentStream.close();
-			   x =110;
-			   //y is arbitrary, test later
-			   y -= 50;
-		     }
-		    else{
-               //x is arbitrary, test later
-               x += 50;
-               image = PDImageXObject.createFromFile(imagePath, doc);
-			   contentStream = new PDPageContentStream(doc, doc.getPage(i));  
-			   contentStream.drawImage(image, x, y - localy);
-			   contentStream.close();
-             }
-		  }
-		contentStream.close();
-=======
 
 		return new ImageView(wr).getImage();
->>>>>>> refs/heads/developGroup3
 	}
 }
