@@ -273,7 +273,7 @@ public class pdfbuilder {
 	}
 
 	public void arbitraryPath(String seqNote, int i) throws IOException {
-		pdfnotegen("C:\\Users\\ahmed\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
+		pdfnotegen("C:\\Users\\JackS\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
 	}
 
 	//creates sheet lines on the page method
@@ -283,7 +283,7 @@ public class pdfbuilder {
 		//this command is for finding where to output the pdf;
 		page = new PDPage();
 		doc.addPage(page);
-		pageImage = PDImageXObject.createFromFile("C:\\Users\\ahmed\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg", doc);
+		pageImage = PDImageXObject.createFromFile("C:\\Users\\JackS\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg", doc);
 		contentStream = new PDPageContentStream(doc, page);
 		contentStream.drawImage(pageImage, 0, 989);
 		contentStream.close();
