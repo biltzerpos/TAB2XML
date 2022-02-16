@@ -288,11 +288,11 @@ public class pdfbuilder {
 		page = new PDPage();
 		doc.addPage(page);
 		pageImage = PDImageXObject.createFromFile(userPath + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg", doc);
-		contentStream = new PDPageContentStream(doc, page);
+		contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 		//TODO: (x,y) = (0, 990), should be (0,0)
 		contentStream.drawImage(pageImage, 0, 0);
-		contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 		contentStream.close();
+		doc.close();
 		++pageCounter;
 	}
 
@@ -312,6 +312,7 @@ public class pdfbuilder {
 //				x = 91;
 //				//y is arbitrary, test later
 //				y -= 50;
+//	            doc.close();
 //			}
 //			else{
 //				//x is arbitrary, test later
@@ -320,6 +321,7 @@ public class pdfbuilder {
 //				contentStream = new PDPageContentStream(doc, doc.getPage(j));
 //				contentStream.drawImage(pageImage, x, y - offsety);
 //				contentStream.close();
+//              doc.close();
 //			}
 //		}
 //		contentStream.close();
