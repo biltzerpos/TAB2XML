@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import GUI.draw.DrawBar;
 import GUI.draw.DrawMusicLines;
 import GUI.draw.DrawNote;
+import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -55,6 +56,7 @@ public class PreviewMusic extends Application{
     public void setMainViewController(MainViewController mvcInput) {
     	mvc = mvcInput;
     }
+
     // We can use this method to update the music sheet
     public void update() throws IOException
     {
@@ -66,35 +68,51 @@ public class PreviewMusic extends Application{
     	 * We get the list of Parts, there should be only one Part in this list,
     	 * so we get the first item, which is the Part, then we get the measures from that Part.
     	 */
-    	List<Measure> measureList = scorePartwise.getParts().get(0).getMeasures();
+	    List<Measure> measures = scorePartwise.getParts().get(0).getMeasures();
 
-    	//set initial positions
-    	double x = 0; 
-    	double y = 0; 
-    	for (int i = 0; i< measureList.size(); i++)
-    	{
-    		Measure measure = measureList.get(i);
-    		// get the list of notes for each measure
-    		List<Note> noteList = measure.getNotesBeforeBackup();
-    		
-    		for (int j = 0; j < noteList.size(); j++)
-    		{
-    			Note note = noteList.get(j);
-    			DrawMusicLines d = new DrawMusicLines(pane, x, y);
+	    // Set initial positions
+        double x = 0;
+        double y = 0;
+
+        for (Measure measure : measures) {
+
+        	// Get the list of notes for each measure
+        	List<Note> notes = measure.getNotesBeforeBackup();
+
+        	// Initialize music lines drawer
+			DrawMusicLines d = new DrawMusicLines(pane, x, y);
+
+    		for (Note note : notes) {
+    			// Get the string of the current note
     			int string = note.getNotations().getTechnical().getString();
-    			d.draw();
-    			x += 50;
-            	double positionX =  d.getMusicLineList().get(string-1).getStartX(string-1);
-            	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
-            	DrawNote noteDrawer = new DrawNote(pane, note, positionX+25, positionY+3 );
-            	noteDrawer.draw();
-        		
-        	}		
-    		//draw a simple bar at end of each measure
+
+    			// If note is not a chord, then draw new music lines, draw note, and increment x
+    			if (note.getChord() == null) {
+    				d = new DrawMusicLines(pane, x, y);
+	    			d.draw();
+
+	            	double positionX =  d.getMusicLineList().get(string-1).getStartX(string-1);
+	            	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
+
+	            	DrawNote noteDrawer = new DrawNote(pane, note, positionX+25, positionY+3 );
+	            	noteDrawer.draw();
+
+	    			x += 50;
+
+	    		// If note is a chord, then just draw the note without drawing new music lines or incrementing x
+    			} else {
+	            	double positionX =  d.getMusicLineList().get(string-1).getStartX(string-1);
+	            	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
+
+	            	DrawNote noteDrawer = new DrawNote(pane, note, positionX+25, positionY+3 );
+	            	noteDrawer.draw();
+    			}
+    		}
+
+    		// Draw a simple bar at end of each measure
     		DrawBar barDrawer = new DrawBar(pane, x, y);
     		barDrawer.draw();
-    	}
-    	
+        }
     }
     
     @FXML
