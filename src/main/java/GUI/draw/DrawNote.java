@@ -26,12 +26,12 @@ public class DrawNote {
 	}
 	
 	public void draw() {
+		/*Rectangle textBack = new Rectangle(getStartX() -3, getStartY() - 12, 15, 15);
+		textBack.setFill(Color.WHITE);
+		pane.getChildren().add(textBack);*/
+		
 		Text text = new Text(getStartX(), getStartY(), Integer.toString(this.fret));
-    	Rectangle textBack = new Rectangle(getStartX() -3, getStartY() - 12, 15, 15);
-    	textBack.setFill(Color.WHITE);
     	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
-    	
-    	pane.getChildren().add(textBack);
     	pane.getChildren().add(text);
 	}
 	

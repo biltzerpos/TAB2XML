@@ -38,7 +38,7 @@ public class Guitar {
 		d.draw();
 		DrawClef dc = new DrawClef(this.pane, this.clef, x+5, y+15);
 		dc.draw();
-		
+		x+=50;
 		for(int i = 0;  i < measureList.size(); i++) 
 		{
 			Measure measure = measureList.get(i);
@@ -53,9 +53,16 @@ public class Guitar {
 					int string = note.getNotations().getTechnical().getString();
 					if (note.getChord() == null) 
 					{
+		            	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
+		            	DrawNote noteDrawer = new DrawNote(this.pane, fret, x+25, positionY+3 );
+		            	noteDrawer.draw();
 						d1.draw();
 		            	x+=50;
-		            	
+					}
+					else {
+						double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
+		            	DrawNote noteDrawer = new DrawNote(this.pane, fret, x-25, positionY+3 );
+		            	noteDrawer.draw();
 					}
 				}
 				
