@@ -17,6 +17,9 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import models.Part;
+import models.measure.Measure;
+import models.measure.note.Note;
 import utility.Settings;
 
 ////pdf file creation details
@@ -68,10 +71,50 @@ import utility.Settings;
 //doc.save(file path in the directory)                                           (saves to apply image)
 //doc.close()                                                                    (closes document)
 
+/*-------------------------------------------------------------------------------------------------------------------------------------------
+ * 
+ * 	Scans tab like a book:
+  1) Start at first measure
+  2) Examines first line
+  3) Then the next line
+  4) Keeps track of the position of each line's first position (ex.    " e||--------------------5|
+                                                p is 26 (0+(25+1))       B||---3----------------||
+                                                p is 52                  G||*------------------*||
+                                                ..                       D||*----5-------------*||
+                                                ..                       A||-------------8------||
+                                                ..                       E||--------------------||"
+  5) After first measure is examined, move to next measure
+  6) Repeat until all measures examined.
 
 
+To get the examined data score.getModel(), this returns a ScorePartwise object with the data, series of notes is:
 
-@SuppressWarnings("unused")
+
+// Draw notes on PDF
+//
+    for(Measue i : score.getModel().getPart().getMeasure()) {
+      for(Note n : i.getNote()) {
+        //inner loop goes through notes of the ith measure and draws notes on pdf
+      }
+    }
+//
+
+//Create the corresponding amount of pages
+counter pages
+final notesPERpage
+counter maxNotesHoldable
+
+
+	while(maxNotesHOlder < notes.getSize){
+  		gen pdf;
+  	maxNotesHOlder += notesPERpage
+	}
+ * ------------------------------------------------------------------------------------------------------------------------------------------
+ * 
+ */
+
+
+//@SuppressWarnings("unused")
 public class pdfbuilder {
 	//default builder
 	//variables need to be static
@@ -82,69 +125,87 @@ public class pdfbuilder {
 	private static PDPage page;
 	private static PDImageXObject image;
 	private static PDPageContentStream contentStream;
-	//initializer for the document
-	//Assuming we will fit 4 music images per page, hence we will initialize with an array of images we plan to insert, open to modification if needed
+	private int pages;
+	private final int notesPerPage = 50;
+	private int maxNotesTotal;
+	private int totalNotes;
+	private int x;
+	private int y;
+	//initializer for the documen
 	
-    ////Rough method idea
+	////Rough method idea
 	//Once you press the preview or save button, you call this method with the PNG files so that it uses them to build it
-	// Don't know how to hook it up to be viewable or interact with the buttons pressed on the GUI, will require help
+	//Don't know how to hook it up to be viewable or interact with the buttons pressed on the GUI, will require help
+	
+	//Main method to call to create PDF
+	public void sheetpdf(Part part) throws IOException {
+		//get total notes to draw
+		for(Measure measure : part.getMeasures()) {
+			totalNotes += measure.getNotesAfterBackup().size();
+		}
 
+		//check if extra page is needed, if so, generate extra page
+		while(maxNotesTotal <= totalNotes) {
+			//gen next page of sheet music
+			pdfpagegen();
+		}
 
-	public pdfbuilder(File[] pngFiles) throws IOException {
-		doc = new PDDocument();
-		pref = Preferences.userRoot();
-		BufferedImage usingImage;
-		s.inputFolder = pref.get("inputFolder", System.getProperty("user.home"));
-		s.outputFolder = pref.get("outputFolder", System.getProperty("user.home"));
-		for (int i = 0; i<pngFiles.length; i++) {
-			if (i == pngFiles.length) {
-				if (i%8 == 0) {
-					page = new PDPage();
-					doc.addPage(page);
-					image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
-					usingImage = ImageIO.read(pngFiles[i]);
-					contentStream = new PDPageContentStream(doc, page);  
-					contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
-					contentStream.close();  
-					doc.save(s.outputFolder);
-					doc.close();
-					break;
-				}
-				else {
-					image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
-					usingImage = ImageIO.read(pngFiles[i]);
-					contentStream = new PDPageContentStream(doc, page);  
-					contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
-					contentStream.close();  
-					doc.save(s.outputFolder);
-					doc.close();
-					break;
-				}
-			}
-			if (i == 0) {
-				page = new PDPage();
-				doc.addPage(page);
-				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
-				usingImage = ImageIO.read(pngFiles[i]);
-				contentStream = new PDPageContentStream(doc, page);  
-				contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
-			}
-			if (i%8 == 0 && i != 0) {
-				page = new PDPage();
-				doc.addPage(page);
-				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
-				usingImage = ImageIO.read(pngFiles[i]);
-				contentStream = new PDPageContentStream(doc, page);  
-				contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
-			}
-			else {
-				image = PDImageXObject.createFromFileByExtension(pngFiles[i], doc);
-				usingImage = ImageIO.read(pngFiles[i]);
-				contentStream = new PDPageContentStream(doc, page);  
-				contentStream.drawImage(image, usingImage.getWidth(), usingImage.getHeight());
+		//map notes onto sheet 
+		for(Measure m : part.getMeasures()) {
+			for(Note n : m.getNotesAfterBackup()) {
+//				switch (n.getPitch().) {
+//				case :
+//					
+//					break;
+//
+//				default:
+//					break;
+//				}
 			}
 		}
-		doc.save(pref.get("outputFolder", System.getProperty("user.home")));
-		//call doc.close() when creation is reached its final stage. Unsure whether doc.close() is a final command.
+		
+		
+		doc.close();
+	}
+	//creates sheet lines on the page method
+	public void pdfpagegen() throws IOException {
+    // generates new sheet music on the page
+		doc = new PDDocument();
+		pref = Preferences.userRoot();
+		//this command is for finding where to output the pdf;
+		s.outputFolder = pref.get("outputFolder", System.getProperty("user.home"));
+		page = new PDPage();
+		doc.addPage(page);
+		//NEED SPECIFIC PATH OF THE IMAGE TO INSERT
+		image = PDImageXObject.createFromFile("/TAB2XML_G14/src/main/resources/SHEET/blankGuitarSheet.jpg", doc);
+		contentStream = new PDPageContentStream(doc, page);  
+		contentStream.drawImage(image, 0, 989);
+		contentStream.close();
+	}
+	//inputs notes on sheet music
+	public void pdfnotegen(String imagePath, int localy) throws IOException {
+    //arbitrary numbers for now
+    x = 110;
+    y = 885;
+	for (int i = 0; i<maxNotesTotal; i++){
+			if (x >= 660){
+			   image = PDImageXObject.createFromFile(imagePath, doc);
+			   contentStream = new PDPageContentStream(doc, doc.getPage(i));  
+			   contentStream.drawImage(image, x, y - localy);
+			   contentStream.close();
+			   x =110;
+			   //y is arbitrary, test later
+			   y -= 50;
+		     }
+		    else{
+               //x is arbitrary, test later
+               x += 50;
+               image = PDImageXObject.createFromFile(imagePath, doc);
+			   contentStream = new PDPageContentStream(doc, doc.getPage(i));  
+			   contentStream.drawImage(image, x, y - localy);
+			   contentStream.close();
+             }
+		  }
+		contentStream.close();
 	}
 }
