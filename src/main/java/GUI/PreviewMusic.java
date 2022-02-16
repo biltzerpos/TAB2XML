@@ -9,11 +9,8 @@ import java.util.logging.Logger;
 import GUI.draw.DrawBar;
 import GUI.draw.DrawMusicLines;
 import GUI.draw.DrawNote;
-<<<<<<< HEAD
 import instruments.Guitar;
-=======
 import custom_exceptions.TXMLException;
->>>>>>> branch 'develop_group06' of https://github.com/ElmiraOn/EECS2311_group6
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
