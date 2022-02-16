@@ -5,6 +5,7 @@ import java.util.List;
 import GUI.draw.DrawBar;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawMusicLines;
+import GUI.draw.DrawNote;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
@@ -37,18 +38,24 @@ public class Guitar {
 		d.draw();
 		DrawClef dc = new DrawClef(this.pane, this.clef, x+5, y+15);
 		dc.draw();
-		x+=50;
-		for(int i = 0;  i < measureList.size(); i++) {
-			//x+=50;
+		
+		for(int i = 0;  i < measureList.size(); i++) 
+		{
 			Measure measure = measureList.get(i);
 			List<Note> noteList = measure.getNotesBeforeBackup();
-			for(int j = 0; j<noteList.size(); j++) {
+			for(int j = 0; j<noteList.size(); j++) 
+			{
+				DrawMusicLines d1 = new DrawMusicLines(this.pane, x, y);
 				Note note = noteList.get(j);
-				if(note.getNotations().getTechnical() != null) {
+				if(note.getNotations().getTechnical() != null) 
+				{
 					int fret = note.getNotations().getTechnical().getFret();
 					int string = note.getNotations().getTechnical().getString();
-					if (note.getChord() == null) {
-						
+					if (note.getChord() == null) 
+					{
+						d1.draw();
+		            	x+=50;
+		            	
 					}
 				}
 				
