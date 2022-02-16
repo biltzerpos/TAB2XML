@@ -1,8 +1,6 @@
 package GUI;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 //import java.io.File;
 //import java.util.regex.Matcher;
@@ -17,9 +15,7 @@ import javafx.fxml.FXML;
 //import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import pdfbox.pdfbuilder;
 
@@ -48,17 +44,21 @@ public class PreviewSheetMusicController extends Application {
     }
 
     public void update() throws IOException, TXMLException {
-//    	pdf.sheetpdf(mvc.converter.getScore().getModel().getParts().get(0));
-//    	imageview.setImage(pdf.getImage(0));
+    	pdf.sheetpdf(mvc.converter.getScore().getModel().getParts().get(0));
+    	imageview.setImage(pdf.getImage(0));
 //    	imageview.setX(78);
 //    	imageview.setY(99);
     	
-//    	 InputStream stream = new FileInputStream(System);
+//    	 InputStream stream = new FileInputStream(System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg");
 //         Image image = new Image(stream);
 //         //Creating the image view
 //         ImageView imageView = new ImageView();
 //         //Setting image to the image view
 //         imageView.setImage(image);
+//         imageView.setX(10);
+//         imageView.setY(10);
+//         imageView.setFitWidth(575);
+//         imageView.setPreserveRatio(true);
 	}
 
 //	@FXML
