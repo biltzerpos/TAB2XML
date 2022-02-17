@@ -2,17 +2,19 @@ package instruments;
 
 import java.util.List;
 
-import GUI.draw.DrawBar;
-import GUI.draw.DrawClef;
-import GUI.draw.DrawMusicLines;
-import GUI.draw.DrawNote;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
+
+import GUI.draw.DrawBar;
+import GUI.draw.DrawClef;
+import GUI.draw.DrawMusicLines;
+import GUI.draw.DrawNote;
 
 public class Drumset {
 

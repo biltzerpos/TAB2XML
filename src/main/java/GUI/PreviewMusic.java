@@ -10,6 +10,7 @@ import GUI.draw.DrawBar;
 import GUI.draw.DrawMusicLines;
 import GUI.draw.DrawNote;
 import instruments.Guitar;
+import instruments.Drumset;
 import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
@@ -74,8 +75,10 @@ public class PreviewMusic extends Application{
 		if(instrument == "Guitar") {
 			Guitar g = new Guitar(scorePartwise, pane);
 			g.draw();
+		} else if (instrument == "Drumset") {
+			Drumset d = new Drumset(scorePartwise, pane);
+			d.draw();
 		}
-
 
 	}
 
