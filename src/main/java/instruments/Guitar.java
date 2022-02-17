@@ -15,12 +15,12 @@ import models.measure.attributes.Clef;
 import models.measure.note.Note;
 
 public class Guitar {
-	
+
 	private ScorePartwise scorePartwise;
 	@FXML private Pane pane;
 	private List<Measure> measureList;
 	private Clef clef;
-	
+
 
 	public Guitar(ScorePartwise scorePartwise, Pane pane) {
 		super();
@@ -29,7 +29,7 @@ public class Guitar {
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 		this.clef = this.scorePartwise.getParts().get(0).getMeasures().get(0).getAttributes().getClef();
 	}
-	
+
 	public void draw() {
 		//draw guitar elements
 		double x = 0;
@@ -53,31 +53,43 @@ public class Guitar {
 					int string = note.getNotations().getTechnical().getString();
 					if (note.getChord() == null) 
 					{
-		            	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
-		            	DrawNote noteDrawer = new DrawNote(this.pane, fret, x+25, positionY+3 );
-		            	noteDrawer.draw();
+						double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
+						DrawNote noteDrawer = new DrawNote(this.pane, fret, x+25, positionY+3 );
+						noteDrawer.draw();
 						d1.draw();
-		            	x+=50;
+						x+=50;
 					}
 					else {
 						double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
-		            	DrawNote noteDrawer = new DrawNote(this.pane, fret, x-25, positionY+3 );
-		            	noteDrawer.draw();
+						DrawNote noteDrawer = new DrawNote(this.pane, fret, x-25, positionY+3 );
+						noteDrawer.draw();
 					}
 				}
-				
+
 			}
-			
-			
+
+
 			DrawBar bar = new DrawBar(this.pane, x, y);
 			bar.draw();
-			
+
 		}
-		
+
 	}
-	
-	
-	
-	
-	
+
+
+	public void playNote() {
+		for(int i = 0;  i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
+			for(int j = 0; j<noteList.size(); j++) {
+				String noteSteps = noteList.get(j).getPitch().getStep();
+				System.out.println(noteSteps); // Temporary: print to console for now
+			}
+		}
+	}
+
+
+
+
+
 }
