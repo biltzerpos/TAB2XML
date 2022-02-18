@@ -38,8 +38,8 @@ public class Drumset {
 		double y = 0;
 
 		// Draw the initial music lines
-		DrawMusicLines d = new DrawMusicLines(this.pane, x, y);
-		d.draw();
+		DrawMusicLines d = new DrawMusicLines(this.pane);
+		d.draw(x, y);
 
 		// Iterate through the list of measures
 		for (Measure measure : measureList) {
