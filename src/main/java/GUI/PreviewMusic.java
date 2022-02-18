@@ -44,6 +44,7 @@ public class PreviewMusic extends Application{
     @FXML
     private Button printButton;
     final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
+    private ScorePartwise scorePartwise;
 
 
 	public PreviewMusic() {}
@@ -60,8 +61,9 @@ public class PreviewMusic extends Application{
     public void update() throws IOException
     {
     	// Get the ScorePartwise object directly
-    	ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
     	
+    	scorePartwise = mvc.converter.getScorePartwise();
+
     	/* Get the list of measures from the ScorePartwise object.
     	 *
     	 * We get the list of Parts, there should be only one Part in this list,
