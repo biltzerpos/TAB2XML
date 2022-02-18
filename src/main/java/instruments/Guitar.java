@@ -14,7 +14,7 @@ import models.measure.attributes.Clef;
 import models.measure.note.Note;
 
 public class Guitar {
-	
+
 	private ScorePartwise scorePartwise;
 	@FXML private Pane pane;
 	private List<Measure> measureList;
@@ -23,6 +23,7 @@ public class Guitar {
 	private double y;
 	private DrawMusicLines d;
 	
+
 
 	public Guitar(ScorePartwise scorePartwise, Pane pane) {
 		super();
@@ -34,7 +35,7 @@ public class Guitar {
 		this.y = 0;
 		this.d = new DrawMusicLines(this.pane);
 	}
-	
+
 	/*
 	 * This method is where the actual drawing of the guitar elements happen*/
 	
@@ -55,7 +56,7 @@ public class Guitar {
 				{
 					Note note = noteList.get(j);
 					if(note.getNotations().getTechnical() != null) 
-					{
+					{		
 						int fret = note.getNotations().getTechnical().getFret();
 						int string = note.getNotations().getTechnical().getString();
 						if (note.getChord() == null) 
@@ -110,14 +111,26 @@ public class Guitar {
 				DrawBar bar = new DrawBar(this.pane, x, y);
 				bar.draw();
 			}
+
 		}
 	}
-		
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+	public void playNote() {
+		for(int i = 0;  i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
+			for(int j = 0; j<noteList.size(); j++) {
+				String noteSteps = noteList.get(j).getPitch().getStep();
+				System.out.println(noteSteps); // Temporary: print to console for now
+			}
+		}
+	}
+
+
+
+
+
 }
