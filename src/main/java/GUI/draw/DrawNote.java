@@ -64,6 +64,23 @@ public class DrawNote {
 		this.startY = startY;
 	}
 
+	public void drawX() {
+		Text text = new Text(getStartX(), getStartY(), "x");
+    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
+    	text.toFront();
+    	pane.getChildren().add(text);
+		
+	}
+
+	public void drawO() {
+		Text text = new Text(getStartX(), getStartY(), "o");
+    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
+    	text.toFront();
+    	pane.getChildren().add(text);
+		
+	}
+	
+
 	
 	
 
