@@ -16,7 +16,10 @@ public class DrawNote {
 	private double startX; 
 	private double startY;
 	@FXML private Pane pane;
-	
+
+	/**
+	 * Constructor for guitar.
+	 */
 	public DrawNote(Pane pane, int fret, double startX, double startY) {
 		super();
 		this.fret = fret;
@@ -24,7 +27,17 @@ public class DrawNote {
 		this.startY = startY;
 		this.pane = pane;
 	}
-	
+
+	/**
+	 * Constructor for drums.
+	 */
+	public DrawNote(Pane pane, double startX, double startY) {
+		super();
+		this.startX = startX;
+		this.startY = startY;
+		this.pane = pane;
+	}
+
 	/*
 	 * this method draws note based on given Fret of guitar
 	 * */
