@@ -157,8 +157,6 @@ public class Guitar
 		this.measureList = measureList;
 	}
 
-	
-
 
 
 
