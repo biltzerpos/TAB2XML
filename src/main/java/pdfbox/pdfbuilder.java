@@ -212,6 +212,7 @@ public class pdfbuilder {
 		for(Measure m : part.getMeasures()) {
 			for(Note n : m.getNotesBeforeBackup()) {
 				String pitchFret = "" + n.getPitch().getStep() + n.getNotations().getTechnical().getFret();
+				System.out.println(pitchFret);
 				switch (pitchFret) {
 				case "E0": //1
 					arbitraryPath("E0", Offset.E0Hoffsety.offset());
@@ -322,9 +323,9 @@ public class pdfbuilder {
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, x, y - offsety);
 				contentStream.close();
-				x = 72;
+				x = 20;
 				//y is arbitrary, test later
-				y -= 100;
+				y -= 130;
 			}
 			else{
 				//x is arbitrary, test later
