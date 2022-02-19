@@ -76,6 +76,68 @@ public class DrawDrumsetMusicLines extends Node {
     	musicLineList.add(line);
 	}
 
+	/**
+	 * Returns the y-position of the note based on its octave and step.
+	 *
+	 * @param octave The octave of the note
+	 * @param step   The step of the note
+	 * @return       The y-position of the note
+	 */
+	public double getYPositionFromOctaveAndStep(int octave, String step) {
+		double yPosition = 0.0;
+
+		switch (octave) {
+			case 5:
+				switch (step) {
+				case "A":
+					yPosition = this.musicLineList.get(0).getStartY();
+					break;
+				case "G":
+					yPosition = this.musicLineList.get(1).getStartY();
+					break;
+				case "F":
+					yPosition = this.musicLineList.get(2).getStartY();
+					break;
+				case "E":
+					yPosition = this.musicLineList.get(3).getStartY();
+					break;
+				case "D":
+					yPosition = this.musicLineList.get(4).getStartY();
+					break;
+				case "C":
+					yPosition = this.musicLineList.get(5).getStartY();
+					break;
+				}
+				break;
+			case 4:
+				switch (step) {
+				case "B":
+					yPosition = this.musicLineList.get(6).getStartY();
+					break;
+				case "A":
+					yPosition = this.musicLineList.get(7).getStartY();
+					break;
+				case "G":
+					yPosition = this.musicLineList.get(8).getStartY();
+					break;
+				case "F":
+					yPosition = this.musicLineList.get(9).getStartY();
+					break;
+				case "E":
+					yPosition = this.musicLineList.get(10).getStartY();
+					break;
+				}
+				break;
+		}
+
+//		System.out.println("-----");
+//		System.out.println(octave);
+//		System.out.println(step);
+//		System.out.println(yPosition);
+//		System.out.println("-----");
+		return yPosition;
+	}
+
 	public List<Line> getMusicLineList() {
 		return musicLineList;
 	}
