@@ -313,8 +313,8 @@ public class pdfbuilder {
 		PDPage tempPage = new PDPage();
 		tempDoc.addPage(tempPage);
 		//arbitrary numbers for now
-		x = 91;
-		y = 885 - 198 - 100;
+		x = 72;
+		y = 520;
 		int j = 0;
 		for (int i = 0; i<maxNotesTotal; i++){
 			if (x >= 591){
@@ -322,9 +322,9 @@ public class pdfbuilder {
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, x, y - offsety);
 				contentStream.close();
-				x = 91;
+				x = 72;
 				//y is arbitrary, test later
-				y -= 50;
+				y -= 125;
 			}
 			else{
 				//x is arbitrary, test later
