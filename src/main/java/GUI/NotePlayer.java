@@ -23,12 +23,10 @@ public class NotePlayer extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void setMainViewController(PreviewMusic previewMusic) {
-		// TODO Auto-generated method stub
 		
 	}
 
