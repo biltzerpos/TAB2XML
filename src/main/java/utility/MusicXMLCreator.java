@@ -7,6 +7,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import converter.Score;
 import custom_exceptions.TXMLException;
 
+import models.ScorePartwise;
+
 public class MusicXMLCreator {
     private Score score;
 
@@ -40,7 +42,19 @@ public class MusicXMLCreator {
                 + xmlString;
         return xmlString;
     }
-    
+
+    public ScorePartwise getScorePartwise() {
+    	ScorePartwise sc = null;
+
+    	try {
+    		sc = score.getModel();
+    	} catch (TXMLException e) {
+    		e.printStackTrace();
+    	}
+
+    	return sc;
+    }
+
 //    public static Instrument getInstrumentEnum(String instrument) {
 //        if (instrument.equalsIgnoreCase("guitar"))
 //            return Instrument.GUITAR;

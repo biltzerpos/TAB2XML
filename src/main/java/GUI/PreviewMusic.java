@@ -1,62 +1,123 @@
 package GUI;
 
-import java.io.File;
+import java.io.IOException;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import instruments.Guitar;
+import instruments.Drumset;
+import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+
+import javafx.fxml.FXMLLoader;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
-import javafx.scene.control.Alert;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Window;
 import javafx.stage.Stage;
 
-public class PreviewMusic {
-    private MainViewController mvc;
+import models.ScorePartwise;
+
+public class PreviewMusic extends Application{
+
+	private MainViewController mvc;
+	@FXML private Pane pane;
+	public Window convertWindow;
+    @FXML
+    private Button printButton;
+    final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
+    private ScorePartwise scorePartwise;
+
 
 
 	public PreviewMusic() {}
 
 	@FXML 
-	public void initialize() {
-	}
-
+	public void initialize() {}
+	
     public void setMainViewController(MainViewController mvcInput) {
     	mvc = mvcInput;
     }
-    
-    @FXML
-    private Button printButton;
-    
-    final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
-    
-    @FXML
-    public <printButtonPressed> void printHandle() {
-    	printButton.setOnAction( aEvent -> {
-    	    printButtonPressed.set(true);
-    	});
+    // We can use this method to update the music sheet
+    public void update() throws IOException
+    {
+    	// Get the ScorePartwise object directly
     	
-    	Printer printer = Printer.getDefaultPrinter();
-        PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
-        PrinterJob printSheet = PrinterJob.createPrinterJob();
-       
-        if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
-          boolean printed = printSheet.printPage(layout, pane);
-          if (printed) {
-        	  printSheet.endJob();
-          }
-        }
+    	scorePartwise = mvc.converter.getScorePartwise();
+
+    	/* Get the list of measures from the ScorePartwise object.
+    	 *
+    	 * We get the list of Parts, there should be only one Part in this list,
+    	 * so we get the first item, which is the Part, then we get the measures from that Part.
+    	 */
+    	String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+    	if(instrument == "Guitar") {
+    		Guitar g = new Guitar(scorePartwise, pane);
+    		g.drawGuitar();
+    	}
+    	else if (instrument == "Drumset") {
+			Drumset d = new Drumset(scorePartwise, pane);
+			d.draw();
+		}
+    	
     }
 
+	@FXML
+	public <printButtonPressed> void printHandle() {
+		printButton.setOnAction( aEvent -> {
+			printButtonPressed.set(true);
+		});
 
-    public void playHandle() {
-    	System.out.println("Play button is clicked");
-    }
-    public void handleGotoMeasure() {}
+		Printer printer = Printer.getDefaultPrinter();
+		PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
+		PrinterJob printSheet = PrinterJob.createPrinterJob();
+
+		if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
+			boolean printed = printSheet.printPage(layout, pane);
+			if (printed) {
+				printSheet.endJob();
+			}
+		}
+	}
+
+	@FXML
+	public void playHandle() {
+		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
+		
+		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		if(instrument == "Guitar") {
+			Guitar g = new Guitar(scorePartwise, pane);
+			g.playNote(); // Temporary: print to console for now
+		}
+	}
+	//    private Window openNewWindow(Parent root, String windowName) {
+	//    	Stage stage = new Stage();
+	//		stage.setTitle(windowName);
+	//		stage.initModality(Modality.APPLICATION_MODAL);
+	//		stage.initOwner(MainApp.STAGE);
+	//		stage.setResizable(false);
+	//		Scene scene = new Scene(root);
+	//		stage.setScene(scene);
+	//		stage.show();
+	//		return scene.getWindow();
+	//	}
+
+	public void handleGotoMeasure() {}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
 }

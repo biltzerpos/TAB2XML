@@ -1,7 +1,5 @@
 package converter;
 
-//practicing for merging and branching: 3rd try
-
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +9,9 @@ import java.util.List;
 import GUI.MainViewController;
 import utility.MusicXMLCreator;
 import utility.ValidationError;
+
+import models.ScorePartwise;
+
 
 public class Converter {
 
@@ -30,11 +31,15 @@ public class Converter {
 	public String getMusicXML() {
 		return mxlc.generateMusicXML();
 	}
-	
+
 	public Score getScore() {
 		return score;
 	}
-	
+
+	public ScorePartwise getScorePartwise() {
+		return mxlc.getScorePartwise();
+	}
+
 	public List<ValidationError> validate() {
 		return score.validate();
 	}
