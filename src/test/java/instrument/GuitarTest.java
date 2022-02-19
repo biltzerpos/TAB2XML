@@ -90,7 +90,7 @@ public class GuitarTest extends ApplicationTest{
 	
 	//Given a note that doesnt have technical attributes, checks if method returns false
 	@Test
-	void testNoteHasTechnicalFakse() {
+	void testNoteHasTechnicalFalse() {
 		//all notes from input have technical so we create a local note without any
 		Note n = new Note();
 		Notations notation = new Notations();

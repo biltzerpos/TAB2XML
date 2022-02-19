@@ -52,8 +52,9 @@ public class Guitar
 				x+=50;
 				
 			}
-			
-			checkDuration(measure);
+			if(measure.getNumber() == 1) {
+				checkDuration(measure);
+			}
 			
 			if(x < 900)
 			{
