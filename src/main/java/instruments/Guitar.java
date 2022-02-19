@@ -176,7 +176,7 @@ public class Guitar
 			Measure measure = measureList.get(i);
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			for(int j = 0; j<noteList.size(); j++) {
-				noteSteps += noteList.get(j).getPitch().getStep();
+				noteSteps = noteList.get(j).getPitch().getStep();
 				//pattern = noteSteps;
 				player.play(noteSteps);
 			}
