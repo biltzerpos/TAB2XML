@@ -2,6 +2,7 @@ package instruments;
 
 import java.util.List;
 
+import GUI.draw.Draw44Beat;
 import GUI.draw.DrawBar;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawMusicLines;
@@ -22,8 +23,6 @@ public class Guitar
 	private double x; 
 	private double y;
 	private DrawMusicLines d;
-	
-
 
 	public Guitar(ScorePartwise scorePartwise, Pane pane) 
 	{
@@ -44,13 +43,18 @@ public class Guitar
 		for(int i = 0;  i < measureList.size(); i++) 
 		{
 			Measure measure = measureList.get(i);
+			
 			if(measure.getAttributes().getClef() != null) 
 			{
 				d.draw(x,y);
 				Clef c = extractClef(measure);
 				drawMeasureCleft(c);
 				x+=50;
+				
 			}
+			
+			checkDuration(measure);
+			
 			if(x < 900)
 			{
 				drawMeasureNotes(measure);
@@ -61,12 +65,35 @@ public class Guitar
 				y += 100;
 				drawMeasureNotes(measure);
 			}
+			
 			DrawBar bar = new DrawBar(this.pane, x, y);
 			bar.draw();
-
 		}
 	}
+	//if the notes in a measure are all 1/8( then beat is 4/4) draws 4/4 beat using Draw44Beat
+	private void checkDuration(Measure measure) {
+		List<Note> noteList = measure.getNotesBeforeBackup();
+		if (is44Beat(noteList)) {
+			Draw44Beat dd = new Draw44Beat(this.pane, this.x, this.y+20);
+			dd.draw();
+		}
+		//We can add other beats here if necessary
+	}
 	
+	//This method returns true if the all notes in a measure have 1/8 beat
+	private boolean is44Beat(List<Note> noteList) {
+		Boolean res = true; 
+		for (int i = 0; i < noteList.size(); i++) {
+			Note n = noteList.get(i);
+			int dur = n.getDuration();
+			if(dur != 8) {
+				res = false; 
+				break;
+			}
+		}
+		return res;
+	}
+
 	//This method extracts a clef from a given measure
 	public Clef extractClef(Measure m)
 	{
