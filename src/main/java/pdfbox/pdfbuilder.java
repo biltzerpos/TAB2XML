@@ -150,7 +150,10 @@ public class pdfbuilder {
 	//First Global y = 901    
 	//Second Global y = 726  (change in y 901 - 726 = 175) 
 	//so on.....
-	public enum Offset {
+	public enum Offset { 
+		
+		//TODO: NEW offset x 198
+		//                 y 153
 		EOoffsety (901 - 905 - 198),
 		F1offsety (901 - 918 - 198),
 		G3offsety (901 - 910 - 198),
