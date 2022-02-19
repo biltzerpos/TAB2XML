@@ -56,7 +56,7 @@ public class DrawNote {
 		
 		//the actual notes based on fret value of guitar
 		Text text = new Text(getStartX(), getStartY(), Integer.toString(this.fret));
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
+		text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 12));
     	text.toFront();
     	pane.getChildren().add(text);
 	}
