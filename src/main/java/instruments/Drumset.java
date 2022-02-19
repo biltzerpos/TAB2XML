@@ -14,6 +14,8 @@ import models.measure.note.Notehead;
 import GUI.draw.DrawBar;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawMusicLines;
+import GUI.draw.DrawDrumsetBar;
+import GUI.draw.DrawDrumsetMusicLines;
 import GUI.draw.DrawNote;
 
 public class Drumset {
@@ -38,7 +40,7 @@ public class Drumset {
 		double y = 0;
 
 		// Draw the initial music lines
-		DrawMusicLines d = new DrawMusicLines(this.pane);
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
 		d.draw(x,y);
 
 		// Iterate through the list of measures
@@ -60,7 +62,7 @@ public class Drumset {
 				 */
 				int line = 0;
 
-				double positionY = d.getMusicLineList().get(line).getStartY(0);
+				double positionY = d.getMusicLineList().get(line).getStartY();
 
 				if (note.getChord() == null) {
 					// Only draw music lines if not a chord.
@@ -108,8 +110,13 @@ public class Drumset {
 			}
 
 			// Draw bar line after every measure
-			DrawBar bar = new DrawBar(this.pane, x, y);
-			bar.draw();
+			DrawDrumsetBar bar = new DrawDrumsetBar(this.pane);
+			bar.draw(x, y);
 		}
 	}
+
+	public double getPositionYFromOctaveAndStep(int octave, String step) {
+		return 0;
+	}
+
 }
