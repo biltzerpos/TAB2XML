@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 class DrawBarTest {
 
 	@Test
-	void test01() {
+	void testSetGetStart() {
 		DrawBar bar = new DrawBar();
 		bar.setStartX(30);
 		bar.setStartY(40);
@@ -18,7 +18,7 @@ class DrawBarTest {
 		assertEquals(40.0, bar.getStartY());
 	}
 	@Test
-	void test02() {
+	void testPane() {
 		Pane pane = new Pane();
 		//String s1 = ("|1--2--3|2--3--4|");
 		DrawBar bar = new DrawBar(pane, 30, 30);
