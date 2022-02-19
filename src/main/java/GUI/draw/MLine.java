@@ -1,7 +1,6 @@
 package GUI.draw;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 

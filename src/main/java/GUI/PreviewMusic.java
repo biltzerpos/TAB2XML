@@ -2,14 +2,11 @@ package GUI;
 
 import java.io.IOException;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import GUI.draw.DrawBar;
-import GUI.draw.DrawMusicLines;
-import GUI.draw.DrawNote;
 import instruments.Guitar;
+import instruments.Drumset;
 import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
@@ -26,58 +23,55 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 import javafx.stage.Stage;
 
-import parser.Parser;
-
 import models.ScorePartwise;
-import models.measure.Measure;
-import models.measure.note.Note;
 
 public class PreviewMusic extends Application{
 
 	private MainViewController mvc;
 	@FXML private Pane pane;
 	public Window convertWindow;
-	@FXML
-	private Button printButton;
-	final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
+    @FXML
+    private Button printButton;
+    final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
+    private ScorePartwise scorePartwise;
+
 
 
 	public PreviewMusic() {}
 
 	@FXML 
-	public void initialize() {
+	public void initialize() {}
+	
+    public void setMainViewController(MainViewController mvcInput) {
+    	mvc = mvcInput;
+    }
+    // We can use this method to update the music sheet
+    public void update() throws IOException
+    {
+    	// Get the ScorePartwise object directly
+    	
+    	scorePartwise = mvc.converter.getScorePartwise();
 
-	}
-
-	public void setMainViewController(MainViewController mvcInput) {
-		mvc = mvcInput;
-	}
-
-	// We can use this method to update the music sheet
-	public void update() throws IOException
-	{
-		// Get the ScorePartwise object directly
-		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
-
-		/* Get the list of measures from the ScorePartwise object.
-		 *
-		 * We get the list of Parts, there should be only one Part in this list,
-		 * so we get the first item, which is the Part, then we get the measures from that Part.
-		 */
-
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
-		if(instrument == "Guitar") {
-			Guitar g = new Guitar(scorePartwise, pane);
-			g.draw();
+    	/* Get the list of measures from the ScorePartwise object.
+    	 *
+    	 * We get the list of Parts, there should be only one Part in this list,
+    	 * so we get the first item, which is the Part, then we get the measures from that Part.
+    	 */
+    	String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+    	if(instrument == "Guitar") {
+    		Guitar g = new Guitar(scorePartwise, pane);
+    		g.drawGuitar();
+    	}
+    	else if (instrument == "Drumset") {
+			Drumset d = new Drumset(scorePartwise, pane);
+			d.draw();
 		}
-
-
-	}
+    	
+    }
 
 	@FXML
 	public <printButtonPressed> void printHandle() {

@@ -11,8 +11,6 @@ import javafx.scene.layout.Pane;
 public class DrawMusicLines extends Node{
 	
 	@FXML private Pane pane;
-	private double startY;
-	private double startX;
 	private final double lenght = 50.0;
 	private MLine musicLine;
 	private List<MLine> musicLineList; 
@@ -20,20 +18,18 @@ public class DrawMusicLines extends Node{
 	public DrawMusicLines() {
 		
 	}
-	public DrawMusicLines(Pane pane, double x, double y) {
+	public DrawMusicLines(Pane pane) {
 		super();
 		this.pane = pane;
-		this.startY = y;
-		this.startX = x;
 		this.musicLineList = new ArrayList<MLine>();
 		
 	}
 
 	//Method that does the actual drawing
-	public void draw() {
+	public void draw(double x, double y) {
 		for (int i = 0; i < 6; i++) {
-        	musicLine = new MLine(pane, this.startX, this.startY, this.startX + this.lenght, this.startY, i+1);
-        	this.startY = this.startY + 10;
+        	musicLine = new MLine(pane, x, y, x + this.lenght, y, i+1);
+        	y+=10;
         	musicLineList.add(musicLine);
     	}
 	}
@@ -58,25 +54,6 @@ public class DrawMusicLines extends Node{
 		this.pane = pane;
 	}
 
-	public double getStartY() {
-		return startY;
-	}
-
-	public void setStartY(double startY) {
-		this.startY = startY;
-	}
-
-	public double getStartX() {
-		return startX;
-	}
-
-	public void setStartX(double startX) {
-		this.startX = startX;
-	}
-
-	public double getLenght() {
-		return lenght;
-	}
 	
 	
 	
