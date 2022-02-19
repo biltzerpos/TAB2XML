@@ -35,7 +35,7 @@ public class DrawClef {
 				char c = name.charAt(i);
 				String s = Character.toString(c);
 				Text text = new Text(this.x, this.y,  s);
-				text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+				text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 18));
 				pane.getChildren().add(text);
 				y += 15;
 			}
