@@ -394,12 +394,12 @@ public class pdfbuilder {
 
 			pageImage = renderer.renderImage(pageNumber);
 
-			System.out.println("Page" + page.getCropBox().getHeight() + "and" + page.getCropBox().getWidth());
+			System.out.println("Page " + page.getCropBox().getHeight() + " and " + page.getCropBox().getWidth());
 
 			float dpiXRatio = pageImage.getWidth() / width;
 			float dpiYRatio = pageImage.getHeight()/ height;
 
-			System.out.println("Buffered" + pageImage.getHeight() + "and" + pageImage.getWidth());
+			System.out.println("Buffered " + pageImage.getHeight() + " and " + pageImage.getWidth());
 
 
 			System.out.println("dpiXRatio: "+dpiXRatio+", dpiYRatio: "+dpiYRatio);
