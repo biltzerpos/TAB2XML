@@ -266,7 +266,6 @@ public class pdfbuilder {
 		//				}
 		//			}
 		//		}
-		//TODO: why save as previreSheetMusic.fxml?
 		doc.save("previewSheetMusic.jpg");
 		renderer = new PDFRenderer(doc);
 //		doc.close();
@@ -277,7 +276,7 @@ public class pdfbuilder {
 	//		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + seqNote + ".png", i);
 	//	}
 
-	//creates sheet lines on the page method
+	//creates sheet lines on the page 
 	public void pdfpagegen() throws IOException {
 		// generates new sheet music on the page
 		doc = new PDDocument();
@@ -286,12 +285,12 @@ public class pdfbuilder {
 		doc.addPage(page);
 		pageImage = PDImageXObject.createFromFile(userPath + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.png", doc);
 		
+		
 		//NOTE - This one is to use to append notes on the pages.
 		////contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 		
 		
 		
-		pageCounter++;
 		pageImage = PDImageXObject.createFromFile(System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\SblankGuitarSheet.png", doc);
 
 		page.getCropBox().setLowerLeftX(0);
@@ -301,7 +300,6 @@ public class pdfbuilder {
 		//		System.out.println("Page" + page.getCropBox().getHeight() + "and" + page.getCropBox().getWidth());
 
 		contentStream = new PDPageContentStream(doc, page);
-		//TODO: (x,y) = (0, 990), should be (0,0)
 		contentStream.drawImage(pageImage, 0, 0);
 		contentStream.close();
 		++pageCounter;
@@ -311,8 +309,8 @@ public class pdfbuilder {
 	//TODO: change to append, so that the sheet music isn't overwritten, but instead, display the note on top of the sheet music
 //	public void pdfnotegen(String imagePath, int offsety) throws IOException {
 //		//arbitrary numbers for now
-//		x = 91;
-//		y = 885;
+//		x = 0;
+//		y = 0;
 //		int j = 0;
 //		for (int i = 0; i<maxNotesTotal; i++){
 //			if (x >= 591){
