@@ -124,14 +124,14 @@ public class Guitar
 	}
 	
 	//returns true if the guitar note has chord element
-	private Boolean noteHasChord(Note n) 
+	public Boolean noteHasChord(Note n) 
 	{
 		Boolean result = n.getChord() == null ? false : true;
 		return result;
 	}
 	
 	//return true if guitar note has technical attribute
-	private Boolean noteHasTechnical(Note n) {
+	public Boolean noteHasTechnical(Note n) {
 		Boolean result = n.getNotations().getTechnical() != null ? true : false;
 		return result;
 		
