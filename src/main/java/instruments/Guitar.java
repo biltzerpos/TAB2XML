@@ -47,19 +47,19 @@ public class Guitar
 			if(measure.getAttributes().getClef() != null) 
 			{
 				d.draw(x,y);
-				drawMeasureCleft(measure);
+				Clef c = extractClef(measure);
+				drawMeasureCleft(c);
 				x+=50;
 			}
-			List<Note> noteList = measure.getNotesBeforeBackup();
 			if(x < 900)
 			{
-				drawMeasureNotes(noteList);
+				drawMeasureNotes(measure);
 			}
 			else
 			{
 				x = 0;
 				y += 100;
-				drawMeasureNotes(noteList);
+				drawMeasureNotes(measure);
 			}
 			DrawBar bar = new DrawBar(this.pane, x, y);
 			bar.draw();
@@ -67,42 +67,77 @@ public class Guitar
 		}
 	}
 	
-	private void drawMeasureCleft(Measure m) 
+	//This method extracts a clef from a given measure
+	public Clef extractClef(Measure m)
 	{
 		Clef clef = m.getAttributes().getClef();
-		DrawClef dc = new DrawClef(this.pane, clef, x+5, y+15);
+		return clef;
+	}
+	//This method draws a given clef
+	private void drawMeasureCleft(Clef c) 
+	{
+		DrawClef dc = new DrawClef(this.pane, c, x+5, y+15);
 		dc.draw();
 	}
 
-	private void drawMeasureNotes(List<Note> noteList) 
+	//this method draws the notes in a measure given measure m
+	private void drawMeasureNotes(Measure measure ) 
 	{
+		List<Note> noteList = measure.getNotesBeforeBackup();
 		for(int j = 0; j<noteList.size(); j++) 
 		{
 			Note note = noteList.get(j);
-			if(note.getNotations().getTechnical() != null) 
+			//if a note has technical we use drawNote with techincal to draw fret values on string
+			if(noteHasTechnical(note)) 
 			{		
-				int fret = note.getNotations().getTechnical().getFret();
-				int string = note.getNotations().getTechnical().getString();
-				if (note.getChord() == null) 
-				{
-		           	d.draw(x,y);
-		           	double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
-		           	DrawNote noteDrawer = new DrawNote(this.pane, fret, x+25, positionY+3+y );
-					
-		            x+=50;
-		            noteDrawer.drawFret();
-				}
-				else 
-				{
-					double positionY = d.getMusicLineList().get(string-1).getStartY(string-1);
-		            DrawNote noteDrawer = new DrawNote(this.pane, fret, x-25, positionY+3+y );
-		            noteDrawer.drawFret();
-				}
+				drawNoteWithTechnical(note);
 			}
+			//if the guitar class has anything else we can add else and else-if arguments here
 		}
 	}
+	
+	//Given a Note with techinical attributes, this method draws it using drawNote method of Gui.draw. 
+	private void drawNoteWithTechnical(Note note) {
+		int fret = note.getNotations().getTechnical().getFret();
+		int string = note.getNotations().getTechnical().getString();
+		if (!noteHasChord(note)) 
+		{
+           	d.draw(x,y);
+           	double positionY = getLineCoordinateY(d, string);
+           	DrawNote noteDrawer = new DrawNote(this.pane, fret, x+25, positionY+3+y );
+            x+=50;
+            noteDrawer.drawFret();
+		}
+		else 
+		{
+			double positionY = getLineCoordinateY(d, string);
+            DrawNote noteDrawer = new DrawNote(this.pane, fret, x-25, positionY+3+y );
+            noteDrawer.drawFret();
+		}
+	}
+	
+	//gets the Y coordinate of specific group of music lines based on given string integer. 
+	private double getLineCoordinateY(DrawMusicLines d, int string)
+	{
+		return  d.getMusicLineList().get(string-1).getStartY(string-1);
 
+	}
+	
+	//returns true if the guitar note has chord element
+	private Boolean noteHasChord(Note n) 
+	{
+		Boolean result = n.getChord() == null ? false : true;
+		return result;
+	}
+	
+	//return true if guitar note has technical attribute
+	private Boolean noteHasTechnical(Note n) {
+		Boolean result = n.getNotations().getTechnical() != null ? true : false;
+		return result;
+		
+	}
 
+	//This method plays the notes 
 	public void playNote() {
 		for(int i = 0;  i < measureList.size(); i++) {
 			Measure measure = measureList.get(i);
@@ -114,6 +149,15 @@ public class Guitar
 		}
 	}
 
+	public List<Measure> getMeasureList() {
+		return measureList;
+	}
+
+	public void setMeasureList(List<Measure> measureList) {
+		this.measureList = measureList;
+	}
+
+	
 
 
 
