@@ -64,7 +64,7 @@ public class PreviewMusic extends Application{
     	String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
     	if(instrument == "Guitar") {
     		Guitar g = new Guitar(scorePartwise, pane);
-    		g.draw();
+    		g.drawGuitar();
     	}
     	else if (instrument == "Drumset") {
 			Drumset d = new Drumset(scorePartwise, pane);
