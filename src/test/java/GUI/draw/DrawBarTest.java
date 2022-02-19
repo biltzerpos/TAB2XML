@@ -12,8 +12,10 @@ class DrawBarTest {
 	void test01() {
 		DrawBar bar = new DrawBar();
 		bar.setStartX(30);
+		bar.setStartY(40);
 		
 		assertEquals(30.0, bar.getStartX());
+		assertEquals(40.0, bar.getStartY());
 	}
 	@Test
 	void test02() {
