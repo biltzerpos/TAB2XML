@@ -319,7 +319,7 @@ public class pdfbuilder {
 		for (int i = 0; i<maxNotesTotal; i++){
 			if (x >= 591){
 				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, doc.getPage(j));
+				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, x, y - offsety);
 				contentStream.close();
 				x = 91;
@@ -330,7 +330,7 @@ public class pdfbuilder {
 				//x is arbitrary, test later
 				x += 50;
 				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, doc.getPage(j));
+				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, x, y - offsety);
 				contentStream.close();
 			}
