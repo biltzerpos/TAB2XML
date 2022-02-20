@@ -2,7 +2,9 @@ package instruments;
 
 import java.util.List;
 
+import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
+import org.jfugue.theory.ChordProgression;
 
 import GUI.draw.Draw44Beat;
 import GUI.draw.DrawBar;
@@ -39,25 +41,25 @@ public class Guitar
 
 	/*
 	 * This method is where the actual drawing of the guitar elements happen*/
-	
+
 	public void drawGuitar() 
 	{
 		for(int i = 0;  i < measureList.size(); i++) 
 		{
 			Measure measure = measureList.get(i);
-			
+
 			if(measure.getAttributes().getClef() != null) 
 			{
 				d.draw(x,y);
 				Clef c = extractClef(measure);
 				drawMeasureCleft(c);
 				x+=50;
-				
+
 			}
 			if(measure.getNumber() == 1) {
 				checkDuration(measure);
 			}
-			
+
 			if(x < 900)
 			{
 				drawMeasureNotes(measure);
@@ -68,7 +70,7 @@ public class Guitar
 				y += 100;
 				drawMeasureNotes(measure);
 			}
-			
+
 			DrawBar bar = new DrawBar(this.pane, x, y);
 			bar.draw();
 		}
@@ -82,7 +84,7 @@ public class Guitar
 		}
 		//We can add other beats here if necessary
 	}
-	
+
 	//This method returns true if the all notes in a measure have 1/8 beat
 	private boolean is44Beat(List<Note> noteList) {
 		Boolean res = true; 
@@ -125,63 +127,75 @@ public class Guitar
 			//if the guitar class has anything else we can add else and else-if arguments here
 		}
 	}
-	
+
 	//Given a Note with techinical attributes, this method draws it using drawNote method of Gui.draw. 
 	private void drawNoteWithTechnical(Note note) {
 		int fret = note.getNotations().getTechnical().getFret();
 		int string = note.getNotations().getTechnical().getString();
 		if (!noteHasChord(note)) 
 		{
-           	d.draw(x,y);
-           	double positionY = getLineCoordinateY(d, string);
-           	DrawNote noteDrawer = new DrawNote(this.pane, fret, x+25, positionY+3+y );
-            x+=50;
-            noteDrawer.drawFret();
+			d.draw(x,y);
+			double positionY = getLineCoordinateY(d, string);
+			DrawNote noteDrawer = new DrawNote(this.pane, fret, x+25, positionY+3+y );
+			x+=50;
+			noteDrawer.drawFret();
 		}
 		else 
 		{
 			double positionY = getLineCoordinateY(d, string);
-            DrawNote noteDrawer = new DrawNote(this.pane, fret, x-25, positionY+3+y );
-            noteDrawer.drawFret();
+			DrawNote noteDrawer = new DrawNote(this.pane, fret, x-25, positionY+3+y );
+			noteDrawer.drawFret();
 		}
 	}
-	
+
 	//gets the Y coordinate of specific group of music lines based on given string integer. 
 	private double getLineCoordinateY(DrawMusicLines d, int string)
 	{
 		return  d.getMusicLineList().get(string-1).getStartY(string-1);
 
 	}
-	
+
 	//returns true if the guitar note has chord element
-	public Boolean noteHasChord(Note n) 
+	public Boolean noteHasChord(Note noteList) 
 	{
-		Boolean result = n.getChord() == null ? false : true;
+		Boolean result = noteList.getChord() == null ? false : true;
 		return result;
 	}
-	
+
 	//return true if guitar note has technical attribute
 	public Boolean noteHasTechnical(Note n) {
 		Boolean result = n.getNotations().getTechnical() != null ? true : false;
 		return result;
-		
+
 	}
 
 	//This method plays the notes 
 	public void playNote() {
 		Player player = new Player();
-		
+		Pattern pattern = new Pattern();
 		String noteSteps = new String();
+		String chord = new String();
+
 		for(int i = 0;  i < measureList.size(); i++) {
 			Measure measure = measureList.get(i);
 			List<Note> noteList = measure.getNotesBeforeBackup();
-			for(int j = 0; j<noteList.size(); j++) {
-				noteSteps = noteList.get(j).getPitch().getStep();
-				player.play(noteSteps);
-				
+
+			if(noteHasChord(noteList)) {
+				chord = noteList.get(i).getPitch().getStep();
+				ChordProgression cp = new ChordProgression(chord);
+				pattern = cp.getPattern();
+			}else {
+				noteSteps = noteList.get(i).getPitch().getStep();
 			}
+			System.out.println(noteSteps + pattern);
 		}
-		
+		//player.play(noteSteps + pattern);
+
+	}
+
+	private boolean noteHasChord(List<Note> noteList) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	public List<Measure> getMeasureList() {

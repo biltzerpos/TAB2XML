@@ -28,6 +28,7 @@ import javafx.stage.Window;
 import javafx.stage.Stage;
 
 import models.ScorePartwise;
+import models.measure.note.Note;
 
 public class PreviewMusic extends Application{
 
