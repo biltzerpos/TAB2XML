@@ -170,7 +170,6 @@ public class Guitar
 	//This method plays the notes 
 	public void playNote() {
 		Player player = new Player();
-		//Pattern pattern = new Pattern();
 		
 		String noteSteps = new String();
 		for(int i = 0;  i < measureList.size(); i++) {
@@ -178,8 +177,8 @@ public class Guitar
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			for(int j = 0; j<noteList.size(); j++) {
 				noteSteps = noteList.get(j).getPitch().getStep();
-				//pattern = noteSteps;
 				player.play(noteSteps);
+				
 			}
 		}
 		
