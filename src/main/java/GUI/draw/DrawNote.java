@@ -1,6 +1,9 @@
 package GUI.draw;
 
 import javafx.fxml.FXML;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -42,23 +45,19 @@ public class DrawNote {
 	 * this method draws note based on given Fret of guitar
 	 * */
 	public void drawFret() {
-		// for the background of each note a cube is used
-		Box box = new Box(13, 13, 1); 
-		box.setTranslateX(getStartX()+3);
-		box.setTranslateY(getStartY()-3);
-		box.setTranslateZ(-15);
-		PhongMaterial boxColor = new PhongMaterial();
-		boxColor.setSpecularColor(Color.WHITE);
-		boxColor.setDiffuseColor(Color.WHITE);
-		boxColor.setSpecularPower(0);
-		box.setMaterial(boxColor);
-		pane.getChildren().add(box);
-		
 		//the actual notes based on fret value of guitar
 		Text text = new Text(getStartX(), getStartY(), Integer.toString(this.fret));
 		text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 12));
-    	text.toFront();
-    	pane.getChildren().add(text);
+		text.toFront();
+		//for background
+		Blend blend = new Blend(); 
+		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-10, 15, 15, Color.WHITE); 
+		blend.setTopInput(topInput); 
+		blend.setMode(BlendMode.OVERLAY);
+			    	
+		text.setEffect(blend);
+		        
+		pane.getChildren().add(text);
 	}
 
 	public double getStartX() {
