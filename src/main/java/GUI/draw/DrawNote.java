@@ -113,6 +113,38 @@ public class DrawNote {
 		
 	}
 	
+public void drawDrumClef1() {
+		
+		
+		Box box = new Box(4, 20, 1); 
+		box.setTranslateX(12);
+		box.setTranslateY(30);
+		box.setTranslateZ(10);
+		PhongMaterial boxColor = new PhongMaterial();
+		boxColor.setSpecularColor(Color.BLACK);
+		boxColor.setDiffuseColor(Color.BLACK);
+		boxColor.setSpecularPower(0);
+		box.setMaterial(boxColor);
+		pane.getChildren().add(box);
+		
+			
+		}
+public void drawDrumClef2() {
+	
+	
+	Box box = new Box(4, 20, 1); 
+	box.setTranslateX(5);
+	box.setTranslateY(30);
+	box.setTranslateZ(10);
+	PhongMaterial boxColor = new PhongMaterial();
+	boxColor.setSpecularColor(Color.BLACK);
+	boxColor.setDiffuseColor(Color.BLACK);
+	boxColor.setSpecularPower(0);
+	box.setMaterial(boxColor);
+	pane.getChildren().add(box);
+	
+		
+	}
 
 	
 	
