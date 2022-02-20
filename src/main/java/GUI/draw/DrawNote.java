@@ -78,16 +78,36 @@ public class DrawNote {
 	}
 
 	public void drawX() {
+		Box box = new Box(5, 5, 1); 
+		box.setTranslateX(getStartX()+3);
+		box.setTranslateY(getStartY()-3);
+		box.setTranslateZ(-15);
+		PhongMaterial boxColor = new PhongMaterial();
+		boxColor.setSpecularColor(Color.WHITE);
+		boxColor.setDiffuseColor(Color.WHITE);
+		boxColor.setSpecularPower(0);
+		box.setMaterial(boxColor);
+		pane.getChildren().add(box);
 		Text text = new Text(getStartX(), getStartY(), "x");
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
+    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
     	text.toFront();
     	pane.getChildren().add(text);
 		
 	}
 
 	public void drawO() {
+		Box box = new Box(5, 5, 1); 
+		box.setTranslateX(getStartX()+3);
+		box.setTranslateY(getStartY()-3);
+		box.setTranslateZ(-15);
+		PhongMaterial boxColor = new PhongMaterial();
+		boxColor.setSpecularColor(Color.WHITE);
+		boxColor.setDiffuseColor(Color.WHITE);
+		boxColor.setSpecularPower(0);
+		box.setMaterial(boxColor);
+		pane.getChildren().add(box);
 		Text text = new Text(getStartX(), getStartY(), "o");
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
+    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
     	text.toFront();
     	pane.getChildren().add(text);
 		
