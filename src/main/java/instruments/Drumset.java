@@ -40,6 +40,8 @@ public class Drumset {
 		// Draw the initial music lines
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
 		d.draw(x,y);
+		
+		
 
 		// Iterate through the list of measures
 		for (Measure measure : measureList) {
@@ -62,6 +64,8 @@ public class Drumset {
 					d.draw(x,y);
 
 					DrawNote noteDrawer = new DrawNote(this.pane, x+25, positionY+3);
+					noteDrawer.drawDrumClef1();
+					noteDrawer.drawDrumClef2();
 
 					// If note head exists and is an x, then draw "x", otherwise draw "o"
 					if (symbol != null && symbol.getType().equals("x")) {
