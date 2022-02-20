@@ -2,6 +2,8 @@ package instruments;
 
 import java.util.List;
 
+import org.jfugue.player.Player;
+
 import GUI.draw.Draw44Beat;
 import GUI.draw.DrawBar;
 import GUI.draw.DrawClef;
@@ -166,14 +168,21 @@ public class Guitar
 
 	//This method plays the notes 
 	public void playNote() {
+		Player player = new Player();
+		//Pattern pattern = new Pattern();
+		
+		String noteSteps = new String();
 		for(int i = 0;  i < measureList.size(); i++) {
 			Measure measure = measureList.get(i);
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			for(int j = 0; j<noteList.size(); j++) {
-				String noteSteps = noteList.get(j).getPitch().getStep();
-				System.out.println(noteSteps); // Temporary: print to console for now
+				noteSteps = noteList.get(j).getPitch().getStep();
+				//pattern = noteSteps;
+				player.play(noteSteps);
 			}
 		}
+		
+		
 	}
 
 	public List<Measure> getMeasureList() {
