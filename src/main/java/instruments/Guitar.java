@@ -183,7 +183,6 @@ public class Guitar
 			}
 		}
 		
-		
 	}
 
 	public List<Measure> getMeasureList() {
