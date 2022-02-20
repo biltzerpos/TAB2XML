@@ -46,25 +46,12 @@ public class PreviewSheetMusicController extends Application {
     public void update() throws IOException, TXMLException {
     	pdf.sheetpdf(mvc.converter.getScore().getModel().getParts().get(0));
     	imageview.setImage(pdf.getImage(0));
-//    	imageview.setX(78);
-//    	imageview.setY(99);
-    	
-//    	 InputStream stream = new FileInputStream(System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\blankGuitarSheet.jpg");
-//         Image image = new Image(stream);
-//         //Creating the image view
-//         ImageView imageView = new ImageView();
-//         //Setting image to the image view
-//         imageView.setImage(image);
-//         imageView.setX(10);
-//         imageView.setY(10);
-//         imageView.setFitWidth(575);
-//         imageView.setPreserveRatio(true);
 	}
 
-//	@FXML
-//	private void saveMXLButtonHandle() {
-//		mvc.saveMXLButtonHandle();
-//	}
+	@FXML
+	private void saveMXLButtonHandle() {
+		mvc.saveMXLButtonHandle();
+	}
 
 //	//TODO add go to line button
 //	@FXML
