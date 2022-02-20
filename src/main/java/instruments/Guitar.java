@@ -1,7 +1,9 @@
 package instruments;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
 import GUI.draw.Draw44Beat;
@@ -172,18 +174,52 @@ public class Guitar {
 	public void playNote() {
 		Player player = new Player();
 		// Pattern pattern = new Pattern();
+		Pattern vocals = new Pattern();
+		String noteSteps = "";
+		int voice = 0;
 
-		String noteSteps = new String();
 		for (int i = 0; i < measureList.size(); i++) {
 			Measure measure = measureList.get(i);
 			List<Note> noteList = measure.getNotesBeforeBackup();
+
 			for (int j = 0; j < noteList.size(); j++) {
-				noteSteps = noteList.get(j).getPitch().getStep();
-				// pattern = noteSteps;
-				player.play(noteSteps);
+				String ns = new String();
+				Note note = noteList.get(j);
+				int octave = note.getPitch().getOctave();
+				String oct = Integer.toString(octave);
+				String dur = addDuration(note);
+				voice = note.getVoice();
+
+				if (!noteHasChord(note)) {
+					ns = note.getPitch().getStep() + oct + dur;
+					noteSteps += " " + ns;
+				} else {
+
+					noteSteps += "+" + note.getPitch().getStep() + oct + dur;
+
+				}
 			}
 		}
 
+		vocals.add(noteSteps);
+		System.out.println(vocals.toString());
+		vocals.setInstrument("GUITAR");
+		vocals.setVoice(voice);
+		vocals.setTempo(120);
+		player.play(vocals);
+
+	}
+
+	private String addDuration(Note note) {
+		String res = "";
+		int duration = note.getDuration();
+		if (duration == 8) {
+			res = "i";
+		}
+		if (duration == 64) {
+			res = "w";
+		}
+		return res;
 	}
 
 }
