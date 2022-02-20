@@ -190,6 +190,7 @@ public class Guitar
 			System.out.println(noteSteps + pattern);
 		}
 		//player.play(noteSteps + pattern);
+		
 
 	}
 
