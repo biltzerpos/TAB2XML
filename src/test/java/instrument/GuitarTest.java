@@ -151,8 +151,25 @@ public class GuitarTest extends ApplicationTest{
 		assertSame(newList, m0);
 	}
 	
+	//Tests Is44Beat returns true for a measure with 4/4 beat
+	@Test
+	void testIs44BeatTrue() {
+		//Getting the first measure from input which has 8 1/8 notes (4 1/4)
+		List<Note> n = scorePartwise.getParts().get(0).getMeasures().get(0).getNotesBeforeBackup();
+		Boolean res = g.is44Beat(n);
+		assertTrue(res, "This measure is 4/4");
+		
+	}
 	
-	
+	//Tests is44Beat returns false for a measure without 4/4 beat
+	@Test
+	void testIs44BeatFalse() {
+		//Getting the 2nd measure from input which has different durations
+		List<Note> n = scorePartwise.getParts().get(0).getMeasures().get(1).getNotesBeforeBackup();
+		Boolean res = g.is44Beat(n);
+		assertFalse(res, "This measure is 4/4");
+		
+	}
 		
 	
 
