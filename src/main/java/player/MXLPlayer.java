@@ -6,6 +6,7 @@ import models.Part;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Attributes;
+import models.measure.note.Note;
 import models.part_list.PartList;
 import models.part_list.ScorePart;
 import org.jfugue.player.Player;
@@ -63,12 +64,16 @@ public class MXLPlayer{
 	}
 	public String getMeasure(Measure measure,String partID,int duration){
 		StringBuilder musicString = new StringBuilder();
-
+		for(Note note: measure.getNotesBeforeBackup()) {
+			musicString.append(note);
+			musicString.append(getNote(measure.getAttributes()));
+		}
 		return musicString.toString();
 	}
 	public String getNote(Attributes attributes){
 		StringBuilder musicString = new StringBuilder();
-
+		musicString.append(attributes.getDivisions() + "" + attributes.getKey() + "" + attributes.getTime() + ""
+							+ attributes.getClef());
 		return musicString.toString();
 	}
 
