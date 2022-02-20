@@ -2,28 +2,23 @@ package GUI;
 
 import java.io.IOException;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import instruments.Guitar;
 import instruments.Drumset;
-import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
-
-import javafx.fxml.FXMLLoader;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
+import javafx.scene.transform.Scale;
 import javafx.stage.Window;
 import javafx.stage.Stage;
 
@@ -38,6 +33,7 @@ public class PreviewMusic extends Application{
     private Button printButton;
     final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
     private ScorePartwise scorePartwise;
+    @FXML private AnchorPane anchorPane;
 
 
 
@@ -79,12 +75,20 @@ public class PreviewMusic extends Application{
 			printButtonPressed.set(true);
 		});
 
+		WritableImage screenshot = pane.snapshot(null, null);
 		Printer printer = Printer.getDefaultPrinter();
 		PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
+		
+		final double scaleX = layout.getPrintableWidth() / screenshot.getWidth();
+        final double scaleY = layout.getPrintableHeight() / screenshot.getHeight();
+        final double scale = Math.min(scaleX, scaleY);
+        final ImageView print_node = new ImageView(screenshot);
+        print_node.getTransforms().add(new Scale(scale, scale));
+		
 		PrinterJob printSheet = PrinterJob.createPrinterJob();
 
 		if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
-			boolean printed = printSheet.printPage(layout, pane);
+			boolean printed = printSheet.printPage( print_node);
 			if (printed) {
 				printSheet.endJob();
 			}

@@ -1,6 +1,5 @@
 package instruments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jfugue.pattern.Pattern;
