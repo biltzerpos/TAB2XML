@@ -1,5 +1,8 @@
 package instruments;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jfugue.pattern.Pattern;
@@ -10,8 +13,12 @@ import GUI.draw.DrawBar;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawMusicLines;
 import GUI.draw.DrawNote;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
@@ -26,6 +33,8 @@ public class Guitar {
 	private double x;
 	private double y;
 	private DrawMusicLines d;
+	private HashMap<Measure, Double> xCoordinates;
+	private HashMap<Measure, Double> yCoordinates;
 
 	public Guitar(ScorePartwise scorePartwise, Pane pane) {
 		super();
@@ -34,6 +43,8 @@ public class Guitar {
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 		this.x = 0;
 		this.y = 0;
+		xCoordinates = new HashMap<>();
+		yCoordinates = new HashMap<>();
 		this.d = new DrawMusicLines(this.pane);
 	}
 
@@ -50,7 +61,6 @@ public class Guitar {
 				Clef c = extractClef(measure);
 				drawMeasureCleft(c);
 				x += 50;
-
 			}
 			if (measure.getNumber() == 1) {
 				checkDuration(measure);
@@ -63,9 +73,11 @@ public class Guitar {
 				y += 100;
 				drawMeasureNotes(measure);
 			}
-
+			xCoordinates.put(measure, x);
+			yCoordinates.put(measure, y);
 			DrawBar bar = new DrawBar(this.pane, x, y);
 			bar.draw();
+			System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
 	}
 
@@ -88,9 +100,59 @@ public class Guitar {
 
 	}
 
+	public void highlightMeasureArea(Measure measure) {
+		double x = 0;
+		double y = 0;
+
+		ObservableList children = pane.getChildren();
+		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Object object = (Object) iterator.next();
+			if (object instanceof Rectangle) {
+				removeRect.add((Rectangle) object);
+			}
+		}
+
+		for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
+			Rectangle rect = (Rectangle) iterator.next();
+			pane.getChildren().remove(rect);
+		}
+		x = 0;
+		y = 0;
+		// now iterate again to highlight it in red
+		for (int i = 0; i < measureList.size(); i++) {
+			double w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
+			double yf = getYCoordinatesForGivenMeasure(measureList.get(i));
+			if (yf > y) {
+				// we have moved on to new Line
+				x = 0;
+				w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
+				y = yf;
+			}
+			if (measure.equals(measureList.get(i))) {
+				Rectangle rectangle = new Rectangle(x, yf, w, 50);
+				rectangle.setFill(Color.TRANSPARENT);
+				rectangle.setStyle("-fx-stroke: red;");
+				pane.getChildren().add(rectangle);
+			}
+			x = getXCoordinatesForGivenMeasure(measureList.get(i));
+			y = yf;
+		}
+	}
+
 	// returns a list of measures
 	public List<Measure> getMeasureList() {
 		return measureList;
+	}
+
+	// return X coordinates for given measure
+	public double getXCoordinatesForGivenMeasure(Measure measure) {
+		return xCoordinates.get(measure);
+	}
+
+	// return Y coordinates for given measure
+	public double getYCoordinatesForGivenMeasure(Measure measure) {
+		return yCoordinates.get(measure);
 	}
 
 	// Sets measureList to a new measure
