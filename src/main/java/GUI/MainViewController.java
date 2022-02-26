@@ -40,6 +40,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import models.ScorePartwise;
 import utility.Range;
 import utility.Settings;
 
@@ -309,13 +310,25 @@ public class MainViewController extends Application {
 
 		Parent root;
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMusic.fxml"));
-			root = loader.load();
-			PreviewMusic controller = loader.getController();
-			controller.setMainViewController(this);
-			// update method in the PreviewMusic.java is activated
-			controller.update();
-			convertWindow = this.openNewWindow(root, "Preview Music Sheet");
+			ScorePartwise spw = converter.getScorePartwise();
+			String instrument = spw.getPartList().getScoreParts().get(0).getPartName();
+			if(instrument == "Guitar" || instrument == "Drumset")
+			{
+				FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMusic.fxml"));
+				root = loader.load();
+				PreviewMusic controller = loader.getController();
+				controller.setMainViewController(this);
+				// update method in the PreviewMusic.java is activated
+				controller.update();
+				convertWindow = this.openNewWindow(root, "Preview Music Sheet");
+			}
+			else {
+				FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/InstrumentNotSupported.fxml"));
+				root = loader.load();
+				InstrumentNotSupported controller = loader.getController();
+				controller.setMainViewController(this);
+				convertWindow = this.openNewWindow(root, "Instrument not supported");
+			}
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
