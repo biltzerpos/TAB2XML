@@ -45,8 +45,6 @@ public class PreviewMusic extends Application {
 	final BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
 	private ScorePartwise scorePartwise;
 	@FXML
-	private AnchorPane anchorPane;
-	@FXML
 	TextField gotoMeasureField;
 	private Guitar g;
 	private Drumset d;
@@ -165,6 +163,12 @@ public class PreviewMusic extends Application {
 				count++;
 			}
 		}
+	}
+	
+	@FXML
+	public  void editHandle()
+	{
+		
 	}
 
 	@Override
