@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 public class InstrumentNotSupported extends Application {
 	
+	//Class to handle instrument not supported window
 	private MainViewController mvc;
 	
 	

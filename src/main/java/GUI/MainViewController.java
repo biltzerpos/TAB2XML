@@ -316,6 +316,7 @@ public class MainViewController extends Application {
 		try {
 			ScorePartwise spw = converter.getScorePartwise();
 			String instrument = spw.getPartList().getScoreParts().get(0).getPartName();
+			//if the instrument is not supported by the application, notify user by openning a message
 			if(instrument == "Guitar" || instrument == "Drumset")
 			{
 				FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMusic.fxml"));
