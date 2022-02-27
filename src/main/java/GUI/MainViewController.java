@@ -314,9 +314,9 @@ public class MainViewController extends Application {
 
 		Parent root;
 		try {
+			//if the instrument is not supported by the application, notify user by openning a message
 			ScorePartwise spw = converter.getScorePartwise();
 			String instrument = spw.getPartList().getScoreParts().get(0).getPartName();
-			//if the instrument is not supported by the application, notify user by openning a message
 			if(instrument == "Guitar" || instrument == "Drumset")
 			{
 				FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMusic.fxml"));
@@ -328,11 +328,12 @@ public class MainViewController extends Application {
 				convertWindow = this.openNewWindow(root, "Preview Music Sheet");
 			}
 			else {
-				FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/InstrumentNotSupported.fxml"));
-				root = loader.load();
-				InstrumentNotSupported controller = loader.getController();
-				controller.setMainViewController(this);
-				convertWindow = this.openNewWindow(root, "Instrument not supported");
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+						"The instrument of this Tablature is not supported currently", ButtonType.OK);
+				alert.setTitle("Instrument Not Supported");
+				alert.setHeaderText("Sorry...");
+				Optional<ButtonType> o = alert.showAndWait();
+				
 			}
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
