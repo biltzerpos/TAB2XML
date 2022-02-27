@@ -256,6 +256,9 @@ public class MainViewController extends Application {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+		stage.setOnCloseRequest(e -> {
+			e.consume();
+			closeWindow(stage);});
 		return scene.getWindow();
 	}
 	
@@ -406,6 +409,20 @@ public class MainViewController extends Application {
         task.isDone();
         return task;
     }
+    
+    public void closeWindow(Stage stage) {
+		//mvc.editHandle(); 
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+				"Are you sure you want to close this window?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+		alert.setTitle("Close window");
+		alert.setHeaderText("You are about to close the window!");
+		Optional<ButtonType> o = alert.showAndWait();
+		
+		if(o.get() == ButtonType.YES) {
+			stage.close();
+		}
+		
+	}
  
 	@Override
 	public void start(Stage primaryStage) throws Exception {

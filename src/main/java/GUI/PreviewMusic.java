@@ -168,19 +168,21 @@ public class PreviewMusic extends Application {
 	public void closePreviewHandle() {
 		//mvc.editHandle(); 
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
-				"Are you sure you want to close this Preview window?", ButtonType.YES, ButtonType.NO);
+				"Are you sure you want to close this Preview window?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 		alert.setTitle("Close preview window");
+		alert.setHeaderText("You are about to close the Preview window!");
 		Optional<ButtonType> o = alert.showAndWait();
 		
 		if(o.get() == ButtonType.YES) {
 			mvc.convertWindow.hide();
 		}
 		
+		
 	}
-
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-
+		
 	}
 }
