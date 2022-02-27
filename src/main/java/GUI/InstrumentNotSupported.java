@@ -4,15 +4,12 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 public class InstrumentNotSupported extends Application {
 	
 	private MainViewController mvc;
-	public Window convertWindow;
+	
 	
 	public InstrumentNotSupported() {
 	}
@@ -25,7 +22,7 @@ public class InstrumentNotSupported extends Application {
 		mvc = mvcInput;
 	}
 
-	// We can use this method to update the music sheet
+	// method the reacts to click on ok button
 	public void update() throws IOException {
 		mvc.convertWindow.hide();
 	}
