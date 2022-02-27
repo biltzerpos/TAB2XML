@@ -14,11 +14,9 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
-
 import converter.Converter;
 import converter.measure.TabMeasure;
 import javafx.application.Application;
@@ -40,6 +38,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import models.ScorePartwise;
 import utility.Range;
 import utility.Settings;
 
@@ -313,13 +312,28 @@ public class MainViewController extends Application {
 
 		Parent root;
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMusic.fxml"));
-			root = loader.load();
-			PreviewMusic controller = loader.getController();
-			controller.setMainViewController(this);
-			// update method in the PreviewMusic.java is activated
-			controller.update();
-			convertWindow = this.openNewWindow(root, "Preview Music Sheet");
+
+			//if the instrument is not supported by the application, notify user by openning a message
+			ScorePartwise spw = converter.getScorePartwise();
+			String instrument = spw.getPartList().getScoreParts().get(0).getPartName();
+			if(instrument == "Guitar" || instrument == "Drumset")
+			{
+				FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMusic.fxml"));
+				root = loader.load();
+				PreviewMusic controller = loader.getController();
+				controller.setMainViewController(this);
+				// update method in the PreviewMusic.java is activated
+				controller.update();
+				convertWindow = this.openNewWindow(root, "Preview Music Sheet");
+			}
+			else {
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+						"The instrument of this Tablature is not supported currently", ButtonType.OK);
+				alert.setTitle("Instrument Not Supported");
+				alert.setHeaderText("Sorry...");
+				Optional<ButtonType> o = alert.showAndWait();
+				
+			}
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
