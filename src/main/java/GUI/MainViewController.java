@@ -249,14 +249,18 @@ public class MainViewController extends Application {
 	private Window openNewWindow(Parent root, String windowName) {
 		Stage stage = new Stage();
 		stage.setTitle(windowName);
-		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initModality(Modality.NONE);
 		stage.initOwner(MainApp.STAGE);
 		stage.setResizable(false);
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+		stage.setOnCloseRequest(e -> {
+			e.consume();
+			closeWindow(stage);});
 		return scene.getWindow();
 	}
+	
 
 	@FXML
 	private void saveTabButtonHandle() {
@@ -393,6 +397,20 @@ public class MainViewController extends Application {
         return task;
     }
     
+    public void closeWindow(Stage stage) {
+		//mvc.editHandle(); 
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+				"Are you sure you want to close this window?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+		alert.setTitle("Close window");
+		alert.setHeaderText("You are about to close the window!");
+		Optional<ButtonType> o = alert.showAndWait();
+		
+		if(o.get() == ButtonType.YES) {
+			stage.close();
+		}
+		
+	}
+ 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
