@@ -250,7 +250,7 @@ public class MainViewController extends Application {
 	private Window openNewWindow(Parent root, String windowName) {
 		Stage stage = new Stage();
 		stage.setTitle(windowName);
-		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initModality(Modality.NONE);
 		stage.initOwner(MainApp.STAGE);
 		stage.setResizable(false);
 		Scene scene = new Scene(root);
@@ -258,6 +258,7 @@ public class MainViewController extends Application {
 		stage.show();
 		return scene.getWindow();
 	}
+	
 
 	@FXML
 	private void saveTabButtonHandle() {
@@ -405,7 +406,7 @@ public class MainViewController extends Application {
         task.isDone();
         return task;
     }
-    
+ 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
