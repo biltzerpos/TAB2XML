@@ -14,7 +14,7 @@
                   <Font name="System Bold Italic" size="24.0" />
                </font>
             </Text>
-            <Text layoutX="10.0" layoutY="67.107421875" strokeType="OUTSIDE" strokeWidth="0.0" text="The instrument for this tablature is not supported at the moment" textAlignment="CENTER" wrappingWidth="331.199951171875" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="52.0">
+            <Text layoutX="10.0" layoutY="67.107421875" strokeType="OUTSIDE" strokeWidth="0.0" text="The instrument for this tablature is not supported currently" textAlignment="CENTER" wrappingWidth="331.199951171875" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="52.0">
                <font>
                   <Font size="14.0" />
                </font>
