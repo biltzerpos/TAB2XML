@@ -62,7 +62,7 @@ public class PreviewMusic extends Application {
 		mvc = mvcInput;
 	}
 
-	// We can use this method to update the music sheet
+	//method to update the music sheet
 	public void update() throws IOException {
 		// Get the ScorePartwise object directly
 
@@ -115,11 +115,11 @@ public class PreviewMusic extends Application {
 
 	@FXML
 	public void playHandle() {
-		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
+		//ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
 
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		if (instrument == "Guitar") {
-			Guitar g = new Guitar(scorePartwise, pane);
+			//Guitar g = new Guitar(scorePartwise, pane);
 			g.playNote();
 		}
 	}
@@ -136,13 +136,13 @@ public class PreviewMusic extends Application {
 	// }
 
 	public void handleGotoMeasure() {
-		System.out.println("Go Button is Clicked");
+		//System.out.println("Go Button is Clicked");
 		int measureNumber = Integer.parseInt(gotoMeasureField.getText());
 		// Get the ScorePartwise object directly
 		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		
-		System.out.println("instrument:" + instrument);
+		//System.out.println("instrument:" + instrument);
 		int count = 1;
 		if (instrument == "Guitar") {
 			List<Measure> measureList = g.getMeasureList();
@@ -165,6 +165,11 @@ public class PreviewMusic extends Application {
 				count++;
 			}
 		}
+	}
+	
+	@FXML
+	public void editHandle() {
+		
 	}
 
 	@Override
