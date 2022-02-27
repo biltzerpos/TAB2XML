@@ -19,6 +19,7 @@ import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -136,20 +137,20 @@ public class PreviewMusic extends Application {
 	// }
 
 	public void handleGotoMeasure() {
-		System.out.println("Go Button is Clicked");
 		int measureNumber = Integer.parseInt(gotoMeasureField.getText());
 		// Get the ScorePartwise object directly
 		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		
-		System.out.println("instrument:" + instrument);
 		int count = 1;
+		boolean measureFound = false;
 		if (instrument == "Guitar") {
 			List<Measure> measureList = g.getMeasureList();
 			for (Iterator iterator = measureList.iterator(); iterator.hasNext();) {
 				Measure measure = (Measure) iterator.next();
 				if(measureNumber == count) {
 					g.highlightMeasureArea(measure);
+					measureFound = true;
 					break;
 				}
 				count++;
@@ -160,10 +161,17 @@ public class PreviewMusic extends Application {
 				Measure measure = (Measure) iterator.next();
 				if(measureNumber == count) {
 					d.highlightMeasureArea(measure);
+					measureFound = true;
 					break;
 				}
 				count++;
 			}
+		}
+		if(!measureFound) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setContentText("Measure " + measureNumber + " could not be found.");
+			alert.setHeaderText("Preview Music Sheet");
+			alert.show();
 		}
 	}
 
