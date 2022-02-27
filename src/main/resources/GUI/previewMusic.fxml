@@ -44,7 +44,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Button>
-                  <Button fx:id="editButton" mnemonicParsing="false" onAction="#editHandle" prefWidth="115.0" text="Edit Tablature">
+                  <Button fx:id="closePreviewButton" mnemonicParsing="false" onAction="#closePreviewHandle" prefWidth="115.0" text="Close Preview">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
