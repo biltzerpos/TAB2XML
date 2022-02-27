@@ -66,13 +66,8 @@ public class Guitar {
 				checkDuration(measure);
 			}
 
-			if (x < 900) {
-				drawMeasureNotes(measure);
-			} else {
-				x = 0;
-				y += 100;
-				drawMeasureNotes(measure);
-			}
+			drawMeasureNotes(measure);
+			
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
 			DrawBar bar = new DrawBar(this.pane, x, y);
@@ -196,13 +191,27 @@ public class Guitar {
 		List<Note> noteList = measure.getNotesBeforeBackup();
 		for (int j = 0; j < noteList.size(); j++) {
 			Note note = noteList.get(j);
-			// if a note has technical we use drawNote with techincal to draw fret values on
-			// string
-			if (noteHasTechnical(note)) {
-				drawNoteWithTechnical(note);
+			if (x < 900) {
+				// if a note has technical we use drawNote with techincal to draw fret values on
+				// string
+				if (noteHasTechnical(note)) {
+					drawNoteWithTechnical(note);
+				}
+				// if the guitar class has anything else we can add else and else-if arguments
+				// here
 			}
-			// if the guitar class has anything else we can add else and else-if arguments
-			// here
+			else {
+				x = 0; 
+				y+= 100;
+				// if a note has technical we use drawNote with techincal to draw fret values on
+				// string
+				if (noteHasTechnical(note)) {
+					drawNoteWithTechnical(note);
+				}
+				// if the guitar class has anything else we can add else and else-if arguments
+				// here
+			}
+			
 		}
 	}
 
