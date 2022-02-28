@@ -249,7 +249,7 @@ public class MainViewController extends Application {
 		Stage stage = new Stage();
 		stage.setTitle(windowName);
 		stage.initModality(Modality.NONE);
-		stage.initOwner(MainApp.STAGE);
+		stage.initOwner(null);
 		stage.setResizable(false);
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
