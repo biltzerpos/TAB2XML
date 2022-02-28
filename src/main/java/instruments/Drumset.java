@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfugue.pattern.Pattern;
+import org.jfugue.player.Player;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -155,6 +158,13 @@ public class Drumset {
 			y = yf;
 		}
 	}
+	
+	// This method plays the notes
+		public void playDrumNote() {
+			
+			System.out.println("Drum note play bottom clicked");
+			
+		}
 
 	// return X coordinates for given measure
 	public double getXCoordinatesForGivenMeasure(Measure measure) {

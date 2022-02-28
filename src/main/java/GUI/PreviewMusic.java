@@ -117,7 +117,11 @@ public class PreviewMusic extends Application {
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		if (instrument == "Guitar") {
 			//Guitar g = new Guitar(scorePartwise, pane);
-			g.playNote();
+			g.playGuitarNote();
+		}
+		else if(instrument == "Drumset") {
+			//Drumset d = new Drumset(scorePartwise, pane);
+			d.playDrumNote();
 		}
 	}
 	// private Window openNewWindow(Parent root, String windowName) {
