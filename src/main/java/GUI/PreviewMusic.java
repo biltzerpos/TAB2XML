@@ -3,36 +3,31 @@ package GUI;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
-
-import converter.measure.TabMeasure;
+import java.util.Optional;
 import instruments.Guitar;
 import instruments.Drumset;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
-import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 import javafx.stage.Window;
 import javafx.stage.Stage;
-
 import models.ScorePartwise;
 import models.measure.Measure;
-import utility.Range;
 
 public class PreviewMusic extends Application {
 
@@ -50,6 +45,8 @@ public class PreviewMusic extends Application {
 	TextField gotoMeasureField;
 	private Guitar g;
 	private Drumset d;
+	@FXML private Button closePreviewButton;
+	
 
 	public PreviewMusic() {
 	}
@@ -62,7 +59,7 @@ public class PreviewMusic extends Application {
 		mvc = mvcInput;
 	}
 
-	// We can use this method to update the music sheet
+	//method to update the music sheet
 	public void update() throws IOException {
 		// Get the ScorePartwise object directly
 
@@ -115,11 +112,11 @@ public class PreviewMusic extends Application {
 
 	@FXML
 	public void playHandle() {
-		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
+		//ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
 
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		if (instrument == "Guitar") {
-			Guitar g = new Guitar(scorePartwise, pane);
+			//Guitar g = new Guitar(scorePartwise, pane);
 			g.playNote();
 		}
 	}
@@ -136,13 +133,13 @@ public class PreviewMusic extends Application {
 	// }
 
 	public void handleGotoMeasure() {
-		System.out.println("Go Button is Clicked");
+		//System.out.println("Go Button is Clicked");
 		int measureNumber = Integer.parseInt(gotoMeasureField.getText());
 		// Get the ScorePartwise object directly
 		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		
-		System.out.println("instrument:" + instrument);
+		//System.out.println("instrument:" + instrument);
 		int count = 1;
 		if (instrument == "Guitar") {
 			List<Measure> measureList = g.getMeasureList();
@@ -166,10 +163,26 @@ public class PreviewMusic extends Application {
 			}
 		}
 	}
-
+	
+	@FXML
+	public void closePreviewHandle() {
+		//mvc.editHandle(); 
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+				"Are you sure you want to close this Preview window?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+		alert.setTitle("Close preview window");
+		alert.setHeaderText("You are about to close the Preview window!");
+		Optional<ButtonType> o = alert.showAndWait();
+		
+		if(o.get() == ButtonType.YES) {
+			mvc.convertWindow.hide();
+		}
+		
+		
+	}
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-
+		
 	}
 }
