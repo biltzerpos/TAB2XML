@@ -10,8 +10,10 @@ import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.print.JobSettings;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
+import javafx.print.PageRange;
 import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
@@ -88,27 +90,41 @@ public class PreviewMusic extends Application {
 		printButton.setOnAction(aEvent -> {
 			printButtonPressed.set(true);
 		});
-
+		
+		PrinterJob printSheet = PrinterJob.createPrinterJob();
 		WritableImage screenshot = pane.snapshot(null, null);
 		Printer printer = Printer.getDefaultPrinter();
 		PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT,
 				Printer.MarginType.HARDWARE_MINIMUM);
-
+		
+		PageLayout pgLayout = printSheet.getJobSettings().getPageLayout();
+		 JobSettings js = printSheet.getJobSettings();
+		 
 		final double scaleX = layout.getPrintableWidth() / screenshot.getWidth();
 		final double scaleY = layout.getPrintableHeight() / screenshot.getHeight();
 		final double scale = Math.min(scaleX, scaleY);
 		final ImageView print_node = new ImageView(screenshot);
-		print_node.getTransforms().add(new Scale(scale, scale));
-
-		PrinterJob printSheet = PrinterJob.createPrinterJob();
-
-		if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
-			boolean printed = printSheet.printPage(print_node);
-			if (printed) {
-				printSheet.endJob();
+		
+		int pagesNeeded = (int) (screenshot.getHeight() / layout.getPrintableHeight());
+	
+		PageRange pgRange = new PageRange(1, pagesNeeded);
+	    printSheet.getJobSettings().setPageRanges(pgRange);
+	    if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
+		boolean printed = false;
+		for (PageRange pr : js.getPageRanges()){ 
+		for (int p=1; p <= pagesNeeded; p++) {
+			
+			
+			printSheet.printPage(print_node);
+		
 			}
 		}
+		}
+			printSheet.endJob();
+		
 	}
+
+	
 
 	@FXML
 	public void playHandle() {
