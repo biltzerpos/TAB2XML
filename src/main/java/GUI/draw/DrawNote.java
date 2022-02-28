@@ -7,6 +7,9 @@ import javafx.scene.effect.ColorInput;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -77,11 +80,22 @@ public class DrawNote {
 	}
 
 	public void drawX() {
-		
-		Text text = new Text(getStartX(), getStartY(), "x");
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-    	text.toFront();
-    	pane.getChildren().add(text);
+		// Drawing the "x" with two lines
+		double xCenterX = getStartX() + 3;
+		double xCenterY = getStartY() - 3;
+		Line topLeftToBottomRight = new Line(xCenterX-4, xCenterY+4, xCenterX+4, xCenterY-4);
+		Line topRightToBottomLeft = new Line(xCenterX+4, xCenterY+4, xCenterX-4, xCenterY-4);
+		topLeftToBottomRight.setStrokeWidth(1.5);
+		topRightToBottomLeft.setStrokeWidth(1.5);
+
+		// Drawing the stem
+		Line stem = new Line(getStartX()+8, getStartY()-8, getStartX()+8, getStartY()-35);
+		stem.setStrokeWidth(1.5);
+
+    	pane.getChildren().add(topLeftToBottomRight);
+    	pane.getChildren().add(topRightToBottomLeft);
+    	pane.getChildren().add(stem);
+
     	Blend blend = new Blend(); 
 		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE); 
 		blend.setTopInput(topInput); 
@@ -89,22 +103,26 @@ public class DrawNote {
 	}
 
 	public void drawO() {
-		
-		Text text = new Text(getStartX(), getStartY(), "o");
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-    	text.toFront();
-		Blend blend = new Blend(); 
-		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE); 
-		blend.setTopInput(topInput); 
+
+		Ellipse ellipse = new Ellipse(getStartX()+3, getStartY()-2, 6.0, 4.5);
+		ellipse.setRotate(330);
+		ellipse.toFront();
+
+		Line stem = new Line(getStartX()+8, getStartY()-5, getStartX()+8, getStartY()-35);
+		stem.setStrokeWidth(1.5);
+
+		Blend blend = new Blend();
+		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE);
+		blend.setTopInput(topInput);
 		blend.setMode(BlendMode.OVERLAY);
-	
-    	pane.getChildren().add(text);
-    	text.setEffect(blend);
+
+    	pane.getChildren().add(ellipse);
+    	pane.getChildren().add(stem);
+    	ellipse.setEffect(blend);
 	}
 	
-public void drawDrumClef1() {
-		
-		
+	public void drawDrumClef1() {
+
 		Box box = new Box(4, 20, 1); 
 		box.setTranslateX(12);
 		box.setTranslateY(30);
@@ -115,27 +133,19 @@ public void drawDrumClef1() {
 		boxColor.setSpecularPower(0);
 		box.setMaterial(boxColor);
 		pane.getChildren().add(box);
-		
-			
-		}
-public void drawDrumClef2() {
-	
-	
-	Box box = new Box(4, 20, 1); 
-	box.setTranslateX(5);
-	box.setTranslateY(30);
-	box.setTranslateZ(10);
-	PhongMaterial boxColor = new PhongMaterial();
-	boxColor.setSpecularColor(Color.BLACK);
-	boxColor.setDiffuseColor(Color.BLACK);
-	boxColor.setSpecularPower(0);
-	box.setMaterial(boxColor);
-	pane.getChildren().add(box);
-	
-		
 	}
 
-	
-	
+	public void drawDrumClef2() {
 
+		Box box = new Box(4, 20, 1); 
+		box.setTranslateX(5);
+		box.setTranslateY(30);
+		box.setTranslateZ(10);
+		PhongMaterial boxColor = new PhongMaterial();
+		boxColor.setSpecularColor(Color.BLACK);
+		boxColor.setDiffuseColor(Color.BLACK);
+		boxColor.setSpecularPower(0);
+		box.setMaterial(boxColor);
+		pane.getChildren().add(box);
+	}
 }
