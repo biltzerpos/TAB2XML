@@ -41,7 +41,7 @@ public class Drumset {
 		this.clef = this.scorePartwise.getParts().get(0).getMeasures().get(0).getAttributes().getClef();
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
-		
+
 	}
 
 	public void draw() {
@@ -53,8 +53,8 @@ public class Drumset {
 		// Draw the initial music lines
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
 		d.draw(x,y);
-		
-		
+
+
 
 		// Iterate through the list of measures
 		for (Measure measure : measureList) {
@@ -158,13 +158,13 @@ public class Drumset {
 			y = yf;
 		}
 	}
-	
+
 	// This method plays the notes
-		public void playDrumNote() {
-			
-			System.out.println("Drum note play bottom clicked");
-			
-		}
+	public void playDrumNote() {
+
+		System.out.println("Drum note play bottom clicked");
+
+	}
 
 	// return X coordinates for given measure
 	public double getXCoordinatesForGivenMeasure(Measure measure) {
@@ -175,7 +175,7 @@ public class Drumset {
 	public double getYCoordinatesForGivenMeasure(Measure measure) {
 		return yCoordinates.get(measure);
 	}
-	
+
 	public double getPositionYFromOctaveAndStep(int octave, String step) {
 		return 0;
 	}
@@ -184,5 +184,5 @@ public class Drumset {
 	public List<Measure> getMeasureList() {
 		return measureList;
 	}
-	
+
 }
