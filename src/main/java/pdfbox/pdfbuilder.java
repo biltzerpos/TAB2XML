@@ -312,13 +312,14 @@ public class pdfbuilder {
 			pageImage = PDImageXObject.createFromFile(imagePath, doc);
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX, globalY - offsety);
+			System.out.println(globalX +","+ globalY);
 			contentStream.close();
 			globalX += 50;
 			//y is arbitrary, test later
 			++totalNotes;
 		}
 		// this else is for when it reaches the end of the staff, to then translate it into the next staff
-		else{
+		else {
 			globalX = 15;
 			//y is the best i could chose
 			globalY -= 140;
@@ -326,6 +327,7 @@ public class pdfbuilder {
 			pageImage = PDImageXObject.createFromFile(imagePath, doc);
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX, globalY - offsety);
+			System.out.println(globalX +","+ globalY);
 			contentStream.close();
 			globalX += 50;
 			++totalNotes;
