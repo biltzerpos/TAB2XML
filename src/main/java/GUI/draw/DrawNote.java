@@ -7,7 +7,6 @@ import javafx.scene.effect.ColorInput;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Box;
@@ -15,20 +14,22 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import models.measure.note.Note;
 
 public class DrawNote {
 	
-	private int fret;
 	private double startX; 
 	private double startY;
 	@FXML private Pane pane;
+	private Note note;
+	
 
 	/**
 	 * Constructor for guitar.
 	 */
-	public DrawNote(Pane pane, int fret, double startX, double startY) {
+	public DrawNote(Pane pane, Note note, double startX, double startY) {
 		super();
-		this.fret = fret;
+		this.note = note;
 		this.startX = startX;
 		this.startY = startY;
 		this.pane = pane;
@@ -44,12 +45,12 @@ public class DrawNote {
 		this.pane = pane;
 	}
 
-	/*
+	/**
 	 * this method draws note based on given Fret of guitar
 	 * */
 	public void drawFret() {
-		//the actual notes based on fret value of guitar
-		Text text = new Text(getStartX(), getStartY(), Integer.toString(this.fret));
+		int fret = note.getNotations().getTechnical().getFret();
+		Text text = new Text(getStartX(), getStartY(), Integer.toString(fret));
 		text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 12));
 		text.toFront();
 		//for background
@@ -60,7 +61,7 @@ public class DrawNote {
 			    	
 		text.setEffect(blend);
 		        
-		pane.getChildren().add(text);
+		pane.getChildren().add(text);	
 	}
 
 	public double getStartX() {
@@ -148,4 +149,6 @@ public class DrawNote {
 		box.setMaterial(boxColor);
 		pane.getChildren().add(box);
 	}
+
+	
 }
