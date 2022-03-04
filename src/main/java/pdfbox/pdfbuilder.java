@@ -135,7 +135,7 @@ public class pdfbuilder {
 	private final int notesPerPage = 50;
 	private int maxNotesTotal = notesPerPage;
 	private int totalNotes;
-	private int globalX = 15;
+	private int globalX = 115;
 	private int globalY = 425;
 	private int pageCounter;
 
@@ -320,7 +320,7 @@ public class pdfbuilder {
 		}
 		// this else is for when it reaches the end of the staff, to then translate it into the next staff
 		else {
-			globalX = 15;
+			globalX = 115;
 			//y is the best i could chose
 			globalY -= 140;
 			//x is arbitrary, test later
