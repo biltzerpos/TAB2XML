@@ -21,8 +21,9 @@ public class JfugueTest {
 //		
 		Pattern vocals = new Pattern();
 //		vocals.add("Rh G5is E5i Ri | G5s Ris E5q Rs | G5q E5i Rs D5q rs C5h Rs");
-		vocals.add("E2i B2i E3i G3i B3i E4i B3i G3i E4w+B3w+G3w+E3w+B2w+E2w");
-		vocals.setInstrument("GUITAR");
+//	    vocals.add("E2i B2i E3i G3i B3i E4i B3i G3i E4w+B3w+G3w+E3w+B2w+E2w");
+//		vocals.setInstrument("GUITAR");
+		vocals.add("V9 [Acoustic_Snare] V9 [Lo_Mid_Tom]"); 
 		
 //		ChordProgression cp = new ChordProgression("C D E F G A B");
 //				

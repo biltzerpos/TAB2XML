@@ -222,7 +222,6 @@ public class Guitar {
 	// This method plays the notes
 	public void playGuitarNote() {
 		Player player = new Player();
-		// Pattern pattern = new Pattern();
 		Pattern vocals = new Pattern();
 		String noteSteps = "";
 		int voice = 0;

@@ -18,7 +18,8 @@ import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
 import models.measure.note.Notehead;
-
+import utility.DrumPieceInfo;
+import utility.DrumUtils;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawDrumsetBar;
 import GUI.draw.DrawDrumsetMusicLines;
@@ -160,11 +161,70 @@ public class Drumset {
 		}
 	}
 
+
+	public String getDrumNoteFullName(String Id) {
+		String fullName = "";
+
+//		for (int i = 0; i < measureList.size(); i++) {
+//			Measure measure = measureList.get(i);
+//			List<Note> noteList = measure.getNotesBeforeBackup();
+//
+//			for (int j = 0; j < noteList.size(); j++) {
+//				String Id = ((Note) noteList).getInstrument().getId();
+				if(Id == "P1-I50") {
+					fullName = "Crash_Cymbal_1";
+				}else if(Id == "P1-I36"){
+					fullName = "Bass_Drum";
+				}else if(Id == "P1-I39"){
+					fullName = "Acoustic_Snare";
+				}else if(Id == "P1-I43"){
+					fullName = "Closed_Hi_Hat";
+				}else if(Id == "P1-I47"){
+					fullName = "Open_Hi_Hat";
+				}else if(Id == "P1-I52"){
+					fullName = "Ride_Cymbal_1";
+				}else if(Id == "P1-I54"){
+					fullName = "Ride_Bell";
+				}else if(Id == "P1-I53"){
+					fullName = "Chinese_Cymbal_1";
+				}else if(Id == "P1-I48"){
+					fullName = "Lo_Mid_Tom";
+				}else if(Id == "P1-I46"){
+					fullName = "Lo_Tom";
+				}else if(Id == "P1-I44"){
+					fullName = "High_Floor_Tom";
+				}else if(Id == "P1-I42"){
+					fullName = "Low_Floor_Tom";
+				}else if(Id == "P1-I45"){
+					fullName = "Pedal_Hi_Hat";
+				}
+//			}
+//
+//		}
+		return fullName;
+	}
+
 	// This method plays the notes
 	public void playDrumNote() {
+		Player player = new Player();
+		Pattern vocals = new Pattern();
+		String drumNote = "";
+		
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
 
-		System.out.println("Drum note play bottom clicked");
-
+			for (int j = 0; j < noteList.size(); j++) {
+				String drumId = "";
+				Note note = noteList.get(j);
+				drumId = note.getInstrument().getId();
+				drumNote += "V9 [" + getDrumNoteFullName(drumId) + "] ";
+			}
+		}
+		
+		vocals.add(drumNote);
+		System.out.println(vocals.toString());
+		player.play(vocals);
 	}
 
 	// return X coordinates for given measure
