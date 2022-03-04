@@ -205,14 +205,22 @@ public class Drumset {
 
 			for (int j = 0; j < noteList.size(); j++) {
 				String drumId = "";
+				String ns = new String();
 				Note note = noteList.get(j);
 				drumId = note.getInstrument().getId();
-				drumNote += "V9 [" + getDrumNoteFullName(drumId) + "] ";
+				ns = "[" + getDrumNoteFullName(drumId) + "]";
+
+				if (note.getChord() == null) {
+					drumNote += " V9 " + ns;
+				}else {
+					drumNote += "+" + ns;
+				}
 			}
 		}
 
 		vocals.add(drumNote);
-		System.out.println(vocals.toString());
+		//System.out.println(vocals.toString());
+		vocals.setTempo(120);
 		player.play(vocals);
 	}
 
