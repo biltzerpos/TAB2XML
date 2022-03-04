@@ -17,10 +17,12 @@ import javafx.print.PageRange;
 import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
@@ -97,31 +99,30 @@ public class PreviewMusic extends Application {
 		PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT,
 				Printer.MarginType.HARDWARE_MINIMUM);
 		
-		PageLayout pgLayout = printSheet.getJobSettings().getPageLayout();
-		 JobSettings js = printSheet.getJobSettings();
-		 
+
 		final double scaleX = layout.getPrintableWidth() / screenshot.getWidth();
 		final double scaleY = layout.getPrintableHeight() / screenshot.getHeight();
 		final double scale = Math.min(scaleX, scaleY);
-		final ImageView print_node = new ImageView(screenshot);
+		PageLayout pgLayout = printSheet.getJobSettings().getPageLayout();
+		JobSettings js = printSheet.getJobSettings();
+		 final ImageView print_node = new ImageView(screenshot);
+		 print_node.getTransforms().add(new Scale(scale, scale));
 		
 		int pagesNeeded = (int) (screenshot.getHeight() / layout.getPrintableHeight());
 	
-		PageRange pgRange = new PageRange(1, pagesNeeded);
+		PageRange pgRange = new PageRange(1, pagesNeeded+1);
 	    printSheet.getJobSettings().setPageRanges(pgRange);
 	    if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
-		boolean printed = false;
-		for (PageRange pr : js.getPageRanges()){ 
-		for (int p=1; p <= pagesNeeded; p++) {
-			
-			
-			printSheet.printPage(print_node);
 		
-			}
-		}
-		}
+	    	printSheet.printPage(print_node);
+	    	
+			for (int p=1; p<=pagesNeeded; p++) {
+				print_node.setTranslateY(-pgLayout.getPrintableHeight());
+				printSheet.printPage(print_node);
+		}	
 			printSheet.endJob();
 		
+	    }
 	}
 
 	
