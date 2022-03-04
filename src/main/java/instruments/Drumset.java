@@ -23,6 +23,7 @@ import GUI.draw.DrawClef;
 import GUI.draw.DrawDrumsetBar;
 import GUI.draw.DrawDrumsetMusicLines;
 import GUI.draw.DrawNote;
+import GUI.draw.DrawDrumsetNote;
 
 public class Drumset {
 
@@ -76,7 +77,7 @@ public class Drumset {
 					// Also draw the music lines before drawing the note so that the note appears on top.
 					d.draw(x,y);
 
-					DrawNote noteDrawer = new DrawNote(this.pane, x+25, positionY+3);
+					DrawDrumsetNote noteDrawer = new DrawDrumsetNote(this.pane, note, x+25, positionY+3);
 					noteDrawer.drawDrumClef1();
 					noteDrawer.drawDrumClef2();
 
@@ -91,7 +92,7 @@ public class Drumset {
 					x+=50;
 				}
 				else {
-					DrawNote noteDrawer = new DrawNote(this.pane, x-25, positionY+3 );
+					DrawDrumsetNote noteDrawer = new DrawDrumsetNote(this.pane, note, x-25, positionY+3 );
 
 					// If note head exists and is an x, then draw "x", otherwise draw "o"
 					if (symbol != null && symbol.getType().equals("x")) {

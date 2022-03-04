@@ -4,25 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
-
-import GUI.draw.Draw44Beat;
-import GUI.draw.DrawBar;
-import GUI.draw.DrawClef;
-import GUI.draw.DrawMusicLines;
-import GUI.draw.DrawNote;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
+import GUI.draw.*;
 
 public class Guitar {
 
@@ -62,22 +55,14 @@ public class Guitar {
 				drawMeasureCleft(c);
 				x += 50;
 			}
-			if (measure.getNumber() == 1) {
-				checkDuration(measure);
-			}
 
-			if (x < 900) {
-				drawMeasureNotes(measure);
-			} else {
-				x = 0;
-				y += 100;
-				drawMeasureNotes(measure);
-			}
+			drawMeasureNotes(measure);
+
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
 			DrawBar bar = new DrawBar(this.pane, x, y);
 			bar.draw();
-			System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
+			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
 	}
 
@@ -140,7 +125,7 @@ public class Guitar {
 		}
 	}
 
-	// returns a list of measures
+	// getter: returns a list of measures
 	public List<Measure> getMeasureList() {
 		return measureList;
 	}
@@ -160,74 +145,77 @@ public class Guitar {
 		this.measureList = measureList;
 	}
 
-	// if the notes in a measure are all 1/8( then beat is 4/4) draws 4/4 beat using
-	// Draw44Beat
-	private void checkDuration(Measure measure) {
-		List<Note> noteList = measure.getNotesBeforeBackup();
-		if (is44Beat(noteList)) {
-			Draw44Beat dd = new Draw44Beat(this.pane, this.x, this.y + 20);
-			dd.draw();
-		}
-		// We can add other beats here if necessary
-	}
-
-	// This method returns true if the all notes in a measure have 1/8 beat
-	public boolean is44Beat(List<Note> noteList) {
-		Boolean res = true;
-		for (int i = 0; i < noteList.size(); i++) {
-			Note n = noteList.get(i);
-			int dur = n.getDuration();
-			if (dur != 8) {
-				res = false;
-				break;
-			}
-		}
-		return res;
-	}
-
 	// This method draws a given clef
 	private void drawMeasureCleft(Clef c) {
 		DrawClef dc = new DrawClef(this.pane, c, x + 5, y + 15);
 		dc.draw();
 	}
 
-	// this method draws the notes in a measure given measure m
+	// this method draws the notes in a  measure 
 	private void drawMeasureNotes(Measure measure) {
+		//list of notes in each measure
 		List<Note> noteList = measure.getNotesBeforeBackup();
+		//the next 3 lines allow drawing lines for the note type
+		double py = getLastLineCoordinateY();
+		DrawNoteType noteType = new DrawNoteType(pane, noteList, x, py);
+		noteType.drawDuration();
+		//iterate through each note in the noteList 
 		for (int j = 0; j < noteList.size(); j++) {
 			Note note = noteList.get(j);
-			// if a note has technical we use drawNote with techincal to draw fret values on
-			// string
-			if (noteHasTechnical(note)) {
-				drawNoteWithTechnical(note);
+			//if x-coordinate is in bound (less than 900), drawing happens in the same line
+			//otherwise we go to the next line
+			if (x < 900) {
+				// if a note has technical we use drawNote with techincal to draw fret values on
+				// string
+				if (noteHasTechnical(note)) {
+					drawNoteWithTechnical(note, noteList);
+				}
+				// if the guitar class has anything else we can add else and else-if arguments
+				// here
+			} else {
+				x = 0;
+				y += 150;
+				// if a note has technical we use drawNote with techincal to draw fret values on
+				// string
+				if (noteHasTechnical(note)) {
+					drawNoteWithTechnical(note, noteList);
+				}
+				// if the guitar class has anything else we can add else and else-if arguments
+				// here
 			}
-			// if the guitar class has anything else we can add else and else-if arguments
-			// here
+
 		}
 	}
 
 	// Given a Note with techinical attributes, this method draws it using drawNote
 	// method of Gui.draw.
-	private void drawNoteWithTechnical(Note note) {
-		int fret = note.getNotations().getTechnical().getFret();
+	private void drawNoteWithTechnical(Note note, List<Note> noteList) {
 		int string = note.getNotations().getTechnical().getString();
+		// if the note belongs to a chord then they are drawn on the same line
 		if (!noteHasChord(note)) {
 			d.draw(x, y);
-			double positionY = getLineCoordinateY(d, string);
-			DrawNote noteDrawer = new DrawNote(this.pane, fret, x + 25, positionY + 3 + y);
+			double positionY = getLineCoordinateY(string);
+			DrawNote noteDrawer = new DrawNote(this.pane, note, x + 25, positionY + 3 + y);
 			x += 50;
 			noteDrawer.drawFret();
-		} else {
-			double positionY = getLineCoordinateY(d, string);
-			DrawNote noteDrawer = new DrawNote(this.pane, fret, x - 25, positionY + 3 + y);
+
+		} 
+		else {
+			double positionY = getLineCoordinateY(string);
+			DrawNote noteDrawer = new DrawNote(this.pane, note, x - 25, positionY + 3 + y);
 			noteDrawer.drawFret();
 		}
 	}
 
 	// gets the Y coordinate of specific group of music lines based on given string
 	// integer.
-	private double getLineCoordinateY(DrawMusicLines d, int string) {
-		return d.getMusicLineList().get(string - 1).getStartY(string - 1);
+	private double getLineCoordinateY(int string) {
+		return this.d.getMusicLineList().get(string - 1).getStartY(string - 1);
+
+	}
+
+	private double getLastLineCoordinateY() {
+		return this.d.getMusicLineList().get(5).getStartY(5);
 
 	}
 
@@ -263,7 +251,7 @@ public class Guitar {
 		}
 
 		vocals.add(noteSteps);
-		System.out.println(vocals.toString());
+		//System.out.println(vocals.toString());
 		vocals.setInstrument("GUITAR");
 		vocals.setVoice(voice);
 		vocals.setTempo(120);
