@@ -125,17 +125,6 @@ public class PreviewMusic extends Application {
 			d.playDrumNote();
 		}
 	}
-	// private Window openNewWindow(Parent root, String windowName) {
-	// Stage stage = new Stage();
-	// stage.setTitle(windowName);
-	// stage.initModality(Modality.APPLICATION_MODAL);
-	// stage.initOwner(MainApp.STAGE);
-	// stage.setResizable(false);
-	// Scene scene = new Scene(root);
-	// stage.setScene(scene);
-	// stage.show();
-	// return scene.getWindow();
-	// }
 
 	public void handleGotoMeasure() {
 
