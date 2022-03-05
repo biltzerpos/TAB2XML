@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfugue.pattern.Pattern;
+import org.jfugue.player.Player;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -15,11 +18,10 @@ import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
 import models.measure.note.Notehead;
-
-import GUI.draw.DrawClef;
 import GUI.draw.DrawDrumsetBar;
 import GUI.draw.DrawDrumsetMusicLines;
 import GUI.draw.DrawNote;
+import GUI.draw.DrawDrumsetNote;
 
 public class Drumset {
 
@@ -38,7 +40,7 @@ public class Drumset {
 		this.clef = this.scorePartwise.getParts().get(0).getMeasures().get(0).getAttributes().getClef();
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
-		
+
 	}
 
 	public void draw() {
@@ -50,8 +52,8 @@ public class Drumset {
 		// Draw the initial music lines
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
 		d.draw(x,y);
-		
-		
+
+
 
 		// Iterate through the list of measures
 		for (Measure measure : measureList) {
@@ -73,7 +75,7 @@ public class Drumset {
 					// Also draw the music lines before drawing the note so that the note appears on top.
 					d.draw(x,y);
 
-					DrawNote noteDrawer = new DrawNote(this.pane, x+25, positionY+3);
+					DrawDrumsetNote noteDrawer = new DrawDrumsetNote(this.pane, note, x+25, positionY+3);
 					noteDrawer.drawDrumClef1();
 					noteDrawer.drawDrumClef2();
 
@@ -88,7 +90,7 @@ public class Drumset {
 					x+=50;
 				}
 				else {
-					DrawNote noteDrawer = new DrawNote(this.pane, x-25, positionY+3 );
+					DrawDrumsetNote noteDrawer = new DrawDrumsetNote(this.pane, note, x-25, positionY+3 );
 
 					// If note head exists and is an x, then draw "x", otherwise draw "o"
 					if (symbol != null && symbol.getType().equals("x")) {
@@ -156,6 +158,72 @@ public class Drumset {
 		}
 	}
 
+
+	public String getDrumNoteFullName(String Id) {
+		String fullName = "";
+
+		if(Id == "P1-I50") {
+			fullName = "Crash_Cymbal_1";
+		}else if(Id == "P1-I36"){
+			fullName = "Bass_Drum";
+		}else if(Id == "P1-I39"){
+			fullName = "Acoustic_Snare";
+		}else if(Id == "P1-I43"){
+			fullName = "Closed_Hi_Hat";
+		}else if(Id == "P1-I47"){
+			fullName = "Open_Hi_Hat";
+		}else if(Id == "P1-I52"){
+			fullName = "Ride_Cymbal_1";
+		}else if(Id == "P1-I54"){
+			fullName = "Ride_Bell";
+		}else if(Id == "P1-I53"){
+			fullName = "Chinese_Cymbal_1";
+		}else if(Id == "P1-I48"){
+			fullName = "Lo_Mid_Tom";
+		}else if(Id == "P1-I46"){
+			fullName = "Lo_Tom";
+		}else if(Id == "P1-I44"){
+			fullName = "High_Floor_Tom";
+		}else if(Id == "P1-I42"){
+			fullName = "Low_Floor_Tom";
+		}else if(Id == "P1-I45"){
+			fullName = "Pedal_Hi_Hat";
+		}
+
+		return fullName;
+	}
+
+	// This method plays the notes
+	public void playDrumNote() {
+		Player player = new Player();
+		Pattern vocals = new Pattern();
+		String drumNote = "";
+
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
+
+			for (int j = 0; j < noteList.size(); j++) {
+				String drumId = "";
+				String ns = new String();
+				Note note = noteList.get(j);
+				drumId = note.getInstrument().getId();
+				ns = "[" + getDrumNoteFullName(drumId) + "]";
+
+				if (note.getChord() == null) {
+					drumNote += " V9 " + ns;
+				}else {
+					drumNote += "+" + ns;
+				}
+			}
+		}
+
+		vocals.add(drumNote);
+		//System.out.println(vocals.toString());
+		vocals.setTempo(120);
+		player.play(vocals);
+	}
+
 	// return X coordinates for given measure
 	public double getXCoordinatesForGivenMeasure(Measure measure) {
 		return xCoordinates.get(measure);
@@ -165,7 +233,7 @@ public class Drumset {
 	public double getYCoordinatesForGivenMeasure(Measure measure) {
 		return yCoordinates.get(measure);
 	}
-	
+
 	public double getPositionYFromOctaveAndStep(int octave, String step) {
 		return 0;
 	}
@@ -174,5 +242,5 @@ public class Drumset {
 	public List<Measure> getMeasureList() {
 		return measureList;
 	}
-	
+
 }

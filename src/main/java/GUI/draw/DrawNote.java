@@ -7,25 +7,29 @@ import javafx.scene.effect.ColorInput;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import models.measure.note.Note;
 
 public class DrawNote {
 	
-	private int fret;
 	private double startX; 
 	private double startY;
 	@FXML private Pane pane;
+	private Note note;
+	
 
 	/**
 	 * Constructor for guitar.
 	 */
-	public DrawNote(Pane pane, int fret, double startX, double startY) {
+	public DrawNote(Pane pane, Note note, double startX, double startY) {
 		super();
-		this.fret = fret;
+		this.note = note;
 		this.startX = startX;
 		this.startY = startY;
 		this.pane = pane;
@@ -41,12 +45,12 @@ public class DrawNote {
 		this.pane = pane;
 	}
 
-	/*
+	/**
 	 * this method draws note based on given Fret of guitar
 	 * */
 	public void drawFret() {
-		//the actual notes based on fret value of guitar
-		Text text = new Text(getStartX(), getStartY(), Integer.toString(this.fret));
+		int fret = note.getNotations().getTechnical().getFret();
+		Text text = new Text(getStartX(), getStartY(), Integer.toString(fret));
 		text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 12));
 		text.toFront();
 		//for background
@@ -57,7 +61,7 @@ public class DrawNote {
 			    	
 		text.setEffect(blend);
 		        
-		pane.getChildren().add(text);
+		pane.getChildren().add(text);	
 	}
 
 	public double getStartX() {
@@ -77,11 +81,22 @@ public class DrawNote {
 	}
 
 	public void drawX() {
-		
-		Text text = new Text(getStartX(), getStartY(), "x");
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-    	text.toFront();
-    	pane.getChildren().add(text);
+		// Drawing the "x" with two lines
+		double xCenterX = getStartX() + 3;
+		double xCenterY = getStartY() - 3;
+		Line topLeftToBottomRight = new Line(xCenterX-4, xCenterY+4, xCenterX+4, xCenterY-4);
+		Line topRightToBottomLeft = new Line(xCenterX+4, xCenterY+4, xCenterX-4, xCenterY-4);
+		topLeftToBottomRight.setStrokeWidth(1.5);
+		topRightToBottomLeft.setStrokeWidth(1.5);
+
+		// Drawing the stem
+		Line stem = new Line(getStartX()+8, getStartY()-8, getStartX()+8, getStartY()-35);
+		stem.setStrokeWidth(1.5);
+
+    	pane.getChildren().add(topLeftToBottomRight);
+    	pane.getChildren().add(topRightToBottomLeft);
+    	pane.getChildren().add(stem);
+
     	Blend blend = new Blend(); 
 		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE); 
 		blend.setTopInput(topInput); 
@@ -89,22 +104,26 @@ public class DrawNote {
 	}
 
 	public void drawO() {
-		
-		Text text = new Text(getStartX(), getStartY(), "o");
-    	text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-    	text.toFront();
-		Blend blend = new Blend(); 
-		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE); 
-		blend.setTopInput(topInput); 
+
+		Ellipse ellipse = new Ellipse(getStartX()+3, getStartY()-2, 6.0, 4.5);
+		ellipse.setRotate(330);
+		ellipse.toFront();
+
+		Line stem = new Line(getStartX()+8, getStartY()-5, getStartX()+8, getStartY()-35);
+		stem.setStrokeWidth(1.5);
+
+		Blend blend = new Blend();
+		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE);
+		blend.setTopInput(topInput);
 		blend.setMode(BlendMode.OVERLAY);
-	
-    	pane.getChildren().add(text);
-    	text.setEffect(blend);
+
+    	pane.getChildren().add(ellipse);
+    	pane.getChildren().add(stem);
+    	ellipse.setEffect(blend);
 	}
 	
-public void drawDrumClef1() {
-		
-		
+	public void drawDrumClef1() {
+
 		Box box = new Box(4, 20, 1); 
 		box.setTranslateX(12);
 		box.setTranslateY(30);
@@ -115,27 +134,21 @@ public void drawDrumClef1() {
 		boxColor.setSpecularPower(0);
 		box.setMaterial(boxColor);
 		pane.getChildren().add(box);
-		
-			
-		}
-public void drawDrumClef2() {
-	
-	
-	Box box = new Box(4, 20, 1); 
-	box.setTranslateX(5);
-	box.setTranslateY(30);
-	box.setTranslateZ(10);
-	PhongMaterial boxColor = new PhongMaterial();
-	boxColor.setSpecularColor(Color.BLACK);
-	boxColor.setDiffuseColor(Color.BLACK);
-	boxColor.setSpecularPower(0);
-	box.setMaterial(boxColor);
-	pane.getChildren().add(box);
-	
-		
+	}
+
+	public void drawDrumClef2() {
+
+		Box box = new Box(4, 20, 1); 
+		box.setTranslateX(5);
+		box.setTranslateY(30);
+		box.setTranslateZ(10);
+		PhongMaterial boxColor = new PhongMaterial();
+		boxColor.setSpecularColor(Color.BLACK);
+		boxColor.setDiffuseColor(Color.BLACK);
+		boxColor.setSpecularPower(0);
+		box.setMaterial(boxColor);
+		pane.getChildren().add(box);
 	}
 
 	
-	
-
 }
