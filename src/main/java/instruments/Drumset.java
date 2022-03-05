@@ -192,6 +192,24 @@ public class Drumset {
 
 		return fullName;
 	}
+	private String addDuration(Note note) {
+		String res = "";
+		String type = note.getType();
+
+		if (type.equals("whole")) {
+			res = "w";
+		} else if (type.equals("half")) {
+			res = "h";
+		} else if (type.equals("quarter")) {
+			res = "q";
+		} else if (type.equals("eighth")) {
+			res = "i";
+		} else if (type.equals("16th")) {
+			res = "s";
+		}
+
+		return res;
+	}
 
 	// This method plays the notes
 	public void playDrumNote() {
@@ -209,17 +227,18 @@ public class Drumset {
 				Note note = noteList.get(j);
 				drumId = note.getInstrument().getId();
 				ns = "[" + getDrumNoteFullName(drumId) + "]";
+				String dur = addDuration(note);
 
 				if (note.getChord() == null) {
-					drumNote += " V9 " + ns;
+					drumNote += " V9 " + ns + dur;
 				}else {
-					drumNote += "+" + ns;
+					drumNote += "+" + ns + dur;
 				}
 			}
 		}
 
 		vocals.add(drumNote);
-		//System.out.println(vocals.toString());
+		System.out.println(vocals.toString());
 		vocals.setTempo(120);
 		player.play(vocals);
 	}
