@@ -101,6 +101,7 @@ public class PreviewMusic extends Application {
         print_node.getTransforms().add(new Scale(scaleX, scaleX));
 		
 		PrinterJob printSheet = PrinterJob.createPrinterJob();
+		
 		if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
 			
 			double numberOfPages = Math.ceil( scaleX / scaleY);
@@ -114,7 +115,10 @@ public class PreviewMusic extends Application {
 			}
 
 			printSheet.endJob();
+		
+	
 		}
+
 	}
 
 
