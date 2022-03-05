@@ -216,6 +216,7 @@ public class Drumset {
 		Player player = new Player();
 		Pattern vocals = new Pattern();
 		String drumNote = "";
+		int voice = 0;
 
 		for (int i = 0; i < measureList.size(); i++) {
 			Measure measure = measureList.get(i);
@@ -225,6 +226,7 @@ public class Drumset {
 				String drumId = "";
 				String ns = new String();
 				Note note = noteList.get(j);
+				voice = note.getVoice();
 				drumId = note.getInstrument().getId();
 				ns = "[" + getDrumNoteFullName(drumId) + "]";
 				String dur = addDuration(note);
@@ -238,7 +240,8 @@ public class Drumset {
 		}
 
 		vocals.add(drumNote);
-		System.out.println(vocals.toString());
+		//System.out.println(vocals.toString());
+		vocals.setVoice(voice);
 		vocals.setTempo(120);
 		player.play(vocals);
 	}
