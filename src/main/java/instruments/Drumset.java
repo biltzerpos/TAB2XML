@@ -206,6 +206,8 @@ public class Drumset {
 			res = "i";
 		} else if (type.equals("16th")) {
 			res = "s";
+		}else if (type.equals("32nd")) {
+			res = "t";
 		}
 
 		return res;
