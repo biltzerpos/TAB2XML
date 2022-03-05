@@ -164,30 +164,32 @@ public class Drumset {
 
 		if(Id == "P1-I50") {
 			fullName = "Crash_Cymbal_1";
-		}else if(Id == "P1-I36"){
+		} else if(Id == "P1-I36"){
 			fullName = "Bass_Drum";
-		}else if(Id == "P1-I39"){
+		} else if(Id == "P1-I39"){
 			fullName = "Acoustic_Snare";
-		}else if(Id == "P1-I43"){
+		} else if(Id == "P1-I43"){
 			fullName = "Closed_Hi_Hat";
-		}else if(Id == "P1-I47"){
+		} else if(Id == "P1-I47"){
 			fullName = "Open_Hi_Hat";
-		}else if(Id == "P1-I52"){
+		} else if(Id == "P1-I52"){
 			fullName = "Ride_Cymbal_1";
-		}else if(Id == "P1-I54"){
+		} else if(Id == "P1-I54"){
 			fullName = "Ride_Bell";
-		}else if(Id == "P1-I53"){
+		} else if(Id == "P1-I53"){
 			fullName = "Chinese_Cymbal_1";
-		}else if(Id == "P1-I48"){
+		} else if(Id == "P1-I48"){
 			fullName = "Lo_Mid_Tom";
-		}else if(Id == "P1-I46"){
+		} else if(Id == "P1-I46"){
 			fullName = "Lo_Tom";
-		}else if(Id == "P1-I44"){
+		} else if(Id == "P1-I44"){
 			fullName = "High_Floor_Tom";
-		}else if(Id == "P1-I42"){
+		} else if(Id == "P1-I42"){
 			fullName = "Low_Floor_Tom";
-		}else if(Id == "P1-I45"){
+		} else if(Id == "P1-I45"){
 			fullName = "Pedal_Hi_Hat";
+		} else {
+			fullName = "Bass_Drum"; // Make it default for now
 		}
 
 		return fullName;
@@ -206,12 +208,14 @@ public class Drumset {
 			res = "i";
 		} else if (type.equals("16th")) {
 			res = "s";
-		}else if (type.equals("32nd")) {
+		} else if (type.equals("32nd")) {
 			res = "t";
-		}else if (type.equals("64th")) {
+		} else if (type.equals("64th")) {
 			res = "x";
-		}else if (type.equals("128th")) {
+		} else if (type.equals("128th")) {
 			res = "o";
+		} else {
+			res = "q"; // Make it default for now
 		}
 
 		return res;
