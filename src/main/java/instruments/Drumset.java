@@ -49,11 +49,19 @@ public class Drumset {
 		double x = 0;
 		double y = 0;
 
+//		// Draw scale for testing
+//		for (int i = 0; i < 500; i += 5) {
+//			int xEnd = i % 50 == 0
+//				? 20
+//				: i % 10 == 0
+//					? 10
+//					: 5;
+//			pane.getChildren().add(new javafx.scene.shape.Line(0, i, xEnd, i));
+//		}
+
 		// Draw the initial music lines
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
 		d.draw(x,y);
-
-
 
 		// Iterate through the list of measures
 		for (Measure measure : measureList) {
@@ -83,26 +91,13 @@ public class Drumset {
 					noteDrawer.drawDrumClef1();
 					noteDrawer.drawDrumClef2();
 
-					// If note head exists and is an x, then draw "x", otherwise draw "o"
-					if (symbol != null && symbol.getType().equals("x")) {
-						noteDrawer.drawX();
-					}
-					else {
-						noteDrawer.drawO();
-					}
+					noteDrawer.draw();
 
 					x+=50;
 				}
 				else {
 					DrawDrumsetNote noteDrawer = new DrawDrumsetNote(this.pane, note, x-25, positionY+3 );
-
-					// If note head exists and is an x, then draw "x", otherwise draw "o"
-					if (symbol != null && symbol.getType().equals("x")) {
-						noteDrawer.drawX();
-					}
-					else {
-						noteDrawer.drawO();
-					}
+					noteDrawer.draw();
 				}
 			}
 			xCoordinates.put(measure, x);

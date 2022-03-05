@@ -119,7 +119,17 @@ public class DrawDrumsetNote {
     	pane.getChildren().add(stem);
     	ellipse.setEffect(blend);
 	}
-	
+
+	public void draw() {
+		// If note head exists and is an x, then draw "x", otherwise draw "o"
+		if (note.getNotehead() != null && note.getNotehead().getType().equals("x")) {
+			this.drawX();
+		}
+		else {
+			this.drawO();
+		}
+	}
+
 	public void drawDrumClef1() {
 
 		Box box = new Box(4, 20, 1); 
