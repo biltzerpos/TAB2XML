@@ -13,9 +13,31 @@ Currently, only guitar and drum tablature are supported, but more instruments an
 features, such as allowing the user to navigate to specific measures, will be added in future 
 releases. 
 
+### Intended Use
+
+This application is intended to help both novice and expert music 
+learners by allowing them to see a tablature in three different forms:
+ tablature, music XML, and music sheet. 
+ 
 ## Getting Started
+
 ### Requirements
+- Device: PC
+- eclipse IDE
+- Java JDK 17 (or higher)
+- Gradle 7.3.3
+- GitHub account
+- Ability to log into GitHub account through eclipse
+
 ### Installing
+To install this application you follow the steps noted below. Each 
+steps is followed by their corresponding image to make the installation 
+easier. Your can also watch the instruction video [here](link goes here)
+
+1. Open eclipse and create/ navigate to a new workspace. 
+Click on launch:
+
+ ![Figure1. Launching eclipse workspace.](/TAB2XML_G14/Documents/UserManual/imgs/installation1.png)
 ### Executing the program
 
 ## Help
