@@ -38,36 +38,36 @@ steps is followed by their corresponding image to make the installation
 easier. Your can also watch the instruction video [here](link goes here)
 
 1. Open eclipse and create/ navigate to a new workspace. 
-Click on launch: <p align="center">
+Click on launch: 	<p align="center">
 <img src="Documents/UserManual/imgs/installation1.png" style="width:70%; ">
 </p>
 2.  In the Package Explorer (usually on the left-hand side) select “Import projects” 
- . You can also open the import window by clicking on File &#8594; import… <p align="center">
+ . You can also open the import window by clicking on File &#8594; import…	<p align="center">
 <img src="Documents/UserManual/imgs/installation2.png" style="width:70%; ">
 </p>
-3. In the import window, select Git &#8594; Projects from Git. Click Next. <p align="center">
+3. In the import window, select Git &#8594; Projects from Git. Click Next. 	<p align="center">
 <img src="Documents/UserManual/imgs/installation3.png" style="width:70%; "></p>
-4. Then select “Clone URI” &#8594; Next.  <p align="center">
+4. Then select “Clone URI” &#8594; Next.	<p align="center">
 <img src="Documents/UserManual/imgs/installation4.png" style="width:70%; "></p>
-5. In the URI enter the following link: <p align="center"> https://github.com/ElmiraOn/EECS2311_group6  </p> 
+5. In the URI enter the following link:	<p align="center"> https://github.com/ElmiraOn/EECS2311_group6  </p> 
  your import window should look like something like figure 5 with your username and password instead. 
  (If your user name and password are not set up check the first lecture on how to access
-  GitHub using eclipse). After double-checking the fields, click Next. <p align="center">
+  GitHub using eclipse). After double-checking the fields, click Next. 	<p align="center">
 <img src="Documents/UserManual/imgs/installation5.png" style="width:70%; ">
 </p>
-6. In the next window, keep default and click Next again. <p align="center">
+6. In the next window, keep default and click Next again. 	<p align="center">
 <img src="Documents/UserManual/imgs/installation6.png" style="width:70%; ">
 </p>
-7. Select the directory and click Next. <p align="center">
+7. Select the directory and click Next. 	<p align="center">
 <img src="Documents/UserManual/imgs/installation7.png" style="width:70%; ">
 </p>
 8. Wait for the cloning process to finish. 
-9. Keep the default and click Next. <p align="center"><img src="Documents/UserManual/imgs/installation8.png" style="width:70%; ">
+9. Keep the default and click Next. 	<p align="center"><img src="Documents/UserManual/imgs/installation8.png" style="width:70%; ">
 </p>
-10. Click Finish <p align="center">
+10. Click Finish 	<p align="center">
 <img src="Documents/UserManual/imgs/installation9.png" style="width:70%; ">
 </p>
-11. You should be able to see the application project displayed in Package Explorer. <p align="center">
+11. You should be able to see the application project displayed in Package Explorer. 	<p align="center">
 <img src="Documents/UserManual/imgs/installation10.png" style="width:70%; ">
 </p>
  
@@ -93,7 +93,7 @@ task window
 When you open the project in the Gradle task window or run it for the first time, 
 it is likely that you will face some errors. In this section we will discuss some 
 methods you can try to fix these errors:
-1. Under Preferences &#8594; Java &#8594; Installed JREs make sure you have JRE 17 <p align="center">
+1. Under Preferences &#8594; Java &#8594; Installed JREs make sure you have JRE 17	<p align="center">
 <img src="Documents/UserManual/imgs/error1.png" style="width:70%; ">
 </p>
 2. Under Preferences &#8594; Gradle selects Gradle Version 7.3.3 (or 7.1.1) and under 
