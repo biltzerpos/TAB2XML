@@ -208,6 +208,10 @@ public class Drumset {
 			res = "s";
 		}else if (type.equals("32nd")) {
 			res = "t";
+		}else if (type.equals("64th")) {
+			res = "x";
+		}else if (type.equals("128th")) {
+			res = "o";
 		}
 
 		return res;
