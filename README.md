@@ -117,7 +117,8 @@ eclipse
 
 The current version works only with the following two examples:
 
-1. Guitar tab:<pre style="font-family:courier;">
+#### Guitar tab:
+<pre style="font-family:courier;">
 |-----------0-----|-0---------------|
 |---------0---0---|-0---------------|
 |-------1-------1-|-1---------------|
@@ -125,7 +126,8 @@ The current version works only with the following two examples:
 |---2-------------|-2---------------|
 |-0---------------|-0---------------|
 </pre>
-2. Drum tab: <pre style="font-family:courier;">
+#### Drum tab: 
+<pre style="font-family:courier;">
 CC|x---------------|--------x-------|
 HH|--x-x-x-x-x-x-x-|----------------|
 SD|----o-------o---|oooo------------|
@@ -139,7 +141,7 @@ Additionally, you can use the following files under src/test/resources/system:
 * bendTest1.txt (for Guitar)
 * Ex38.txt (for Guitar)
 
-###Instrument: Guitar
+### Instrument: Guitar
 
 By entering the Guitar tablature from above, the system is able to:
 
@@ -152,7 +154,7 @@ By entering the Guitar tablature from above, the system is able to:
 
 Unavailable functionalities: Pausing the playing capability
 
-to preview the Guitar tablature:
+#### to preview the Guitar tablature:
 
 1. Run the application as noted in the previous section (Gradle task window &#8594; 
 application &#8594; run). This should open the main application window and you see 
@@ -163,14 +165,62 @@ that buttons are disabled: <p align="center">
 pasting or save the tablature file as a .txt file and use File &#8594; open and 
 navigate to the location of the saved file:<p align="center">
 <img src="Documents/UserManual/imgs/using2.png" style="width:50%; ">
-</p>
-3. Entering the input in the correct format enables the buttons at the bottom. You can use “Show MusicXML” and “Save MusicXML” to view and save the MusicXML created using input tablature. For the purpose of this documentation, we focus on the new update: “Preview Sheet Music”
+</p> Entering the input in the correct format enables the buttons at the bottom. 
+You can use “Show MusicXML” and “Save MusicXML” to view and save the MusicXML 
+created using input tablature. For the purpose of this documentation, 
+we focus on the new update: “Preview Sheet Music”. 
+3. Clicking on “Preview Sheet Music” opens a new window with a Music score 
+corresponding to the input tablature displayed on the screen.<p align="center">
+<img src="Documents/UserManual/imgs/using3.png" style="width:50%; ">
+</p> You can 3 buttons on the bottom right and a input field and a button on the 
+bottom left coreners allowing different functionalities:
 
+	* Playing the notes: Clicking on the “Play Notes” button plays the notes from 
+	beginning to end. Pause and playing from the specific measure will be 
+	available in future releases.  Please note that while the notes are being 
+	played, the other functionalities are not usable. 
+	* Printing Music Sheet: Clicking on the “Print Music Sheet” button 
+	opens a print dialogue window where you can either select to print 
+	the music sheet using your preferred printer or save it as a PDF file.
+	
+	  * Note: if you decide to save as PDF, keep in mind that the saved .pdf file 
+	does not open automatically so make sure you take a note of the directory 
+	you are saving to which you are saving the file. 
+	
+	* Navigating to specific measure: entering a specific measure number in the 
+	input field in the bottom left corner and clicking on "Go" button will 
+	highlight the specified measure in a red rectangle.
+	* Closing the preview window: by clicking on the close button or the `x` on 
+	top right corner, you can close the preview window 
+	
+#### To update the tablature
 
+to update the tablature simply select the input window (close/move/ minimize the 
+current preview window), make the changes you want and click on the preview button
+again to open a new preview window. You can compare the two music scores by having them 
+open side by side. 
+
+### Instrument: DrumSet
+
+The Application support the same functionalities and features for Drumset as 
+it does for the Guitar tablatures. for further details refer to `Documents/UserManual/EECS2311_Group6_TAB2XML_UserManual.pdf`
 
 
 ## Authors
+
+Group 6:
+
+* Elmira Onagh
+* Irsa Nasir
+* Long Lin
+* Harjap Randhawa
+* Daniel Di Giovanni
+
+
 ## Version History
+version 0.0: the starter code
+version 0.1: the first prototype (maintained partial features)
+version 0.2: the mid-term submission (maintains the features from the requirements document and supports both drum and guitar tabs)
 
 
 ## License 
@@ -187,3 +237,20 @@ This work is licensed under a
 [cc-by-sa-shield]: https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg
 
 ## Acknowledgement
+
+This work was possible because of following people:
+
+* Professor  Vassilios Tzerpos who provided the starter code
+* GROUP 14: Who made conversion of the tab to music xml possible
+	* Stanley Ihesiulo
+	* Alexander Arnold
+	* Boho Kim
+	* Kanwarjot Bharaj
+
+
+<p align="right">
+<img src="Documents/UserManual/imgs/LassondeLogo588x216.png" style="width:50%; ">
+</p>
+
+
+
