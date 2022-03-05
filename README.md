@@ -132,23 +132,41 @@ task window
 When you open the project in the Gradle task window or run it for the first time, 
 it is likely that you will face some errors. In this section we will discuss some 
 methods you can try to fix these errors:
-1. Under Preferences &#8594; Java &#8594; Installed JREs make sure you have JRE 17	<p align="center">
-<img src="Documents/UserManual/imgs/error1.png" style="width:70%; ">
-</p>
-2. Under Preferences &#8594; Gradle selects Gradle Version 7.3.3 (or 7.1.1) and under 
-Advanced Options, point Java Home to JDK 17 by navigating to where you have stored 
-JDK17 <p align="center">
-<img src="Documents/UserManual/imgs/error2.png" style="width:70%; ">
-</p>
-3. In Eclipse Package Explorer, click on the three vertical dots. <p align="center">
-<img src="Documents/UserManual/imgs/error3.png" style="width:70%; ">
-</p>select Filters, and uncheck the “resources”, “Gradle build folder”, and “Gradle 
-subprojects” so that they are visible <p align="center">
-<img src="Documents/UserManual/imgs/error4.png" style="width:70%; ">
-</p>
-4. Right Click on the project &#8594; Gradle &#8594; Refresh Gradle Nature
-5. If there are still errors when running the project we suggest restarting the 
-eclipse
+
+<ol>
+	<li>
+		Under Preferences &#8594; Java &#8594; Installed JREs make sure you have JRE 17	
+		<p align="center">
+			<img src="Documents/UserManual/imgs/error1.png" style="width:70%; ">
+		</p>
+	</li>
+	<li>
+		Under Preferences &#8594; Gradle selects Gradle Version 7.3.3 (or 7.1.1) and under 
+		Advanced Options, point Java Home to JDK 17 by navigating to where you have stored 
+		JDK17 
+		<p align="center">
+			<img src="Documents/UserManual/imgs/error2.png" style="width:70%; ">
+		</p>
+	</li>
+	<li>
+		In Eclipse Package Explorer, click on the three vertical dots. 
+		<p align="center">
+			<img src="Documents/UserManual/imgs/error3.png" style="width:70%; ">
+		</p>
+		select Filters, and uncheck the “resources”, “Gradle build folder”, and 
+		“Gradle subprojects” so that they are visible 
+		<p align="center">
+			<img src="Documents/UserManual/imgs/error4.png" style="width:70%; ">
+		</p>
+	</li>
+	<li>
+		Right Click on the project &#8594; Gradle &#8594; Refresh Gradle Nature
+	</li>
+	<li>
+		If there are still errors when running the project we suggest restarting the 
+		eclipse	
+	</li>
+</ol>
 
 ## Using TAB2XML
 
@@ -192,42 +210,67 @@ By entering the Guitar tablature from above, the system is able to:
 Unavailable functionalities: Pausing the playing capability
 
 #### To preview the Guitar tablature:
-
-1. Run the application as noted in the previous section (Gradle task window &#8594; 
-application &#8594; run). This should open the main application window and you see 
-that buttons are disabled: <p align="center">
-<img src="Documents/UserManual/imgs/using1.png" style="width:70%; ">
-</p>
-2. In the input area enter the guitar tablature from above by simply copy 
-pasting or save the tablature file as a .txt file and use File &#8594; open and 
-navigate to the location of the saved file:<p align="center">
-<img src="Documents/UserManual/imgs/using2.png" style="width:70%; ">
-</p> Entering the input in the correct format enables the buttons at the bottom. 
-You can use “Show MusicXML” and “Save MusicXML” to view and save the MusicXML 
-created using input tablature. For the purpose of this documentation, 
-we focus on the new update: “Preview Sheet Music”. 
-3. Clicking on “Preview Sheet Music” opens a new window with a Music score 
-corresponding to the input tablature displayed on the screen.<p align="center">
-<img src="Documents/UserManual/imgs/using3.png" style="width:70%; ">
-</p> You can 3 buttons on the bottom right and a input field and a button on the 
-bottom left coreners allowing different functionalities:
-
-* Playing the notes: Clicking on the “Play Notes” button plays the notes from 
-	beginning to end. Pause and playing from the specific measure will be 
-	available in future releases.  Please note that while the notes are being 
-	played, the other functionalities are not usable. 
-* Printing Music Sheet: Clicking on the “Print Music Sheet” button 
-	opens a print dialogue window where you can either select to print 
-	the music sheet using your preferred printer or save it as a PDF file.
-		* Note: if you decide to save as PDF, keep in mind that the saved .pdf file 
-	does not open automatically so make sure you take a note of the directory 
-	you are saving to which you are saving the file. 
-	
-* Navigating to specific measure: entering a specific measure number in the 
-	input field in the bottom left corner and clicking on "Go" button will 
-	highlight the specified measure in a red rectangle.
-* Closing the preview window: by clicking on the close button or the `x` on 
-	top right corner, you can close the preview window 
+<ol>
+	<li>
+		Run the application as noted in the previous section (Gradle task window &#8594; 
+		application &#8594; run). This should open the main application window and you see 
+		that buttons are disabled: 
+		<p align="center">
+			<img src="Documents/UserManual/imgs/using1.png" style="width:70%; ">
+		</p>
+	</li>
+	<li>
+		In the input area enter the guitar tablature from above by simply copy 
+		pasting or save the tablature file as a .txt file and use File &#8594; open and 
+		navigate to the location of the saved file:
+		<p align="center">
+			<img src="Documents/UserManual/imgs/using2.png" style="width:70%; ">
+		</p> 
+		Entering the input in the correct format enables the buttons at the bottom. 
+		You can use “Show MusicXML” and “Save MusicXML” to view and save the MusicXML 
+		created using input tablature. For the purpose of this documentation, 
+		we focus on the new update: “Preview Sheet Music”.
+		
+	</li>
+	<li> 
+		Clicking on “Preview Sheet Music” opens a new window with a Music score 
+		corresponding to the input tablature displayed on the screen.
+		<p align="center">
+			<img src="Documents/UserManual/imgs/using3.png" style="width:70%; ">
+		</p> 
+		You can 3 buttons on the bottom right and a input field and a button on the 
+		bottom left coreners allowing different functionalities:
+		<ul>
+			<li>
+				Playing the notes: Clicking on the “Play Notes” button plays the notes from 
+				beginning to end. Pause and playing from the specific measure will be 
+				available in future releases.  Please note that while the notes are being 
+				played, the other functionalities are not usable.
+			</li> 
+			<li>
+				Printing Music Sheet: Clicking on the “Print Music Sheet” button 
+				opens a print dialogue window where you can either select to print 
+				the music sheet using your preferred printer or save it as a PDF file.
+				<ul>
+					<li>
+						Note: if you decide to save as PDF, keep in mind that the saved .pdf file 
+						does not open automatically so make sure you take a note of the directory 
+						you are saving to which you are saving the file. 
+					</li>
+				</ul>
+			</li>
+			<li>
+				Navigating to specific measure: entering a specific measure number in the 
+				input field in the bottom left corner and clicking on "Go" button will 
+				highlight the specified measure in a red rectangle.
+			</li>
+			<li>
+				Closing the preview window: by clicking on the close button or the `x` on 
+				top right corner, you can close the preview window 
+			</li>
+		</ul>
+	</li>
+</ol>
 	
 #### To update the tablature
 
