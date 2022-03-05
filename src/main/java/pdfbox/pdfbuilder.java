@@ -216,7 +216,12 @@ public class pdfbuilder {
 		for(Measure m : part.getMeasures()) {
 			for(Note n : m.getNotesBeforeBackup()) {
 				String pitchFret = "" + n.getPitch().getStep() + n.getPitch().getOctave();
+				
+				
 				System.out.println(pitchFret);
+				System.out.println(score.getModel().getPartList().getScoreParts().get(0).getPartName());
+				
+				
 				switch (pitchFret) {
 				//TODO: change offset and the call to Offset
 				case "E2": //1
