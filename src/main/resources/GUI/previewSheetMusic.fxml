@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="880" prefWidth="700" xmlns:fx="http://javafx.com/fxml/1"     xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.PreviewSheetMusicController">
+<AnchorPane prefHeight="880" prefWidth="800" xmlns:fx="http://javafx.com/fxml/1"     xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.PreviewSheetMusicController">
   <children>
     <ImageView fx:id="imageview" fitHeight="880" fitWidth="800" layoutX="10.0" layoutY="10.0" pickOnBounds="false" preserveRatio="true" >
 

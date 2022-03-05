@@ -137,8 +137,8 @@ public class pdfbuilder {
 	private final int notesPerPage = 50;
 	private int maxNotesTotal = notesPerPage;
 	private int totalNotes;
-	private int x;
-	private int y;
+	private int globalX = 15;
+	private int globalY = 425;
 	private int pageCounter;
 
 	private PDFRenderer renderer;
@@ -153,7 +153,7 @@ public class pdfbuilder {
 	//Second Global y = 726  (change in y 901 - 726 = 175) 
 	//so on.....
 	public enum Offset { 
-		
+
 		//TODO: NEW offset x 198
 		//                 y 153
 		EOoffsety (901 - 905 - 198),
@@ -207,7 +207,7 @@ public class pdfbuilder {
 		while(maxNotesTotal <= totalNotes) {
 			//gen next page of sheet music
 			pdfpagegen();
-			++maxNotesTotal;
+		    maxNotesTotal += 50;
 		}
 
 		int mLength = part.getMeasures().size();
@@ -326,55 +326,50 @@ public class pdfbuilder {
 	public void pdfpagegen() throws IOException {
 		// generates new sheet music on the page
 		doc = new PDDocument();
-		//this command is for finding where to output the pdf;
+		//generates a page;
 		page = new PDPage();
 		doc.addPage(page);
-		pageCounter++;
 		pageImage = PDImageXObject.createFromFile(System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\SblankGuitarSheet.png", doc);
-
 		page.getCropBox().setLowerLeftX(0);
 		page.getCropBox().setLowerLeftY(0);
 		page.getCropBox().setUpperRightX(pageImage.getWidth());
 		page.getCropBox().setUpperRightY(pageImage.getHeight());
 		//		System.out.println("Page" + page.getCropBox().getHeight() + "and" + page.getCropBox().getWidth());
-
 		contentStream = new PDPageContentStream(doc, page);
-		//TODO: (x,y) = (0, 990), should be (0,0)
 		contentStream.drawImage(pageImage, 0, 0);
 		contentStream.close();
-		++pageCounter;
+		pageCounter++;
 	}
 
 	//inputs notes on sheet music
 	//TODO: change to append, so that the sheet music isn't overwritten, but instead, display the note on top of the sheet music
 	public void pdfnotegen(String imagePath, int offsety) throws IOException {
-		PDDocument tempDoc = new PDDocument();
-		PDPage tempPage = new PDPage();
-		tempDoc.addPage(tempPage);
 		//arbitrary numbers for now
-		x = 20;
-		y = 425;
-		int j = 0;
-		for (int i = 0; i<maxNotesTotal; i++){
-			if (x >= 450){
-				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-				contentStream.drawImage(pageImage, x, y - offsety);
-				contentStream.close();
-				x = 20;
-				//y is arbitrary, test later
-				y -= 130;
-			}
-			else{
-				//x is arbitrary, test later
-				x += 50;
-				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-				contentStream.drawImage(pageImage, x, y - offsety);
-				contentStream.close();
-			}
+		//this if is for when the sheet staff isn't filled yet
+		if (globalX < 500){
+			pageImage = PDImageXObject.createFromFile(imagePath, doc);
+			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+			contentStream.drawImage(pageImage, globalX, globalY - offsety);
+			System.out.println(globalX +","+ globalY);
+			contentStream.close();
+			globalX += 50;
+			//y is arbitrary, test later
+			++totalNotes;
 		}
-		contentStream.close();
+		// this else is for when it reaches the end of the staff, to then translate it into the next staff
+		else {
+			globalX = 15;
+			//y is the best i could chose
+			globalY -= 140;
+			//x is arbitrary, test later
+			pageImage = PDImageXObject.createFromFile(imagePath, doc);
+			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+			contentStream.drawImage(pageImage, globalX, globalY - offsety);
+			System.out.println(globalX +","+ globalY);
+			contentStream.close();
+			globalX += 50;
+			++totalNotes;
+		}
 	}
 
 
