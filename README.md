@@ -38,7 +38,7 @@ steps is followed by their corresponding image to make the installation
 easier. Your can also watch the instruction video [here](link goes here)
 
 1. Open eclipse and create/ navigate to a new workspace. 
-Click on launch:<p align="center">
+Click on launch: <p align="center">
 <img src="Documents/UserManual/imgs/installation1.png" style="width:50%; ">
 </p>
 2.  In the Package Explorer (usually on the left-hand side) select “Import projects” 
@@ -62,9 +62,7 @@ Click on launch:<p align="center">
 <img src="Documents/UserManual/imgs/installation7.png" style="width:50%; ">
 </p>
 8. Wait for the cloning process to finish. 
-
-9. Keep the default and click Next. <p align="center">
-<img src="Documents/UserManual/imgs/installation8.png" style="width:50%; ">
+9. Keep the default and click Next. <p align="center"><img src="Documents/UserManual/imgs/installation8.png" style="width:50%; ">
 </p>
 10. Click Finish <p align="center">
 <img src="Documents/UserManual/imgs/installation9.png" style="width:50%; ">
@@ -95,7 +93,7 @@ task window
 When you open the project in the Gradle task window or run it for the first time, 
 it is likely that you will face some errors. In this section we will discuss some 
 methods you can try to fix these errors:
-1. Under Preferences &#8594; Java &#8594; Installed JREs make sure you have JRE 17<p align="center">
+1. Under Preferences &#8594; Java &#8594; Installed JREs make sure you have JRE 17 <p align="center">
 <img src="Documents/UserManual/imgs/error1.png" style="width:50%; ">
 </p>
 2. Under Preferences &#8594; Gradle selects Gradle Version 7.3.3 (or 7.1.1) and under 
@@ -154,7 +152,7 @@ By entering the Guitar tablature from above, the system is able to:
 
 Unavailable functionalities: Pausing the playing capability
 
-#### to preview the Guitar tablature:
+#### To preview the Guitar tablature:
 
 1. Run the application as noted in the previous section (Gradle task window &#8594; 
 application &#8594; run). This should open the main application window and you see 
@@ -175,22 +173,21 @@ corresponding to the input tablature displayed on the screen.<p align="center">
 </p> You can 3 buttons on the bottom right and a input field and a button on the 
 bottom left coreners allowing different functionalities:
 
-	* Playing the notes: Clicking on the “Play Notes” button plays the notes from 
+* Playing the notes: Clicking on the “Play Notes” button plays the notes from 
 	beginning to end. Pause and playing from the specific measure will be 
 	available in future releases.  Please note that while the notes are being 
 	played, the other functionalities are not usable. 
-	* Printing Music Sheet: Clicking on the “Print Music Sheet” button 
+* Printing Music Sheet: Clicking on the “Print Music Sheet” button 
 	opens a print dialogue window where you can either select to print 
 	the music sheet using your preferred printer or save it as a PDF file.
-	
-	  * Note: if you decide to save as PDF, keep in mind that the saved .pdf file 
+		* Note: if you decide to save as PDF, keep in mind that the saved .pdf file 
 	does not open automatically so make sure you take a note of the directory 
 	you are saving to which you are saving the file. 
 	
-	* Navigating to specific measure: entering a specific measure number in the 
+* Navigating to specific measure: entering a specific measure number in the 
 	input field in the bottom left corner and clicking on "Go" button will 
 	highlight the specified measure in a red rectangle.
-	* Closing the preview window: by clicking on the close button or the `x` on 
+* Closing the preview window: by clicking on the close button or the `x` on 
 	top right corner, you can close the preview window 
 	
 #### To update the tablature
