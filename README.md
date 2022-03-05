@@ -229,8 +229,7 @@ Unavailable functionalities: Pausing the playing capability
 		Entering the input in the correct format enables the buttons at the bottom. 
 		You can use “Show MusicXML” and “Save MusicXML” to view and save the MusicXML 
 		created using input tablature. For the purpose of this documentation, 
-		we focus on the new update: “Preview Sheet Music”.
-		
+		we focus on the new update:previewing the music sheets. 		
 	</li>
 	<li> 
 		Clicking on “Preview Sheet Music” opens a new window with a Music score 
@@ -272,6 +271,7 @@ Unavailable functionalities: Pausing the playing capability
 		top right corner, you can close the preview window 
 	</li>
 </ul>
+
 #### To update the tablature
 
 to update the tablature simply select the input window (close/move/ minimize the 
