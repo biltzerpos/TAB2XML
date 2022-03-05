@@ -28,6 +28,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import javafx.stage.Window;
 import javafx.stage.Stage;
 import models.ScorePartwise;
@@ -87,42 +88,40 @@ public class PreviewMusic extends Application {
 
 	}
 
+
 	@FXML
 	public <printButtonPressed> void printHandle() {
-		printButton.setOnAction(aEvent -> {
+		printButton.setOnAction( aEvent -> {
 			printButtonPressed.set(true);
 		});
+
+		WritableImage screenshot = anchorPane.snapshot(null, null);
+		Printer printer = Printer.getDefaultPrinter();
+		PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
+		
+		double pagePrintableWidth = layout.getPrintableWidth();
+		double pagePrintableHeight = layout.getPrintableHeight();
+		
+		final double scaleX = pagePrintableWidth / screenshot.getWidth();
+        final double scaleY = pagePrintableHeight / screenshot.getHeight();
+        final ImageView print_node = new ImageView(screenshot);
+        print_node.getTransforms().add(new Scale(scaleX, scaleX));
 		
 		PrinterJob printSheet = PrinterJob.createPrinterJob();
-		WritableImage screenshot = pane.snapshot(null, null);
-		Printer printer = Printer.getDefaultPrinter();
-		PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT,
-				Printer.MarginType.HARDWARE_MINIMUM);
-		
+		if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
+			
+			double numberOfPages = Math.ceil( scaleX / scaleY);
+			
+			Translate gridTransform = new Translate(0, 0);
+			print_node.getTransforms().add(gridTransform);
+			for(int i = 0; i < numberOfPages; i++)
+			{
+				gridTransform.setY(-i * (pagePrintableHeight / scaleX));
+				printSheet.printPage(layout, print_node);
+			}
 
-		final double scaleX = layout.getPrintableWidth() / screenshot.getWidth();
-		final double scaleY = layout.getPrintableHeight() / screenshot.getHeight();
-		final double scale = Math.min(scaleX, scaleY);
-		PageLayout pgLayout = printSheet.getJobSettings().getPageLayout();
-		JobSettings js = printSheet.getJobSettings();
-		 final ImageView print_node = new ImageView(screenshot);
-		 print_node.getTransforms().add(new Scale(scale, scale));
-		
-		int pagesNeeded = (int) (screenshot.getHeight() / layout.getPrintableHeight());
-	
-		PageRange pgRange = new PageRange(1, pagesNeeded+1);
-	    printSheet.getJobSettings().setPageRanges(pgRange);
-	    if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
-		
-	    	printSheet.printPage(print_node);
-	    	
-			for (int p=1; p<=pagesNeeded; p++) {
-				print_node.setTranslateY(-pgLayout.getPrintableHeight());
-				printSheet.printPage(print_node);
-		}	
 			printSheet.endJob();
-		
-	    }
+		}
 	}
 
 	
