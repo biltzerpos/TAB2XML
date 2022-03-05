@@ -57,6 +57,10 @@ public class Drumset {
 
 		// Iterate through the list of measures
 		for (Measure measure : measureList) {
+			if ( x > 849) {
+				x = 0;
+				y += 100;
+			}
 
 			// Iterate through the notes in the current measure
 			for (Note note : measure.getNotesBeforeBackup()) {
@@ -67,7 +71,7 @@ public class Drumset {
 				int octave = note.getUnpitched().getDisplayOctave();
 
 				// Get the y-position based on the octave and step
-				double positionY = d.getYPositionFromOctaveAndStep(octave, step);
+				double positionY = y + d.getYPositionFromOctaveAndStep(octave, step);
 
 				if (note.getChord() == null) {
 					// Only draw music lines if not a chord.
