@@ -124,15 +124,15 @@ public class PreviewMusic extends Application {
 
 	@FXML
 	public void playHandle() {
-		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
+		//ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
 
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		if (instrument == "Guitar") {
-			Guitar g = new Guitar(scorePartwise, pane);
+			//Guitar g = new Guitar(scorePartwise, pane);
 			g.playGuitarNote();   // Play method in Guitar class
 		}
 		else if(instrument == "Drumset") {
-			Drumset d = new Drumset(scorePartwise, pane);
+			//Drumset d = new Drumset(scorePartwise, pane);
 			d.playDrumNote();     // Play method in Drumset class
 		}
 	}
