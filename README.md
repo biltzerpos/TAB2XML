@@ -59,6 +59,7 @@ Click on launch:<p align="center">
 <img src="Documents/UserManual/imgs/installation7.png" style="width:50%; ">
 </p>
 8. Wait for the cloning process to finish. 
+
 9. Keep the default and click Next. <p align="center">
 <img src="Documents/UserManual/imgs/installation8.png" style="width:50%; ">
 </p>
@@ -87,7 +88,27 @@ task window
 
 
 ## Help
-error handling
+
+When you open the project in the Gradle task window or run it for the first time, 
+it is likely that you will face some errors. In this section we will discuss some 
+methods you can try to fix these errors:
+1. Under Preferences &#8594; Java &#8594; Installed JREs make sure you have JRE 17<p align="center">
+<img src="Documents/UserManual/imgs/error1.png" style="width:50%; ">
+</p>
+2. Under Preferences &#8594; Gradle selects Gradle Version 7.3.3 (or 7.1.1) and under 
+Advanced Options, point Java Home to JDK 17 by navigating to where you have stored 
+JDK17 <p align="center">
+<img src="Documents/UserManual/imgs/error2.png" style="width:50%; ">
+</p>
+3. In Eclipse Package Explorer, click on the three vertical dots. <p align="center">
+<img src="Documents/UserManual/imgs/error3.png" style="width:50%; ">
+</p>select Filters, and uncheck the “resources”, “Gradle build folder”, and “Gradle 
+subprojects” so that they are visible <p align="center">
+<img src="Documents/UserManual/imgs/error4.png" style="width:50%; ">
+</p>
+4. Right Click on the project &#8594; Gradle &#8594; Refresh Gradle Nature
+5. 5.	If there are still errors when running the project we suggest restarting the 
+eclipse
 
 ## Authors
 ## Version History
