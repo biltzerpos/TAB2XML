@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -121,34 +122,26 @@ public class DrawNote {
     	pane.getChildren().add(stem);
     	ellipse.setEffect(blend);
 	}
-	
 	public void drawDrumClef1() {
 
-		Box box = new Box(4, 20, 1); 
-		box.setTranslateX(12);
-		box.setTranslateY(30);
-		box.setTranslateZ(10);
-		PhongMaterial boxColor = new PhongMaterial();
-		boxColor.setSpecularColor(Color.BLACK);
-		boxColor.setDiffuseColor(Color.BLACK);
-		boxColor.setSpecularPower(0);
-		box.setMaterial(boxColor);
-		pane.getChildren().add(box);
+		Rectangle r1 = new Rectangle();
+		r1.setWidth(3);
+		r1.setHeight(20);
+		r1.setTranslateX(5);
+		r1.setTranslateY(20);
+		pane.getChildren().add(r1);
+		
 	}
 
 	public void drawDrumClef2() {
 
-		Box box = new Box(4, 20, 1); 
-		box.setTranslateX(5);
-		box.setTranslateY(30);
-		box.setTranslateZ(10);
-		PhongMaterial boxColor = new PhongMaterial();
-		boxColor.setSpecularColor(Color.BLACK);
-		boxColor.setDiffuseColor(Color.BLACK);
-		boxColor.setSpecularPower(0);
-		box.setMaterial(boxColor);
-		pane.getChildren().add(box);
+		Rectangle r1 = new Rectangle();
+		r1.setWidth(3);
+		r1.setHeight(20);
+		r1.setTranslateX(10);
+		r1.setTranslateY(20);
+		pane.getChildren().add(r1);
+		
 	}
 
-	
 }
