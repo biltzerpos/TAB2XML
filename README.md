@@ -52,7 +52,6 @@ Click on launch:<p align="center">
   GitHub using eclipse). After double-checking the fields, click Next. <p align="center">
 <img src="Documents/UserManual/imgs/installation5.png" style="width:50%; ">
 </p>
-
 6. In the next window, keep default and click Next again. <p align="center">
 <img src="Documents/UserManual/imgs/installation6.png" style="width:50%; ">
 </p>
@@ -71,6 +70,21 @@ Click on launch:<p align="center">
 </p>
  
 ### Executing the program
+
+We Run this project through Gradle. To do this we need to open the “Gradle Task window” 
+by Window &#8594; show view &#8594; others &#8594; search for the Gradle task in the search bar &#8594; open. 
+It will take a while for Gradle to build the project. At the end, the project folder will
+ be displayed in the Gradle Task window 
+<p align="center">
+<img src="Documents/UserManual/imgs/run1.png" style="width:50%; ">
+</p>
+
+to run the application open Tab2XML_G14 &#8594; application &#8594; Run in the Gradle 
+task window
+<p align="center">
+<img src="Documents/UserManual/imgs/run2.png" style="width:50%; ">
+</p>
+
 
 ## Help
 error handling
