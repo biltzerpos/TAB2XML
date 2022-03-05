@@ -110,7 +110,7 @@ subprojects” so that they are visible <p align="center">
 <img src="Documents/UserManual/imgs/error4.png" style="width:50%; ">
 </p>
 4. Right Click on the project &#8594; Gradle &#8594; Refresh Gradle Nature
-5. 5.	If there are still errors when running the project we suggest restarting the 
+5. If there are still errors when running the project we suggest restarting the 
 eclipse
 
 ## Using TAB2XML
@@ -151,6 +151,20 @@ By entering the Guitar tablature from above, the system is able to:
 6.	Allow users to return to the input window and update the tablature without the need to close the current preview window.  
 
 Unavailable functionalities: Pausing the playing capability
+
+to preview the Guitar tablature:
+
+1. Run the application as noted in the previous section (Gradle task window &#8594; 
+application &#8594; run). This should open the main application window and you see 
+that buttons are disabled: <p align="center">
+<img src="Documents/UserManual/imgs/using1.png" style="width:50%; ">
+</p>
+2. In the input area enter the guitar tablature from above by simply copy 
+pasting or save the tablature file as a .txt file and use File &#8594; open and 
+navigate to the location of the saved file:<p align="center">
+<img src="Documents/UserManual/imgs/using2.png" style="width:50%; ">
+</p>
+3. Entering the input in the correct format enables the buttons at the bottom. You can use “Show MusicXML” and “Save MusicXML” to view and save the MusicXML created using input tablature. For the purpose of this documentation, we focus on the new update: “Preview Sheet Music”
 
 
 
