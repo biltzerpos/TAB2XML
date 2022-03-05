@@ -240,38 +240,38 @@ Unavailable functionalities: Pausing the playing capability
 		</p> 
 		You can 3 buttons on the bottom right and a input field and a button on the 
 		bottom left coreners allowing different functionalities:
-		<ul>
-			<li>
-				Playing the notes: Clicking on the “Play Notes” button plays the notes from 
-				beginning to end. Pause and playing from the specific measure will be 
-				available in future releases.  Please note that while the notes are being 
-				played, the other functionalities are not usable.
-			</li> 
-			<li>
-				Printing Music Sheet: Clicking on the “Print Music Sheet” button 
-				opens a print dialogue window where you can either select to print 
-				the music sheet using your preferred printer or save it as a PDF file.
-				<ul>
-					<li>
-						Note: if you decide to save as PDF, keep in mind that the saved .pdf file 
-						does not open automatically so make sure you take a note of the directory 
-						you are saving to which you are saving the file. 
-					</li>
-				</ul>
-			</li>
-			<li>
-				Navigating to specific measure: entering a specific measure number in the 
-				input field in the bottom left corner and clicking on "Go" button will 
-				highlight the specified measure in a red rectangle.
-			</li>
-			<li>
-				Closing the preview window: by clicking on the close button or the `x` on 
-				top right corner, you can close the preview window 
-			</li>
-		</ul>
 	</li>
 </ol>
 	
+<ul>
+	<li>
+		Playing the notes: Clicking on the “Play Notes” button plays the notes from 
+		beginning to end. Pause and playing from the specific measure will be 
+		available in future releases.  Please note that while the notes are being 
+		played, the other functionalities are not usable.
+	</li> 
+	<li>
+		Printing Music Sheet: Clicking on the “Print Music Sheet” button 
+		opens a print dialogue window where you can either select to print 
+		the music sheet using your preferred printer or save it as a PDF file.
+		<ul>
+			<li>
+				Note: if you decide to save as PDF, keep in mind that the saved .pdf file 
+				does not open automatically so make sure you take a note of the directory 
+				you are saving to which you are saving the file. 
+			</li>
+		</ul>
+	</li>
+	<li>
+		Navigating to specific measure: entering a specific measure number in the 
+		input field in the bottom left corner and clicking on "Go" button will 
+		highlight the specified measure in a red rectangle.
+	</li>
+	<li>
+		Closing the preview window: by clicking on the close button or the `x` on 
+		top right corner, you can close the preview window 
+	</li>
+</ul>
 #### To update the tablature
 
 to update the tablature simply select the input window (close/move/ minimize the 
