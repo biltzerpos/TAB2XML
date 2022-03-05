@@ -91,9 +91,6 @@ public class PreviewMusic extends Application {
 
 	@FXML
 	public <printButtonPressed> void printHandle() {
-		printButton.setOnAction( aEvent -> {
-			printButtonPressed.set(true);
-		});
 
 		WritableImage screenshot = anchorPane.snapshot(null, null);
 		Printer printer = Printer.getDefaultPrinter();
