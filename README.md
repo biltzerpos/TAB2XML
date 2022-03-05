@@ -21,6 +21,9 @@ learners by allowing them to see a tablature in three different forms:
  
 ## Getting Started
 
+You can find the following instruction in addition to the Requirements document and testing 
+documents under `Documents` folder in the repository. 
+
 ### Requirements
 - Device: PC
 - eclipse IDE
@@ -109,6 +112,48 @@ subprojects” so that they are visible <p align="center">
 4. Right Click on the project &#8594; Gradle &#8594; Refresh Gradle Nature
 5. 5.	If there are still errors when running the project we suggest restarting the 
 eclipse
+
+## Using TAB2XML
+
+The current version works only with the following two examples:
+
+1. Guitar tab:<pre style="font-family:courier;">
+|-----------0-----|-0---------------|
+|---------0---0---|-0---------------|
+|-------1-------1-|-1---------------|
+|-----2-----------|-2---------------|
+|---2-------------|-2---------------|
+|-0---------------|-0---------------|
+</pre>
+2. Drum tab: <pre style="font-family:courier;">
+CC|x---------------|--------x-------|
+HH|--x-x-x-x-x-x-x-|----------------|
+SD|----o-------o---|oooo------------|
+HT|----------------|----oo----------|
+MT|----------------|------oo--------|
+BD|o-------o-------|o-------o-------|
+</pre>
+
+Additionally, you can use the following files under src/test/resources/system:
+
+* bendTest1.txt (for Guitar)
+* Ex38.txt (for Guitar)
+
+###Instrument: Guitar
+
+By entering the Guitar tablature from above, the system is able to:
+
+1.	Properly convert it into a music sheet. 
+2.	print the music sheet or save it as a PDF file in the print dialogue (currently only works once) 
+3.	Play the notes and chord from beginning to end 
+4.	Vertical scrolling for long measures
+5.	By entering a measure number, highlight the corresponding measure on the screen
+6.	Allow users to return to the input window and update the tablature without the need to close the current preview window.  
+
+Unavailable functionalities: Pausing the playing capability
+
+
+
 
 ## Authors
 ## Version History
