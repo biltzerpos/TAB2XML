@@ -1,8 +1,17 @@
 # TAB2XML
-
-Simple overview of use and purposes
+A Music application that converts a given music tablature into music score. 
 ## Description
-in depth description of about your project and overview of use
+TAB2XML is a Java application that converts music tablature into MusicXML, a file format 
+that represents musical notation. However, reading a MusicXML file is a tedious task. 
+The new update introduces the ability to preview any specific MusicXML file created from a 
+given tablature into Music Scores for better understanding. 
+
+Additionally, the new update includes two other features. Playing the notes 
+(currently only for guitar tablature) and ability to print/save as Pdf. 
+
+Currently, only guitar and drum tablature are supported, but more instruments and additional 
+features, such as allowing the user to navigate to specific measures, will be added in future 
+releases. 
 
 ## Getting Started
 ### Requirements
