@@ -12,6 +12,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
+import converter.Score;
+import custom_exceptions.TXMLException;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -188,11 +190,13 @@ public class pdfbuilder {
 	}
 
 	//Main method to call to create PDF
-	public void sheetpdf(Part part) throws IOException {
+	public void sheetpdf(Score score) throws IOException, TXMLException {
 		//set userPath
 		//System.getProperty("user.home") returns a String of the user Path (for example, "C:\Users\ian")
 		userPath = System.getProperty("user.home");
 
+		Part part = score.getModel().getParts().get(0);
+		
 		//get total notes to draw
 		for(Measure measure : part.getMeasures()) {
 			totalNotes += measure.getNotesBeforeBackup().size();
@@ -211,62 +215,96 @@ public class pdfbuilder {
 		//map notes onto sheet
 		for(Measure m : part.getMeasures()) {
 			for(Note n : m.getNotesBeforeBackup()) {
-				String pitchFret = "" + n.getPitch().getStep() + n.getNotations().getTechnical().getFret();
+				String pitchFret = "" + n.getPitch().getStep() + n.getPitch().getOctave();
 				System.out.println(pitchFret);
 				switch (pitchFret) {
-				case "E0": //1
-					arbitraryPath("E0", Offset.E0Hoffsety.offset());
+				//TODO: change offset and the call to Offset
+				case "E2": //1
+					arbitraryPath(pitchFret, Offset.E0Hoffsety.offset());
 					break;
-				case "F1": //2
-					arbitraryPath("F1", Offset.F1offsety.offset());
+				case "F2": //2
+					arbitraryPath(pitchFret, Offset.F1offsety.offset());
 					break;
-				case "G3": //3
-					arbitraryPath("G3", Offset.G3offsety.offset());
+				case "G2": //3
+					arbitraryPath(pitchFret, Offset.G3offsety.offset());
 					break;
-				case "A0": //4
-					arbitraryPath("A0", Offset.A0offsety.offset());
+				case "A2": //4
+					arbitraryPath(pitchFret, Offset.A0offsety.offset());
 					break;
 				case "B2": //5
-					arbitraryPath("B2", Offset.B2offsety.offset());
+					arbitraryPath(pitchFret, Offset.B2offsety.offset());
 					break;
 				case "C3": //6
-					arbitraryPath("C3", Offset.C3offsety.offset());
+					arbitraryPath(pitchFret, Offset.C3offsety.offset());
 					break;
-				case "D0": //7
-					arbitraryPath("D0", Offset.D0offsety.offset());
+				case "D3": //7
+					arbitraryPath(pitchFret, Offset.D0offsety.offset());
 					break;
-				case "E2": //8
-					arbitraryPath("E2", Offset.E2offsety.offset());
+				case "E3": //8
+					arbitraryPath(pitchFret, Offset.E2offsety.offset());
 					break;
 				case "F3": //9
-					arbitraryPath("F3", Offset.F3offsety.offset());
+					arbitraryPath(pitchFret, Offset.F3offsety.offset());
 					break;
-				case "G0": //10
-					arbitraryPath("G0", Offset.G0offsety.offset());
+				case "G3": //10
+					arbitraryPath(pitchFret, Offset.G0offsety.offset());
 					break;
-				case "A2": //11
-					arbitraryPath("A2", Offset.A2offsety.offset());
+				case "A3": //11
+					arbitraryPath(pitchFret, Offset.A2offsety.offset());
 					break;
-				case "B0": //12
-					arbitraryPath("B0", Offset.B0offsety.offset());
+				case "B3": //12
+					arbitraryPath(pitchFret, Offset.B0offsety.offset());
 					break;
-				case "C1": //13
-					arbitraryPath("C1", Offset.C1offsety.offset());
+				case "C4": //13
+					arbitraryPath(pitchFret, Offset.C1offsety.offset());
 					break;
-				case "D3": //14
-					arbitraryPath("D3", Offset.D3offsety.offset());
+				case "D4": //14
+					arbitraryPath(pitchFret, Offset.D3offsety.offset());
 					break;
-				case "A5": //15
-					arbitraryPath("A5H", Offset.A5Hoffsety.offset());
+				case "E4": //15
+					arbitraryPath(pitchFret, Offset.A5Hoffsety.offset());
 					break;
-				case "B7": //16
-					arbitraryPath("B7H", Offset.B7Hoffsety.offset());
+				case "F4": //16
+					arbitraryPath(pitchFret, Offset.B7Hoffsety.offset());
 					break;
-				case "C8": //17
-					arbitraryPath("C8H", Offset.C8Hoffsety.offset());
+				case "G4": //17
+					arbitraryPath(pitchFret, Offset.C8Hoffsety.offset());
 					break;
-				case "D10": //18
-					arbitraryPath("D10H", Offset.D10Hoffsety.offset());
+				case "A4": //18
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "B4": //19
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "C5": //20
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "D5": //21
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "E5": //22
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "F5": //23
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "G5": //24
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "A5": //25
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "B5": //26
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "C6": //27
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "D6": //28
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
+					break;
+				case "E6": //29
+					arbitraryPath(pitchFret, Offset.D10Hoffsety.offset());
 					break;
 				default:
 					break;
