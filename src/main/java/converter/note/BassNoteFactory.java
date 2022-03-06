@@ -8,7 +8,7 @@ public class BassNoteFactory extends GuitarNoteFactory {
 
 	@Override
 	protected GuitarNote instantiateNote(String origin, int position, int distanceFromMeasureStart) {
-			return new BassNote(stringNumber, origin, position, lineName, distanceFromMeasureStart);
+		return new BassNote(stringNumber, origin, position, lineName, distanceFromMeasureStart);
 	}
 
 	@Override

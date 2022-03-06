@@ -47,15 +47,16 @@ public class GuitarNoteFactory extends NoteFactory {
 		List<TabNote> noteList = super.createNote(origin, position, distanceFromMeasureStart);
 		if (noteList.isEmpty()) {
 			noteList.addAll(createGrace(origin, position, distanceFromMeasureStart));
-			if (!noteList.isEmpty()) return noteList;
+			if (!noteList.isEmpty())
+				return noteList;
 			TabNote harmonic = createHarmonic(origin, position, distanceFromMeasureStart);
-			if (harmonic!=null) {
-				harmonic.distance ++; //So the distance is to the fret number, not the square bracket
+			if (harmonic != null) {
+				harmonic.distance++; // So the distance is to the fret number, not the square bracket
 				noteList.add(harmonic);
 				return noteList;
 			}
 			TabNote fret = createFret(origin, position, distanceFromMeasureStart);
-			if (fret!=null) {
+			if (fret != null) {
 				noteList.add(fret);
 				return noteList;
 			}
@@ -75,7 +76,7 @@ public class GuitarNoteFactory extends NoteFactory {
 	}
 
 	protected GuitarNote instantiateNote(String origin, int position, int distanceFromMeasureStart) {
-			return new GuitarNote(stringNumber, origin, position, lineName, distanceFromMeasureStart);
+		return new GuitarNote(stringNumber, origin, position, lineName, distanceFromMeasureStart);
 	}
 
 	protected GuitarNote instantiateNote(String origin, int position, int distanceFromMeasureStart, int stretch) {
@@ -103,16 +104,18 @@ public class GuitarNoteFactory extends NoteFactory {
 
 	protected List<TabNote> createGrace(String origin, int position, int distanceFromMeasureStart) {
 		List<TabNote> noteList = new ArrayList<>();
-		if (!origin.matches(Patterns.GRACE)) return noteList;
+		if (!origin.matches(Patterns.GRACE))
+			return noteList;
 
 		Matcher fretMatcher = Pattern.compile(Patterns.FRET + "(?![0-9])").matcher(origin);
-		//Matcher gracePairMatcher = Pattern.compile("(?<!g])" + Patterns.FRET + "$").matcher(origin);
+		// Matcher gracePairMatcher = Pattern.compile("(?<!g])" + Patterns.FRET +
+		// "$").matcher(origin);
 		Matcher connectorMatcher = Pattern.compile("(?<=[0-9])[^0-9](?=[0-9])").matcher(origin);
 		assert fretMatcher.find();
-		GuitarNote previousNote = createFret(fretMatcher.group(), position + fretMatcher.start(), distanceFromMeasureStart + fretMatcher.start());
+		GuitarNote previousNote = createFret(fretMatcher.group(), position + fretMatcher.start(),
+				distanceFromMeasureStart + fretMatcher.start());
 		int graceCount = 0;
-		while (connectorMatcher.find())
-		{
+		while (connectorMatcher.find()) {
 			graceCount++;
 			String relationship = connectorMatcher.group();
 			assert fretMatcher.find();
@@ -129,8 +132,7 @@ public class GuitarNoteFactory extends NoteFactory {
 		int actualDistance = previousNote.distance;
 		noteList.add(previousNote);
 		// All grace notes have the same distance as the main note, and stretch 1
-		for (TabNote note: noteList)
-		{
+		for (TabNote note : noteList) {
 			note.distance = actualDistance;
 			note.stretch = 1;
 		}

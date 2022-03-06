@@ -21,8 +21,6 @@ import org.fxmisc.richtext.LineNumberFactory;
 import org.jfugue.integration.MusicXmlParser;
 import org.jfugue.midi.MidiParserListener;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import converter.Instrument;
 import custom_exceptions.TXMLException;
 import javafx.application.Application;
@@ -31,8 +29,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import models.measure.Measure;
-import models.measure.note.Note;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import player.DrumInstrument;
@@ -44,9 +40,12 @@ public class PlayMusicController extends Application {
 	private MainViewController mvc;
 	public Highlighter highlighter;
 
-	@FXML public CodeArea mxlText;
-	@FXML TextField gotoMeasureField;
-	@FXML Button goToline;
+	@FXML
+	public CodeArea mxlText;
+	@FXML
+	TextField gotoMeasureField;
+	@FXML
+	Button goToline;
 
 	public PlayMusicController() {
 
@@ -57,41 +56,40 @@ public class PlayMusicController extends Application {
 		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
 	}
 
-    public void setMainViewController(MainViewController mvcInput) {
-    	mvc = mvcInput;
-    }
+	public void setMainViewController(MainViewController mvcInput) {
+		mvc = mvcInput;
+	}
 
-    public void update() throws ParserConfigurationException, ValidityException, ParsingException, IOException, MidiUnavailableException, InvalidMidiDataException, TXMLException {
-//    	MusicXmlParser parser = new MusicXmlParser();		
-//		MidiParserListener midilistener = new MidiParserListener();
-//		parser.addParserListener(midilistener);
-//		parser.parse(mvc.converter.getMusicXML());
-//		
-//		Sequencer sequencer = MidiSystem.getSequencer();
-//		sequencer.open();
-//		
-//		Sequence sequence = midilistener.getSequence();
-//		Track track = sequence.createTrack();
-//		
-//		ShortMessage sm = new ShortMessage();
-//		sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 24, 0);
-//		track.add(new MidiEvent(sm, 1));
-//		System.out.println("Size of track: " + track.size());
-//	
-//		sequencer.setSequence(sequence);
-//		sequencer.start();
-
-		
-		if(Settings.getInstance().getInstrument() == Instrument.DRUMS) {
+	public void update() throws ParserConfigurationException, ValidityException, ParsingException, IOException,
+			MidiUnavailableException, InvalidMidiDataException, TXMLException {
+   
+		if (Settings.getInstance().getInstrument() == Instrument.DRUMS) {
 			DrumInstrument drumPlayer = new DrumInstrument();
-			drumPlayer.playDrums(mvc.converter.getScore().getModel().getParts().get(0).getMeasures(), mvc.converter.getScore());
-		}
-		else if(Settings.getInstance().getInstrument() == Instrument.GUITAR) {
+			drumPlayer.playDrums(mvc.converter.getScore().getModel().getParts().get(0).getMeasures(),
+					mvc.converter.getScore());
+		} else if (Settings.getInstance().getInstrument() == Instrument.GUITAR) {
+			MusicXmlParser parser = new MusicXmlParser();
+			MidiParserListener midilistener = new MidiParserListener();
+			parser.addParserListener(midilistener);
+			parser.parse(mvc.converter.getMusicXML());
+
+			Sequencer sequencer = MidiSystem.getSequencer();
+			sequencer.open();
+
+			Sequence sequence = midilistener.getSequence();
+			Track track = sequence.createTrack();
+
+			ShortMessage sm = new ShortMessage();
+			sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 24, 0);
+			track.add(new MidiEvent(sm, 1));
+			System.out.println("Size of track: " + track.size());
+
+			sequencer.setSequence(sequence);
+			sequencer.setTempoInBPM(280);
 			
+			sequencer.start();
 		}
-		
-		
-		
+
 	}
 
 //	@FXML

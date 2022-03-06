@@ -5,7 +5,7 @@ public class GuitarStringName {
 	private String step;
 	private String octave;
 
-	public GuitarStringName (String st, String oc) {
+	public GuitarStringName(String st, String oc) {
 		step = st;
 		octave = oc;
 	}

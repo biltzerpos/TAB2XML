@@ -18,27 +18,28 @@ import utility.ValidationError;
 
 public class TabSection extends ScoreComponent {
 
-	//                           a measure line at start of line(with name)          zero or more middle measure lines       (optional |'s and spaces then what's ahead is end of line)
-    private static String LINE_PATTERN = "(" + Patterns.START_OF_LINE          +          Patterns.MIDDLE_OF_LINE + "*"    +   "("+ Patterns.DIVIDER+"*"+Patterns.SPACEORTAB+"*)"     +  ")";
+	// a measure line at start of line(with name) zero or more middle measure lines
+	// (optional |'s and spaces then what's ahead is end of line)
+	private static String LINE_PATTERN = "(" + Patterns.START_OF_LINE + Patterns.MIDDLE_OF_LINE + "*" + "("
+			+ Patterns.DIVIDER + "*" + Patterns.SPACEORTAB + "*)" + ")";
 
-    int endIndex;
-    private TabRow tabRow;
-    boolean isFirstTabSection;
-    private List<Instruction> instructionList = new ArrayList<>();
-    private boolean repeatsFound = false;
+	int endIndex;
+	private TabRow tabRow;
+	boolean isFirstTabSection;
+	private List<Instruction> instructionList = new ArrayList<>();
+	private boolean repeatsFound = false;
 
-    public TabSection(AnchoredText at, boolean isFirstTabSection) {
-        this.at = at;
-        this.endIndex = at.positionInScore + at.text.length();
-        this.isFirstTabSection = isFirstTabSection;
-        createTabRowAndInstructionList();
-        for (Instruction instruction : this.instructionList)
-            instruction.applyTo(this);
-    }
+	public TabSection(AnchoredText at, boolean isFirstTabSection) {
+		this.at = at;
+		this.endIndex = at.positionInScore + at.text.length();
+		this.isFirstTabSection = isFirstTabSection;
+		createTabRowAndInstructionList();
+		for (Instruction instruction : this.instructionList)
+			instruction.applyTo(this);
+	}
 
 	/**
-	 * Separates the text of this TabSection into
-	 * Instructions, and a TabRow
+	 * Separates the text of this TabSection into Instructions, and a TabRow
 	 */
 	private void createTabRowAndInstructionList() {
 
@@ -77,55 +78,65 @@ public class TabSection extends ScoreComponent {
 		this.tabRow = new TabRow(tabRowData);
 	}
 
-    private List<Instruction> extractInstructions(AnchoredText instrAT, boolean isTop) {
-        List<Instruction> instructionList = new ArrayList<>();
-        // Matches the repeat text including any barlines
-        Matcher repeatMatcher = Pattern.compile(Repeat.PATTERN).matcher(instrAT.text);
-        boolean repeatsAdded = false;
+	private List<Instruction> extractInstructions(AnchoredText instrAT, boolean isTop) {
+		List<Instruction> instructionList = new ArrayList<>();
+		// Matches the repeat text including any barlines
+		Matcher repeatMatcher = Pattern.compile(Repeat.PATTERN).matcher(instrAT.text);
+		boolean repeatsAdded = false;
 
-        while((repeatMatcher.find())) {
-        	AnchoredText repeatAT = new AnchoredText(repeatMatcher.group(), instrAT.positionInScore + repeatMatcher.start(), instrAT.positionInLine + repeatMatcher.start());
-        	if (repeatsFound)
-        		instructionList.add(new InvalidRepeat(repeatAT, isTop));
-        	else {
-        		repeatsAdded = true;
-        		instructionList.add(new Repeat(repeatAT, isTop));
-        	}
-        }
-        if (repeatsAdded) repeatsFound = true;
+		while ((repeatMatcher.find())) {
+			AnchoredText repeatAT = new AnchoredText(repeatMatcher.group(),
+					instrAT.positionInScore + repeatMatcher.start(), instrAT.positionInLine + repeatMatcher.start());
+			if (repeatsFound)
+				instructionList.add(new InvalidRepeat(repeatAT, isTop));
+			else {
+				repeatsAdded = true;
+				instructionList.add(new Repeat(repeatAT, isTop));
+			}
+		}
+		if (repeatsAdded)
+			repeatsFound = true;
 
-        Matcher timeSigMatcher = Pattern.compile(TimeSignature.PATTERN).matcher(instrAT.text);
-        while(timeSigMatcher.find()) {
-        	AnchoredText timeSigAT = new AnchoredText(timeSigMatcher.group(), instrAT.positionInScore + timeSigMatcher.start(), instrAT.positionInLine + timeSigMatcher.start());
-            instructionList.add(new TimeSignature(timeSigAT, isTop));
-        }
+		Matcher timeSigMatcher = Pattern.compile(TimeSignature.PATTERN).matcher(instrAT.text);
+		while (timeSigMatcher.find()) {
+			AnchoredText timeSigAT = new AnchoredText(timeSigMatcher.group(),
+					instrAT.positionInScore + timeSigMatcher.start(), instrAT.positionInLine + timeSigMatcher.start());
+			instructionList.add(new TimeSignature(timeSigAT, isTop));
+		}
 
-        Matcher timingMatcher = Pattern.compile(Timing.PATTERN).matcher(instrAT.text);
-        while(timingMatcher.find()) {
-        	AnchoredText timingAT = new AnchoredText(timingMatcher.group(), instrAT.positionInScore + timingMatcher.start(), instrAT.positionInLine + timingMatcher.start());
-            instructionList.add(new Timing(timingAT, isTop));
-        }
+		Matcher timingMatcher = Pattern.compile(Timing.PATTERN).matcher(instrAT.text);
+		while (timingMatcher.find()) {
+			AnchoredText timingAT = new AnchoredText(timingMatcher.group(),
+					instrAT.positionInScore + timingMatcher.start(), instrAT.positionInLine + timingMatcher.start());
+			instructionList.add(new Timing(timingAT, isTop));
+		}
 
-        return instructionList;
-    }
+		return instructionList;
+	}
 
-    public static String tabRowLinePattern() {
-        return "(^"+ Patterns.SPACEORTAB + "*(" + LINE_PATTERN + Patterns.SPACEORTAB + "*)+)";
-    }
+	public static String tabRowLinePattern() {
+		return "(^" + Patterns.SPACEORTAB + "*(" + LINE_PATTERN + Patterns.SPACEORTAB + "*)+)";
+	}
 
-    /**
-     * Creates the regex pattern for detecting a tab section (i.e a tab row and corresponding instructions)
-     * @return a String regex pattern enclosed in brackets that identifies a tab section pattern (the pattern also captures the newline right before the tab row collection)
-     */
-    public static String getRegexPattern() {
-        // Zero or more instructions, followed by one or more tab rows, followed by zero or more instructions
-        return "((^|\\n)"+ Instruction.LINE_PATTERN+")*"          // 0 or more lines separated by newlines, each containing a group of instructions
-                + "("                                                                   // then the tab row, which is made of...
-                +       "(^|\\n)"                                                           // a start of line or a new line
-                +       TabSection.tabRowLinePattern()                               // a tab row followed by whitespace, all repeated one or more times
-                + ")+"                                                                  // the tab row just described is repeated one or more times.
-                + "(\\n" + Instruction.LINE_PATTERN+")*";
-    }
+	/**
+	 * Creates the regex pattern for detecting a tab section (i.e a tab row and
+	 * corresponding instructions)
+	 *
+	 * @return a String regex pattern enclosed in brackets that identifies a tab
+	 *         section pattern (the pattern also captures the newline right before
+	 *         the tab row collection)
+	 */
+	public static String getRegexPattern() {
+		// Zero or more instructions, followed by one or more tab rows, followed by zero
+		// or more instructions
+		return "((^|\\n)" + Instruction.LINE_PATTERN + ")*" // 0 or more lines separated by newlines, each containing a
+															// group of instructions
+				+ "(" // then the tab row, which is made of...
+				+ "(^|\\n)" // a start of line or a new line
+				+ TabSection.tabRowLinePattern() // a tab row followed by whitespace, all repeated one or more times
+				+ ")+" // the tab row just described is repeated one or more times.
+				+ "(\\n" + Instruction.LINE_PATTERN + ")*";
+	}
 
 	public TabRow getTabRow() {
 		return this.tabRow;

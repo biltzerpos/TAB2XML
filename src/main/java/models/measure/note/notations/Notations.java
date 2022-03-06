@@ -11,47 +11,47 @@ import models.measure.note.notations.technical.Ornaments;
 import models.measure.note.notations.technical.Technical;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({"tied", "slur", "slide", "technical"})
+@JsonPropertyOrder({ "tied", "slur", "slide", "technical" })
 public class Notations {
-    Technical technical;
+	Technical technical;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "slur")
-    List<Slur> slurs;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "slur")
+	List<Slur> slurs;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "slide")
-    List<Slide> slides;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "slide")
+	List<Slide> slides;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "tied")
-    private List<Tied> tieds;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "tied")
+	private List<Tied> tieds;
 
-    private Ornaments ornaments;
+	private Ornaments ornaments;
 
-    public List<Slur> getSlurs() {
-        return slurs;
-    }
+	public List<Slur> getSlurs() {
+		return slurs;
+	}
 
-    public Technical getTechnical() {
-        return technical;
-    }
+	public Technical getTechnical() {
+		return technical;
+	}
 
-    public List<Slide> getSlides() {
-        return slides;
-    }
+	public List<Slide> getSlides() {
+		return slides;
+	}
 
-    public void setSlurs(List<Slur> slurs) {
-        this.slurs = slurs;
-    }
+	public void setSlurs(List<Slur> slurs) {
+		this.slurs = slurs;
+	}
 
-    public void setSlides(List<Slide> slides) {
-        this.slides = slides;
-    }
+	public void setSlides(List<Slide> slides) {
+		this.slides = slides;
+	}
 
-    public void setTechnical(Technical technical) {
-        this.technical = technical;
-    }
+	public void setTechnical(Technical technical) {
+		this.technical = technical;
+	}
 
 	public Ornaments getOrnaments() {
 		return ornaments;

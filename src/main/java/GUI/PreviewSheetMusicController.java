@@ -22,13 +22,16 @@ import pdfbox.pdfbuilder;
 public class PreviewSheetMusicController extends Application {
 
 //	public File saveFile;
-    private MainViewController mvc;
+	private MainViewController mvc;
 	public Highlighter highlighter;
 	private pdfbuilder pdf;
 
-	@FXML public ImageView imageview;
-	@FXML TextField gotoMeasureField;
-	@FXML Button goToline;
+	@FXML
+	public ImageView imageview;
+	@FXML
+	TextField gotoMeasureField;
+	@FXML
+	Button goToline;
 
 	public PreviewSheetMusicController() {
 
@@ -39,14 +42,14 @@ public class PreviewSheetMusicController extends Application {
 		pdf = new pdfbuilder();
 	}
 
-    public void setMainViewController(MainViewController mvcInput) {
-    	mvc = mvcInput;
-    }
+	public void setMainViewController(MainViewController mvcInput) {
+		mvc = mvcInput;
+	}
 
-    public void update() throws IOException, TXMLException {
-    	pdf.sheetpdf(mvc.converter.getScore());
-    	imageview.setImage(pdf.getImage(0));
-    	imageview.setPreserveRatio(true);
+	public void update() throws IOException, TXMLException {
+		pdf.sheetpdf(mvc.converter.getScore());
+		imageview.setImage(pdf.getImage(0));
+		imageview.setPreserveRatio(true);
 	}
 
 	@FXML

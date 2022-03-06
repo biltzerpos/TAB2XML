@@ -15,11 +15,16 @@ public class SystemDefaultSettingsWindowController extends Application {
 	private MainViewController mvc;
 	Preferences prefs;
 
-	@FXML public TextField inputFolderField;
-	@FXML public TextField outputFolderField;
-	@FXML private ComboBox<String> cmbErrorSensitivity;
-	@FXML private ComboBox<String> cmbNumerator;
-	@FXML private ComboBox<String> cmbDenominator;
+	@FXML
+	public TextField inputFolderField;
+	@FXML
+	public TextField outputFolderField;
+	@FXML
+	private ComboBox<String> cmbErrorSensitivity;
+	@FXML
+	private ComboBox<String> cmbNumerator;
+	@FXML
+	private ComboBox<String> cmbDenominator;
 
 	public SystemDefaultSettingsWindowController() {
 		prefs = Preferences.userRoot();
@@ -37,13 +42,15 @@ public class SystemDefaultSettingsWindowController extends Application {
 		outputFolderField.setText(outputFolder);
 
 		cmbErrorSensitivity.getItems().removeAll(cmbErrorSensitivity.getItems());
-		cmbErrorSensitivity.getItems().addAll("Level 1 - Minimal Error Checking", "Level 2 - Standard Error Checking", "Level 3 - Advanced Error Checking", "Level 4 - Detailed Error Checking");
+		cmbErrorSensitivity.getItems().addAll("Level 1 - Minimal Error Checking", "Level 2 - Standard Error Checking",
+				"Level 3 - Advanced Error Checking", "Level 4 - Detailed Error Checking");
 		String errStr = prefs.get("errorSensitivity", "2");
 		int err = Integer.parseInt(errStr);
 		cmbErrorSensitivity.getSelectionModel().select(err - 1);
 
 		cmbNumerator.getItems().removeAll(cmbNumerator.getItems());
-		for (int i =1; i<=16; i++) cmbNumerator.getItems().add(i + "");
+		for (int i = 1; i <= 16; i++)
+			cmbNumerator.getItems().add(i + "");
 		String tsNumStr = prefs.get("tsNum", "4");
 		int tsNum = Integer.parseInt(tsNumStr);
 		cmbNumerator.getSelectionModel().select(tsNum + "");
@@ -55,7 +62,8 @@ public class SystemDefaultSettingsWindowController extends Application {
 		cmbDenominator.getSelectionModel().select(tsDen + "");
 	}
 
-	@FXML private void handleErrorSensitivity() {
+	@FXML
+	private void handleErrorSensitivity() {
 		int err;
 		switch (cmbErrorSensitivity.getValue().toString()) {
 		case "Level 1 - Minimal Error Checking" -> err = 1;
@@ -64,7 +72,7 @@ public class SystemDefaultSettingsWindowController extends Application {
 		case "Level 4 - Detailed Error Checking" -> err = 4;
 		default -> err = 4;
 		}
-		prefs.put("errorSensitivity", err+"");
+		prefs.put("errorSensitivity", err + "");
 		mvc.refresh();
 	}
 
@@ -99,5 +107,6 @@ public class SystemDefaultSettingsWindowController extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {}
+	public void start(Stage primaryStage) throws Exception {
+	}
 }

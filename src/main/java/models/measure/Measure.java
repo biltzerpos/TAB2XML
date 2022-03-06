@@ -13,82 +13,82 @@ import models.measure.direction.Direction;
 import models.measure.note.Note;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({"attributes", "noteBefore", "backup", "noteAfter", "barlines", "direction"})
+@JsonPropertyOrder({ "attributes", "noteBefore", "backup", "noteAfter", "barlines", "direction" })
 public class Measure {
-    @JacksonXmlProperty(isAttribute = true)
-    int number;
+	@JacksonXmlProperty(isAttribute = true)
+	int number;
 
-    Attributes attributes;
+	Attributes attributes;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "noteBefore")
-    List<Note> notesBeforeBackup;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "noteBefore")
+	List<Note> notesBeforeBackup;
 
-    Backup backup;
+	Backup backup;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "noteAfter")
-    List<Note> notesAfterBackup;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "noteAfter")
+	List<Note> notesAfterBackup;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "barline")
-    List<BarLine> barlines;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "barline")
+	List<BarLine> barlines;
 
-    Direction direction;
+	Direction direction;
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
+	public void setNumber(int number) {
+		this.number = number;
+	}
 
-    public int getNumber() {
-        return number;
-    }
+	public int getNumber() {
+		return number;
+	}
 
-    public void setAttributes(Attributes attributes) {
-        this.attributes = attributes;
-    }
+	public void setAttributes(Attributes attributes) {
+		this.attributes = attributes;
+	}
 
-    public Backup getBackup() {
-        return backup;
-    }
+	public Backup getBackup() {
+		return backup;
+	}
 
-    public Attributes getAttributes() {
-        return attributes;
-    }
+	public Attributes getAttributes() {
+		return attributes;
+	}
 
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
 
-    public List<BarLine> getBarlines() {
-        return barlines;
-    }
+	public List<BarLine> getBarlines() {
+		return barlines;
+	}
 
-    public Direction getDirection() {
-        return direction;
-    }
+	public Direction getDirection() {
+		return direction;
+	}
 
-    public List<Note> getNotesBeforeBackup() {
-        return notesBeforeBackup;
-    }
+	public List<Note> getNotesBeforeBackup() {
+		return notesBeforeBackup;
+	}
 
-    public void setBackup(Backup backup) {
-        this.backup = backup;
-    }
+	public void setBackup(Backup backup) {
+		this.backup = backup;
+	}
 
-    public void setBarlines(List<BarLine> barlines) {
-        this.barlines = barlines;
-    }
+	public void setBarlines(List<BarLine> barlines) {
+		this.barlines = barlines;
+	}
 
-    public void setNotesAfterBackup(List<Note> notesAfterBackup) {
-        this.notesAfterBackup = notesAfterBackup;
-    }
+	public void setNotesAfterBackup(List<Note> notesAfterBackup) {
+		this.notesAfterBackup = notesAfterBackup;
+	}
 
-    public void setNotesBeforeBackup(List<Note> notesBeforeBackup) {
-        this.notesBeforeBackup = notesBeforeBackup;
-    }
+	public void setNotesBeforeBackup(List<Note> notesBeforeBackup) {
+		this.notesBeforeBackup = notesBeforeBackup;
+	}
 
-    public List<Note> getNotesAfterBackup() {
-        return notesAfterBackup;
-    }
+	public List<Note> getNotesAfterBackup() {
+		return notesAfterBackup;
+	}
 }

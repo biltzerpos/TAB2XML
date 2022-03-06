@@ -11,11 +11,13 @@ public class StartTieDecorator implements NoteModelDecorator {
 
 	@Override
 	public boolean applyTo(Note noteModel) {
-            if (noteModel.getNotations() == null) noteModel.setNotations(new Notations());
-    	    Notations notations = noteModel.getNotations();
-            if (notations.getTieds() == null) notations.setTieds(new ArrayList<>());
-            List<Tied> tieds = notations.getTieds();
-            tieds.add(new Tied("start"));
-            return true;
+		if (noteModel.getNotations() == null)
+			noteModel.setNotations(new Notations());
+		Notations notations = noteModel.getNotations();
+		if (notations.getTieds() == null)
+			notations.setTieds(new ArrayList<>());
+		List<Tied> tieds = notations.getTieds();
+		tieds.add(new Tied("start"));
+		return true;
 	}
 }

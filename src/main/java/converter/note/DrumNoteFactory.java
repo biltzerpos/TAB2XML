@@ -21,10 +21,10 @@ public class DrumNoteFactory extends NoteFactory {
 
 	@Override
 	protected AnchoredText createConnector(List<TabNote> noteList, int idx, int endIdx, int endNote) {
-			AnchoredText connectorAT = new AnchoredText("", 0, 0);
-			// No connectors for drum notes
-			return connectorAT;
-		}
+		AnchoredText connectorAT = new AnchoredText("", 0, 0);
+		// No connectors for drum notes
+		return connectorAT;
+	}
 
 	@Override
 	protected List<TabNote> createNote(String origin, int position, int distanceFromMeasureStart) {
@@ -89,10 +89,12 @@ public class DrumNoteFactory extends NoteFactory {
 		rollNote.addDecorator((noteModel) -> {
 			Notations n = getNonNullNotations(noteModel);
 			Ornaments o;
-			if (n.getOrnaments() == null) n.setOrnaments(new Ornaments());
+			if (n.getOrnaments() == null)
+				n.setOrnaments(new Ornaments());
 			o = n.getOrnaments();
 			Tremolo t;
-			if (o.getTremolo() == null) o.setTremolo(new Tremolo(1));
+			if (o.getTremolo() == null)
+				o.setTremolo(new Tremolo(1));
 			t = o.getTremolo();
 			t.setType("single");
 			return true;

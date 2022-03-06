@@ -17,25 +17,26 @@ import utility.DoubleDigitStyle;
 import utility.Settings;
 import utility.ValidationError;
 
-public class GuitarMeasure extends TabMeasure{
-    protected int MIN_LINE_COUNT;
-    protected int MAX_LINE_COUNT;
-    String [][] tuning;
+public class GuitarMeasure extends TabMeasure {
+	protected int MIN_LINE_COUNT;
+	protected int MAX_LINE_COUNT;
+	String[][] tuning;
 
-    public GuitarMeasure(List<AnchoredText> inputData, List<AnchoredText> inputNameData, boolean isFirstMeasure) {
-        super(inputData, inputNameData, isFirstMeasure);
-        allowedPadding = Settings.getInstance().guitarMeasureStartPadding;
-        MIN_LINE_COUNT = 6;
-        MAX_LINE_COUNT = 6;
-        tuning = Settings.getInstance().getGuitarTuning();
-    }
+	public GuitarMeasure(List<AnchoredText> inputData, List<AnchoredText> inputNameData, boolean isFirstMeasure) {
+		super(inputData, inputNameData, isFirstMeasure);
+		allowedPadding = Settings.getInstance().guitarMeasureStartPadding;
+		MIN_LINE_COUNT = 6;
+		MAX_LINE_COUNT = 6;
+		tuning = Settings.getInstance().getGuitarTuning();
+	}
 
-    @Override
+	@Override
 	protected int adjustDivisionsForSpecialCases(int usefulMeasureLength) {
 		for (List<List<TabNote>> chordList : getVoiceSortedChordList()) {
 			int start = 0;
 			// Start at 1 to ignore first chord
-			// If it is longer than one digit, it has not been counted in usefulMeasureLength
+			// If it is longer than one digit, it has not been counted in
+			// usefulMeasureLength
 			// Applies only for NOTE ON SECOND DIGIT
 			if (Settings.getInstance().ddStyle == DoubleDigitStyle.NOTE_ON_SECOND_DIGIT_STRETCH)
 				start = 1;
@@ -51,11 +52,14 @@ public class GuitarMeasure extends TabMeasure{
 	protected int adjustDurationForSpecialCases(int duration, List<TabNote> chord, List<TabNote> nextChord) {
 		// Adjust duration due to double digit fret numbers
 		switch (Settings.getInstance().ddStyle) {
-		case NOTE_ON_FIRST_DIGIT_STRETCH: duration -= chordStretch(chord) - 1;
+		case NOTE_ON_FIRST_DIGIT_STRETCH:
+			duration -= chordStretch(chord) - 1;
 			break;
 		case NOTE_ON_SECOND_DIGIT_NO_STRETCH:
 			break;
-		case NOTE_ON_SECOND_DIGIT_STRETCH: if (nextChord != null) duration -= chordStretch(nextChord) - 1;
+		case NOTE_ON_SECOND_DIGIT_STRETCH:
+			if (nextChord != null)
+				duration -= chordStretch(nextChord) - 1;
 		default:
 			break;
 		}
@@ -63,27 +67,27 @@ public class GuitarMeasure extends TabMeasure{
 	}
 
 	@Override
-	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name)
-	{
+	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name) {
 		return new TabGuitarString(stringNumber, data, name);
 	}
 
 	@Override
 	protected Attributes getAttributesModel() {
-        Attributes attributes = new Attributes();
-        attributes.setDivisions(this.divisions);
-        attributes.setKey(new Key(0));
-        if (this.changesTimeSignature)
-            attributes.setTime(new Time(this.beatCount, this.beatType));
-        if (this.measureCount == 1) {
-            attributes.setClef(new Clef("TAB", 5));
-            List<StaffTuning> staffTunings = new ArrayList<>();
-            for (int string = 0; string < MAX_LINE_COUNT; string++)
-            	staffTunings.add(new StaffTuning(string + 1, tuning[MAX_LINE_COUNT-1-string][0], Integer.parseInt(tuning[MAX_LINE_COUNT-1-string][1])));
-            attributes.setStaffDetails(new StaffDetails(MAX_LINE_COUNT, staffTunings));
-        }
-        return attributes;
-    }
+		Attributes attributes = new Attributes();
+		attributes.setDivisions(this.divisions);
+		attributes.setKey(new Key(0));
+		if (this.changesTimeSignature)
+			attributes.setTime(new Time(this.beatCount, this.beatType));
+		if (this.measureCount == 1) {
+			attributes.setClef(new Clef("TAB", 5));
+			List<StaffTuning> staffTunings = new ArrayList<>();
+			for (int string = 0; string < MAX_LINE_COUNT; string++)
+				staffTunings.add(new StaffTuning(string + 1, tuning[MAX_LINE_COUNT - 1 - string][0],
+						Integer.parseInt(tuning[MAX_LINE_COUNT - 1 - string][1])));
+			attributes.setStaffDetails(new StaffDetails(MAX_LINE_COUNT, staffTunings));
+		}
+		return attributes;
+	}
 
 	/**
 	 * Validates that the guitar has a supported number of strings. Validates its

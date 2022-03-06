@@ -12,29 +12,29 @@ import utility.ValidationError;
 
 public class TabGuitarString extends TabString {
 
-    public TabGuitarString(int stringNumber, AnchoredText dataAT, AnchoredText nameAT) {
-        super(stringNumber, dataAT, nameAT);
-    }
+	public TabGuitarString(int stringNumber, AnchoredText dataAT, AnchoredText nameAT) {
+		super(stringNumber, dataAT, nameAT);
+	}
 
-    @Override
-    public List<ValidationError> validate() {
+	@Override
+	public List<ValidationError> validate() {
 
-        if (!GuitarUtils.isValidName(this.name)) {
-            String message = "Unrecognized name";
-            addError(message, 1, getRanges());
-        }
+		if (!GuitarUtils.isValidName(this.name)) {
+			String message = "Unrecognized name";
+			addError(message, 1, getRanges());
+		}
 
-        for (ValidationError error : errors) {
-            if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
-                return errors;
-            }
-        }
+		for (ValidationError error : errors) {
+			if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
+				return errors;
+			}
+		}
 
-        for (TabNote note : this.noteList)
-            errors.addAll(note.validate());
+		for (TabNote note : this.noteList)
+			errors.addAll(note.validate());
 
-        return errors;
-    }
+		return errors;
+	}
 
 	@Override
 	protected NoteFactory createNoteFactory() {

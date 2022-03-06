@@ -8,66 +8,66 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ScorePart {
-    @JacksonXmlProperty(isAttribute = true)
-    private String id;
+	@JacksonXmlProperty(isAttribute = true)
+	private String id;
 
-    @JacksonXmlProperty(localName = "part-name")
-    private String partName;
+	@JacksonXmlProperty(localName = "part-name")
+	private String partName;
 
-    @JacksonXmlProperty(localName = "score-instrument")
+	@JacksonXmlProperty(localName = "score-instrument")
 //    @JacksonXmlElementWrapper(useWrapping = false)
-    private List<ScoreInstrument> scoreInstruments;
+	private List<ScoreInstrument> scoreInstruments;
 
-    @JacksonXmlProperty(localName = "midi-device")
-    private MIDIDevice midiDevice;
+	@JacksonXmlProperty(localName = "midi-device")
+	private MIDIDevice midiDevice;
 
-    @JacksonXmlProperty(localName = "midi-instrument")
+	@JacksonXmlProperty(localName = "midi-instrument")
 //    @JacksonXmlElementWrapper(useWrapping = false)
-    private List<MIDIInstrument> midiInstruments;
+	private List<MIDIInstrument> midiInstruments;
 
-    public ScorePart() {
+	public ScorePart() {
 
-    }
+	}
 
-    public ScorePart(String id, String partName) {
-        this.id = id;
-        this.partName = partName;
-    }
+	public ScorePart(String id, String partName) {
+		this.id = id;
+		this.partName = partName;
+	}
 
-    public ScorePart(String id, String partName, List<ScoreInstrument> scoreInstruments) {
-        this(id, partName);
-        this.scoreInstruments = scoreInstruments;
-    }
+	public ScorePart(String id, String partName, List<ScoreInstrument> scoreInstruments) {
+		this(id, partName);
+		this.scoreInstruments = scoreInstruments;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public List<ScoreInstrument> getScoreInstruments() {
-        return scoreInstruments;
-    }
+	public List<ScoreInstrument> getScoreInstruments() {
+		return scoreInstruments;
+	}
 
-    public List<MIDIInstrument> getMIDIInstruments() {
-        return midiInstruments;
-    }
+	public List<MIDIInstrument> getMIDIInstruments() {
+		return midiInstruments;
+	}
 
-    public String getPartName() {
-        return partName;
-    }
+	public String getPartName() {
+		return partName;
+	}
 
-    public void setPartName(String partName) {
-        this.partName = partName;
-    }
+	public void setPartName(String partName) {
+		this.partName = partName;
+	}
 
-    public void setScoreInstruments(List<ScoreInstrument> scoreInstruments) {
-        this.scoreInstruments = scoreInstruments;
-    }
+	public void setScoreInstruments(List<ScoreInstrument> scoreInstruments) {
+		this.scoreInstruments = scoreInstruments;
+	}
 
-    public void setMIDIInstruments(List<MIDIInstrument> midiInstruments) {
-        this.midiInstruments = midiInstruments;
-    }
+	public void setMIDIInstruments(List<MIDIInstrument> midiInstruments) {
+		this.midiInstruments = midiInstruments;
+	}
 }
