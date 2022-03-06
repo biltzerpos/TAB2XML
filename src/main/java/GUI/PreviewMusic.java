@@ -15,7 +15,6 @@ import javafx.print.PageOrientation;
 import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -45,8 +44,8 @@ public class PreviewMusic extends Application {
 	private AnchorPane anchorPane;
 	@FXML
 	TextField gotoMeasureField;
-	private Guitar g;
-	private Drumset d;
+	private Guitar guitar;
+	private Drumset drum;
 	@FXML private Button closePreviewButton;
 	
 
@@ -61,7 +60,7 @@ public class PreviewMusic extends Application {
 		mvc = mvcInput;
 	}
 
-	//method to update the music sheet
+	//method to update the preview window
 	public void update() throws IOException {
 		// Get the ScorePartwise object directly
 
@@ -76,15 +75,16 @@ public class PreviewMusic extends Application {
 		 */
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		if (instrument == "Guitar") {
-			g = new Guitar(scorePartwise, pane);
-			g.drawGuitar();
+			this.guitar = new Guitar(scorePartwise, pane);
+			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
-			d = new Drumset(scorePartwise, pane);
-			d.draw();
+			this.drum = new Drumset(scorePartwise, pane);
+			this.drum.draw();
 		}
 
 	}
-
+	
+	//Method that handles the `print music sheet` button
 	@FXML
 	public <printButtonPressed> void printHandle() {
 
@@ -121,50 +121,43 @@ public class PreviewMusic extends Application {
 
 	}
 
-
+	// Method that handles `play note` button
 	@FXML
 	public void playHandle() {
-		//ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
-
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		if (instrument == "Guitar") {
-			//Guitar g = new Guitar(scorePartwise, pane);
-			g.playGuitarNote();   // Play method in Guitar class
+			this.guitar.playGuitarNote();   // Play method in Guitar class
 		}
 		else if(instrument == "Drumset") {
-			//Drumset d = new Drumset(scorePartwise, pane);
-			d.playDrumNote();     // Play method in Drumset class
+			this.drum.playDrumNote();     // Play method in Drumset class
 		}
 	}
 
+	//Method that handle navigating to specific measure through 'Go' button
 	public void handleGotoMeasure() {
-
-		//System.out.println("Go Button is Clicked");
 		int measureNumber = Integer.parseInt(gotoMeasureField.getText());
-		// Get the ScorePartwise object directly
-		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		String instrument = this.scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		
 		//System.out.println("instrument:" + instrument);
 		int count = 1;
 		boolean measureFound = false;
 		if (instrument == "Guitar") {
-			List<Measure> measureList = g.getMeasureList();
-			for (Iterator iterator = measureList.iterator(); iterator.hasNext();) {
+			List<Measure> measureList = this.guitar.getMeasureList();
+			for (Iterator<Measure> iterator = measureList.iterator(); iterator.hasNext();) {
 				Measure measure = (Measure) iterator.next();
 				if(measureNumber == count) {
-					g.highlightMeasureArea(measure);
+					this.guitar.highlightMeasureArea(measure);
 					measureFound = true;
 					break;
 				}
 				count++;
 			}
 		} else if (instrument == "Drumset") {
-			List<Measure> measureList = d.getMeasureList();
-			for (Iterator iterator = measureList.iterator(); iterator.hasNext();) {
+			List<Measure> measureList = this.drum.getMeasureList();
+			for (Iterator<Measure> iterator = measureList.iterator(); iterator.hasNext();) {
 				Measure measure = (Measure) iterator.next();
 				if(measureNumber == count) {
-					d.highlightMeasureArea(measure);
+					this.drum.highlightMeasureArea(measure);
 					measureFound = true;
 					break;
 				}
@@ -179,6 +172,7 @@ public class PreviewMusic extends Application {
 		}
 	}
 	
+	// Method that handles `close` button 
 	@FXML
 	public void closePreviewHandle() {
 		//mvc.editHandle(); 
