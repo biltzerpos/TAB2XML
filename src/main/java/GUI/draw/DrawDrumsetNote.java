@@ -201,6 +201,11 @@ public class DrawDrumsetNote {
 	}
 
 	public void draw() {
+		// If the note is octave 5 and step A, then it is above the staff and a small line must be drawn behind it.
+		if (note.getUnpitched().getDisplayOctave() == 5 && note.getUnpitched().getDisplayStep().equals("A")) {
+			pane.getChildren().add(new Line(getStartX()-5, getStartY()-3, getStartX()+11, getStartY()-3));
+		}
+
 		// If note head exists and is an x, then draw "x", otherwise draw "o"
 		if (note.getNotehead() != null && note.getNotehead().getType().equals("x")) {
 			this.drawX();
