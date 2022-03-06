@@ -297,9 +297,10 @@ Group 6:
 
 
 ## Version History
-version 0.0: the starter code
-version 0.1: the first prototype (maintained partial features)
-version 0.2: the mid-term submission (maintains the features from the requirements document and supports both drum and guitar tabs)
+
+* version 0.0: the starter code
+* version 0.1: the first prototype (maintained partial features)
+* version 0.2: the mid-term submission (maintains the features from the requirements document and supports both drum and guitar tabs)
 
 
 ## License 
