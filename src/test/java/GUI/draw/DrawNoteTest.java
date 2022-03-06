@@ -2,6 +2,10 @@ package GUI.draw;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import javafx.scene.layout.Pane;
@@ -13,6 +17,8 @@ import converter.Score;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.note.Note;
+
+import instruments.Drumset;
 
 import custom_exceptions.TXMLException;
 
@@ -83,34 +89,19 @@ public class DrawNoteTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 
-		    double x = 0;
-		    double y = 0;
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane);
 
-		    for (Measure measure : scorePartwise.getParts().get(0).getMeasures()) {
+		    drumsetDrawer.draw();
 
-		    	for (Note note : measure.getNotesBeforeBackup()) {
+		    List<Node> noteList = new ArrayList<>();
 
-		    		// Only draw the notes that have no notehead
-		    		if (note.getNotehead() == null) {
-
-			    		// Draw note
-			    		DrawNote drawNote = new DrawNote(pane, x, y);
-			    		drawNote.drawO();
-	
-			    		// Check pane to make sure the note was added
-			    		Node addedNode = pane.getChildren().get(pane.getChildren().size()-1);
-			    		if (addedNode instanceof Text) {
-			    			Text textNode = (Text) addedNode;
-
-			    			assertEquals(x, textNode.getX(), "Text node has incorrect x-coordinate: expected " + x + ", but received " + textNode.getX());
-			    			assertEquals(y, textNode.getY(), "Text node has incorrect y-coordinate: expected " + y + ", but received " + textNode.getY());
-			    			assertEquals("o", textNode.getText(), "Text node has incorrect text value: expected x, but received " + textNode.getText());
-			    		} else {
-			    			fail("Text node was not added");
-			    		}
-		    		}
+		    for (Node node : pane.getChildren()) {
+		    	if (node.getId() != null && node.getId().equals("drum-note-o")) {
+		    		noteList.add(node);
 		    	}
 		    }
+
+		    assertEquals(14, noteList.size(), "Pane should have 14 \"o\" notes, but has " + noteList.size() + "instead");
 		} catch (TXMLException e) {
 			fail("TXMLException thrown\n" + e.getMessage());
 		}
@@ -134,34 +125,29 @@ public class DrawNoteTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 
-		    double x = 0;
-		    double y = 0;
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane);
 
-		    for (Measure measure : scorePartwise.getParts().get(0).getMeasures()) {
+		    drumsetDrawer.draw();
 
-		    	for (Note note : measure.getNotesBeforeBackup()) {
+		    List<Node> noteList = new ArrayList<>();
 
-		    		// Only draw the notes that have an x notehead
-		    		if (note.getNotehead() != null && note.getNotehead().getType().equals("x")) {
-
-			    		// Draw note
-			    		DrawNote drawNote = new DrawNote(pane, x, y);
-			    		drawNote.drawX();
-	
-			    		// Check pane to make sure the note was added
-			    		Node addedNode = pane.getChildren().get(pane.getChildren().size()-1);
-			    		if (addedNode instanceof Text) {
-			    			Text textNode = (Text) addedNode;
-
-			    			assertEquals(x, textNode.getX(), "Text node has incorrect x-coordinate: expected " + x + ", but received " + textNode.getX());
-			    			assertEquals(y, textNode.getY(), "Text node has incorrect y-coordinate: expected " + y + ", but received " + textNode.getY());
-			    			assertEquals("x", textNode.getText(), "Text node has incorrect text value: expected x, but received " + textNode.getText());
-			    		} else {
-			    			fail("Text node was not added");
-			    		}
-		    		}
+		    for (Node node : pane.getChildren()) {
+		    	if (node.getId() != null && node.getId().equals("drum-note-x-1")) {
+		    		noteList.add(node);
 		    	}
 		    }
+
+		    assertEquals(9, noteList.size(), "Pane should have 9 top-left to bottom-right lines for the \"x\" notes, but has " + noteList.size() + "instead");
+
+		    noteList = new ArrayList<>();
+
+		    for (Node node : pane.getChildren()) {
+		    	if (node.getId() != null && node.getId().equals("drum-note-x-2")) {
+		    		noteList.add(node);
+		    	}
+		    }
+
+		    assertEquals(9, noteList.size(), "Pane should have 9 top-right to bottom-left lines for the \"x\" notes, but has " + noteList.size() + "instead");
 		} catch (TXMLException e) {
 			fail("TXMLException thrown\n" + e.getMessage());
 		}

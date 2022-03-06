@@ -59,6 +59,9 @@ public class DrawDrumsetNote {
 		Line topLeftToBottomRight = new Line(xCenterX-4, xCenterY+4, xCenterX+4, xCenterY-4);
 		Line topRightToBottomLeft = new Line(xCenterX+4, xCenterY+4, xCenterX-4, xCenterY-4);
 
+		topLeftToBottomRight.setId("drum-note-x-2");
+		topRightToBottomLeft.setId("drum-note-x-1");
+
 		if (note.getType().equals("half") || note.getType().equals("whole")) {
 			// If the note is a half note or a whole note, then we draw the an outline of the "x".
 			// We do this by drawing a black "x" and adding a smaller white "x" on top of it.
@@ -111,6 +114,7 @@ public class DrawDrumsetNote {
 			// Whole notes are horizontal
 			ellipse = new Ellipse(getStartX()+3, getStartY()-3, 6.0, 5.0);
 		}
+		ellipse.setId("drum-note-o");
 		ellipse.toFront();
 
 		Blend blend = new Blend();
