@@ -138,7 +138,7 @@ public class pdfbuilder {
 	private int maxNotesTotal = notesPerPage;
 	private int totalNotes;
 	private int globalX = 78;
-	private int globalY = 714;
+	private int globalY = 400;
 	private int pageCounter;
 
 	private PDFRenderer renderer;
@@ -237,7 +237,7 @@ public class pdfbuilder {
 				
 				
 				System.out.println(pitchFret);
-				System.out.println(score.getModel().getPartList().getScoreParts().get(0).getPartName());
+			//	System.out.println(score.getModel().getPartList().getScoreParts().get(0).getPartName());
 				
 				
 				switch (pitchFret) {
@@ -375,8 +375,8 @@ public class pdfbuilder {
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, globalX, globalY - offsety);
 				System.out.println(globalX +","+ globalY);
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				contentStream.close();
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				globalX += 18;
 				++totalNotes;
 			}
@@ -387,8 +387,8 @@ public class pdfbuilder {
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, globalX, globalY - offsety);
 				System.out.println(globalX +","+ globalY);
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				contentStream.close();
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				globalX += 18;
 				++totalNotes;
 			}
@@ -399,6 +399,7 @@ public class pdfbuilder {
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, globalX, globalY - offsety);
 				System.out.println(globalX +","+ globalY);
+				contentStream.close();
 				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				pdflinegen(lines);
 				globalX += 18;
@@ -410,6 +411,7 @@ public class pdfbuilder {
 				pageImage = PDImageXObject.createFromFile(imagePath, doc);
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, globalX, globalY - offsety);
+				contentStream.close();
 				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				System.out.println(globalX +","+ globalY);
 				pdflinegen(lines);
@@ -422,10 +424,11 @@ public class pdfbuilder {
 	public void pdflinegen(int lines) throws IOException {
 		String linepath = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png";  //gets png of line
 		pageImage = PDImageXObject.createFromFile(linepath, doc);
-		int innerY = globalY-14;                                                                                       
+		int innerY = globalY-40;                                                                                       
 		for (int i = 0; i<lines; i++) {
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX, innerY);
+			contentStream.close();
 			innerY -= 7;
 		}
 	}
@@ -435,6 +438,7 @@ public class pdfbuilder {
 		pageImage = PDImageXObject.createFromFile(tabpath, doc);
 		contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 		contentStream.drawImage(pageImage, globalX, innerYT-number);
+		contentStream.close();
 	}
 
 
