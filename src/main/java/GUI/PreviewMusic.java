@@ -73,7 +73,7 @@ public class PreviewMusic extends Application {
 		 * get the first item, which is the Part, then we get the measures from that
 		 * Part.
 		 */
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		String instrument = getInstrument();
 		if (instrument == "Guitar") {
 			this.guitar = new Guitar(scorePartwise, pane);
 			this.guitar.drawGuitar();
@@ -124,7 +124,7 @@ public class PreviewMusic extends Application {
 	// Method that handles `play note` button
 	@FXML
 	public void playHandle() {
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		String instrument = getInstrument();
 		if (instrument == "Guitar") {
 			this.guitar.playGuitarNote();   // Play method in Guitar class
 		}
@@ -133,11 +133,10 @@ public class PreviewMusic extends Application {
 		}
 	}
 
-	//Method that handle navigating to specific measure through 'Go' button
+	//Method that handle navigating to specific measure (1- size of measure list) through 'Go' button
 	public void handleGotoMeasure() {
 		int measureNumber = Integer.parseInt(gotoMeasureField.getText());
-		String instrument = this.scorePartwise.getPartList().getScoreParts().get(0).getPartName();
-		
+		String instrument = getInstrument();
 		//System.out.println("instrument:" + instrument);
 		int count = 1;
 		boolean measureFound = false;
@@ -186,6 +185,13 @@ public class PreviewMusic extends Application {
 			mvc.convertWindow.hide();
 		}
 		
+		
+	}
+	
+	//return a string representation of the instrument
+	private String getInstrument() {
+		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		return instrument;
 		
 	}
 	
