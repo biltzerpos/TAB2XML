@@ -143,9 +143,9 @@ public class DrumInstrument {
 
 		System.out.println(wholeString);
 		
-		Sequence sequence = new
+//		Sequence sequence = new
 		
-		player.play(wholeString);
+//		player.play(wholeString);
 		//		nNPMCounter = 0;
 	}
 }
