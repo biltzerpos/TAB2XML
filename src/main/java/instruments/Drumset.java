@@ -123,7 +123,7 @@ public class Drumset {
 			}
 
 			xCoordinates.put(measure, x);
-			yCoordinates.put(measure, y);
+			yCoordinates.put(measure, y - 30);
 			// Draw bar line after every measure
 			DrawDrumsetBar bar = new DrawDrumsetBar(this.pane);
 			bar.draw(x, y);
@@ -139,8 +139,12 @@ public class Drumset {
 		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
 			Object object = (Object) iterator.next();
 			if (object instanceof Rectangle) {
-				System.out.println("Rectangle Added to removal list.");
-				removeRect.add((Rectangle) object);
+				// ONLY REMOVE RECTANGLES IF THEY ARE RED,
+				// OTHERWISE THE NOTE BEAMS WILL BE REMOVES BECAUSE THEY ARE ALSO RECTANGLES
+				if (((Rectangle) object).getStyle().equals("-fx-stroke: red;")) {
+					System.out.println("Rectangle Added to removal list.");
+					removeRect.add((Rectangle) object);
+				}
 			}
 		}
 
@@ -169,7 +173,7 @@ public class Drumset {
 				System.out.println("Four Rectangle values are:(" + x + "," + y + "," + w + "," + 50 + ")");
 				System.out.println("X Coordinates to Highlight:" + getXCoordinatesForGivenMeasure(measure));
 				System.out.println("Y Coordinates to Highlight:" + getYCoordinatesForGivenMeasure(measure));
-				Rectangle rectangle = new Rectangle(x, yf, w, 50);
+				Rectangle rectangle = new Rectangle(x, yf, w, 80);
 				rectangle.setFill(Color.TRANSPARENT);
 				rectangle.setStyle("-fx-stroke: red;");
 				pane.getChildren().add(rectangle);
