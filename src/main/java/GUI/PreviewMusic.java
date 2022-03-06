@@ -46,8 +46,8 @@ public class PreviewMusic extends Application {
 	TextField gotoMeasureField;
 	private Guitar guitar;
 	private Drumset drum;
-	@FXML private Button closePreviewButton;
-	
+	@FXML
+	private Button closePreviewButton;
 
 	public PreviewMusic() {
 	}
@@ -60,7 +60,7 @@ public class PreviewMusic extends Application {
 		mvc = mvcInput;
 	}
 
-	//method to update the preview window
+	// method to update the preview window
 	public void update() throws IOException {
 		// Get the ScorePartwise object directly
 
@@ -83,40 +83,38 @@ public class PreviewMusic extends Application {
 		}
 
 	}
-	
-	//Method that handles the `print music sheet` button
+
+	// Method that handles the `print music sheet` button
 	@FXML
 	public <printButtonPressed> void printHandle() {
 
 		WritableImage screenshot = anchorPane.snapshot(null, null);
 		Printer printer = Printer.getDefaultPrinter();
 		PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
-		
+
 		double pagePrintableWidth = layout.getPrintableWidth();
 		double pagePrintableHeight = layout.getPrintableHeight();
-		
+
 		final double scaleX = pagePrintableWidth / screenshot.getWidth();
-        final double scaleY = pagePrintableHeight / screenshot.getHeight();
-        final ImageView print_node = new ImageView(screenshot);
-        print_node.getTransforms().add(new Scale(scaleX, scaleX));
-		
+		final double scaleY = pagePrintableHeight / screenshot.getHeight();
+		final ImageView print_node = new ImageView(screenshot);
+		print_node.getTransforms().add(new Scale(scaleX, scaleX));
+
 		PrinterJob printSheet = PrinterJob.createPrinterJob();
-		
+
 		if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
-			
-			double numberOfPages = Math.ceil( scaleX / scaleY);
-			
+
+			double numberOfPages = Math.ceil(scaleX / scaleY);
+
 			Translate gridTransform = new Translate(0, 0);
 			print_node.getTransforms().add(gridTransform);
-			for(int i = 0; i < numberOfPages; i++)
-			{
+			for (int i = 0; i < numberOfPages; i++) {
 				gridTransform.setY(-i * (pagePrintableHeight / scaleX));
 				printSheet.printPage(layout, print_node);
 			}
 
 			printSheet.endJob();
-		
-	
+
 		}
 
 	}
@@ -126,25 +124,25 @@ public class PreviewMusic extends Application {
 	public void playHandle() {
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			this.guitar.playGuitarNote();   // Play method in Guitar class
-		}
-		else if(instrument == "Drumset") {
-			this.drum.playDrumNote();     // Play method in Drumset class
+			this.guitar.playGuitarNote(); // Play method in Guitar class
+		} else if (instrument == "Drumset") {
+			this.drum.playDrumNote(); // Play method in Drumset class
 		}
 	}
 
-	//Method that handle navigating to specific measure (1- size of measure list) through 'Go' button
+	// Method that handle navigating to specific measure (1- size of measure list)
+	// through 'Go' button
 	public void handleGotoMeasure() {
 		int measureNumber = Integer.parseInt(gotoMeasureField.getText());
 		String instrument = getInstrument();
-		//System.out.println("instrument:" + instrument);
+		// System.out.println("instrument:" + instrument);
 		int count = 1;
 		boolean measureFound = false;
 		if (instrument == "Guitar") {
 			List<Measure> measureList = this.guitar.getMeasureList();
 			for (Iterator<Measure> iterator = measureList.iterator(); iterator.hasNext();) {
 				Measure measure = (Measure) iterator.next();
-				if(measureNumber == count) {
+				if (measureNumber == count) {
 					this.guitar.highlightMeasureArea(measure);
 					measureFound = true;
 					break;
@@ -155,7 +153,7 @@ public class PreviewMusic extends Application {
 			List<Measure> measureList = this.drum.getMeasureList();
 			for (Iterator<Measure> iterator = measureList.iterator(); iterator.hasNext();) {
 				Measure measure = (Measure) iterator.next();
-				if(measureNumber == count) {
+				if (measureNumber == count) {
 					this.drum.highlightMeasureArea(measure);
 					measureFound = true;
 					break;
@@ -163,41 +161,40 @@ public class PreviewMusic extends Application {
 				count++;
 			}
 		}
-		if(!measureFound) {
+		if (!measureFound) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setContentText("Measure " + measureNumber + " could not be found.");
 			alert.setHeaderText("Preview Music Sheet");
 			alert.show();
 		}
 	}
-	
-	// Method that handles `close` button 
+
+	// Method that handles `close` button
 	@FXML
 	public void closePreviewHandle() {
-		//mvc.editHandle(); 
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
-				"Are you sure you want to close this Preview window?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+		// mvc.editHandle();
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to close this Preview window?",
+				ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 		alert.setTitle("Close preview window");
 		alert.setHeaderText("You are about to close the Preview window!");
 		Optional<ButtonType> o = alert.showAndWait();
-		
-		if(o.get() == ButtonType.YES) {
+
+		if (o.get() == ButtonType.YES) {
 			mvc.convertWindow.hide();
 		}
-		
-		
+
 	}
-	
-	//return a string representation of the instrument
+
+	// return a string representation of the instrument
 	private String getInstrument() {
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		return instrument;
-		
+
 	}
-	
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
