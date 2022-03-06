@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -50,6 +51,7 @@ import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -101,6 +103,7 @@ public class MainViewController extends Application {
 	@FXML
 	public void initialize() {
 		mainText.setParagraphGraphicFactory(LineNumberFactory.get(mainText));
+		mainText.setStyle(STYLESHEET_MODENA);
 		converter = new Converter(this);
 		highlighter = new Highlighter(this, converter);
 		listenforTextAreaChanges();
@@ -272,6 +275,7 @@ public class MainViewController extends Application {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+		scene.setFill(Paint.valueOf("Gray"));
 		return scene.getWindow();
 	}
 
@@ -342,42 +346,15 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
-	private void playMusicButtonHandle() throws ParserConfigurationException, ValidityException, ParsingException, InvalidMidiDataException, MidiUnavailableException {
+	private void playMusicButtonHandle() throws ParserConfigurationException, ValidityException, ParsingException, InvalidMidiDataException, MidiUnavailableException, TXMLException {
 		Parent root;
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/playMusic.fxml"));
 			root = loader.load();
 			PlayMusicController controller = loader.getController();
 			controller.setMainViewController(this);
-
-			//----------------------------------------------------------------------------------------------------------
-			MusicXmlParser parser = new MusicXmlParser();		
-			MidiParserListener midilistener = new MidiParserListener();
-			parser.addParserListener(midilistener);
-			parser.parse(converter.getMusicXML());
-			
-			// ManagedPlayer or Sequencer (Sequencer can play multiple noes simultaneously
-//			ManagedPlayer player = new ManagedPlayer();
-			Sequencer sequencer = MidiSystem.getSequencer();
-			sequencer.open();
-			
-			Sequence sequence = midilistener.getSequence();
-			Track track = sequence.createTrack();
-			
-			if(Settings.getInstance().getInstrument() == Instrument.DRUMS) {
-				
-			}
-			else if (Settings.getInstance().getInstrument() == Instrument.GUITAR) {
-				ShortMessage sm = new ShortMessage();
-				sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 24, 0);
-				track.add(new MidiEvent(sm, 1));
-				System.out.println("Size of track: " + track.size());
-			}
-			sequencer.setSequence(sequence);
-			sequencer.start();
-			System.out.println("done playing");
-			//----------------------------------------------------------------------------------------------------------
-//			convertWindow = this.openNewWindow(root, "Play Music");
+			controller.update();
+			convertWindow = this.openNewWindow(root, "Play Music");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);

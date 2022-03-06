@@ -7,7 +7,7 @@
 }
 .styled-text-area .navigator {
     -fx-padding: 5px;
- 
+
 }
 .styled-text-area {
     -fx-effect: innershadow( gaussian , #00000015 , 5 , 0 , 2 , 2 );
@@ -36,8 +36,7 @@
 }
 
 #borderPane, #menuBar, #convertPane, #settingsPane, #timeSignaturePane, #tabPlayerPane {
-    -fx-background-color: rgb(50,50,50);
-
+	-fx-background-color: linear-gradient(to right, #120f1c, #00001f);
 }
 
 #tabPlayerDisplay {

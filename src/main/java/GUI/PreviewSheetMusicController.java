@@ -46,6 +46,7 @@ public class PreviewSheetMusicController extends Application {
     public void update() throws IOException, TXMLException {
     	pdf.sheetpdf(mvc.converter.getScore());
     	imageview.setImage(pdf.getImage(0));
+    	imageview.setPreserveRatio(true);
 	}
 
 	@FXML
