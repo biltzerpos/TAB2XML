@@ -111,7 +111,7 @@ public class DrawNoteType {
 		pane.getChildren().add(l);
 	}
 
-	// Getters and setters
+	// setters
 	public Pane getPane() {
 		return pane;
 	}
