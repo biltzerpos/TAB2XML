@@ -137,8 +137,8 @@ public class pdfbuilder {
 	private final int notesPerPage = 50;
 	private int maxNotesTotal = notesPerPage;
 	private int totalNotes;
-	private int globalX = 15;
-	private int globalY = 425;
+	private int globalX = 78;
+	private int globalY = 714;
 	private int pageCounter;
 
 	private PDFRenderer renderer;
@@ -342,7 +342,7 @@ public class pdfbuilder {
 	}
 
 	public void arbitraryPath(int offset, int fret, int lines) throws IOException {
-		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png", offset);
+		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png", offset, fret, lines); //arbitrary number
 	}
 
 	//creates sheet lines on the page method
@@ -366,33 +366,75 @@ public class pdfbuilder {
 
 	//inputs notes on sheet music
 	//TODO: change to append, so that the sheet music isn't overwritten, but instead, display the note on top of the sheet music
-	public void pdfnotegen(String imagePath, int offsety) throws IOException {
+	public void pdfnotegen(String imagePath, int offsety, int fretnumber, int lines) throws IOException {
 		//arbitrary numbers for now
 		//this if is for when the sheet staff isn't filled yet
-		if (globalX < 500){
-			pageImage = PDImageXObject.createFromFile(imagePath, doc);
-			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-			contentStream.drawImage(pageImage, globalX, globalY - offsety);
-			System.out.println(globalX +","+ globalY);
-			contentStream.close();
-			globalX += 50;
-			//y is arbitrary, test later
-			++totalNotes;
+		if (lines == 0) {
+			if (globalX < 500){
+				pageImage = PDImageXObject.createFromFile(imagePath, doc);
+				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+				contentStream.drawImage(pageImage, globalX, globalY - offsety);
+				System.out.println(globalX +","+ globalY);
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers"+fretnumber+".png",offsety);
+				contentStream.close();
+				globalX += 18;
+				++totalNotes;
+			}
+			else {
+				globalX = 78;
+				globalY -= 180;
+				pageImage = PDImageXObject.createFromFile(imagePath, doc);
+				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+				contentStream.drawImage(pageImage, globalX, globalY - offsety);
+				System.out.println(globalX +","+ globalY);
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers"+fretnumber+".png",offsety);
+				contentStream.close();
+				globalX += 18;
+				++totalNotes;
+			}
 		}
-		// this else is for when it reaches the end of the staff, to then translate it into the next staff
 		else {
-			globalX = 15;
-			//y is the best i could chose
-			globalY -= 140;
-			//x is arbitrary, test later
-			pageImage = PDImageXObject.createFromFile(imagePath, doc);
-			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-			contentStream.drawImage(pageImage, globalX, globalY - offsety);
-			System.out.println(globalX +","+ globalY);
-			contentStream.close();
-			globalX += 50;
-			++totalNotes;
+			if (globalX < 500){
+				pageImage = PDImageXObject.createFromFile(imagePath, doc);
+				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+				contentStream.drawImage(pageImage, globalX, globalY - offsety);
+				System.out.println(globalX +","+ globalY);
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers"+fretnumber+".png",offsety);
+				pdflinegen(lines);
+				globalX += 18;
+				++totalNotes;
+			}
+			else {
+				globalX = 78;
+				globalY -= 180;
+				pageImage = PDImageXObject.createFromFile(imagePath, doc);
+				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+				contentStream.drawImage(pageImage, globalX, globalY - offsety);
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers"+fretnumber+".png",offsety);
+				System.out.println(globalX +","+ globalY);
+				pdflinegen(lines);
+				globalX += 18;
+				++totalNotes;
+			}
 		}
+	}
+	
+	public void pdflinegen(int lines) throws IOException {
+		String linepath = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png";  //gets png of line
+		pageImage = PDImageXObject.createFromFile(linepath, doc);
+		int innerY = globalY-14;                                                                                       
+		for (int i = 0; i<lines; i++) {
+			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+			contentStream.drawImage(pageImage, globalX, innerY);
+			innerY -= 7;
+		}
+	}
+	
+	public void pdftabgen(String tabpath, int number) throws IOException {
+		int innerYT = globalY -60; //the 60 is a placehoder at the top empty cell if the tab
+		pageImage = PDImageXObject.createFromFile(tabpath, doc);
+		contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+		contentStream.drawImage(pageImage, globalX, innerYT-number);
 	}
 
 
