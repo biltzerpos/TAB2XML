@@ -1,17 +1,16 @@
 package GUI.draw;
 
 import java.util.List;
-
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import models.measure.note.Note;
 
+// This class draws note type under the music lines
 public class DrawNoteType {
 
 	@FXML
 	private Pane pane;
-	private Note note;
 	private double startX;
 	private double startY;
 	private final double HalfNoteLength = 15;
@@ -26,15 +25,12 @@ public class DrawNoteType {
 	public DrawNoteType(Pane pane, List<Note> noteList, double startX, double startY) {
 		super();
 		this.pane = pane;
-		// this.note = note;
 		this.startX = startX;
 		this.startY = startY;
-		// this.noteType = this.note.getType();
 		this.noteList = noteList;
 	}
 
 	public void drawDuration() {
-		// double x = startX;
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
 			if (note.getChord() == null) {
@@ -65,17 +61,6 @@ public class DrawNoteType {
 
 			}
 		}
-	}
-
-	private void drawBeam() {
-		double y1 = startY + 37;
-		Line l = new Line();
-		l.setStartX(startX);
-		l.setEndX(startX + 50);
-		l.setStartY(y1);
-		l.setEndY(y1);
-		l.setStrokeWidth(3);
-		pane.getChildren().add(l);
 	}
 
 	// shorter stick
@@ -114,20 +99,25 @@ public class DrawNoteType {
 
 	}
 
+	// draw the beam itself
+	private void drawBeam() {
+		double y1 = startY + 37;
+		Line l = new Line();
+		l.setStartX(startX);
+		l.setEndX(startX + 50);
+		l.setStartY(y1);
+		l.setEndY(y1);
+		l.setStrokeWidth(3);
+		pane.getChildren().add(l);
+	}
+
+	// Getters and setters
 	public Pane getPane() {
 		return pane;
 	}
 
 	public void setPane(Pane pane) {
 		this.pane = pane;
-	}
-
-	public Note getNote() {
-		return note;
-	}
-
-	public void setNote(Note note) {
-		this.note = note;
 	}
 
 	public double getStartX() {
