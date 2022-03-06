@@ -29,7 +29,7 @@ public class DrawDrumsetNote {
 		super();
 		this.note = note;
 		this.startX = startX;
-		this.top = top - 30;
+		this.top = top - 25;
 		this.startY = startY;
 		this.pane = pane;
 	}
@@ -158,16 +158,18 @@ public class DrawDrumsetNote {
 
 	public void drawBeam() {
 		if (note.getType().equals("eighth")) {
-			Line beam = new Line(getStartX()+8, this.top, getStartX()+58, this.top);
-			beam.setStrokeWidth(3);
+			// Beamed eighth notes have one beam connecting them
+			Rectangle beam = new Rectangle(getStartX()+8, this.top-1, 50, 5);
 			pane.getChildren().add(beam);
 		} else if (note.getType().equals("16th")) {
-			Line beam = new Line(getStartX()+8, this.top, getStartX()+58, this.top);
-			beam.setStrokeWidth(3);
+			// Beamed 16th notes have two beams connecting them
+
+			// Draw first beam
+			Rectangle beam = new Rectangle(getStartX()+8, this.top-1, 50, 5);
 			pane.getChildren().add(beam);
 
-			beam = new Line(getStartX()+8, this.top+5, getStartX()+58, this.top+5);
-			beam.setStrokeWidth(3);
+			// Draw second beam below the first beam
+			beam = new Rectangle(getStartX()+8, this.top+7, 50, 5);
 			pane.getChildren().add(beam);
 		}
 	}
