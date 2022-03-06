@@ -1,23 +1,47 @@
 package GUI;
 
+import java.io.IOException;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
+import javax.xml.parsers.ParserConfigurationException;
+
 //import java.io.File;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.midi.MidiParserListener;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import converter.Instrument;
+import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 //import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import models.measure.Measure;
+import models.measure.note.Note;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
+import player.DrumInstrument;
+import utility.Settings;
 
 public class PlayMusicController extends Application {
 
 //	public File saveFile;
-//	private MainViewController mvc;
+	private MainViewController mvc;
 	public Highlighter highlighter;
 
 	@FXML public CodeArea mxlText;
@@ -34,13 +58,40 @@ public class PlayMusicController extends Application {
 	}
 
     public void setMainViewController(MainViewController mvcInput) {
-//    	mvc = mvcInput;
+    	mvc = mvcInput;
     }
 
-    public void update() {
-		mxlText.moveTo(0);
-		mxlText.requestFollowCaret();
-        mxlText.requestFocus();
+    public void update() throws ParserConfigurationException, ValidityException, ParsingException, IOException, MidiUnavailableException, InvalidMidiDataException, TXMLException {
+//    	MusicXmlParser parser = new MusicXmlParser();		
+//		MidiParserListener midilistener = new MidiParserListener();
+//		parser.addParserListener(midilistener);
+//		parser.parse(mvc.converter.getMusicXML());
+//		
+//		Sequencer sequencer = MidiSystem.getSequencer();
+//		sequencer.open();
+//		
+//		Sequence sequence = midilistener.getSequence();
+//		Track track = sequence.createTrack();
+//		
+//		ShortMessage sm = new ShortMessage();
+//		sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 24, 0);
+//		track.add(new MidiEvent(sm, 1));
+//		System.out.println("Size of track: " + track.size());
+//	
+//		sequencer.setSequence(sequence);
+//		sequencer.start();
+
+		
+		if(Settings.getInstance().getInstrument() == Instrument.DRUMS) {
+			DrumInstrument drumPlayer = new DrumInstrument();
+			drumPlayer.playDrums(mvc.converter.getScore().getModel().getParts().get(0).getMeasures(), mvc.converter.getScore());
+		}
+		else if(Settings.getInstance().getInstrument() == Instrument.GUITAR) {
+			
+		}
+		
+		
+		
 	}
 
 //	@FXML

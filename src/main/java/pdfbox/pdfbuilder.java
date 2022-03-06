@@ -124,7 +124,7 @@ public class pdfbuilder {
 	private static Settings s;
 	private static File file;
 
-	//JAVA doc object, has an array of pages which are of type PDPage 
+	//JAVA doc object, has an array of pages which are of type PDPage
 	public PDDocument doc;
 	private static PDPage page;
 
@@ -138,8 +138,9 @@ public class pdfbuilder {
 	private int maxNotesTotal = notesPerPage;
 	private int totalNotes;
 	private int globalX = 78;
-	private int globalY = 400;
+	private int globalY = 632;
 	private int pageCounter;
+	private String instr = "";
 
 	private PDFRenderer renderer;
 	//initializer for the document
@@ -149,46 +150,46 @@ public class pdfbuilder {
 	//Don't know how to hook it up to be viewable or interact with the buttons pressed on the GUI, will require help
 
 	//Offset calculated using first group as reference frame
-	//First Global y = 901    
-	//Second Global y = 726  (change in y 901 - 726 = 175) 
+	//First Global y = 901
+	//Second Global y = 726  (change in y 901 - 726 = 175)
 	//so on.....
-	public enum Offset { 
+	public enum Offset {
 
 		//TODO: NEW offset x 198
 		//                 y 153
-		E2offsety (901 - 905 - 198, 7),	//1
-		F2offsety (901 - 918 - 198, 6),	//2
-		G2offsety (901 - 910 - 198, 6),	//3
-		A2offsety (901 - 918 - 198, 5),	//4
-		B2offsety (901 - 918 - 198, 5),	//5
-		
-		C3offsety (901 - 918 - 198, 4),	//6
-		D3offsety (901 - 910 - 198, 4),	//7
-		E3offsety (901 - 913 - 198, 3),	//8
-		F3offsety (901 - 918 - 198, 3),	//9
-		G3offsety (901 - 922 - 198, 2),	//10
-		A3offsety (901 - 925 - 198, 2),	//11
-		B3offsety (901 - 918 - 198, 1),	//12
-		
-		C4offsety (901 - 918 - 198, 1),	//13
-		D4offsety (901 - 918 - 198, 0),	//14
-		E4offsety (901 - 918 - 198, 0),	//15
-		F4offsety (901 - 921 - 198, 0),	//16
-		G4offsety (901 - 926 - 198, 0),	//17
-		A4offsety (901 - 930 - 198, 0),	//18
-		B4offsety (901 - 933 - 198, 0),	//19
-		
-		C5offsety (901 - 937 - 198, 0),	//20
-		D5offsety (901 - 940 - 198, 0),	//21
-		E5offsety (901 - 943 - 198, 0),	//22
-		F5offsety (901 - 946 - 198, 0),	//23
-		G5offsety (901 - 949 - 198, 0),	//24
-		A5offsety (901 - 951 - 198, 1),	//25
-		B5offsety (901 - 954 - 198, 1),	//26
-		
-		C6offsety (901 - 957 - 198, 2),	//27
-		D6offsety (901 - 960 - 198, 2),	//28
-		E6offsety (901 - 963 - 198, 23);	//29
+		E2offsety (60, 7),	//1
+		F2offsety (54, 6),	//2
+		G2offsety (48, 6),	//3
+		A2offsety (42, 5),	//4
+		B2offsety (36, 5),	//5
+
+		C3offsety (30, 4),	//6
+		D3offsety (24, 4),	//7
+		E3offsety (18, 3),	//8
+		F3offsety (12, 3),	//9
+		G3offsety (6, 2),	//10
+		A3offsety (0, 2),	//11
+		B3offsety ((-6), 1),	//12
+
+		C4offsety ((-12), 1),	//13
+		D4offsety ((-18), 0),	//14
+		E4offsety ((-24), 0),	//15
+		F4offsety ((-30), 0),	//16
+		G4offsety ((-36), 0),	//17
+		A4offsety ((-42), 0),	//18
+		B4offsety ((-48), 0),	//19
+
+		C5offsety ((-54), 0),	//20
+		D5offsety ((-60), 0),	//21
+		E5offsety ((-66), 0),	//22
+		F5offsety ((-72), 0),	//23
+		G5offsety ((-78), 0),	//24
+		A5offsety ((-84), 1),	//25
+		B5offsety ((-90), 1),	//26
+
+		C6offsety ((-96), 2),	//27
+		D6offsety ((-112), 2),	//28
+		E6offsety ((-118), 23);	//29
 
 		protected final Integer offset;
 		protected final Integer lines;
@@ -199,9 +200,9 @@ public class pdfbuilder {
 		}
 
 		public int offset() {
-			return this.offset;
+			return (this.offset / 2);
 		}
-		
+
 		public int lines() {
 			return this.lines;
 		}
@@ -214,7 +215,7 @@ public class pdfbuilder {
 		userPath = System.getProperty("user.home");
 
 		Part part = score.getModel().getParts().get(0);
-		
+
 		//get total notes to draw
 		for(Measure measure : part.getMeasures()) {
 			totalNotes += measure.getNotesBeforeBackup().size();
@@ -229,108 +230,205 @@ public class pdfbuilder {
 		}
 
 		int mLength = part.getMeasures().size();
-		System.out.println(mLength);
+
 		//map notes onto sheet
 		for(Measure m : part.getMeasures()) {
 			for(Note n : m.getNotesBeforeBackup()) {
-				String pitchFret = "" + n.getPitch().getStep() + n.getPitch().getOctave();
+				String pitchFret = "";
 				
-				
-				System.out.println(pitchFret);
-			//	System.out.println(score.getModel().getPartList().getScoreParts().get(0).getPartName());
-				
-				
-				switch (pitchFret) {
-				//TODO: change offset and the call to Offset
-				case "E2": //1
-					arbitraryPath(Offset.E2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E2offsety.lines());
-					break;
-				case "F2": //2
-					arbitraryPath(Offset.F2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.F2offsety.lines());
-					break;
-				case "G2": //3
-					arbitraryPath(Offset.G2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.G2offsety.lines());
-					break;
-				case "A2": //4
-					arbitraryPath(Offset.A2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.A2offsety.lines());
-					break;
-				case "B2": //5
-					arbitraryPath(Offset.B2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.B2offsety.lines());
-					break;
-				case "C3": //6
-					arbitraryPath(Offset.C3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.C3offsety.lines());
-					break;
-				case "D3": //7
-					arbitraryPath(Offset.D3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.D3offsety.lines());
-					break;
-				case "E3": //8
-					arbitraryPath(Offset.E3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E3offsety.lines());
-					break;
-				case "F3": //9
-					arbitraryPath(Offset.F3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.F3offsety.lines());
-					break;
-				case "G3": //10
-					arbitraryPath(Offset.G3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.G3offsety.lines());
-					break;
-				case "A3": //11
-					arbitraryPath(Offset.A3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.A3offsety.lines());
-					break;
-				case "B3": //12
-					arbitraryPath(Offset.B3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.B3offsety.lines());
-					break;
-				case "C4": //13
-					arbitraryPath(Offset.C4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.C4offsety.lines());
-					break;
-				case "D4": //14
-					arbitraryPath(Offset.D4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.D4offsety.lines());
-					break;
-				case "E4": //15
-					arbitraryPath(Offset.E4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E4offsety.lines());
-					break;
-				case "F4": //16
-					arbitraryPath(Offset.F4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.F4offsety.lines());
-					break;
-				case "G4": //17
-					arbitraryPath(Offset.G4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.G4offsety.lines());
-					break;
-				case "A4": //18
-					arbitraryPath(Offset.A4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.A4offsety.lines());
-					break;
-				case "B4": //19
-					arbitraryPath(Offset.B4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.B4offsety.lines());
-					break;
-				case "C5": //20
-					arbitraryPath(Offset.C5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.C5offsety.lines());
-					break;
-				case "D5": //21
-					arbitraryPath(Offset.D5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.D5offsety.lines());
-					break;
-				case "E5": //22
-					arbitraryPath(Offset.E5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E5offsety.lines());
-					break;
-				case "F5": //23
-					arbitraryPath(Offset.F5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.F5offsety.lines());
-					break;
-				case "G5": //24
-					arbitraryPath(Offset.G5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.G5offsety.lines());
-					break;
-				case "A5": //25
-					arbitraryPath(Offset.A5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.A5offsety.lines());
-					break;
-				case "B5": //26
-					arbitraryPath(Offset.B5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.B5offsety.lines());
-					break;
-				case "C6": //27
-					arbitraryPath(Offset.C6offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.C6offsety.lines());
-					break;
-				case "D6": //28
-					arbitraryPath(Offset.D6offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.D6offsety.lines());
-					break;
-				case "E6": //29
-					arbitraryPath(Offset.E6offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E6offsety.lines());
-					break;
-				default:
-					break;
+				if(score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
+					instr = "Guitar";
+					pitchFret = "" + n.getPitch().getStep() + n.getPitch().getOctave();
+					
+					switch (pitchFret) {
+					//TODO: change offset and the call to Offset
+					case "E2": //1
+						arbitraryPath(Offset.E2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E2offsety.lines(), n);
+						break;
+					case "F2": //2
+						arbitraryPath(Offset.F2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.F2offsety.lines(), n);
+						break;
+					case "G2": //3
+						arbitraryPath(Offset.G2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.G2offsety.lines(), n);
+						break;
+					case "A2": //4
+						arbitraryPath(Offset.A2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.A2offsety.lines(), n);
+						break;
+					case "B2": //5
+						arbitraryPath(Offset.B2offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.B2offsety.lines(), n);
+						break;
+					case "C3": //6
+						arbitraryPath(Offset.C3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.C3offsety.lines(), n);
+						break;
+					case "D3": //7
+						arbitraryPath(Offset.D3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.D3offsety.lines(), n);
+						break;
+					case "E3": //8
+						arbitraryPath(Offset.E3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E3offsety.lines(), n);
+						break;
+					case "F3": //9
+						arbitraryPath(Offset.F3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.F3offsety.lines(), n);
+						break;
+					case "G3": //10
+						arbitraryPath(Offset.G3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.G3offsety.lines(), n);
+						break;
+					case "A3": //11
+						arbitraryPath(Offset.A3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.A3offsety.lines(), n);
+						break;
+					case "B3": //12
+						arbitraryPath(Offset.B3offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.B3offsety.lines(), n);
+						break;
+					case "C4": //13
+						arbitraryPath(Offset.C4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.C4offsety.lines(), n);
+						break;
+					case "D4": //14
+						arbitraryPath(Offset.D4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.D4offsety.lines(), n);
+						break;
+					case "E4": //15
+						arbitraryPath(Offset.E4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E4offsety.lines(), n);
+						break;
+					case "F4": //16
+						arbitraryPath(Offset.F4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.F4offsety.lines(), n);
+						break;
+					case "G4": //17
+						arbitraryPath(Offset.G4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.G4offsety.lines(), n);
+						break;
+					case "A4": //18
+						arbitraryPath(Offset.A4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.A4offsety.lines(), n);
+						break;
+					case "B4": //19
+						arbitraryPath(Offset.B4offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.B4offsety.lines(), n);
+						break;
+					case "C5": //20
+						arbitraryPath(Offset.C5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.C5offsety.lines(), n);
+						break;
+					case "D5": //21
+						arbitraryPath(Offset.D5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.D5offsety.lines(), n);
+						break;
+					case "E5": //22
+						arbitraryPath(Offset.E5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E5offsety.lines(), n);
+						break;
+					case "F5": //23
+						arbitraryPath(Offset.F5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.F5offsety.lines(), n);
+						break;
+					case "G5": //24
+						arbitraryPath(Offset.G5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.G5offsety.lines(), n);
+						break;
+					case "A5": //25
+						arbitraryPath(Offset.A5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.A5offsety.lines(), n);
+						break;
+					case "B5": //26
+						arbitraryPath(Offset.B5offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.B5offsety.lines(), n);
+						break;
+					case "C6": //27
+						arbitraryPath(Offset.C6offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.C6offsety.lines(), n);
+						break;
+					case "D6": //28
+						arbitraryPath(Offset.D6offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.D6offsety.lines(), n);
+						break;
+					case "E6": //29
+						arbitraryPath(Offset.E6offsety.offset(), n.getNotations().getTechnical().getFret(), Offset.E6offsety.lines(), n);
+						break;
+					default:
+						break;
+					}
+				}
+				else if(score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
+					instr = "Drumset";
+					pitchFret = "" + n.getUnpitched().getDisplayStep() + n.getUnpitched().getDisplayOctave();
+					
+					switch (pitchFret) {
+					//TODO: change offset and the call to Offset
+					case "E2": //1
+						arbitraryPath(Offset.E2offsety.offset(), 0, Offset.E2offsety.lines(), n);
+						break;
+					case "F2": //2
+						arbitraryPath(Offset.F2offsety.offset(), 0, Offset.F2offsety.lines(), n);
+						break;
+					case "G2": //3
+						arbitraryPath(Offset.G2offsety.offset(), 0, Offset.G2offsety.lines(), n);
+						break;
+					case "A2": //4
+						arbitraryPath(Offset.A2offsety.offset(), 0, Offset.A2offsety.lines(), n);
+						break;
+					case "B2": //5
+						arbitraryPath(Offset.B2offsety.offset(), 0, Offset.B2offsety.lines(), n);
+						break;
+					case "C3": //6
+						arbitraryPath(Offset.C3offsety.offset(), 0, Offset.C3offsety.lines(), n);
+						break;
+					case "D3": //7
+						arbitraryPath(Offset.D3offsety.offset(), 0, Offset.D3offsety.lines(), n);
+						break;
+					case "E3": //8
+						arbitraryPath(Offset.E3offsety.offset(), 0, Offset.E3offsety.lines(), n);
+						break;
+					case "F3": //9
+						arbitraryPath(Offset.F3offsety.offset(), 0, Offset.F3offsety.lines(), n);
+						break;
+					case "G3": //10
+						arbitraryPath(Offset.G3offsety.offset(), 0, Offset.G3offsety.lines(), n);
+						break;
+					case "A3": //11
+						arbitraryPath(Offset.A3offsety.offset(), 0, Offset.A3offsety.lines(), n);
+						break;
+					case "B3": //12
+						arbitraryPath(Offset.B3offsety.offset(), 0, Offset.B3offsety.lines(), n);
+						break;
+					case "C4": //13
+						arbitraryPath(Offset.C4offsety.offset(), 0, Offset.C4offsety.lines(), n);
+						break;
+					case "D4": //14
+						arbitraryPath(Offset.D4offsety.offset(), 0, Offset.D4offsety.lines(), n);
+						break;
+					case "E4": //15
+						arbitraryPath(Offset.E4offsety.offset(), 0, Offset.E4offsety.lines(), n);
+						break;
+					case "F4": //16
+						arbitraryPath(Offset.F4offsety.offset(), 0, Offset.F4offsety.lines(), n);
+						break;
+					case "G4": //17
+						arbitraryPath(Offset.G4offsety.offset(), 0, Offset.G4offsety.lines(), n);
+						break;
+					case "A4": //18
+						arbitraryPath(Offset.A4offsety.offset(), 0, Offset.A4offsety.lines(), n);
+						break;
+					case "B4": //19
+						arbitraryPath(Offset.B4offsety.offset(), 0, Offset.B4offsety.lines(), n);
+						break;
+					case "C5": //20
+						arbitraryPath(Offset.C5offsety.offset(), 0, Offset.C5offsety.lines(), n);
+						break;
+					case "D5": //21
+						arbitraryPath(Offset.D5offsety.offset(), 0, Offset.D5offsety.lines(), n);
+						break;
+					case "E5": //22
+						arbitraryPath(Offset.E5offsety.offset(), 0, Offset.E5offsety.lines(), n);
+						break;
+					case "F5": //23
+						arbitraryPath(Offset.F5offsety.offset(), 0, Offset.F5offsety.lines(), n);
+						break;
+					case "G5": //24
+						arbitraryPath(Offset.G5offsety.offset(), 0, Offset.G5offsety.lines(), n);
+						break;
+					case "A5": //25
+						arbitraryPath(Offset.A5offsety.offset(), 0, Offset.A5offsety.lines(), n);
+						break;
+					case "B5": //26
+						arbitraryPath(Offset.B5offsety.offset(), 0, Offset.B5offsety.lines(), n);
+						break;
+					case "C6": //27
+						arbitraryPath(Offset.C6offsety.offset(), 0, Offset.C6offsety.lines(), n);
+						break;
+					case "D6": //28
+						arbitraryPath(Offset.D6offsety.offset(), 0, Offset.D6offsety.lines(), n);
+						break;
+					case "E6": //29
+						arbitraryPath(Offset.E6offsety.offset(), 0, Offset.E6offsety.lines(), n);
+						break;
+					default:
+						break;
+					}
 				}
 			}
 		}
@@ -341,8 +439,8 @@ public class pdfbuilder {
 
 	}
 
-	public void arbitraryPath(int offset, int fret, int lines) throws IOException {
-		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png", offset, fret, lines); //arbitrary number
+	public void arbitraryPath(int offset, int fret, int lines, Note n) throws IOException {
+		pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png", offset, fret, lines, n); //arbitrary number
 	}
 
 	//creates sheet lines on the page method
@@ -357,7 +455,9 @@ public class pdfbuilder {
 		page.getCropBox().setLowerLeftY(0);
 		page.getCropBox().setUpperRightX(pageImage.getWidth());
 		page.getCropBox().setUpperRightY(pageImage.getHeight());
-		//		System.out.println("Page" + page.getCropBox().getHeight() + "and" + page.getCropBox().getWidth());
+
+		System.out.println("H: " + page.getCropBox().getHeight() + ",   W: " + page.getCropBox().getWidth());
+
 		contentStream = new PDPageContentStream(doc, page);
 		contentStream.drawImage(pageImage, 0, 0);
 		contentStream.close();
@@ -366,78 +466,81 @@ public class pdfbuilder {
 
 	//inputs notes on sheet music
 	//TODO: change to append, so that the sheet music isn't overwritten, but instead, display the note on top of the sheet music
-	public void pdfnotegen(String imagePath, int offsety, int fretnumber, int lines) throws IOException {
+	public void pdfnotegen(String imagePath, int offsety, int fretnumber, int lines, Note n) throws IOException {
 		//arbitrary numbers for now
 		//this if is for when the sheet staff isn't filled yet
-		if (lines == 0) {
-			if (globalX < 500){
-				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-				contentStream.drawImage(pageImage, globalX, globalY - offsety);
-				System.out.println(globalX +","+ globalY);
-				contentStream.close();
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
-				globalX += 18;
-				++totalNotes;
-			}
-			else {
-				globalX = 78;
-				globalY -= 180;
-				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-				contentStream.drawImage(pageImage, globalX, globalY - offsety);
-				System.out.println(globalX +","+ globalY);
-				contentStream.close();
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
-				globalX += 18;
-				++totalNotes;
-			}
+		if (lines == 0 && globalX >= 500) {
+			globalX = 78;
+			globalY -= 189;
+		}
+		else if (globalX < 500) {
+			System.out.println("GLOBAL Y : " + globalY);
+			System.out.println("OFFSET   : " + (offsety));
+			System.out.println("TEMP Y   : " + (globalY - (offsety)));
+
+			pdflinegen(lines);
 		}
 		else {
-			if (globalX < 500){
-				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-				contentStream.drawImage(pageImage, globalX, globalY - offsety);
-				System.out.println(globalX +","+ globalY);
-				contentStream.close();
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
-				pdflinegen(lines);
-				globalX += 18;
-				++totalNotes;
-			}
-			else {
-				globalX = 78;
-				globalY -= 180;
-				pageImage = PDImageXObject.createFromFile(imagePath, doc);
-				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-				contentStream.drawImage(pageImage, globalX, globalY - offsety);
-				contentStream.close();
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
-				System.out.println(globalX +","+ globalY);
-				pdflinegen(lines);
-				globalX += 18;
-				++totalNotes;
-			}
+			globalX = 78;
+			globalY -= 189;
+			pdflinegen(lines);
 		}
+
+
+		if(n.getType().equals("whole")) {
+			pageImage = PDImageXObject.createFromFile(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\WholeNote.png", doc);
+		}
+		else {
+			pageImage = PDImageXObject.createFromFile(imagePath, doc);
+		}
+
+		contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+		contentStream.drawImage(pageImage, globalX - 46, globalY - (offsety));
+		contentStream.close();
+		
+		if(instr.equals("Guitar")) {
+			pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\" + fretnumber + ".png", offsety, n);
+		}
+		else {
+			//TODO: put correct path for pgn
+			pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\0.png", offsety, n);
+		}
+
+
+		System.out.println(n.getType());
+
+		if(!(n.getType().equals("whole"))) {
+			globalX += 30;
+		}
+		++totalNotes;
+
+		System.out.println("----------------------");
 	}
-	
+
 	public void pdflinegen(int lines) throws IOException {
 		String linepath = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png";  //gets png of line
 		pageImage = PDImageXObject.createFromFile(linepath, doc);
-		int innerY = globalY-40;                                                                                       
-		for (int i = 0; i<lines; i++) {
+		int innerY = globalY + 44;
+		for (int i = 0; i < lines; i++) {
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX, innerY);
 			contentStream.close();
-			innerY -= 7;
+			innerY -= 6;
 		}
 	}
-	
-	public void pdftabgen(String tabpath, int number) throws IOException {
-		int innerYT = globalY -60; //the 60 is a placehoder at the top empty cell if the tab
+
+	public void pdftabgen(String tabpath, int number, Note n) throws IOException {
+		int innerYT = globalY + 9; //the 60 is a placehoder at the top empty cell if the tab
 		pageImage = PDImageXObject.createFromFile(tabpath, doc);
 		contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-		contentStream.drawImage(pageImage, globalX, innerYT-number);
+		
+		if(instr.equals("Guitar")) {
+			contentStream.drawImage(pageImage, globalX + 5, innerYT - (7 * (n.getNotations().getTechnical().getString() - 1)));
+		}
+		else {
+			
+		}
+		
 		contentStream.close();
 	}
 
@@ -448,7 +551,7 @@ public class pdfbuilder {
 
 	int numPages() {
 		return doc.getPages().getCount();
-	}   
+	}
 
 	public Image getImage(int pageNumber) {
 		BufferedImage pageImage;
@@ -456,10 +559,6 @@ public class pdfbuilder {
 			PDPage pDPage = doc.getPage(pageNumber);
 
 			pageImage = renderer.renderImage(pageNumber);
-
-			System.out.println("Page" + page.getCropBox().getHeight() + "and" + page.getCropBox().getWidth());
-			System.out.println("Buffered" + pageImage.getHeight() + "and" + pageImage.getWidth());
-
 		} catch (IOException ex) {
 			throw new UncheckedIOException("PDFRenderer throws IOException", ex);
 		}
