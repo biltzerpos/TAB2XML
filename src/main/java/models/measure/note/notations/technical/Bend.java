@@ -23,6 +23,7 @@ public class Bend {
 	public String getShape() {
 		return shape;
 	}
+
 	public void setShape(String shape) {
 		this.shape = shape;
 	}
@@ -34,6 +35,5 @@ public class Bend {
 	public void setBendAlter(double bendAlter) {
 		this.bendAlter = bendAlter;
 	}
-
 
 }

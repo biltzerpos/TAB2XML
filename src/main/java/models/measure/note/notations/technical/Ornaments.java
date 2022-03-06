@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Ornaments {
 
-	public Ornaments() {}
+	public Ornaments() {
+	}
 
 	public Tremolo getTremolo() {
 		return tremolo;

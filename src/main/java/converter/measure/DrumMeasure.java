@@ -15,12 +15,12 @@ import utility.ValidationError;
 
 public class DrumMeasure extends TabMeasure {
 
-    public DrumMeasure(List<AnchoredText> inputData, List<AnchoredText> inputNameData, boolean isFirstMeasureInGroup) {
-        super(inputData, inputNameData, isFirstMeasureInGroup);
-        allowedPadding = Settings.getInstance().drumsMeasureStartPadding;
-    }
+	public DrumMeasure(List<AnchoredText> inputData, List<AnchoredText> inputNameData, boolean isFirstMeasureInGroup) {
+		super(inputData, inputNameData, isFirstMeasureInGroup);
+		allowedPadding = Settings.getInstance().drumsMeasureStartPadding;
+	}
 
-    @Override
+	@Override
 	protected int adjustDivisionsForSpecialCases(int usefulMeasureLength) {
 		return usefulMeasureLength;
 	}
@@ -41,43 +41,41 @@ public class DrumMeasure extends TabMeasure {
 	}
 
 	@Override
-	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name)
-	{
+	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name) {
 		return new TabDrumString(stringNumber, data, name);
 	}
 
 	@Override
 	protected Attributes getAttributesModel() {
-        Attributes attributes = new Attributes();
-        attributes.setDivisions(this.divisions);
+		Attributes attributes = new Attributes();
+		attributes.setDivisions(this.divisions);
 
-        if (this.changesTimeSignature)
-            attributes.setTime(new Time(this.beatCount, this.beatType));
+		if (this.changesTimeSignature)
+			attributes.setTime(new Time(this.beatCount, this.beatType));
 
-        if (this.measureCount == 1) {
-        	attributes.setKey(new Key(0));
-            attributes.setClef(new Clef("percussion", 2));
-        }
-        return attributes;
-    }
+		if (this.measureCount == 1) {
+			attributes.setKey(new Key(0));
+			attributes.setClef(new Clef("percussion", 2));
+		}
+		return attributes;
+	}
 
 	/**
-     * Validates its aggregated TabString objects
-     * TODO Can be moved to superclass?
-     */
+	 * Validates its aggregated TabString objects TODO Can be moved to superclass?
+	 */
 	@Override
 	public List<ValidationError> validate() {
-	    super.validate();
-	    // Validate Aggregates unless there are already critical errors
-	    for (ValidationError error : errors) {
-	        if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
-	            return errors;
-	        }
-	    }
-	    for (TabString measureLine : this.tabStringList) {
-	        errors.addAll(measureLine.validate());
-	    }
+		super.validate();
+		// Validate Aggregates unless there are already critical errors
+		for (ValidationError error : errors) {
+			if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
+				return errors;
+			}
+		}
+		for (TabString measureLine : this.tabStringList) {
+			errors.addAll(measureLine.validate());
+		}
 
-	    return errors;
+		return errors;
 	}
 }

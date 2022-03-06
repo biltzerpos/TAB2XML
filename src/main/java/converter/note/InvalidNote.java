@@ -7,30 +7,30 @@ import utility.ValidationError;
 
 public class InvalidNote extends TabNote {
 
-    public InvalidNote(int stringNumber, String origin, int position, String lineName, int distanceFromMeasureStart) {
-        super(stringNumber, origin, position, lineName, distanceFromMeasureStart);
-    }
+	public InvalidNote(int stringNumber, String origin, int position, String lineName, int distanceFromMeasureStart) {
+		super(stringNumber, origin, position, lineName, distanceFromMeasureStart);
+	}
 
-    public InvalidNote(InvalidNote n) {
-        super(n);
-    }
+	public InvalidNote(InvalidNote n) {
+		super(n);
+	}
 
-    @Override
+	@Override
 	public TabNote copy() {
 		return new InvalidNote(this);
 	}
 
 	@Override
-    public models.measure.note.Note getModel() {
-        return null;
-    }
+	public models.measure.note.Note getModel() {
+		return null;
+	}
 
-    @Override
+	@Override
 	public List<ValidationError> validate() {
 
-        addError("Unrecognized text, will be ignored.", 3, getRanges());
-        return errors;
-    }
+		addError("Unrecognized text, will be ignored.", 3, getRanges());
+		return errors;
+	}
 
 	@Override
 	protected void setStems(Note noteModel) {

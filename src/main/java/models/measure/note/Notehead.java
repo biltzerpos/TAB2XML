@@ -6,21 +6,25 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Notehead {
-    @JacksonXmlProperty(isAttribute = true)
-    String parentheses;
+	@JacksonXmlProperty(isAttribute = true)
+	String parentheses;
 
-    @JacksonXmlText
-    String type;
+	@JacksonXmlText
+	String type;
 
-    public Notehead(String t) {
-        this.type = t;
-    }
+	public String getType() {
+		return this.type;
+	}
 
-    public String getParentheses() {
-        return parentheses;
-    }
+	public Notehead(String t) {
+		this.type = t;
+	}
 
-    public void setParentheses(String parentheses) {
-        this.parentheses = parentheses;
-    }
+	public String getParentheses() {
+		return parentheses;
+	}
+
+	public void setParentheses(String parentheses) {
+		this.parentheses = parentheses;
+	}
 }

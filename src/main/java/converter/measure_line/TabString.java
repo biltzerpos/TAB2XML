@@ -14,49 +14,50 @@ import utility.Settings;
 import utility.ValidationError;
 
 public abstract class TabString extends ScoreComponent {
-    public String line;
-    public String name;
-    int namePosition;
-    int position;
-    public List<TabNote> noteList;
-    public int padding;
+	public String line;
+	public String name;
+	int namePosition;
+	int position;
+	public List<TabNote> noteList;
+	public int padding;
 
-    protected TabString(int stringNumber, AnchoredText dataAT, AnchoredText nameAT) {
-        this.line = dataAT.text;
-        this.position = dataAT.positionInScore;
-        this.name = nameAT.text;
-        this.namePosition = nameAT.positionInScore;
-        padding = line.length();
-        Matcher paddingMatcher = Pattern.compile("[^-]").matcher(line);
-        if (paddingMatcher.find()) padding = paddingMatcher.start();
-        this.noteList = this.createNoteList(stringNumber, this.line, position);
-    }
+	protected TabString(int stringNumber, AnchoredText dataAT, AnchoredText nameAT) {
+		this.line = dataAT.text;
+		this.position = dataAT.positionInScore;
+		this.name = nameAT.text;
+		this.namePosition = nameAT.positionInScore;
+		padding = line.length();
+		Matcher paddingMatcher = Pattern.compile("[^-]").matcher(line);
+		if (paddingMatcher.find())
+			padding = paddingMatcher.start();
+		this.noteList = this.createNoteList(stringNumber, this.line, position);
+	}
 
-    public List<TabNote> getNoteList() {
-        List<TabNote> noteList = new ArrayList<>();
-        for (ValidationError error : this.validate()) {
-            if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
-                return noteList;
-            }
-        }
-        for (TabNote note : this.noteList) {
-            List<ValidationError> errors = note.validate();
-            boolean criticalError = false;
-            for (ValidationError error : errors) {
-                if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
-                    criticalError = true;
-                    break;
-                }
-            }
-            if (!criticalError)
-                noteList.add(note);
-        }
-        return noteList;
-    }
-
+	public List<TabNote> getNoteList() {
+		List<TabNote> noteList = new ArrayList<>();
+		for (ValidationError error : this.validate()) {
+			if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
+				return noteList;
+			}
+		}
+		for (TabNote note : this.noteList) {
+			List<ValidationError> errors = note.validate();
+			boolean criticalError = false;
+			for (ValidationError error : errors) {
+				if (error.getPriority() <= Settings.getInstance().criticalErrorCutoff) {
+					criticalError = true;
+					break;
+				}
+			}
+			if (!criticalError)
+				noteList.add(note);
+		}
+		return noteList;
+	}
 
 	/**
 	 * Generates a list of notes of any type (guitar, bass, drums)
+	 *
 	 * @param stringNumber
 	 * @param line
 	 * @param position
@@ -71,7 +72,8 @@ public abstract class TabString extends ScoreComponent {
 			String leadingStr = line.substring(0, noteMatcher.start()).replaceAll("\s", "");
 			int distanceFromMeasureStart = leadingStr.length();
 			if (!match.isBlank()) {
-				noteList.addAll(nf.getNotes(stringNumber, match, position + noteMatcher.start(), this.name, distanceFromMeasureStart));
+				noteList.addAll(nf.getNotes(stringNumber, match, position + noteMatcher.start(), this.name,
+						distanceFromMeasureStart));
 			}
 		}
 		return noteList;
@@ -82,26 +84,24 @@ public abstract class TabString extends ScoreComponent {
 	@Override
 	public List<Range> getRanges() {
 		List<Range> ranges = new ArrayList<>();
-		ranges.add(new Range(position,position+line.length()));
+		ranges.add(new Range(position, position + line.length()));
 		return null;
 	}
 
 	/**
 	 * Provides a warning for whitespace in the tab
+	 *
 	 * @return a List<ValidationError> for all locations that contain whitespaces
 	 */
 	@Override
 	public List<ValidationError> validate() {
 
-	    if (this.line.length()-this.line.replaceAll("\s", "").length() != 0) {
-	        addError(
-	                "Adding whitespace might result in different timing than you expect.",
-	                3,
-	                getRanges());
+		if (this.line.length() - this.line.replaceAll("\s", "").length() != 0) {
+			addError("Adding whitespace might result in different timing than you expect.", 3, getRanges());
 
-	    }
+		}
 
-	    return errors;
+		return errors;
 	}
 
 }

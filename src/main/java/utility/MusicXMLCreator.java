@@ -8,38 +8,40 @@ import converter.Score;
 import custom_exceptions.TXMLException;
 
 public class MusicXMLCreator {
-    private Score score;
+	private Score score;
 
-    public MusicXMLCreator(Score s) {
-        score = s;
-    }
+	public MusicXMLCreator(Score s) {
+		score = s;
+	}
 
-    public String generateMusicXML() {
-        if(score.at.text.isBlank()){
-            return "";
-        }
-        XmlMapper mapper = new XmlMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        String xmlString = "";
-        try {
-            xmlString = mapper.writeValueAsString(score.getModel());
-            xmlString = xmlString.replace("noteBefore", "note");
-            xmlString = xmlString.replace("noteAfter", "note");
-            xmlString = xmlString.replaceAll("\\R[ \\t]*<midiinstruments>[\\s\\S]*</midiinstruments>[ \\t]*\\R", "\n");
-            xmlString = xmlString.replaceAll("\\R[ \\t]*<timeModification>\\s*<actual-notes>\\d+</actual-notes>\\s*<normal-notes>\\d+</normal-notes>\\s*</timeModification>[ \\t]*\\R", "\n");
+	public String generateMusicXML() {
+		if (score.at.text.isBlank()) {
+			return "";
+		}
+		XmlMapper mapper = new XmlMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		String xmlString = "";
+		try {
+			xmlString = mapper.writeValueAsString(score.getModel());
+			xmlString = xmlString.replace("noteBefore", "note");
+			xmlString = xmlString.replace("noteAfter", "note");
+			xmlString = xmlString.replaceAll("\\R[ \\t]*<midiinstruments>[\\s\\S]*</midiinstruments>[ \\t]*\\R", "\n");
+			xmlString = xmlString.replaceAll(
+					"\\R[ \\t]*<timeModification>\\s*<actual-notes>\\d+</actual-notes>\\s*<normal-notes>\\d+</normal-notes>\\s*</timeModification>[ \\t]*\\R",
+					"\n");
 
-        }catch (JsonProcessingException | TXMLException e) {
-            e.printStackTrace();
-            return "";
-        }
+		} catch (JsonProcessingException | TXMLException e) {
+			e.printStackTrace();
+			return "";
+		}
 
-        xmlString = """
-                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
-                """
-                + xmlString;
-        return xmlString;
-    }
+		xmlString = """
+				<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+				<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+				"""
+				+ xmlString;
+		return xmlString;
+	}
 
 //    public static Instrument getInstrumentEnum(String instrument) {
 //        if (instrument.equalsIgnoreCase("guitar"))

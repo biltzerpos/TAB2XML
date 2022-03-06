@@ -9,16 +9,15 @@ import utility.Settings;
 
 public class BassMeasure extends GuitarMeasure {
 
-    public BassMeasure(List<AnchoredText> inputData, List<AnchoredText> inputNameData, boolean isFirstMeasure) {
-        super(inputData, inputNameData, isFirstMeasure);
-        MIN_LINE_COUNT = 4;
-        MAX_LINE_COUNT = 4;
-        tuning = Settings.getInstance().getBassTuning();
-    }
+	public BassMeasure(List<AnchoredText> inputData, List<AnchoredText> inputNameData, boolean isFirstMeasure) {
+		super(inputData, inputNameData, isFirstMeasure);
+		MIN_LINE_COUNT = 4;
+		MAX_LINE_COUNT = 4;
+		tuning = Settings.getInstance().getBassTuning();
+	}
 
 	@Override
-	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name)
-	{
+	protected TabString newTabString(int stringNumber, AnchoredText data, AnchoredText name) {
 		return new TabBassString(stringNumber, data, name);
 	}
 

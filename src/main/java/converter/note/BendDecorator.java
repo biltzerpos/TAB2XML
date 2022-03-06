@@ -15,12 +15,14 @@ public class BendDecorator implements NoteModelDecorator {
 
 	@Override
 	public boolean applyTo(Note noteModel) {
-		if (noteModel.getNotations() == null) noteModel.setNotations(new Notations());
-	    Notations notations = noteModel.getNotations();
-	    if (notations.getTechnical() == null) notations.setTechnical(new Technical());
-	    Technical technical = notations.getTechnical();
-	    Bend bend = new Bend(width);
-	    technical.setBend(bend);
+		if (noteModel.getNotations() == null)
+			noteModel.setNotations(new Notations());
+		Notations notations = noteModel.getNotations();
+		if (notations.getTechnical() == null)
+			notations.setTechnical(new Technical());
+		Technical technical = notations.getTechnical();
+		Bend bend = new Bend(width);
+		technical.setBend(bend);
 		return true;
 	}
 

@@ -11,6 +11,7 @@ import utility.ValidationError;
 public abstract class ScoreComponent {
 
 	public AnchoredText at;
+
 	public abstract List<ValidationError> validate();
 
 	public List<ValidationError> errors = new ArrayList<>();

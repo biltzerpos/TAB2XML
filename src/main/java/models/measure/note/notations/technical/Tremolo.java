@@ -5,15 +5,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 public class Tremolo {
 
-    @JacksonXmlProperty(isAttribute = true)
+	@JacksonXmlProperty(isAttribute = true)
 	private String type;
 
-    @JacksonXmlText
-    int number;
+	@JacksonXmlText
+	int number;
 
-    public Tremolo(int n) {
-        this.number = n;
-    }
+	public Tremolo(int n) {
+		this.number = n;
+	}
 
 	public String getType() {
 		return type;

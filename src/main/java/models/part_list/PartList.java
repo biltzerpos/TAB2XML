@@ -7,23 +7,23 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class PartList {
 
-    @JacksonXmlProperty(localName = "score-part")
-    @JacksonXmlElementWrapper(useWrapping = false)
-    public List<ScorePart> scoreParts;
+	@JacksonXmlProperty(localName = "score-part")
+	@JacksonXmlElementWrapper(useWrapping = false)
+	public List<ScorePart> scoreParts;
 
-    public PartList() {
+	public PartList() {
 
-    }
+	}
 
-    public PartList(List<ScorePart> scoreParts) {
-        this.scoreParts = scoreParts;
-    }
+	public PartList(List<ScorePart> scoreParts) {
+		this.scoreParts = scoreParts;
+	}
 
-    public List<ScorePart> getScoreParts() {
-        return scoreParts;
-    }
+	public List<ScorePart> getScoreParts() {
+		return scoreParts;
+	}
 
-    public void setScoreParts(List<ScorePart> scoreParts) {
-        this.scoreParts = scoreParts;
-    }
+	public void setScoreParts(List<ScorePart> scoreParts) {
+		this.scoreParts = scoreParts;
+	}
 }
