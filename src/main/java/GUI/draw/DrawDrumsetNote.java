@@ -14,18 +14,21 @@ import javafx.scene.shape.Box;
 import javafx.scene.shape.CubicCurve;
 
 import models.measure.note.Note;
+import models.measure.Measure;
 
 public class DrawDrumsetNote {
 
+	private double top;
 	private double startX;
 	private double startY;
 	private Note note;
 	@FXML private Pane pane;
 
-	public DrawDrumsetNote(Pane pane, Note note, double startX, double startY) {
+	public DrawDrumsetNote(Pane pane, Note note, double top, double startX, double startY) {
 		super();
 		this.note = note;
 		this.startX = startX;
+		this.top = top - 30;
 		this.startY = startY;
 		this.pane = pane;
 	}
@@ -44,6 +47,64 @@ public class DrawDrumsetNote {
 
 	public void setStartY(double startY) {
 		this.startY = startY;
+	}
+
+	public void drawX() {
+		// Drawing the "x" with two lines
+		double xCenterX = getStartX() + 3;
+		double xCenterY = getStartY() - 3;
+		Line topLeftToBottomRight = new Line(xCenterX-4, xCenterY+4, xCenterX+4, xCenterY-4);
+		Line topRightToBottomLeft = new Line(xCenterX+4, xCenterY+4, xCenterX-4, xCenterY-4);
+		topLeftToBottomRight.setStrokeWidth(1.5);
+		topRightToBottomLeft.setStrokeWidth(1.5);
+
+		// Drawing the stem
+		Line stem = new Line(getStartX()+8, getStartY()-8, getStartX()+8, this.top);
+		stem.setStrokeWidth(1.5);
+
+    	pane.getChildren().add(topLeftToBottomRight);
+    	pane.getChildren().add(topRightToBottomLeft);
+    	pane.getChildren().add(stem);
+
+    	Blend blend = new Blend(); 
+		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE); 
+		blend.setTopInput(topInput); 
+		blend.setMode(BlendMode.OVERLAY);
+	}
+
+	public void drawO() {
+
+		Ellipse ellipse = new Ellipse(getStartX()+3, getStartY()-2, 6.0, 4.5);
+		ellipse.setRotate(330);
+		ellipse.toFront();
+
+		Line stem = new Line(getStartX()+8, getStartY()-5, getStartX()+8, this.top);
+		stem.setStrokeWidth(1.5);
+
+		Blend blend = new Blend();
+		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE);
+		blend.setTopInput(topInput);
+		blend.setMode(BlendMode.OVERLAY);
+
+    	pane.getChildren().add(ellipse);
+    	pane.getChildren().add(stem);
+    	ellipse.setEffect(blend);
+	}
+
+	public void drawConnection() {
+		if (note.getType().equals("eighth")) {
+			Line connection = new Line(getStartX()+8, this.top, getStartX()+58, this.top);
+			connection.setStrokeWidth(3);
+			pane.getChildren().add(connection);
+		} else if (note.getType().equals("16th")) {
+			Line connection = new Line(getStartX()+8, this.top, getStartX()+58, this.top);
+			connection.setStrokeWidth(3);
+			pane.getChildren().add(connection);
+
+			connection = new Line(getStartX()+8, this.top+5, getStartX()+58, this.top+5);
+			connection.setStrokeWidth(3);
+			pane.getChildren().add(connection);
+		}
 	}
 
 	public void drawFlag() {
@@ -72,52 +133,6 @@ public class DrawDrumsetNote {
 			);
 	    	pane.getChildren().add(cubicCurve2);
 		}
-	}
-
-	public void drawX() {
-		// Drawing the "x" with two lines
-		double xCenterX = getStartX() + 3;
-		double xCenterY = getStartY() - 3;
-		Line topLeftToBottomRight = new Line(xCenterX-4, xCenterY+4, xCenterX+4, xCenterY-4);
-		Line topRightToBottomLeft = new Line(xCenterX+4, xCenterY+4, xCenterX-4, xCenterY-4);
-		topLeftToBottomRight.setStrokeWidth(1.5);
-		topRightToBottomLeft.setStrokeWidth(1.5);
-
-		// Drawing the stem
-		Line stem = new Line(getStartX()+8, getStartY()-8, getStartX()+8, getStartY()-35);
-		stem.setStrokeWidth(1.5);
-
-		drawFlag();
-
-    	pane.getChildren().add(topLeftToBottomRight);
-    	pane.getChildren().add(topRightToBottomLeft);
-    	pane.getChildren().add(stem);
-
-    	Blend blend = new Blend(); 
-		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE); 
-		blend.setTopInput(topInput); 
-		blend.setMode(BlendMode.OVERLAY);
-	}
-
-	public void drawO() {
-
-		Ellipse ellipse = new Ellipse(getStartX()+3, getStartY()-2, 6.0, 4.5);
-		ellipse.setRotate(330);
-		ellipse.toFront();
-
-		Line stem = new Line(getStartX()+8, getStartY()-5, getStartX()+8, getStartY()-35);
-		stem.setStrokeWidth(1.5);
-
-		drawFlag();
-
-		Blend blend = new Blend();
-		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE);
-		blend.setTopInput(topInput);
-		blend.setMode(BlendMode.OVERLAY);
-
-    	pane.getChildren().add(ellipse);
-    	pane.getChildren().add(stem);
-    	ellipse.setEffect(blend);
 	}
 
 	public void draw() {

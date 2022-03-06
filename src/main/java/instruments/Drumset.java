@@ -71,9 +71,8 @@ public class Drumset {
 			}
 
 			// Iterate through the notes in the current measure
-			for (Note note : measure.getNotesBeforeBackup()) {
-
-				Notehead symbol = note.getNotehead();
+			for (int i = 0; i < measure.getNotesBeforeBackup().size(); i++) {
+				Note note = measure.getNotesBeforeBackup().get(i);
 
 				String step = note.getUnpitched().getDisplayStep();
 				int octave = note.getUnpitched().getDisplayOctave();
@@ -81,13 +80,15 @@ public class Drumset {
 				// Get the y-position based on the octave and step
 				double positionY = y + d.getYPositionFromOctaveAndStep(octave, step);
 
+				DrawDrumsetNote noteDrawer;
+
 				if (note.getChord() == null) {
 					// Only draw music lines if not a chord.
 					// This is because if it is a chord, the music lines from the last chord will be used.
 					// Also draw the music lines before drawing the note so that the note appears on top.
 					d.draw(x,y);
 
-					DrawDrumsetNote noteDrawer = new DrawDrumsetNote(this.pane, note, x+25, positionY+3);
+					noteDrawer = new DrawDrumsetNote(this.pane, note, y, x+25, positionY+3);
 					noteDrawer.drawDrumClef1();
 					noteDrawer.drawDrumClef2();
 
@@ -96,10 +97,31 @@ public class Drumset {
 					x+=50;
 				}
 				else {
-					DrawDrumsetNote noteDrawer = new DrawDrumsetNote(this.pane, note, x-25, positionY+3 );
+					noteDrawer = new DrawDrumsetNote(this.pane, note, y, x-25, positionY+3 );
 					noteDrawer.draw();
 				}
+
+				// Drawing beams or flags
+
+				Note previousNote = i > 0 ? measure.getNotesBeforeBackup().get(i - 1) : null;
+				Note nextNote = i < measure.getNotesBeforeBackup().size() - 1 ? measure.getNotesBeforeBackup().get(i + 1) : null;
+
+				// Draw connection if current note and next note have same type and the next note is not a chord
+				if (nextNote != null && note.getType().equals(nextNote.getType()) && nextNote.getChord() == null) {
+					noteDrawer.drawConnection();
+				} else if (previousNote != null && note.getType().equals(previousNote.getType()) && note.getChord() == null) {
+					// Do nothing if current note and previous note have same type and the current note is not a chord,
+					// because a beam would have already been drawn.
+				} else {
+					// Draw flag only on the last chord note of a chord so that it is not drawn more than once.
+					if (nextNote != null && nextNote.getChord() == null) {
+						System.out.println(i);
+						noteDrawer.drawFlag();
+					}
+				}
+
 			}
+
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
 			// Draw bar line after every measure
