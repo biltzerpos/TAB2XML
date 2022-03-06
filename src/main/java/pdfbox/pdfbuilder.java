@@ -335,7 +335,7 @@ public class pdfbuilder {
 			}
 		}
 		//TODO: why save as previreSheetMusic.fxml?
-		doc.save("previewSheetMusic.jpg");
+//		doc.save("previewSheetMusic.jpg");
 		renderer = new PDFRenderer(doc);
 		//		doc.close();
 
@@ -375,7 +375,7 @@ public class pdfbuilder {
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, globalX, globalY - offsety);
 				System.out.println(globalX +","+ globalY);
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers"+fretnumber+".png",offsety);
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				contentStream.close();
 				globalX += 18;
 				++totalNotes;
@@ -387,7 +387,7 @@ public class pdfbuilder {
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, globalX, globalY - offsety);
 				System.out.println(globalX +","+ globalY);
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers"+fretnumber+".png",offsety);
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				contentStream.close();
 				globalX += 18;
 				++totalNotes;
@@ -399,7 +399,7 @@ public class pdfbuilder {
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, globalX, globalY - offsety);
 				System.out.println(globalX +","+ globalY);
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers"+fretnumber+".png",offsety);
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				pdflinegen(lines);
 				globalX += 18;
 				++totalNotes;
@@ -410,7 +410,7 @@ public class pdfbuilder {
 				pageImage = PDImageXObject.createFromFile(imagePath, doc);
 				contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 				contentStream.drawImage(pageImage, globalX, globalY - offsety);
-				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers"+fretnumber+".png",offsety);
+				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\"+fretnumber+".png",offsety);
 				System.out.println(globalX +","+ globalY);
 				pdflinegen(lines);
 				globalX += 18;
