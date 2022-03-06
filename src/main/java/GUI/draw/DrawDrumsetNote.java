@@ -127,7 +127,7 @@ public class DrawDrumsetNote {
     		// The black ellipse was already drawn, so we just need to draw the white ellipse.
 
     		// Draw white ellipse to screen
-    		ellipse = new Ellipse(getStartX()+3, getStartY()-2, 4.5, 3.0);
+    		ellipse = new Ellipse(getStartX()+3, getStartY()-2, 4.5, 1.5);
     		ellipse.setFill(Color.WHITE);
     		ellipse.setRotate(330);
     		ellipse.toFront();
