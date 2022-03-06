@@ -21,9 +21,7 @@ import javafx.scene.image.WritableImage;
 import models.Part;
 import models.measure.Measure;
 import models.measure.note.Note;
-import player.DrumInstrument;
 import utility.DrumPiece;
-import utility.DrumUtils;
 import utility.Settings;
 
 ////pdf file creation details
@@ -187,12 +185,12 @@ public class pdfbuilder {
 		E5offsety((-66), 0), // 22
 		F5offsety((-72), 0), // 23
 		G5offsety((-78), 0), // 24
-		A5offsety((-84), -1), // 25
-		B5offsety((-90), -1), // 26
+		A5offsety((-84), (-1)), // 25
+		B5offsety((-90), (-1)), // 26
 
-		C6offsety((-96), -2), // 27
-		D6offsety((-112), -2), // 28
-		E6offsety((-118), -23); // 29
+		C6offsety((-96), (-2)), // 27
+		D6offsety((-112), (-2)), // 28
+		E6offsety((-118), (-23)); // 29
 
 		protected final Integer offset;
 		protected final Integer lines;
@@ -234,7 +232,6 @@ public class pdfbuilder {
 		}
 
 		int mLength = part.getMeasures().size();
-
 
 		int iteration = 0;
 		int measure = 0;
@@ -380,7 +377,7 @@ public class pdfbuilder {
 						arbitraryPath(DrumPiece.ACOUSTIC_SNARE.getOffset(), 0, 0, n, score, iteration, measure);
 						break;
 					case "P1-I43": // 3
-						arbitraryPath(DrumPiece.CLOSED_HI_HAT.getOffset() , 0, 0, n, score, iteration, measure);
+						arbitraryPath(DrumPiece.CLOSED_HI_HAT.getOffset(), 0, 0, n, score, iteration, measure);
 						break;
 					case "P1-I47": // 4
 						arbitraryPath(DrumPiece.OPEN_HI_HAT.getOffset(), 0, 0, n, score, iteration, measure);
@@ -469,21 +466,24 @@ public class pdfbuilder {
 			measure++;
 		}
 		// TODO: why save as previreSheetMusic.fxml?
-		//		doc.save("previewSheetMusic.jpg");
+		// doc.save("previewSheetMusic.jpg");
 		renderer = new PDFRenderer(doc);
 		// doc.close();
-		
+
 	}
 
-	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure) throws IOException, TXMLException {
-		if((lines < 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
-			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png", offset, fret, -1 * (lines), n, score, iteration, measure); 
-		}
-		else if((lines >= 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
-			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png", offset, fret, lines, n, score, iteration, measure);
-		}
-		else if((score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset"))) {
-			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\DRUMX.png", offset, fret, lines, n, score, iteration, measure);
+	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure)
+			throws IOException, TXMLException {
+		if ((lines < 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
+			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png", offset, fret,
+					-1 * (lines), n, score, iteration, measure);
+		} else if ((lines >= 0)
+				&& (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
+			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png", offset, fret, lines, n,
+					score, iteration, measure);
+		} else if ((score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset"))) {
+			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\DRUMX.png", offset, fret, lines, n,
+					score, iteration, measure);
 		}
 	}
 
@@ -494,7 +494,9 @@ public class pdfbuilder {
 		// generates a page;
 		page = new PDPage();
 		doc.addPage(page);
-		pageImage = PDImageXObject.createFromFile(System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\SblankGuitarSheet.png",doc);
+		pageImage = PDImageXObject.createFromFile(
+				System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\SblankGuitarSheet.png",
+				doc);
 		page.getCropBox().setLowerLeftX(0);
 		page.getCropBox().setLowerLeftY(0);
 		page.getCropBox().setUpperRightX(pageImage.getWidth());
@@ -511,25 +513,24 @@ public class pdfbuilder {
 	// inputs notes on sheet music
 	// TODO: change to append, so that the sheet music isn't overwritten, but
 	// instead, display the note on top of the sheet music
-	public void pdfnotegen(String imagePath, int offsety, int fretnumber, int lines, Note n, Score score, int iteration, int measure) throws IOException, TXMLException {
+	public void pdfnotegen(String imagePath, int offsety, int fretnumber, int lines, Note n, Score score, int iteration,
+			int measure) throws IOException, TXMLException {
 		// arbitrary numbers for now
 		// this if is for when the sheet staff isn't filled yet
-		if(score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
-			if(n.getChord() != null) {
+		if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
+			if (n.getChord() != null) {
 				globalX -= 30;
 			}
 			if (lines == 0 && globalX >= 500) {
 				globalX = 78;
 				globalY -= 189;
-			} 
-			else if (globalX < 500) {
+			} else if (globalX < 500) {
 				System.out.println("GLOBAL Y : " + globalY);
 				System.out.println("OFFSET   : " + (offsety));
 				System.out.println("TEMP Y   : " + (globalY - (offsety)));
-				
+
 				pdflinegen(lines);
-			} 
-			else {
+			} else {
 				globalX = 78;
 				globalY -= 189;
 				pdflinegen(lines);
@@ -539,26 +540,24 @@ public class pdfbuilder {
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX - 46, globalY - (offsety));
 			contentStream.close();
-			pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\" + fretnumber + ".png", offsety, n, score);
+			pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\" + fretnumber + ".png", offsety, n,
+					score);
 			globalX += 30;
 			++totalNotes;
-		}
-		else if(score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
-			if(totalNotes != 0) {
+		} else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
+			if (totalNotes != 0) {
 				globalY = 656;
 			}
 			if (lines == 0 && globalX >= 500) {
 				globalX = 78;
 				globalY -= 189;
-			} 
-			else if (globalX < 500) {
+			} else if (globalX < 500) {
 				System.out.println("GLOBAL Y : " + globalY);
 				System.out.println("OFFSET   : " + (offsety));
 				System.out.println("TEMP Y   : " + (globalY - (offsety)));
 
 //				pdflinegen(lines);
-			} 
-			else {
+			} else {
 				globalX = 78;
 				globalY -= 189;
 //				pdflinegen(lines);
@@ -566,18 +565,21 @@ public class pdfbuilder {
 
 			pageImage = PDImageXObject.createFromFile(imagePath, doc);
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
-			if((iteration < score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup().size()) && 
-					(score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup().get(iteration).getChord() != null)) {
+			if ((iteration < score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup()
+					.size())
+					&& (score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup()
+							.get(iteration).getChord() != null)) {
 				globalX -= 30;
 				contentStream.drawImage(pageImage, globalX - 30, globalY - (offsety));
-			}
-			else if((iteration >= score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup().size()) || 
-					(score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup().get(iteration).getChord() == null)) {
+			} else if ((iteration >= score.getModel().getParts().get(0).getMeasures().get(measure)
+					.getNotesBeforeBackup().size())
+					|| (score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup()
+							.get(iteration).getChord() == null)) {
 				contentStream.drawImage(pageImage, globalX, globalY - (offsety));
 			}
 			contentStream.close();
 
-			if(n.getNotehead() != null) {
+			if (n.getNotehead() != null) {
 				System.out.println(n.getNotehead().getType());
 
 //				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + n.getNotehead().getType() + ".png", offsety, n, score);
@@ -605,7 +607,7 @@ public class pdfbuilder {
 	}
 
 	public void pdftabgen(String tabpath, int number, Note n, Score score) throws IOException, TXMLException {
-		if(score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
+		if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
 			int innerYT = globalY + 9; // the 60 is a placehoder at the top empty cell if the tab
 			pageImage = PDImageXObject.createFromFile(tabpath, doc);
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
@@ -618,13 +620,13 @@ public class pdfbuilder {
 			}
 
 			contentStream.close();
-		}
-		else if(score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
+		} else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
 			int innerYT = globalY + 9; // the 60 is a placehoder at the top empty cell if the tab
-			pageImage = PDImageXObject.createFromFile(System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png", doc);
+			pageImage = PDImageXObject.createFromFile(
+					System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png", doc);
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 
-			contentStream.drawImage(pageImage, globalX + 5,  innerYT - (globalY - (number)));
+			contentStream.drawImage(pageImage, globalX + 5, innerYT - (globalY - (number)));
 
 			contentStream.close();
 		}

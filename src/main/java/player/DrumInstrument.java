@@ -26,17 +26,19 @@ public class DrumInstrument {
 		wholeString += "T120 V[PERCUSSION]";
 
 		for (Measure measure : measureList) {
-			if(measure.getNotesBeforeBackup() != null)  {
+			if (measure.getNotesBeforeBackup() != null) {
 				for (int i = 0; (i < measure.getNotesBeforeBackup().size()); i++) {
 					for (Entry<DrumPiece, DrumPieceInfo> drumSetElement : DrumUtils.drumSet.entrySet()) {
 						// If the note is an valid enum, it exists in our set of notes
-						if (measure.getNotesBeforeBackup().get(i).getInstrument().getId().equals(drumSetElement.getValue().getMidiID())) {
+						if (measure.getNotesBeforeBackup().get(i).getInstrument().getId()
+								.equals(drumSetElement.getValue().getMidiID())) {
 							// append enum to string
 							if (measure.getNotesBeforeBackup().get(i).getChord() != null) {
-								wholeString += String.format("+[%s]%s", drumSetElement.getKey(), getDurationMIDI(measure.getNotesBeforeBackup().get(i).getDuration()));
-							} 
-							else if(measure.getNotesBeforeBackup().get(i).getChord() == null){
-								wholeString += String.format(" [%s]%s", drumSetElement.getKey(), getDurationMIDI(measure.getNotesBeforeBackup().get(i).getDuration()));
+								wholeString += String.format("+[%s]%s", drumSetElement.getKey(),
+										getDurationMIDI(measure.getNotesBeforeBackup().get(i).getDuration()));
+							} else if (measure.getNotesBeforeBackup().get(i).getChord() == null) {
+								wholeString += String.format(" [%s]%s", drumSetElement.getKey(),
+										getDurationMIDI(measure.getNotesBeforeBackup().get(i).getDuration()));
 							}
 							break;
 						}

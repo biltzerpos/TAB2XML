@@ -62,7 +62,7 @@ public class PlayMusicController extends Application {
 
 	public void update() throws ParserConfigurationException, ValidityException, ParsingException, IOException,
 			MidiUnavailableException, InvalidMidiDataException, TXMLException {
-   
+
 		if (Settings.getInstance().getInstrument() == Instrument.DRUMS) {
 			DrumInstrument drumPlayer = new DrumInstrument();
 			drumPlayer.playDrums(mvc.converter.getScore().getModel().getParts().get(0).getMeasures(),
@@ -86,7 +86,7 @@ public class PlayMusicController extends Application {
 
 			sequencer.setSequence(sequence);
 			sequencer.setTempoInBPM(280);
-			
+
 			sequencer.start();
 		}
 
