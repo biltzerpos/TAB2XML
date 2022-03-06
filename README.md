@@ -35,7 +35,7 @@ documents under `Documents` folder in the repository.
 ### Installing
 To install this application you follow the steps noted below. Each 
 steps is followed by their corresponding image to make the installation 
-easier. Your can also watch the instruction video [here](link goes here)
+easier. Your can also watch the instruction video [here](https://youtu.be/e4EMPcAn35w)
 
  <ol>
   <li>
