@@ -51,21 +51,48 @@ public class DrawDrumsetNote {
 	}
 
 	public void drawX() {
-		// Drawing the "x" with two lines
+		// Center coordinates of the "x"
 		double xCenterX = getStartX() + 3;
 		double xCenterY = getStartY() - 3;
+
+		// Draw to crossing line to make the "x"
 		Line topLeftToBottomRight = new Line(xCenterX-4, xCenterY+4, xCenterX+4, xCenterY-4);
 		Line topRightToBottomLeft = new Line(xCenterX+4, xCenterY+4, xCenterX-4, xCenterY-4);
-		topLeftToBottomRight.setStrokeWidth(1.5);
-		topRightToBottomLeft.setStrokeWidth(1.5);
 
-		// Drawing the stem
-		Line stem = new Line(getStartX()+8, getStartY()-8, getStartX()+8, this.top);
-		stem.setStrokeWidth(1.5);
+		if (note.getType().equals("half") || note.getType().equals("whole")) {
+			// If the note is a half note or a whole note, then we draw the an outline of the "x".
+			// We do this by drawing a black "x" and adding a smaller white "x" on top of it.
 
-    	pane.getChildren().add(topLeftToBottomRight);
-    	pane.getChildren().add(topRightToBottomLeft);
-    	pane.getChildren().add(stem);
+			// Make the black "x" wider and add it to the screen
+			topLeftToBottomRight.setStrokeWidth(3.5);
+			topRightToBottomLeft.setStrokeWidth(3.5);
+	    	pane.getChildren().add(topLeftToBottomRight);
+	    	pane.getChildren().add(topRightToBottomLeft);
+
+	    	// Create and add the  white "x"
+			topLeftToBottomRight = new Line(xCenterX-4, xCenterY+4, xCenterX+4, xCenterY-4);
+			topRightToBottomLeft = new Line(xCenterX+4, xCenterY+4, xCenterX-4, xCenterY-4);
+			topLeftToBottomRight.setStroke(Color.WHITE);
+			topRightToBottomLeft.setStroke(Color.WHITE);
+			topLeftToBottomRight.setStrokeWidth(1.5);
+			topRightToBottomLeft.setStrokeWidth(1.5);
+	    	pane.getChildren().add(topLeftToBottomRight);
+	    	pane.getChildren().add(topRightToBottomLeft);
+		} else {
+			// If the note is not a half note or a whole note, then just draw the "x"
+			topLeftToBottomRight.setStrokeWidth(1.5);
+			topRightToBottomLeft.setStrokeWidth(1.5);
+	    	pane.getChildren().add(topLeftToBottomRight);
+	    	pane.getChildren().add(topRightToBottomLeft);
+		}
+
+		// Only draw the stem if the note is not a whole note
+		if (!note.getType().equals("whole")) {
+			// Drawing the stem
+			Line stem = new Line(getStartX()+8, getStartY()-8, getStartX()+8, this.top);
+			stem.setStrokeWidth(1.5);
+	    	pane.getChildren().add(stem);
+		}
 
     	Blend blend = new Blend(); 
 		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE); 
@@ -74,13 +101,17 @@ public class DrawDrumsetNote {
 	}
 
 	public void drawO() {
-
-		Ellipse ellipse = new Ellipse(getStartX()+3, getStartY()-2, 6.0, 4.5);
-		ellipse.setRotate(330);
+		// The note is drawn with an ellipse
+		Ellipse ellipse;
+		if (!note.getType().equals("whole")) {
+			// If the not is not a whole not, then it is rotated slightly
+			ellipse = new Ellipse(getStartX()+3, getStartY()-2, 6.0, 4.5);
+			ellipse.setRotate(330);
+		} else {
+			// Whole notes are horizontal
+			ellipse = new Ellipse(getStartX()+3, getStartY()-3, 6.0, 5.0);
+		}
 		ellipse.toFront();
-
-		Line stem = new Line(getStartX()+8, getStartY()-5, getStartX()+8, this.top);
-		stem.setStrokeWidth(1.5);
 
 		Blend blend = new Blend();
 		ColorInput topInput = new ColorInput(getStartX()-3, getStartY()-7, 14, 8, Color.WHITE);
@@ -88,8 +119,41 @@ public class DrawDrumsetNote {
 		blend.setMode(BlendMode.OVERLAY);
 
     	pane.getChildren().add(ellipse);
-    	pane.getChildren().add(stem);
     	ellipse.setEffect(blend);
+
+    	if (note.getType().equals("half")) {
+    		// If the note is a half note, then the note is an outline of the note.
+    		// We do this by drawing a black ellipse and a smaller white ellipse on top of it.
+    		// The black ellipse was already drawn, so we just need to draw the white ellipse.
+
+    		// Draw white ellipse to screen
+    		ellipse = new Ellipse(getStartX()+3, getStartY()-2, 4.5, 3.0);
+    		ellipse.setFill(Color.WHITE);
+    		ellipse.setRotate(330);
+    		ellipse.toFront();
+        	pane.getChildren().add(ellipse);
+
+        	// Half notes have stems, so draw stem
+    		Line stem = new Line(getStartX()+8, getStartY()-5, getStartX()+8, this.top);
+    		stem.setStrokeWidth(1.5);
+        	pane.getChildren().add(stem);
+    	} else if (note.getType().equals("whole")) {
+    		// Whole notes are an outline of the note, but they are outlined differently than half notes.
+    		// The black ellipse was already drawn, so we just draw a white ellipse on top of it to give it an outlines effect.
+
+    		// Draw white ellipse to the screen
+    		ellipse = new Ellipse(getStartX()+3, getStartY()-3, 2.5, 4.0);
+    		ellipse.setFill(Color.WHITE);
+    		ellipse.setRotate(345);
+    		ellipse.toFront();
+        	pane.getChildren().add(ellipse);
+    	} else {
+    		// All other notes have stems, so draw stem
+    		Line stem = new Line(getStartX()+8, getStartY()-5, getStartX()+8, this.top);
+    		stem.setStrokeWidth(1.5);
+        	pane.getChildren().add(stem);
+    	}
+
 	}
 
 	public void drawConnection() {
