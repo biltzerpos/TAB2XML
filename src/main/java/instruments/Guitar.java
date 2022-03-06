@@ -29,6 +29,9 @@ public class Guitar {
 	private HashMap<Measure, Double> xCoordinates;
 	private HashMap<Measure, Double> yCoordinates;
 
+	public Guitar() {
+	}
+
 	public Guitar(ScorePartwise scorePartwise, Pane pane) {
 		super();
 		this.scorePartwise = scorePartwise;
@@ -89,16 +92,16 @@ public class Guitar {
 		double x = 0;
 		double y = 0;
 
-		ObservableList children = pane.getChildren();
+		ObservableList<?> children = pane.getChildren();
 		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
-		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+		for (Iterator<?> iterator = children.iterator(); iterator.hasNext();) {
 			Object object = (Object) iterator.next();
 			if (object instanceof Rectangle) {
 				removeRect.add((Rectangle) object);
 			}
 		}
 
-		for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
+		for (Iterator<Rectangle> iterator = removeRect.iterator(); iterator.hasNext();) {
 			Rectangle rect = (Rectangle) iterator.next();
 			pane.getChildren().remove(rect);
 		}
@@ -151,19 +154,19 @@ public class Guitar {
 		dc.draw();
 	}
 
-	// this method draws the notes in a  measure 
+	// this method draws the notes in a measure
 	private void drawMeasureNotes(Measure measure) {
-		//list of notes in each measure
+		// list of notes in each measure
 		List<Note> noteList = measure.getNotesBeforeBackup();
-		//the next 3 lines allow drawing lines for the note type
+		// the next 3 lines allow drawing lines for the note type
 		double py = getLastLineCoordinateY();
 		DrawNoteType noteType = new DrawNoteType(pane, noteList, x, py);
 		noteType.drawDuration();
-		//iterate through each note in the noteList 
+		// iterate through each note in the noteList
 		for (int j = 0; j < noteList.size(); j++) {
 			Note note = noteList.get(j);
-			//if x-coordinate is in bound (less than 900), drawing happens in the same line
-			//otherwise we go to the next line
+			// if x-coordinate is in bound (less than 900), drawing happens in the same line
+			// otherwise we go to the next line
 			if (x < 900) {
 				// if a note has technical we use drawNote with techincal to draw fret values on
 				// string
@@ -199,8 +202,7 @@ public class Guitar {
 			x += 50;
 			noteDrawer.drawFret();
 
-		} 
-		else {
+		} else {
 			double positionY = getLineCoordinateY(string);
 			DrawNote noteDrawer = new DrawNote(this.pane, note, x - 25, positionY + 3 + y);
 			noteDrawer.drawFret();
@@ -215,7 +217,7 @@ public class Guitar {
 	}
 
 	private double getLastLineCoordinateY() {
-		return this.d.getMusicLineList().get(5).getStartY(5);
+		return this.d.getMusicLineList().get(5).getStartY(6);
 
 	}
 
@@ -235,7 +237,7 @@ public class Guitar {
 				Note note = noteList.get(j);
 				int octave = note.getPitch().getOctave();
 				String oct = Integer.toString(octave);
-				String dur = addDuration(note);
+				String dur = getDuration(note);
 				voice = note.getVoice();
 
 				if (!noteHasChord(note)) {
@@ -250,7 +252,7 @@ public class Guitar {
 		}
 
 		vocals.add(noteSteps);
-		//System.out.println(vocals.toString());
+		// System.out.println(vocals.toString());
 		vocals.setInstrument("GUITAR");
 		vocals.setVoice(voice);
 		vocals.setTempo(120);
@@ -258,7 +260,8 @@ public class Guitar {
 
 	}
 
-	private String addDuration(Note note) {
+	// returns string representation of a duration for a given note
+	private String getDuration(Note note) {
 		String res = "";
 		int duration = note.getDuration();
 		if (duration == 8) {
