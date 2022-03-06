@@ -108,7 +108,7 @@ public class Drumset {
 
 				// Draw connection if current note and next note have same type and the next note is not a chord
 				if (nextNote != null && note.getType().equals(nextNote.getType()) && nextNote.getChord() == null) {
-					noteDrawer.drawConnection();
+					noteDrawer.drawBeam();
 				} else if (previousNote != null && note.getType().equals(previousNote.getType()) && note.getChord() == null) {
 					// Do nothing if current note and previous note have same type and the current note is not a chord,
 					// because a beam would have already been drawn.

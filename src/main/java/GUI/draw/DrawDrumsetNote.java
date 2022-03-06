@@ -156,19 +156,19 @@ public class DrawDrumsetNote {
 
 	}
 
-	public void drawConnection() {
+	public void drawBeam() {
 		if (note.getType().equals("eighth")) {
-			Line connection = new Line(getStartX()+8, this.top, getStartX()+58, this.top);
-			connection.setStrokeWidth(3);
-			pane.getChildren().add(connection);
+			Line beam = new Line(getStartX()+8, this.top, getStartX()+58, this.top);
+			beam.setStrokeWidth(3);
+			pane.getChildren().add(beam);
 		} else if (note.getType().equals("16th")) {
-			Line connection = new Line(getStartX()+8, this.top, getStartX()+58, this.top);
-			connection.setStrokeWidth(3);
-			pane.getChildren().add(connection);
+			Line beam = new Line(getStartX()+8, this.top, getStartX()+58, this.top);
+			beam.setStrokeWidth(3);
+			pane.getChildren().add(beam);
 
-			connection = new Line(getStartX()+8, this.top+5, getStartX()+58, this.top+5);
-			connection.setStrokeWidth(3);
-			pane.getChildren().add(connection);
+			beam = new Line(getStartX()+8, this.top+5, getStartX()+58, this.top+5);
+			beam.setStrokeWidth(3);
+			pane.getChildren().add(beam);
 		}
 	}
 
