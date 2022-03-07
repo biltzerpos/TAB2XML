@@ -344,7 +344,7 @@ public class MainViewController extends Application {
 
 		Parent root;
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewSheetMusic.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/previewSheetMusic.fxml"));
 			root = loader.load();
 			PreviewSheetMusicController controller = loader.getController();
 			controller.setMainViewController(this);

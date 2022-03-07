@@ -3,6 +3,7 @@ package pdfbox;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 import java.util.prefs.Preferences;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -494,7 +495,15 @@ public class pdfbuilder {
 		// TODO: why save as previreSheetMusic.fxml?
 		 doc.save("SheetMusic.pdf");
 		 doc.close();
-		 Desktop.getDesktop().open(new File("SheetMusic.pdf"));
+		 
+		 if(System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("Linux") ) {
+			 ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "sensible-browser SheetMusic.pdf");
+			 processBuilder.start();
+		 }
+		 else {
+			 Desktop.getDesktop().open(new File("SheetMusic.pdf"));
+		 }
+		 
 //		renderer = new PDFRenderer(doc);
 		// doc.close();
 
@@ -621,7 +630,7 @@ public class pdfbuilder {
 	}
 	
 	public String getNumberPath(int number) {
-		return System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\" + number + ".png";
+		return System.getProperty("user.home") + File.separator + "git" + File.separator + "TAB2XML" + File.separator  + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "Numbers" + File.separator + number + ".png";
 	}
 
 	public void pdflinegen(int lines) throws IOException {

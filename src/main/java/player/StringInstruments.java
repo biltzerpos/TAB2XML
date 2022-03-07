@@ -14,6 +14,8 @@ import models.measure.note.Note;
 public class StringInstruments {
 	private String wholeString = "";
 	private Player player;
+	public StaccatoParser parser = new StaccatoParser();
+	public MidiParserListener midilistener = new MidiParserListener();
 	
 	public void playStringInstruments(Score score) throws TXMLException {
 		player = new Player();
@@ -31,8 +33,7 @@ public class StringInstruments {
 				}
 			}
 		}
-		StaccatoParser parser = new StaccatoParser();
-		MidiParserListener midilistener = new MidiParserListener();
+		
 		parser.addParserListener(midilistener);
 		parser.parse(wholeString);
 
