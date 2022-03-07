@@ -525,7 +525,7 @@ public class pdfbuilder {
 			contentStream.drawImage(pageImage, 0, 0);
 			contentStream.close();
 			pageCounter++;
-			maxNotesTotal += 50;
+			maxNotesTotal += 85;
 		}
 	}
 
@@ -536,15 +536,16 @@ public class pdfbuilder {
 			int measure) throws IOException, TXMLException {
 		// arbitrary numbers for now
 		// this if is for when the sheet staff isn't filled yet
-		if (currentNOPG == 50) {
+		if (currentNOPG == 85) {
 			globalX = 78;
 			globalY = 632;
 			currentNOPG = 0; 
-			++currentPage;
+			currentPage++;
 		}
 		if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
 			if (n.getChord() != null) {
 				globalX -= 30;
+				//currentNOPG--;
 			}
 			if (lines == 0 && globalX >= 500) {
 				globalX = 78;
@@ -553,15 +554,15 @@ public class pdfbuilder {
 				System.out.println("GLOBAL Y : " + globalY);
 				System.out.println("OFFSET   : " + (offsety));
 				System.out.println("TEMP Y   : " + (globalY - (offsety)));
-				++currentNOPG;
+				currentNOPG++;
 				pdflinegen(lines);
 			} else {
 				globalX = 78;
 				globalY -= 189;
 				pdflinegen(lines);
-				++currentNOPG;
+				currentNOPG++;
 			}
-
+			
 			pageImage = PDImageXObject.createFromFile(imagePath, doc);
 			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX - 46, globalY - (offsety));
@@ -570,11 +571,8 @@ public class pdfbuilder {
 			globalX += 30;
 			++totalNotes;
 		} else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
-			if (totalNotes != 0) {
+			if (totalNotes == 0) {
 				globalY = 656;
-			}
-			if (n.getChord() != null) {
-				globalX -= 30;
 			}
 			if (lines == 0 && globalX >= 500) {
 				globalX = 78;
@@ -663,30 +661,31 @@ public class pdfbuilder {
 		return doc.getPages().getCount();
 	}
 
-	public Image getImage(int pageNumber) {
-		BufferedImage pageImage;
-		try {
-			PDPage pDPage = doc.getPage(pageNumber);
-
-			pageImage = renderer.renderImage(pageNumber);
-		} catch (IOException ex) {
-			throw new UncheckedIOException("PDFRenderer throws IOException", ex);
-		}
-		return BufferedToFXimage(pageImage);
-	}
-
-	private Image BufferedToFXimage(BufferedImage pageImage) {
-		WritableImage wr = null;
-		if (pageImage != null) {
-			wr = new WritableImage(pageImage.getWidth(), pageImage.getHeight());
-			PixelWriter pw = wr.getPixelWriter();
-			for (int x = 0; x < pageImage.getWidth(); x++) {
-				for (int y = 0; y < pageImage.getHeight(); y++) {
-					pw.setArgb(x, y, pageImage.getRGB(x, y));
-				}
-			}
-		}
-
-		return new ImageView(wr).getImage();
-	}
+//	public Image getImage(int pageNumber) {
+//		BufferedImage pageImage;
+//		try {
+//			PDPage pDPage = doc.getPage(pageNumber);
+//
+//			pageImage = renderer.renderImage(pageNumber);
+//		} catch (IOException ex) {
+//			throw new UncheckedIOException("PDFRenderer throws IOException", ex);
+//		}
+//		return BufferedToFXimage(pageImage);
+//	}
+//
+//	private Image BufferedToFXimage(BufferedImage pageImage) {
+//		WritableImage wr = null;
+//		if (pageImage != null) {
+//			wr = new WritableImage(pageImage.getWidth(), pageImage.getHeight());
+//			PixelWriter pw = wr.getPixelWriter();
+//			for (int x = 0; x < pageImage.getWidth(); x++) {
+//				for (int y = 0; y < pageImage.getHeight(); y++) {
+//					pw.setArgb(x, y, pageImage.getRGB(x, y));
+//				}
+//			}
+//		}
+//
+//		return new ImageView(wr).getImage();
+//	}
+//}
 }
