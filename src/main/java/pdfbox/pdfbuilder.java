@@ -570,8 +570,11 @@ public class pdfbuilder {
 			globalX += 30;
 			++totalNotes;
 		} else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
-			if (totalNotes == 0) {
+			if (totalNotes != 0) {
 				globalY = 656;
+			}
+			if (n.getChord() != null) {
+				globalX -= 30;
 			}
 			if (lines == 0 && globalX >= 500) {
 				globalX = 78;
