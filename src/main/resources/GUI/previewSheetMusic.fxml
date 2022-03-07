@@ -11,10 +11,10 @@
 	xmlns="http://javafx.com/javafx/2.2"
 	fx:controller="GUI.PreviewSheetMusicController">
 	<children>
-		<ImageView fx:id="imageview" fitHeight="880" fitWidth="710"
-			layoutX="10.0" layoutY="10.0" pickOnBounds="false"
-			preserveRatio="true">
+			<ImageView fx:id="imageview" fitHeight="880" fitWidth="710"
+				layoutX="10.0" layoutY="10.0" pickOnBounds="false"
+				preserveRatio="true">
 
-		</ImageView>
+			</ImageView>
 	</children>
 </AnchorPane>

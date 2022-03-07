@@ -1,5 +1,6 @@
 package pdfbox;
 
+import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -140,6 +141,15 @@ public class pdfbuilder {
 	private int globalY = 632;
 	private int pageCounter;
 	private String instr = "";
+	
+	private String nUp = "";
+	private String nDown = "";
+	private String drumX = "";
+	private String line = "";
+	private String o = "";
+	private String x = "";
+	private String sheet = "";
+	
 
 	private PDFRenderer renderer;
 	// initializer for the document
@@ -214,22 +224,28 @@ public class pdfbuilder {
 		// set userPath
 		// System.getProperty("user.home") returns a String of the user Path (for
 		// example, "C:\Users\ian")
-		userPath = System.getProperty("user.home");
+		if(System.getProperty("os.name").contains("Windows")) {
+			nUp = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png";
+			nDown = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png";
+			drumX = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\DRUMX.png";
+			line = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png";
+			o = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\o.png";
+			x = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png";
+			sheet = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\SblankGuitarSheet.png";
+		}
+		System.out.println(System.getProperty("os.name"));
+		
 
 		Part part = score.getModel().getParts().get(0);
 
 		// get total notes to draw
-		for (Measure measure : part.getMeasures()) {
-			totalNotes += measure.getNotesBeforeBackup().size();
-		}
+//		for (Measure measure : part.getMeasures()) {
+//			totalNotes += measure.getNotesBeforeBackup().size();
+//		}
 
 		pdfpagegen();
 		// check if extra page is needed, if so, generate extra page
-		while (maxNotesTotal <= totalNotes) {
-			// gen next page of sheet music
-			pdfpagegen();
-			maxNotesTotal += 50;
-		}
+		
 
 		int mLength = part.getMeasures().size();
 
@@ -243,6 +259,8 @@ public class pdfbuilder {
 					instr = "Guitar";
 					pitchFret = "" + n.getPitch().getStep() + n.getPitch().getOctave();
 
+					System.out.println(pitchFret);
+					
 					switch (pitchFret) {
 					// TODO: change offset and the call to Offset
 					case "E2": // 1
@@ -466,8 +484,9 @@ public class pdfbuilder {
 			measure++;
 		}
 		// TODO: why save as previreSheetMusic.fxml?
-		// doc.save("previewSheetMusic.jpg");
-		renderer = new PDFRenderer(doc);
+//		 doc.save("SheetMusic.png");
+		 Desktop.getDesktop().open(new File("SheetMusic.pdf"));
+//		renderer = new PDFRenderer(doc);
 		// doc.close();
 
 	}
@@ -475,28 +494,30 @@ public class pdfbuilder {
 	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure)
 			throws IOException, TXMLException {
 		if ((lines < 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
-			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png", offset, fret,
-					-1 * (lines), n, score, iteration, measure);
+			pdfnotegen(nDown, offset, fret, -1 * (lines), n, score, iteration, measure);
 		} else if ((lines >= 0)
 				&& (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
-			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png", offset, fret, lines, n,
+			pdfnotegen(nUp, offset, fret, lines, n,
 					score, iteration, measure);
 		} else if ((score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset"))) {
-			pdfnotegen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\DRUMX.png", offset, fret, lines, n,
+			pdfnotegen(drumX, offset, fret, lines, n,
 					score, iteration, measure);
 		}
 	}
 
 	// creates sheet lines on the page method
 	public void pdfpagegen() throws IOException {
+		while (maxNotesTotal <= totalNotes) {
+			// gen next page of sheet music
+			pdfpagegen();
+			maxNotesTotal += 50;
+		}
 		// generates new sheet music on the page
 		doc = new PDDocument();
 		// generates a page;
 		page = new PDPage();
 		doc.addPage(page);
-		pageImage = PDImageXObject.createFromFile(
-				System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\SblankGuitarSheet.png",
-				doc);
+		pageImage = PDImageXObject.createFromFile(sheet, doc);
 		page.getCropBox().setLowerLeftX(0);
 		page.getCropBox().setLowerLeftY(0);
 		page.getCropBox().setUpperRightX(pageImage.getWidth());
@@ -540,12 +561,11 @@ public class pdfbuilder {
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX - 46, globalY - (offsety));
 			contentStream.close();
-			pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\" + fretnumber + ".png", offsety, n,
-					score);
+			pdftabgen(getNumberPath(fretnumber), offsety, n, score);
 			globalX += 30;
 			++totalNotes;
 		} else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
-			if (totalNotes != 0) {
+			if (totalNotes == 0) {
 				globalY = 656;
 			}
 			if (lines == 0 && globalX >= 500) {
@@ -590,13 +610,13 @@ public class pdfbuilder {
 		}
 		System.out.println("----------------------");
 	}
+	
+	public String getNumberPath(int number) {
+		return System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\Numbers\\" + number + ".png";
+	}
 
 	public void pdflinegen(int lines) throws IOException {
-		String linepath = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png"; // gets
-		// png
-		// of
-		// line
-		pageImage = PDImageXObject.createFromFile(linepath, doc);
+		pageImage = PDImageXObject.createFromFile(line, doc);
 		int innerY = globalY + 44;
 		for (int i = 0; i < lines; i++) {
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
@@ -622,8 +642,7 @@ public class pdfbuilder {
 			contentStream.close();
 		} else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
 			int innerYT = globalY + 9; // the 60 is a placehoder at the top empty cell if the tab
-			pageImage = PDImageXObject.createFromFile(
-					System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png", doc);
+			pageImage = PDImageXObject.createFromFile(line, doc);
 			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
 
 			contentStream.drawImage(pageImage, globalX + 5, innerYT - (globalY - (number)));

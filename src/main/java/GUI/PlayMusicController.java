@@ -32,6 +32,7 @@ import javafx.stage.Stage;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import player.DrumInstrument;
+import player.StringInstruments;
 import utility.Settings;
 
 public class PlayMusicController extends Application {
@@ -68,26 +69,30 @@ public class PlayMusicController extends Application {
 			drumPlayer.playDrums(mvc.converter.getScore().getModel().getParts().get(0).getMeasures(),
 					mvc.converter.getScore());
 		} else if (Settings.getInstance().getInstrument() == Instrument.GUITAR) {
-			MusicXmlParser parser = new MusicXmlParser();
-			MidiParserListener midilistener = new MidiParserListener();
-			parser.addParserListener(midilistener);
-			parser.parse(mvc.converter.getMusicXML());
-
-			Sequencer sequencer = MidiSystem.getSequencer();
-			sequencer.open();
-
-			Sequence sequence = midilistener.getSequence();
-			Track track = sequence.createTrack();
-
-			ShortMessage sm = new ShortMessage();
-			sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 24, 0);
-			track.add(new MidiEvent(sm, 1));
-			System.out.println("Size of track: " + track.size());
-
-			sequencer.setSequence(sequence);
-			sequencer.setTempoInBPM(280);
-
-			sequencer.start();
+//			MusicXmlParser parser = new MusicXmlParser();
+//			MidiParserListener midilistener = new MidiParserListener();
+//			parser.addParserListener(midilistener);
+//			parser.parse(mvc.converter.getMusicXML());
+//
+//			Sequencer sequencer = MidiSystem.getSequencer();
+//			sequencer.open();
+//
+//			Sequence sequence = midilistener.getSequence();
+//			Track track = sequence.createTrack();
+//
+//			ShortMessage sm = new ShortMessage();
+//			sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 24, 0);
+//			track.add(new MidiEvent(sm, 1));
+//			System.out.println("Size of track: " + track.size());
+//
+//			sequencer.setSequence(sequence);
+//			sequencer.setTempoInBPM(280);
+//
+//			sequencer.start();
+			
+			
+			StringInstruments stringsPlayer = new StringInstruments();
+			stringsPlayer.playStringInstruments(mvc.converter.getScore());
 		}
 
 	}
