@@ -1,10 +1,8 @@
 package pdfbox;
 
 import java.awt.Desktop;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.prefs.Preferences;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -15,10 +13,6 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import converter.Score;
 import custom_exceptions.TXMLException;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import models.Part;
 import models.measure.Measure;
 import models.measure.note.Note;
@@ -226,25 +220,28 @@ public class pdfbuilder {
 		// set userPath
 		// System.getProperty("user.home") returns a String of the user Path (for
 		// example, "C:\Users\ian")
-		if(System.getProperty("os.name").contains("Windows")) {
-			nUp = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png";
-			nDown = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png";
-			drumX = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\DRUMX.png";
-			line = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png";
-			o = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\o.png";
-			x = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png";
-			sheet = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\SblankGuitarSheet.png";
-		}
-		else if (System.getProperty("os.name").contains("Max")) {
-			nUp = System.getProperty("user.home") + "//git//TAB2XML//src//main//resources//NOTES//NotationUp.png";
-			nDown = System.getProperty("user.home") + "//git//TAB2XML//src//main//resources//NOTES//NotationDown.png";
-			drumX = System.getProperty("user.home") + "//git//TAB2XML//src//main//resources//NOTES//DRUMX.png";
-			line = System.getProperty("user.home") + "//git//TAB2XML//src//main//resources//NOTES//Line.png";
-			o = System.getProperty("user.home") + "//git//TAB2XML//src//main//resources//NOTES//o.png";
-			x = System.getProperty("user.home") + "//git//TAB2XML//src//main//resources//NOTES//NotationDown.png";
-			sheet = System.getProperty("user.home") + "//git//TAB2XML//src//main//resources//NOTES//SblankGuitarSheet.png";
-		}
+//		if(System.getProperty("os.name").contains("Windows")) {
+//			nUp = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationUp.png";
+//			nDown = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png";
+//			drumX = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\DRUMX.png";
+//			line = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\Line.png";
+//			o = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\o.png";
+//			x = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\NotationDown.png";
+//			sheet = System.getProperty("user.home") + "\\git\\TAB2XML\\src\\main\\resources\\SHEET\\SblankGuitarSheet.png";
+//		}
+//		else if (System.getProperty("os.name").contains("Mac")) {
+			String home = System.getProperty("user.home");
+			nUp = home + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "NOTES" + File.separator + "NotationUp.png";
+			nDown = home + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "NOTES" + File.separator + "NotationDown.png";
+			drumX = home + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "NOTES" + File.separator + "DRUMX.png";
+			line = home + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "NOTES" + File.separator + "Line.png";
+			o = home + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "NOTES" + File.separator + "o.png";
+			x = home + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "NOTES" + File.separator + "x.png";
+			sheet = home + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "SHEET" + File.separator + "SblankGuitarSheet.png";
+//		}
+		System.out.println(System.getProperty("user.home"));
 		System.out.println(System.getProperty("os.name"));
+		System.out.println(nUp);
 		
 
 		Part part = score.getModel().getParts().get(0);

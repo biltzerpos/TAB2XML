@@ -1,4 +1,4 @@
-package converter;
+package SheetMusic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import converter.Score;
 import converter.measure.TabMeasure;
 import converter.note.TabNote;
 import custom_exceptions.TXMLException;

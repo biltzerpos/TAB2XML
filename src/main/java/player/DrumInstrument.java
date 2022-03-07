@@ -15,7 +15,6 @@ import utility.DrumPieceInfo;
 import utility.DrumUtils;
 
 public class DrumInstrument {
-	private String drumInfo = "";
 	private String wholeString = "";
 	private Player player;
 
@@ -46,9 +45,6 @@ public class DrumInstrument {
 				}
 			}
 		}
-
-		System.out.println(wholeString);
-
 		StaccatoParser parser = new StaccatoParser();
 		MidiParserListener midilistener = new MidiParserListener();
 		parser.addParserListener(midilistener);
