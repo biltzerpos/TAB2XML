@@ -349,7 +349,7 @@ public class MainViewController extends Application {
 			PreviewSheetMusicController controller = loader.getController();
 			controller.setMainViewController(this);
 			controller.update();
-			convertWindow = this.openNewWindow(root, "Sheet Music Preview");
+			//convertWindow = this.openNewWindow(root, "Sheet Music Preview");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);

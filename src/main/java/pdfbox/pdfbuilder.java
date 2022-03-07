@@ -135,11 +135,13 @@ public class pdfbuilder {
 	private static PDPageContentStream contentStream;
 	private String userPath;
 	private final int notesPerPage = 50;
-	private int maxNotesTotal = notesPerPage;
+	private int maxNotesTotal = 0;
 	private int totalNotes = 0;
+	private int currentNOPG = 0;
 	private int globalX = 78;
 	private int globalY = 632;
 	private int pageCounter;
+	private int currentPage = 0;
 	private String instr = "";
 	
 	private String nUp = "";
@@ -239,10 +241,10 @@ public class pdfbuilder {
 		Part part = score.getModel().getParts().get(0);
 
 		// get total notes to draw
-//		for (Measure measure : part.getMeasures()) {
-//			totalNotes += measure.getNotesBeforeBackup().size();
-//		}
-
+		for (Measure measure : part.getMeasures()) {
+			totalNotes += measure.getNotesBeforeBackup().size();
+		}
+		doc = new PDDocument();
 		pdfpagegen();
 		// check if extra page is needed, if so, generate extra page
 		
@@ -484,7 +486,8 @@ public class pdfbuilder {
 			measure++;
 		}
 		// TODO: why save as previreSheetMusic.fxml?
-//		 doc.save("SheetMusic.png");
+		 doc.save("SheetMusic.pdf");
+		 doc.close();
 		 Desktop.getDesktop().open(new File("SheetMusic.pdf"));
 //		renderer = new PDFRenderer(doc);
 		// doc.close();
@@ -507,28 +510,23 @@ public class pdfbuilder {
 
 	// creates sheet lines on the page method
 	public void pdfpagegen() throws IOException {
-		while (maxNotesTotal <= totalNotes) {
-			// gen next page of sheet music
-			pdfpagegen();
+		while (maxNotesTotal < totalNotes) {
+			page = new PDPage();
+			doc.addPage(page);
+			pageImage = PDImageXObject.createFromFile(sheet, doc);
+			page.getCropBox().setLowerLeftX(0);
+			page.getCropBox().setLowerLeftY(0);
+			page.getCropBox().setUpperRightX(pageImage.getWidth());
+			page.getCropBox().setUpperRightY(pageImage.getHeight());
+
+			System.out.println("H: " + page.getCropBox().getHeight() + ",   W: " + page.getCropBox().getWidth());
+
+			contentStream = new PDPageContentStream(doc, page);
+			contentStream.drawImage(pageImage, 0, 0);
+			contentStream.close();
+			pageCounter++;
 			maxNotesTotal += 50;
 		}
-		// generates new sheet music on the page
-		doc = new PDDocument();
-		// generates a page;
-		page = new PDPage();
-		doc.addPage(page);
-		pageImage = PDImageXObject.createFromFile(sheet, doc);
-		page.getCropBox().setLowerLeftX(0);
-		page.getCropBox().setLowerLeftY(0);
-		page.getCropBox().setUpperRightX(pageImage.getWidth());
-		page.getCropBox().setUpperRightY(pageImage.getHeight());
-
-		System.out.println("H: " + page.getCropBox().getHeight() + ",   W: " + page.getCropBox().getWidth());
-
-		contentStream = new PDPageContentStream(doc, page);
-		contentStream.drawImage(pageImage, 0, 0);
-		contentStream.close();
-		pageCounter++;
 	}
 
 	// inputs notes on sheet music
@@ -538,6 +536,12 @@ public class pdfbuilder {
 			int measure) throws IOException, TXMLException {
 		// arbitrary numbers for now
 		// this if is for when the sheet staff isn't filled yet
+		if (currentNOPG == 50) {
+			globalX = 78;
+			globalY = 632;
+			currentNOPG = 0; 
+			++currentPage;
+		}
 		if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
 			if (n.getChord() != null) {
 				globalX -= 30;
@@ -549,16 +553,17 @@ public class pdfbuilder {
 				System.out.println("GLOBAL Y : " + globalY);
 				System.out.println("OFFSET   : " + (offsety));
 				System.out.println("TEMP Y   : " + (globalY - (offsety)));
-
+				++currentNOPG;
 				pdflinegen(lines);
 			} else {
 				globalX = 78;
 				globalY -= 189;
 				pdflinegen(lines);
+				++currentNOPG;
 			}
 
 			pageImage = PDImageXObject.createFromFile(imagePath, doc);
-			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX - 46, globalY - (offsety));
 			contentStream.close();
 			pdftabgen(getNumberPath(fretnumber), offsety, n, score);
@@ -576,19 +581,17 @@ public class pdfbuilder {
 				System.out.println("OFFSET   : " + (offsety));
 				System.out.println("TEMP Y   : " + (globalY - (offsety)));
 
-//				pdflinegen(lines);
 			} else {
 				globalX = 78;
 				globalY -= 189;
-//				pdflinegen(lines);
 			}
 
 			pageImage = PDImageXObject.createFromFile(imagePath, doc);
-			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 			if ((iteration < score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup()
 					.size())
 					&& (score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup()
-							.get(iteration).getChord() != null)) {
+						 .get(iteration).getChord() != null)) {
 				globalX -= 30;
 				contentStream.drawImage(pageImage, globalX - 30, globalY - (offsety));
 			} else if ((iteration >= score.getModel().getParts().get(0).getMeasures().get(measure)
@@ -606,7 +609,6 @@ public class pdfbuilder {
 			}
 
 			globalX += 30;
-			++totalNotes;
 		}
 		System.out.println("----------------------");
 	}
@@ -619,7 +621,7 @@ public class pdfbuilder {
 		pageImage = PDImageXObject.createFromFile(line, doc);
 		int innerY = globalY + 44;
 		for (int i = 0; i < lines; i++) {
-			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX, innerY);
 			contentStream.close();
 			innerY -= 6;
@@ -630,7 +632,7 @@ public class pdfbuilder {
 		if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
 			int innerYT = globalY + 9; // the 60 is a placehoder at the top empty cell if the tab
 			pageImage = PDImageXObject.createFromFile(tabpath, doc);
-			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 
 			if (instr.equals("Guitar")) {
 				contentStream.drawImage(pageImage, globalX + 5,
@@ -643,7 +645,7 @@ public class pdfbuilder {
 		} else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
 			int innerYT = globalY + 9; // the 60 is a placehoder at the top empty cell if the tab
 			pageImage = PDImageXObject.createFromFile(line, doc);
-			contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, false);
+			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 
 			contentStream.drawImage(pageImage, globalX + 5, innerYT - (globalY - (number)));
 
