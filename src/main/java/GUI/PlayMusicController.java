@@ -46,7 +46,9 @@ public class PlayMusicController extends Application {
 	@FXML
 	TextField gotoMeasureField;
 	@FXML
-	Button goToline;
+	Button playMusicNotes;
+	
+	private boolean playCondition = false;
 
 	public PlayMusicController() {
 
@@ -97,10 +99,17 @@ public class PlayMusicController extends Application {
 
 	}
 
-//	@FXML
-//	private void saveMXLButtonHandle() {
-//		mvc.saveMXLButtonHandle();
-//	}
+	@FXML
+	private void PlayerHandle() {
+		if(playCondition != true) {
+			playMusicNotes.setText("Play");
+			playCondition = false;
+		}
+		else if(playCondition == true) {
+			playMusicNotes.setText("Pause");
+			playCondition = true;
+		}
+	}
 
 //	//TODO add go to line button
 //	@FXML
