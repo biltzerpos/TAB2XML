@@ -15,6 +15,7 @@ import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
+import models.measure.note.notations.Tied;
 import GUI.draw.*;
 
 public class Guitar {
@@ -220,6 +221,10 @@ public class Guitar {
 		return this.d.getMusicLineList().get(5).getStartY(6);
 
 	}
+	public Boolean noteHasTie(Note n) {
+		Boolean result = n.getNotations().getTieds() == null ? false : true;
+		return result;
+	}
 
 	// This method plays the notes
 	public void playGuitarNote() {
@@ -240,19 +245,19 @@ public class Guitar {
 				String dur = getDuration(note);
 				voice = note.getVoice();
 
-				if (!noteHasChord(note)) {
+				if (!noteHasChord(note) && !noteHasTie(note)) {
 					ns = note.getPitch().getStep() + oct + dur;
 					noteSteps += " " + ns;
-				} else {
-
+				} else if(noteHasChord(note)){
 					noteSteps += "+" + note.getPitch().getStep() + oct + dur;
-
+				} else if(noteHasTie(note)){
+					noteSteps += "- " + note.getPitch().getStep() + oct + dur;
 				}
 			}
 		}
 
 		vocals.add(noteSteps);
-		// System.out.println(vocals.toString());
+		System.out.println(vocals.toString());
 		vocals.setInstrument("GUITAR");
 		vocals.setVoice(voice);
 		vocals.setTempo(120);
