@@ -33,7 +33,7 @@ public class DrawClef {
 
 	}
 
-
+	//DrumClef
 	public void drawDrumClef1() {
 
 		Rectangle r1 = new Rectangle();
