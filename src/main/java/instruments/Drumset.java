@@ -18,6 +18,7 @@ import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
 import models.measure.note.Notehead;
+import GUI.draw.DrawClef;
 import GUI.draw.DrawDrumsetBar;
 import GUI.draw.DrawDrumsetMusicLines;
 import GUI.draw.DrawNote;
@@ -74,11 +75,13 @@ public class Drumset {
 					// This is because if it is a chord, the music lines from the last chord will be used.
 					// Also draw the music lines before drawing the note so that the note appears on top.
 					d.draw(x,y);
+					
+					DrawClef drumclef = new DrawClef(this.pane, clef, x+25, positionY+3);
+							drumclef.drawDrumClef1();
+							drumclef.drawDrumClef2();
 
 					DrawDrumsetNote noteDrawer = new DrawDrumsetNote(this.pane, note, x+25, positionY+3);
-					noteDrawer.drawDrumClef1();
-					noteDrawer.drawDrumClef2();
-
+					
 					// If note head exists and is an x, then draw "x", otherwise draw "o"
 					if (symbol != null && symbol.getType().equals("x")) {
 						noteDrawer.drawX();

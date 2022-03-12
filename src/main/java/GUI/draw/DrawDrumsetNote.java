@@ -121,25 +121,5 @@ public class DrawDrumsetNote {
     	ellipse.setEffect(blend);
 	}
 	
-	public void drawDrumClef1() {
-
-		Rectangle r1 = new Rectangle();
-		r1.setWidth(3);
-		r1.setHeight(20);
-		r1.setTranslateX(5);
-		r1.setTranslateY(20);
-		pane.getChildren().add(r1);
-		
-	}
-
-	public void drawDrumClef2() {
-
-		Rectangle r1 = new Rectangle();
-		r1.setWidth(3);
-		r1.setHeight(20);
-		r1.setTranslateX(10);
-		r1.setTranslateY(20);
-		pane.getChildren().add(r1);
-		
-	}
+	
 }

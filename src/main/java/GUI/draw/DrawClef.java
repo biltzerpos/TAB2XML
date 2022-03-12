@@ -2,11 +2,13 @@ package GUI.draw;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import models.measure.attributes.Clef;
+import models.measure.note.Note;
 
 public class DrawClef {
 	
@@ -27,7 +29,28 @@ public class DrawClef {
 		
 	}
 	
-	
+
+	public void drawDrumClef1() {
+
+		Rectangle r1 = new Rectangle();
+		r1.setWidth(3);
+		r1.setHeight(20);
+		r1.setTranslateX(5);
+		r1.setTranslateY(20);
+		pane.getChildren().add(r1);
+		
+	}
+
+	public void drawDrumClef2() {
+
+		Rectangle r1 = new Rectangle();
+		r1.setWidth(3);
+		r1.setHeight(20);
+		r1.setTranslateX(10);
+		r1.setTranslateY(20);
+		pane.getChildren().add(r1);
+		
+	}
 	public void draw() {
 		String name = this.clef.getSign();
 		if (name == "TAB") {
