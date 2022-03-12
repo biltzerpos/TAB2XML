@@ -129,14 +129,11 @@ public class pdfbuilder {
 	// used to insert image onto page
 	private static PDPageContentStream contentStream;
 	private String userPath;
-	private final int notesPerPage = 50;
-	private int maxNotesTotal = 0;
 	private int totalNotes = 0;
-	private int currentNOPG = 0;
 	private int globalX = 78;
 	private int globalY = 632;
-	private int pageCounter;
-	private int currentPage = 0;
+	private int globalGap = 60;
+	private int currentPage = -1;
 	private String instr = "";
 	
 	private String nUp = "";
@@ -525,7 +522,6 @@ public class pdfbuilder {
 
 	// creates sheet lines on the page method
 	public void pdfpagegen() throws IOException {
-		while (maxNotesTotal < totalNotes) {
 			page = new PDPage();
 			doc.addPage(page);
 			pageImage = PDImageXObject.createFromFile(sheet, doc);
@@ -539,9 +535,7 @@ public class pdfbuilder {
 			contentStream = new PDPageContentStream(doc, page);
 			contentStream.drawImage(pageImage, 0, 0);
 			contentStream.close();
-			pageCounter++;
-			maxNotesTotal += 85;
-		}
+			currentPage++;
 	}
 
 	// inputs notes on sheet music
@@ -551,15 +545,14 @@ public class pdfbuilder {
 			int measure) throws IOException, TXMLException {
 		// arbitrary numbers for now
 		// this if is for when the sheet staff isn't filled yet
-		if (currentNOPG == 85) {
+		if (globalX >= 500 && globalY <= 100) {
 			globalX = 78;
 			globalY = 632;
-			currentNOPG = 0; 
-			currentPage++;
+			pdfpagegen();
 		}
 		if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
 			if (n.getChord() != null) {
-				globalX -= 30;
+				globalX -= globalGap;
 				//currentNOPG--;
 			}
 			if (lines == 0 && globalX >= 500) {
@@ -569,13 +562,11 @@ public class pdfbuilder {
 				System.out.println("GLOBAL Y : " + globalY);
 				System.out.println("OFFSET   : " + (offsety));
 				System.out.println("TEMP Y   : " + (globalY - (offsety)));
-				currentNOPG++;
 				pdflinegen(lines);
 			} else {
 				globalX = 78;
 				globalY -= 189;
 				pdflinegen(lines);
-				currentNOPG++;
 			}
 			
 			pageImage = PDImageXObject.createFromFile(imagePath, doc);
@@ -583,8 +574,7 @@ public class pdfbuilder {
 			contentStream.drawImage(pageImage, globalX - 46, globalY - (offsety));
 			contentStream.close();
 			pdftabgen(getNumberPath(fretnumber), offsety, n, score);
-			globalX += 30;
-			++totalNotes;
+			globalX += globalGap;
 		} else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
 			if (totalNotes == 0) {
 				globalY = 656;
@@ -624,7 +614,7 @@ public class pdfbuilder {
 //				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + n.getNotehead().getType() + ".png", offsety, n, score);
 			}
 
-			globalX += 30;
+			globalX += globalGap;
 		}
 		System.out.println("----------------------");
 	}
@@ -675,7 +665,15 @@ public class pdfbuilder {
 	int numPages() {
 		return doc.getPages().getCount();
 	}
-
+	// TODO: connect this method to the GUI for the user to change spacing betwen notes
+	public void changeXSpacing (int x) {
+		if (x < 0) {
+			throw new IllegalArgumentException("Cannot reduce gap to less than 0.");
+		}
+		else {
+			globalGap = x;
+		}
+	}
 //	public Image getImage(int pageNumber) {
 //		BufferedImage pageImage;
 //		try {
