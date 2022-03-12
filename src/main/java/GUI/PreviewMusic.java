@@ -15,7 +15,6 @@ import javafx.print.PageOrientation;
 import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -45,10 +44,10 @@ public class PreviewMusic extends Application {
 	private AnchorPane anchorPane;
 	@FXML
 	TextField gotoMeasureField;
-	private Guitar g;
-	private Drumset d;
-	@FXML private Button closePreviewButton;
-	
+	private Guitar guitar;
+	private Drumset drum;
+	@FXML
+	private Button closePreviewButton;
 
 	public PreviewMusic() {
 	}
@@ -61,7 +60,7 @@ public class PreviewMusic extends Application {
 		mvc = mvcInput;
 	}
 
-	//method to update the music sheet
+	// method to update the preview window
 	public void update() throws IOException {
 		// Get the ScorePartwise object directly
 
@@ -74,126 +73,128 @@ public class PreviewMusic extends Application {
 		 * get the first item, which is the Part, then we get the measures from that
 		 * Part.
 		 */
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			g = new Guitar(scorePartwise, pane);
-			g.drawGuitar();
+			this.guitar = new Guitar(scorePartwise, pane);
+			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
-			d = new Drumset(scorePartwise, pane);
-			d.draw();
+			this.drum = new Drumset(scorePartwise, pane);
+			this.drum.draw();
 		}
 
 	}
 
+	// Method that handles the `print music sheet` button
 	@FXML
 	public <printButtonPressed> void printHandle() {
 
 		WritableImage screenshot = anchorPane.snapshot(null, null);
 		Printer printer = Printer.getDefaultPrinter();
 		PageLayout layout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
-		
+
 		double pagePrintableWidth = layout.getPrintableWidth();
 		double pagePrintableHeight = layout.getPrintableHeight();
-		
+
 		final double scaleX = pagePrintableWidth / screenshot.getWidth();
-        final double scaleY = pagePrintableHeight / screenshot.getHeight();
-        final ImageView print_node = new ImageView(screenshot);
-        print_node.getTransforms().add(new Scale(scaleX, scaleX));
-		
+		final double scaleY = pagePrintableHeight / screenshot.getHeight();
+		final ImageView print_node = new ImageView(screenshot);
+		print_node.getTransforms().add(new Scale(scaleX, scaleX));
+
 		PrinterJob printSheet = PrinterJob.createPrinterJob();
+
 		if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
-			
-			double numberOfPages = Math.ceil( scaleX / scaleY);
-			
+
+			double numberOfPages = Math.ceil(scaleX / scaleY);
+
 			Translate gridTransform = new Translate(0, 0);
 			print_node.getTransforms().add(gridTransform);
-			for(int i = 0; i < numberOfPages; i++)
-			{
+			for (int i = 0; i < numberOfPages; i++) {
 				gridTransform.setY(-i * (pagePrintableHeight / scaleX));
 				printSheet.printPage(layout, print_node);
 			}
 
 			printSheet.endJob();
+
 		}
+
 	}
 
-
+	// Method that handles `play note` button
 	@FXML
 	public void playHandle() {
-		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
-
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			Guitar g = new Guitar(scorePartwise, pane);
-			g.playGuitarNote();   // Play method in Guitar class
-		}
-		else if(instrument == "Drumset") {
-			Drumset d = new Drumset(scorePartwise, pane);
-			d.playDrumNote();     // Play method in Drumset class
+			this.guitar.playGuitarNote(); // Play method in Guitar class
+		} else if (instrument == "Drumset") {
+			this.drum.playDrumNote(); // Play method in Drumset class
 		}
 	}
 
+	// Method that handle navigating to specific measure (1- size of measure list)
+	// through 'Go' button
 	public void handleGotoMeasure() {
-
-		//System.out.println("Go Button is Clicked");
 		int measureNumber = Integer.parseInt(gotoMeasureField.getText());
-		// Get the ScorePartwise object directly
-		ScorePartwise scorePartwise = mvc.converter.getScorePartwise();
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
-		
-		//System.out.println("instrument:" + instrument);
+		String instrument = getInstrument();
+		// System.out.println("instrument:" + instrument);
 		int count = 1;
 		boolean measureFound = false;
 		if (instrument == "Guitar") {
-			List<Measure> measureList = g.getMeasureList();
-			for (Iterator iterator = measureList.iterator(); iterator.hasNext();) {
+			List<Measure> measureList = this.guitar.getMeasureList();
+			for (Iterator<Measure> iterator = measureList.iterator(); iterator.hasNext();) {
 				Measure measure = (Measure) iterator.next();
-				if(measureNumber == count) {
-					g.highlightMeasureArea(measure);
+				if (measureNumber == count) {
+					this.guitar.highlightMeasureArea(measure);
 					measureFound = true;
 					break;
 				}
 				count++;
 			}
 		} else if (instrument == "Drumset") {
-			List<Measure> measureList = d.getMeasureList();
-			for (Iterator iterator = measureList.iterator(); iterator.hasNext();) {
+			List<Measure> measureList = this.drum.getMeasureList();
+			for (Iterator<Measure> iterator = measureList.iterator(); iterator.hasNext();) {
 				Measure measure = (Measure) iterator.next();
-				if(measureNumber == count) {
-					d.highlightMeasureArea(measure);
+				if (measureNumber == count) {
+					this.drum.highlightMeasureArea(measure);
 					measureFound = true;
 					break;
 				}
 				count++;
 			}
 		}
-		if(!measureFound) {
+		if (!measureFound) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setContentText("Measure " + measureNumber + " could not be found.");
 			alert.setHeaderText("Preview Music Sheet");
 			alert.show();
 		}
 	}
-	
+
+	// Method that handles `close` button
 	@FXML
 	public void closePreviewHandle() {
-		//mvc.editHandle(); 
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
-				"Are you sure you want to close this Preview window?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+		// mvc.editHandle();
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to close this Preview window?",
+				ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 		alert.setTitle("Close preview window");
 		alert.setHeaderText("You are about to close the Preview window!");
 		Optional<ButtonType> o = alert.showAndWait();
-		
-		if(o.get() == ButtonType.YES) {
+
+		if (o.get() == ButtonType.YES) {
 			mvc.convertWindow.hide();
 		}
-		
-		
+
 	}
-	
+
+	// return a string representation of the instrument
+	private String getInstrument() {
+		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		return instrument;
+
+	}
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
