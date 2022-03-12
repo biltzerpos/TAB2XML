@@ -667,8 +667,8 @@ public class pdfbuilder {
 	}
 	// TODO: connect this method to the GUI for the user to change spacing betwen notes
 	public void changeXSpacing (int x) {
-		if (x < 0) {
-			throw new IllegalArgumentException("Cannot reduce gap to less than 0.");
+		if (x <= 0) {
+			throw new IllegalArgumentException("Cannot reduce gap to less than 1.");
 		}
 		else {
 			globalGap = x;
