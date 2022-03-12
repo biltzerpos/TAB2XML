@@ -14,9 +14,13 @@ import javafx.scene.shape.Rectangle;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
+import models.measure.note.Dot;
+import models.measure.note.Grace;
 import models.measure.note.Note;
+import models.measure.note.Rest;
 import models.measure.note.notations.Tied;
 import GUI.draw.*;
+import converter.note.GuitarNote;
 
 public class Guitar {
 
@@ -240,11 +244,16 @@ public class Guitar {
 			for (int j = 0; j < noteList.size(); j++) {
 				String ns = new String();
 				Note note = noteList.get(j);
+				Grace gra = note.getGrace();
+				List<Dot> dot = note.getDots();
+				Rest res = note.getRest();
+				Integer alt = note.getPitch().getAlter();
 				int octave = note.getPitch().getOctave();
 				String oct = Integer.toString(octave);
 				String dur = getDuration(note);
 				voice = note.getVoice();
-
+				System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt: " + alt);
+				
 				if (!noteHasChord(note) && !noteHasTie(note)) {
 					ns = note.getPitch().getStep() + oct + dur;
 					noteSteps += " " + ns;
