@@ -229,6 +229,10 @@ public class Guitar {
 		Boolean result = n.getNotations().getTieds() == null ? false : true;
 		return result;
 	}
+	public Boolean noteHasRest(Note n) {
+		Boolean result = n.getRest() == null ? false : true;
+		return result;
+	}
 
 	// This method plays the notes
 	public void playGuitarNote() {
@@ -244,23 +248,25 @@ public class Guitar {
 			for (int j = 0; j < noteList.size(); j++) {
 				String ns = new String();
 				Note note = noteList.get(j);
-				Grace gra = note.getGrace();
-				List<Dot> dot = note.getDots();
-				Rest res = note.getRest();
-				Integer alt = note.getPitch().getAlter();
+//				Grace gra = note.getGrace();
+//				List<Dot> dot = note.getDots();
+//				Rest res = note.getRest();
+//				Integer alt = note.getPitch().getAlter();
 				int octave = note.getPitch().getOctave();
 				String oct = Integer.toString(octave);
 				String dur = getDuration(note);
 				voice = note.getVoice();
-				System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt: " + alt);
+				ns = note.getPitch().getStep() + oct + dur;
+				//System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt: " + alt);
 				
 				if (!noteHasChord(note) && !noteHasTie(note)) {
-					ns = note.getPitch().getStep() + oct + dur;
 					noteSteps += " " + ns;
 				} else if(noteHasChord(note)){
-					noteSteps += "+" + note.getPitch().getStep() + oct + dur;
+					noteSteps += "+" + ns;
 				} else if(noteHasTie(note)){
-					noteSteps += "- " + note.getPitch().getStep() + oct + dur;
+					noteSteps += "-" + ns;
+				} else if(noteHasRest(note)){
+					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;;
 				}
 			}
 		}
