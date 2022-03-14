@@ -118,7 +118,7 @@ public class pdfbuilder {
 	private int totalNotes = 0;
 	private int globalX = 78;
 	private int globalY = 632;
-	private int globalGap = 60;
+	private int globalGap = 30;
 	private int currentPage = -1;
 	private String instr = "";
 
@@ -302,7 +302,7 @@ public class pdfbuilder {
 				// TODO remove print
 				System.out.println(n.getNotehead().getType());
 
-//				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + n.getNotehead().getType() + ".png", offsety, n, score);
+				//				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + n.getNotehead().getType() + ".png", offsety, n, score);
 			}
 
 			globalX += globalGap;
@@ -317,12 +317,27 @@ public class pdfbuilder {
 
 	public void pdflinegen(int lines) throws IOException {
 		pageImage = PDImageXObject.createFromFile(line, doc);
-		int innerY = globalY + 44;
-		for (int i = 0; i < lines; i++) {
-			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
-			contentStream.drawImage(pageImage, globalX, innerY);
-			contentStream.close();
-			innerY -= 6;
+		if (lines > 0) {
+			// TODO remove print 
+			System.out.println(globalY);
+			int innerY = globalY + 44;
+			for (int i = 0; i < lines; i++) {
+				contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
+				contentStream.drawImage(pageImage, globalX, innerY);
+				contentStream.close();
+				innerY -= 6;
+			}
+		}
+		else if (lines < 0) {
+			// TODO remove print 
+			System.out.println(globalY);
+			int innerY = globalY + 88;
+			for (int i = 0; i > lines; i--) {
+				contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
+				contentStream.drawImage(pageImage, globalX, innerY);
+				contentStream.close();
+				innerY += 6;
+			}
 		}
 	}
 
@@ -334,7 +349,7 @@ public class pdfbuilder {
 
 			if (instr.equals("Guitar")) {
 				contentStream.drawImage(pageImage, globalX + 5,
-						innerYT - (7 * (n.getNotations().getTechnical().getString() - 1)));
+				innerYT - (7 * (n.getNotations().getTechnical().getString() - 1)));
 			} else {
 
 			}
