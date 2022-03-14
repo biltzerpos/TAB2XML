@@ -130,9 +130,9 @@ public class pdfbuilder {
 	private String o = "";
 	private String x = "";
 	private String sheet = "";
-	
+
 	private PDFRenderer renderer;
-	
+
 	public void setDirectories() {
 		String home = System.getProperty("user.home");
 
@@ -161,7 +161,7 @@ public class pdfbuilder {
 		doc = new PDDocument();
 		pdfpagegen();
 
-		
+
 		// map notes onto sheet
 		int iteration = 0;
 		int measure = 0;
@@ -186,7 +186,7 @@ public class pdfbuilder {
 			}
 			measure++;
 		}
-		
+
 		doc.save("SheetMusic.pdf");
 		doc.close();
 
@@ -204,7 +204,7 @@ public class pdfbuilder {
 
 	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure) throws IOException, TXMLException {
 		if ((lines < 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
-			pdfnotegen(nDown, offset, fret, -1 * (lines), n, score, iteration, measure);
+			pdfnotegen(nDown, offset, fret, lines, n, score, iteration, measure);
 		} 
 		else if ((lines >= 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
 			pdfnotegen(nUp, offset, fret, lines, n, score, iteration, measure);
@@ -223,7 +223,7 @@ public class pdfbuilder {
 		page.getCropBox().setUpperRightX(pageImage.getWidth());
 		page.getCropBox().setUpperRightY(pageImage.getHeight());
 
-		//TODO remove print
+		// TODO remove print
 		System.out.println("H: " + page.getCropBox().getHeight() + ",   W: " + page.getCropBox().getWidth());
 
 		contentStream = new PDPageContentStream(doc, page);
@@ -275,43 +275,39 @@ public class pdfbuilder {
 			if (lines == 0 && globalX >= 500) {
 				globalX = 78;
 				globalY -= 189;
-			} else if (globalX < 500) {
-				//TODO remove print
+			} 
+			else if (globalX < 500) {
+				// TODO remove print
 				System.out.println("GLOBAL Y : " + globalY);
 				System.out.println("OFFSET   : " + (offsety));
 				System.out.println("TEMP Y   : " + (globalY - (offsety)));
-
-			} else {
+			} 
+			else {
 				globalX = 78;
 				globalY -= 189;
 			}
 
 			pageImage = PDImageXObject.createFromFile(imagePath, doc);
 			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
-			if ((iteration < score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup()
-					.size())
-					&& (score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup()
-							.get(iteration).getChord() != null)) {
+			if ((iteration < score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup().size()) && (score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup().get(iteration).getChord() != null)) {
 				globalX -= 30;
 				contentStream.drawImage(pageImage, globalX - 30, globalY - (offsety));
-			} else if ((iteration >= score.getModel().getParts().get(0).getMeasures().get(measure)
-					.getNotesBeforeBackup().size())
-					|| (score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup()
-							.get(iteration).getChord() == null)) {
+			} 
+			else if ((iteration >= score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup().size()) || (score.getModel().getParts().get(0).getMeasures().get(measure).getNotesBeforeBackup().get(iteration).getChord() == null)) {
 				contentStream.drawImage(pageImage, globalX, globalY - (offsety));
 			}
 			contentStream.close();
 
 			if (n.getNotehead() != null) {
-				//TODO remove print
+				// TODO remove print
 				System.out.println(n.getNotehead().getType());
 
-				//				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + n.getNotehead().getType() + ".png", offsety, n, score);
+//				pdftabgen(userPath + "\\git\\TAB2XML\\src\\main\\resources\\NOTES\\" + n.getNotehead().getType() + ".png", offsety, n, score);
 			}
 
 			globalX += globalGap;
 		}
-		//TODO remove print
+		// TODO remove print
 		System.out.println("----------------------");
 	}
 
@@ -332,7 +328,7 @@ public class pdfbuilder {
 
 	public void pdftabgen(String tabpath, int number, Note n, Score score) throws IOException, TXMLException {
 		if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
-			int innerYT = globalY + 9; // the 60 is a placehoder at the top empty cell if the tab
+			int innerYT = globalY + 9;
 			pageImage = PDImageXObject.createFromFile(tabpath, doc);
 			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 
