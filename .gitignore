@@ -8,8 +8,6 @@ build
 /bin/.gitignore
 /lib/.project
 /.settings/org.eclipse.jdt.core.prefs
-.classpath
 /.settings/org.eclipse.buildship.core.prefs
-previewSheetMusic.jpg
-/SheetMusic.pdf
-/SheetMusic.png
+.classpath
+SheetMusic.pdf
