@@ -1,0 +1,40 @@
+.context-menu {
+	-fx-background-color: #120f2c;
+    -fx-border-color: #100d28;
+   	-fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.3), 5.0, 0.0, 0.0, 0.0);
+   	}
+.menu {
+	-fx-background: #0e0c1e;
+	-fx-padding: 5 7.5;
+	 }
+.menu .label {
+	-fx-text-fill: #FFFFFF;
+	-fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
+	}
+.menu-item {
+	-fx-padding: 3 5;
+    -fx-background: #0e0c1e;
+    }
+.tooltip {
+	-fx-font-size: 10.5px;
+	}
+#name {
+	-fx-font-size: 30.0px;
+	}
+#buttonSeperator .line {
+	-fx-border-width: 0.5px;
+    -fx-border-color: #100d28;
+    }
+.button {
+	-fx-content-display: top;
+	-fx-background-color: linear-gradient(null, #120f1c, #120f2c);
+}
+.button:hover {
+	-fx-background-color: #0e0c1e;
+}
+#filePathTitle {
+	-fx-font-size: 12px;
+}
+#hButtonBar {
+	 -fx-border-color: #151326;
+}

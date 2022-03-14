@@ -242,7 +242,7 @@ public class MainViewController extends Application {
 			if (saveFile != null && Files.readString(Path.of(saveFile.getAbsolutePath())).replace("\r\n", "\n")
 					.equals(mainText.getText()))
 				return true; // if file didn't change, we are ok to go. no need to save anything, no chance
-								// of overwriting.
+			// of overwriting.
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -349,25 +349,25 @@ public class MainViewController extends Application {
 			PreviewSheetMusicController controller = loader.getController();
 			controller.setMainViewController(this);
 			controller.update();
-			//convertWindow = this.openNewWindow(root, "Sheet Music Preview");
+			//	convertWindow = this.openNewWindow(root, "Sheet Music Preview");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
 		}
-
 	}
 
 	@FXML
 	private void playMusicButtonHandle() throws ParserConfigurationException, ValidityException, ParsingException,
-			InvalidMidiDataException, MidiUnavailableException, TXMLException {
+	InvalidMidiDataException, MidiUnavailableException, TXMLException {
 		Parent root;
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/playMusic.fxml"));
 			root = loader.load();
 			PlayMusicController controller = loader.getController();
 			controller.setMainViewController(this);
-			controller.update();
-			convertWindow = this.openNewWindow(root, "Play Music");
+			// Initialize music player
+			controller.update(); 
+			convertWindow = this.openNewWindow(root, "Music Player");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
@@ -404,14 +404,14 @@ public class MainViewController extends Application {
 	public void listenforTextAreaChanges() {
 		// Subscription cleanupWhenDone =
 		mainText.multiPlainChanges().successionEnds(Duration.ofMillis(350)).supplyTask(this::update)
-				.awaitLatest(mainText.multiPlainChanges()).filterMap(t -> {
-					if (t.isSuccess()) {
-						return Optional.of(t.get());
-					} else {
-						t.getFailure().printStackTrace();
-						return Optional.empty();
-					}
-				}).subscribe(highlighter::applyHighlighting);
+		.awaitLatest(mainText.multiPlainChanges()).filterMap(t -> {
+			if (t.isSuccess()) {
+				return Optional.of(t.get());
+			} else {
+				t.getFailure().printStackTrace();
+				return Optional.empty();
+			}
+		}).subscribe(highlighter::applyHighlighting);
 	}
 
 	public Task<StyleSpans<Collection<String>>> update() {

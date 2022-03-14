@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 import org.jfugue.midi.MidiParserListener;
 import org.jfugue.player.Player;
 import org.staccato.StaccatoParser;
@@ -20,8 +23,7 @@ public class DrumInstrument {
 	public StaccatoParser parser = new StaccatoParser();
 	public MidiParserListener midilistener = new MidiParserListener();
 
-
-	public void  playDrums(List<Measure> measureList, Score score) {
+	public void setupDrums(List<Measure> measureList, Score score) {
 		player = new Player();
 
 		Map<DrumPiece, DrumPieceInfo> map = DrumUtils.drumSet;
@@ -48,10 +50,11 @@ public class DrumInstrument {
 				}
 			}
 		}
+		
 		parser.addParserListener(midilistener);
 		parser.parse(wholeString);
 
-		player.play(midilistener.getSequence());
+//		player.play(midilistener.getSequence());
 	}
 
 	public String getDurationMIDI(int duration) {
@@ -87,5 +90,28 @@ public class DrumInstrument {
 			break;
 		}
 		return durationMIDI;
+	}
+
+	// Play Music Player
+	public void play() throws InvalidMidiDataException, MidiUnavailableException, InterruptedException {
+		player.getManagedPlayer().start(midilistener.getSequence());
+	}
+
+	// Pause Music Player
+	public void pause() throws MidiUnavailableException, InvalidMidiDataException {
+		if (player.getManagedPlayer().isPlaying() || !player.getManagedPlayer().isFinished()) {
+			player.getManagedPlayer().pause();
+		}
+	}
+
+	// Rewind Music Player
+	public void rewind() {
+		player.getManagedPlayer().seek(0);
+	}
+
+	// Stop Music Player
+	public void stop() throws MidiUnavailableException {
+		player.getManagedPlayer().reset();
+		player.getManagedPlayer().finish();
 	}
 }

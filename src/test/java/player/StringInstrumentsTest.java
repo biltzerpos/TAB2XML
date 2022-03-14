@@ -26,7 +26,7 @@ class StringInstrumentsTest {
 	StringInstruments stringPlayer = new StringInstruments();
 	ScorePartwise scorePartWise = score.getModel();
 	
-	stringPlayer.playStringInstruments(score);
+	stringPlayer.setupStringInstruments(score);
 	}
 
 }

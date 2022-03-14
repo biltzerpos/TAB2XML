@@ -39,7 +39,7 @@ class DrumInstrumentTest {
 		DrumInstrument drumPlayer = new DrumInstrument();
 		ScorePartwise scorePartWise = score.getModel();
 		
-		drumPlayer.playDrums(scorePartWise.getParts().get(0).getMeasures(), score);
+		drumPlayer.setupDrums(scorePartWise.getParts().get(0).getMeasures(), score);
 		
 		
 	
