@@ -7,8 +7,8 @@ public class Tied {
 	private String type;
 
 	public Tied(String type) {
-        this.type = type;
-    }
+		this.type = type;
+	}
 
 	public String getType() {
 		return type;

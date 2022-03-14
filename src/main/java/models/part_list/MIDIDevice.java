@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class MIDIDevice {
 
-	 @JacksonXmlProperty(isAttribute = true)
-	    private int port = 1;
+	@JacksonXmlProperty(isAttribute = true)
+	private int port = 1;
 
 }

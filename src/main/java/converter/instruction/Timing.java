@@ -20,29 +20,28 @@ import utility.ValidationError;
 
 public class Timing extends Instruction {
 	private static String supportedTimings = "whqestg";
-    public static String PATTERN = "(?<=^|\\n)XQ.*(?=$|\\n)";
-    private Map<Integer, String> timings = new TreeMap<>();
-    //private Map<Integer, String> unrecognized = new TreeMap<>();
-    private boolean tab = false;
-    private int divisions = 1;
-    Set<Integer> divFactors = new HashSet<>();
-    List<Integer> missingPositions = new ArrayList<>();
+	public static String PATTERN = "(?<=^|\\n)XQ.*(?=$|\\n)";
+	private Map<Integer, String> timings = new TreeMap<>();
+	// private Map<Integer, String> unrecognized = new TreeMap<>();
+	private boolean tab = false;
+	private int divisions = 1;
+	Set<Integer> divFactors = new HashSet<>();
+	List<Integer> missingPositions = new ArrayList<>();
 
-    public Timing(AnchoredText inputAT, boolean isTop) {
-        super(inputAT, isTop);
-        Matcher xqMatcher = Pattern.compile("XQ *").matcher(at.text);
-    	xqMatcher.find();
-    	setRange(new Range(xqMatcher.end(), at.text.trim().length()));
-        // Whole, half, and quarter notes are always included
-        divFactors.add(1);
-        divFactors.add(2);
-        divFactors.add(4);
-        String timingPattern = "([" + supportedTimings + "](\\.+|[0-9]{1,2})?)";
-        Matcher timingMatcher = Pattern.compile(timingPattern).matcher(at.text);
-		while (timingMatcher.find())
-		{
+	public Timing(AnchoredText inputAT, boolean isTop) {
+		super(inputAT, isTop);
+		Matcher xqMatcher = Pattern.compile("XQ *").matcher(at.text);
+		xqMatcher.find();
+		setRange(new Range(xqMatcher.end(), at.text.trim().length()));
+		// Whole, half, and quarter notes are always included
+		divFactors.add(1);
+		divFactors.add(2);
+		divFactors.add(4);
+		String timingPattern = "([" + supportedTimings + "](\\.+|[0-9]{1,2})?)";
+		Matcher timingMatcher = Pattern.compile(timingPattern).matcher(at.text);
+		while (timingMatcher.find()) {
 			timings.put(timingMatcher.start(), timingMatcher.group());
-			//TODO Add range to recognizedRanges
+			// TODO Add range to recognizedRanges
 		}
 //        for (int i = 2; i < at.text.length(); i++)
 //        {
@@ -56,7 +55,7 @@ public class Timing extends Instruction {
 //        	}
 //        	explicitDivisions = 1;
 //        }
-    }
+	}
 
 	@Override
 	public <E extends ScoreComponent> void applyTo(E scoreComponent) {
@@ -115,19 +114,34 @@ public class Timing extends Instruction {
 			int tuplet = 1;
 			char base = timing.charAt(0);
 			if (timing.length() > 1) {
-				if (timing.charAt(1) == '.') dotCount = timing.length() - 1;
-				else tuplet = Integer.parseInt(timing.substring(1));
+				if (timing.charAt(1) == '.')
+					dotCount = timing.length() - 1;
+				else
+					tuplet = Integer.parseInt(timing.substring(1));
 			}
 			divUpdate(tuplet);
 			int durValue = 1;
 			switch (base) {
-			case 'w': durValue = 1; break;
-			case 'h': durValue = 2; break;
-			case 'q': durValue = 4; break;
-			case 'e': durValue = 8; break;
-			case 's': durValue = 16; break;
-			case 't': durValue = 32; break;
-			default: assert false: "There should not be any other base timing characters";
+			case 'w':
+				durValue = 1;
+				break;
+			case 'h':
+				durValue = 2;
+				break;
+			case 'q':
+				durValue = 4;
+				break;
+			case 'e':
+				durValue = 8;
+				break;
+			case 's':
+				durValue = 16;
+				break;
+			case 't':
+				durValue = 32;
+				break;
+			default:
+				assert false : "There should not be any other base timing characters";
 			}
 			int factor = (int) Math.pow(2, dotCount);
 			divUpdate(durValue * factor);
@@ -139,50 +153,47 @@ public class Timing extends Instruction {
 		divFactors.add(i);
 	}
 
-	private static int lcm(int a, int b)
-	{
-	    return a * (b / gcd(a, b));
+	private static int lcm(int a, int b) {
+		return a * (b / gcd(a, b));
 	}
 
-	private static int lcm(Set<Integer> input)
-	{
-	    int result = 1;
-	    for(int i: input) result = lcm(result, i);
-	    return result;
+	private static int lcm(Set<Integer> input) {
+		int result = 1;
+		for (int i : input)
+			result = lcm(result, i);
+		return result;
 	}
 
-	private static int gcd(int a, int b)
-	{
-	    while (b > 0)
-	    {
-	        int temp = b;
-	        b = a % b;
-	        a = temp;
-	    }
-	    return a;
+	private static int gcd(int a, int b) {
+		while (b > 0) {
+			int temp = b;
+			b = a % b;
+			a = temp;
+		}
+		return a;
 	}
 
 	@Override
 	public List<ValidationError> validate() {
-        if (tab) {
-            addError(
-                    "The TAB character is not allowed in a timing line.",
-                    3,
-                    getRanges());
-        }
-        List<Range> ranges = new ArrayList<>();
-        for (int i: missingPositions) {
-        	ranges.add(new Range(at.positionInScore + i, at.positionInScore + i +1));
-        	if (i == at.text.length()) {
-        		List<Range> xqRange = new ArrayList<>();
-        		xqRange.add(new Range(at.positionInScore, at.positionInScore + 2)); // Highlight the XQ if the missing timing is after the end of the line
-        		addError("Missing timing designation at the end of this line", 1, xqRange);
-        	}
-         }
-        if (!ranges.isEmpty()) addError("Missing timing designation", 1, ranges);
-        //TODO Add error if there are unrecognized Ranges
+		if (tab) {
+			addError("The TAB character is not allowed in a timing line.", 3, getRanges());
+		}
+		List<Range> ranges = new ArrayList<>();
+		for (int i : missingPositions) {
+			ranges.add(new Range(at.positionInScore + i, at.positionInScore + i + 1));
+			if (i == at.text.length()) {
+				List<Range> xqRange = new ArrayList<>();
+				xqRange.add(new Range(at.positionInScore, at.positionInScore + 2)); // Highlight the XQ if the missing
+																					// timing is after the end of the
+																					// line
+				addError("Missing timing designation at the end of this line", 1, xqRange);
+			}
+		}
+		if (!ranges.isEmpty())
+			addError("Missing timing designation", 1, ranges);
+		// TODO Add error if there are unrecognized Ranges
 
-        return errors;
-    }
+		return errors;
+	}
 
 }

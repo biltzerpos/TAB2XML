@@ -17,29 +17,33 @@ import javafx.stage.Stage;
 public class ShowMXLController extends Application {
 
 	public File saveFile;
-    private MainViewController mvc;
+	private MainViewController mvc;
 	public Highlighter highlighter;
 
-	@FXML public CodeArea mxlText;
-	@FXML TextField gotoMeasureField;
-	@FXML Button goToline;
+	@FXML
+	public CodeArea mxlText;
+	@FXML
+	TextField gotoMeasureField;
+	@FXML
+	Button goToline;
 
-	public ShowMXLController() {}
+	public ShowMXLController() {
+	}
 
 	@FXML
 	public void initialize() {
 		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
 	}
 
-    public void setMainViewController(MainViewController mvcInput) {
-    	mvc = mvcInput;
-    }
+	public void setMainViewController(MainViewController mvcInput) {
+		mvc = mvcInput;
+	}
 
-    public void update() {
+	public void update() {
 		mxlText.replaceText(mvc.converter.getMusicXML());
 		mxlText.moveTo(0);
 		mxlText.requestFollowCaret();
-        mxlText.requestFocus();
+		mxlText.requestFocus();
 	}
 
 	@FXML
@@ -47,10 +51,10 @@ public class ShowMXLController extends Application {
 		mvc.saveMXLButtonHandle();
 	}
 
-	//TODO add go to line button
+	// TODO add go to line button
 	@FXML
 	private void handleGotoMeasure() {
-		int measureNumber = Integer.parseInt(gotoMeasureField.getText() );
+		int measureNumber = Integer.parseInt(gotoMeasureField.getText());
 		if (!goToMeasure(measureNumber)) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setContentText("Measure " + measureNumber + " could not be found.");
@@ -59,28 +63,30 @@ public class ShowMXLController extends Application {
 		}
 	}
 
-    private boolean goToMeasure(int measureCount) {
-    	//Pattern textBreakPattern = Pattern.compile("((\\R|^)[ ]*(?=\\R)){2,}|^|$");
-    	Pattern mxlMeasurePattern = Pattern.compile("<measure number=\"" + measureCount + "\">");
-        Matcher mxlMeasureMatcher = mxlMeasurePattern.matcher(mxlText.getText());
+	private boolean goToMeasure(int measureCount) {
+		// Pattern textBreakPattern = Pattern.compile("((\\R|^)[ ]*(?=\\R)){2,}|^|$");
+		Pattern mxlMeasurePattern = Pattern.compile("<measure number=\"" + measureCount + "\">");
+		Matcher mxlMeasureMatcher = mxlMeasurePattern.matcher(mxlText.getText());
 
-        if (mxlMeasureMatcher.find()) {
-        	int pos = mxlMeasureMatcher.start();
-        	mxlText.moveTo(pos);
-        	mxlText.requestFollowCaret();
-        	Pattern newLinePattern = Pattern.compile("\\R");
-        	Matcher newLineMatcher = newLinePattern.matcher(mxlText.getText().substring(pos));
-        	for (int i = 0; i < 30; i++) newLineMatcher.find();
-        	int endPos = newLineMatcher.start();
-        	mxlText.moveTo(pos+endPos);
-        	mxlText.requestFollowCaret();
-        	//mxlText.moveTo(pos);
-            mxlText.requestFocus();
-            return true;
-            }
-        else return false;
-    }
+		if (mxlMeasureMatcher.find()) {
+			int pos = mxlMeasureMatcher.start();
+			mxlText.moveTo(pos);
+			mxlText.requestFollowCaret();
+			Pattern newLinePattern = Pattern.compile("\\R");
+			Matcher newLineMatcher = newLinePattern.matcher(mxlText.getText().substring(pos));
+			for (int i = 0; i < 30; i++)
+				newLineMatcher.find();
+			int endPos = newLineMatcher.start();
+			mxlText.moveTo(pos + endPos);
+			mxlText.requestFollowCaret();
+			// mxlText.moveTo(pos);
+			mxlText.requestFocus();
+			return true;
+		} else
+			return false;
+	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {}
+	public void start(Stage primaryStage) throws Exception {
+	}
 }

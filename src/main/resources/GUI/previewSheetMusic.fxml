@@ -6,10 +6,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="900" prefWidth="900" xmlns:fx="http://javafx.com/fxml/1"     xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.PreviewSheetMusicController">
-  <children>
-    <ImageView fx:id="imageview" fitHeight="800" fitWidth="800" layoutX="100.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true" >
+<AnchorPane prefHeight="890" prefWidth="700"
+	xmlns:fx="http://javafx.com/fxml/1"
+	xmlns="http://javafx.com/javafx/2.2"
+	fx:controller="GUI.PreviewSheetMusicController">
+	<children>
+			<ImageView fx:id="imageview" fitHeight="880" fitWidth="710"
+				layoutX="10.0" layoutY="10.0" pickOnBounds="false"
+				preserveRatio="true">
 
-    </ImageView>
-  </children>
+			</ImageView>
+	</children>
 </AnchorPane>

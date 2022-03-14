@@ -9,31 +9,33 @@ import utility.Patterns;
 import utility.Range;
 import utility.ValidationError;
 
-public abstract class Instruction extends ScoreComponent{
+public abstract class Instruction extends ScoreComponent {
 	protected boolean isTop;
 
-    public static String LINE_PATTERN = getLinePattern();
+	public static String LINE_PATTERN = getLinePattern();
 
-    protected Range rangeInLine;
-    protected boolean hasBeenApplied;
+	protected Range rangeInLine;
+	protected boolean hasBeenApplied;
 
-    Instruction(AnchoredText inputAT, boolean isTop) {
-        this.at = inputAT;
-        this.isTop = isTop;
-        //int relStartPos = position - Score.tabText.substring(0,position).lastIndexOf("\n");
-        int relStartPos = at.positionInLine;
-        int relEndPos = relStartPos + at.text.length() - 1;
-        setRange(new Range(relStartPos, relEndPos));
-    }
+	Instruction(AnchoredText inputAT, boolean isTop) {
+		this.at = inputAT;
+		this.isTop = isTop;
+		// int relStartPos = position -
+		// Score.tabText.substring(0,position).lastIndexOf("\n");
+		int relStartPos = at.positionInLine;
+		int relEndPos = relStartPos + at.text.length() - 1;
+		setRange(new Range(relStartPos, relEndPos));
+	}
 
-    public abstract <E extends ScoreComponent> void applyTo(E scoreComponent);
+	public abstract <E extends ScoreComponent> void applyTo(E scoreComponent);
 
-    void setHasBeenApplied(boolean bool) {
-        this.hasBeenApplied = bool;
-    }
-    boolean getHasBeenApplied() {
-        return this.hasBeenApplied;
-    }
+	void setHasBeenApplied(boolean bool) {
+		this.hasBeenApplied = bool;
+	}
+
+	boolean getHasBeenApplied() {
+		return this.hasBeenApplied;
+	}
 
 	@Override
 	public List<Range> getRanges() {
@@ -42,17 +44,14 @@ public abstract class Instruction extends ScoreComponent{
 		return ranges;
 	}
 
-    @Override
+	@Override
 	public List<ValidationError> validate() {
 
-        if (!this.hasBeenApplied) {
-            addError(
-                    "This instruction could not be applied to any measure or note.",
-                    3,
-                    getRanges());
-        }
-        return errors;
-    }
+		if (!this.hasBeenApplied) {
+			addError("This instruction could not be applied to any measure or note.", 3, getRanges());
+		}
+		return errors;
+	}
 
 	private static String getLinePattern() {
 		String instruction = "((" + TimeSignature.PATTERN + ")|(" + Repeat.PATTERN + ")|(" + Timing.PATTERN + "))";
@@ -75,5 +74,3 @@ public abstract class Instruction extends ScoreComponent{
 		this.rangeInLine = range;
 	}
 }
-
-

@@ -6,14 +6,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement(localName = "time-modification")
-@JsonPropertyOrder({"actual-notes", "normal-notes"})
+@JsonPropertyOrder({ "actual-notes", "normal-notes" })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class TimeModification {
 
 	public TimeModification(int an, int nn) {
-        this.actualNotes = an;
-        this .normalNotes = nn;
-    }
+		this.actualNotes = an;
+		this.normalNotes = nn;
+	}
 
 	@JacksonXmlProperty(localName = "actual-notes")
 	private int actualNotes;
@@ -35,6 +35,5 @@ public class TimeModification {
 	public void setNormalNotes(int normalNotes) {
 		this.normalNotes = normalNotes;
 	}
-
 
 }

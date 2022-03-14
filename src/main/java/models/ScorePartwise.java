@@ -13,91 +13,90 @@ import models.part_list.PartList;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "score-partwise")
-@JsonPropertyOrder({"movement-title", "identification"})
+@JsonPropertyOrder({ "movement-title", "identification" })
 public class ScorePartwise {
-    @JsonIgnore
-    private static int SCORE_COUNT = 1;
+	@JsonIgnore
+	private static int SCORE_COUNT = 1;
 
-    @JacksonXmlProperty(isAttribute = true)
-    String version;
+	@JacksonXmlProperty(isAttribute = true)
+	String version;
 
-    Work work;
-    @JacksonXmlProperty(localName = "movement-title")
-    String movementTitle;
-    Identification identification;
+	Work work;
+	@JacksonXmlProperty(localName = "movement-title")
+	String movementTitle;
+	Identification identification;
 
+	@JacksonXmlProperty(localName = "part-list")
+	PartList partList;
 
-    @JacksonXmlProperty(localName = "part-list")
-    PartList partList;
+	@JacksonXmlProperty(localName = "part")
+	@JacksonXmlElementWrapper(useWrapping = false)
+	List<Part> parts;
 
-    @JacksonXmlProperty(localName = "part")
-    @JacksonXmlElementWrapper(useWrapping = false)
-    List<Part> parts;
+	ScorePartwise() {
+		SCORE_COUNT++;
+	}
 
-    ScorePartwise() {
-        SCORE_COUNT++;
-    }
+	public ScorePartwise(String version, PartList partList, List<Part> parts) {
+		this();
+		this.version = version;
+		this.partList = partList;
+		this.parts = parts;
+	}
 
-    public ScorePartwise(String version, PartList partList, List<Part> parts) {
-        this();
-        this.version = version;
-        this.partList = partList;
-        this.parts = parts;
-    }
+	public static int getScoreCount() {
+		return SCORE_COUNT;
+	}
 
-    public static int getScoreCount() {
-        return SCORE_COUNT;
-    }
+	public Identification getIdentification() {
+		return identification;
+	}
 
-    public Identification getIdentification() {
-        return identification;
-    }
+	public static void setScoreCount(int scoreCount) {
+		SCORE_COUNT = scoreCount;
+	}
 
-    public static void setScoreCount(int scoreCount) {
-        SCORE_COUNT = scoreCount;
-    }
+	public List<Part> getParts() {
+		return parts;
+	}
 
-    public List<Part> getParts() {
-        return parts;
-    }
+	public PartList getPartList() {
+		return partList;
+	}
 
-    public PartList getPartList() {
-        return partList;
-    }
+	public String getMovementTitle() {
+		return movementTitle;
+	}
 
-    public String getMovementTitle() {
-        return movementTitle;
-    }
+	public String getVersion() {
+		return version;
+	}
 
-    public String getVersion() {
-        return version;
-    }
+	public void setIdentification(Identification identification) {
+		this.identification = identification;
+	}
 
-    public void setIdentification(Identification identification) {
-        this.identification = identification;
-    }
+	public void setMovementTitle(String movementTitle) {
+		this.movementTitle = movementTitle;
+	}
 
-    public void setMovementTitle(String movementTitle) {
-        this.movementTitle = movementTitle;
-    }
+	public void setPartList(PartList partList) {
+		this.partList = partList;
+	}
 
-    public void setPartList(PartList partList) {
-        this.partList = partList;
-    }
+	public void setWork(Work work) {
+		this.work = work;
+	}
 
-    public void setWork(Work work) {
-        this.work = work;
-    }
+	public Work getWork() {
+		return work;
+	}
 
-    public Work getWork() {
-        return work;
-    }
+	public void setVersion(String version) {
+		this.version = version;
+	}
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public void setParts(List<Part> parts) {
-        this.parts = parts;
-    }
+	public void setParts(List<Part> parts) {
+		this.parts = parts;
+	}
 }

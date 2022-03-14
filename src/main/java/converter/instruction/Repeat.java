@@ -16,16 +16,16 @@ import utility.ValidationError;
 public class Repeat extends Instruction {
 
 	public static String PATTERN = getPattern();
-    private int repeatCount;
-    private boolean startApplied = false;
-    private boolean endApplied = false;
+	private int repeatCount;
+	private boolean startApplied = false;
+	private boolean endApplied = false;
 
-    public Repeat(AnchoredText inputAT, boolean isTop) {
-        super(inputAT, isTop);
-        Matcher matcher = Pattern.compile("[0-9]+").matcher(at.text);
-        if (matcher.find())
-            this.repeatCount = Integer.parseInt(matcher.group());
-    }
+	public Repeat(AnchoredText inputAT, boolean isTop) {
+		super(inputAT, isTop);
+		Matcher matcher = Pattern.compile("[0-9]+").matcher(at.text);
+		if (matcher.find())
+			this.repeatCount = Integer.parseInt(matcher.group());
+	}
 
 	@Override
 	public <E extends ScoreComponent> void applyTo(E scoreComponent) {
@@ -57,30 +57,27 @@ public class Repeat extends Instruction {
 		this.setHasBeenApplied(this.startApplied && this.endApplied);
 	}
 
-    private static String getPattern() {
-        String times = "[xX]";
-        String timesLong = "[Tt][Ii][Mm][Ee][Ss]";
-        String count = "[0-9]{1,2}";
-        String repeatTextPattern = "[Rr][Ee][Pp][Ee][Aa][Tt]" + "([ -]{0,7}|[ \t]{0,2})"  +  "(" +"("+times+count+")|("+ count+times +")|("+ count + "([ -]{0,7}|[ \t]{0,3})"  + timesLong + ")" + ")";
-        //     | or sol or whitespace   optional space or -                     optional space or -     | or eol or whitespace
-        return "("+"(((?<=\\|)|\\||^|"+ Patterns.SPACEORTAB + ")|(?<=\\n))"  +        "[ -]*"       +   repeatTextPattern   +   "[ -]*"     +     "(($|\\s)|\\|)" + ")";
-    }
+	private static String getPattern() {
+		String times = "[xX]";
+		String timesLong = "[Tt][Ii][Mm][Ee][Ss]";
+		String count = "[0-9]{1,2}";
+		String repeatTextPattern = "[Rr][Ee][Pp][Ee][Aa][Tt]" + "([ -]{0,7}|[ \t]{0,2})" + "(" + "(" + times + count
+				+ ")|(" + count + times + ")|(" + count + "([ -]{0,7}|[ \t]{0,3})" + timesLong + ")" + ")";
+		// | or sol or whitespace optional space or - optional space or - | or eol or
+		// whitespace
+		return "(" + "(((?<=\\|)|\\||^|" + Patterns.SPACEORTAB + ")|(?<=\\n))" + "[ -]*" + repeatTextPattern + "[ -]*"
+				+ "(($|\\s)|\\|)" + ")";
+	}
 
 	@Override
 	public List<ValidationError> validate() {
-	    super.validate();
-	    if (!(isTop)) {
-	        addError(
-	                "Repeats should only be applied to the top of measures.",
-	                3,
-	                getRanges());
-	    }
-	    if ((!this.startApplied && this.endApplied)) {
-	        addError(
-	                "This repeat was not fully applied.",
-	                1,
-	                getRanges());
-	    }
-	    return errors;
+		super.validate();
+		if (!(isTop)) {
+			addError("Repeats should only be applied to the top of measures.", 3, getRanges());
+		}
+		if ((!this.startApplied && this.endApplied)) {
+			addError("This repeat was not fully applied.", 1, getRanges());
+		}
+		return errors;
 	}
 }
