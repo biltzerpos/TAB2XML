@@ -17,7 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import pdfbox.pdfbuilder;
+import previewer.pdfbuilder;
 
 public class PreviewSheetMusicController extends Application {
 
