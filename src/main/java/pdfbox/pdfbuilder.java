@@ -100,11 +100,6 @@ counter maxNotesHoldable
  */
 
 public class pdfbuilder {
-	// variables need to be static
-	private static Preferences pref;
-	private static Settings s;
-	private static File file;
-
 	// JAVA doc object, has an array of pages which are of type PDPage
 	public PDDocument doc;
 	private static PDPage page;
@@ -114,7 +109,6 @@ public class pdfbuilder {
 
 	// used to insert image onto page
 	private static PDPageContentStream contentStream;
-	private String userPath;
 	private int totalNotes = 0;
 	private int globalX = 78;
 	private int globalY = 632;
@@ -130,8 +124,6 @@ public class pdfbuilder {
 	private String o = "";
 	private String x = "";
 	private String sheet = "";
-
-	private PDFRenderer renderer;
 
 	public void setDirectories() {
 		String home = System.getProperty("user.home");
@@ -198,7 +190,6 @@ public class pdfbuilder {
 			Desktop.getDesktop().open(new File("SheetMusic.pdf"));
 		}
 
-		// renderer = new PDFRenderer(doc);
 		// doc.close();
 	}
 
