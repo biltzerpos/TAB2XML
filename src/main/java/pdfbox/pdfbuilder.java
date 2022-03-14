@@ -132,7 +132,7 @@ public class pdfbuilder {
 	private int totalNotes = 0;
 	private int globalX = 78;
 	private int globalY = 632;
-	private int globalGap = 60;
+	private int globalGap = 30;
 	private int currentPage = -1;
 	private String instr = "";
 	
@@ -509,7 +509,7 @@ public class pdfbuilder {
 	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure)
 			throws IOException, TXMLException {
 		if ((lines < 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
-			pdfnotegen(nDown, offset, fret, -1 * (lines), n, score, iteration, measure);
+			pdfnotegen(nDown, offset, fret, (lines), n, score, iteration, measure);
 		} else if ((lines >= 0)
 				&& (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
 			pdfnotegen(nUp, offset, fret, lines, n,
@@ -625,12 +625,23 @@ public class pdfbuilder {
 
 	public void pdflinegen(int lines) throws IOException {
 		pageImage = PDImageXObject.createFromFile(line, doc);
+		if (lines > 0) {
 		int innerY = globalY + 44;
 		for (int i = 0; i < lines; i++) {
 			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX, innerY);
 			contentStream.close();
 			innerY -= 6;
+		}
+		}
+		else if (lines < 0) {
+		int innerY = globalY - 44;
+		for (int i = 0; i > lines; i--) {
+			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
+			contentStream.drawImage(pageImage, globalX, innerY);
+			contentStream.close();
+			innerY += 6;
+		}
 		}
 	}
 
