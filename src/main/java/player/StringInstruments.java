@@ -34,6 +34,19 @@ public class StringInstruments {
 			}
 		}
 		
+		
+		for (Measure measure : score.getModel().getParts().get(0).getMeasures()) {
+			if (measure.getNotesBeforeBackup() != null) {
+				for (int i = 0; (i < measure.getNotesBeforeBackup().size()); i++) {					
+					if (measure.getNotesBeforeBackup().get(i).getChord() != null) {
+						wholeString += String.format("+%s%s", checkIrregularNotes(measure.getNotesBeforeBackup().get(i)), getDurationMIDI(measure.getNotesBeforeBackup().get(i).getDuration()));
+					} else if (measure.getNotesBeforeBackup().get(i).getChord() == null) {
+						wholeString += String.format(" %s%s", checkIrregularNotes(measure.getNotesBeforeBackup().get(i)), getDurationMIDI(measure.getNotesBeforeBackup().get(i).getDuration()));
+					}
+				}
+			}
+		}
+		
 		parser.addParserListener(midilistener);
 		parser.parse(wholeString);
 
