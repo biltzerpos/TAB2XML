@@ -635,7 +635,7 @@ public class pdfbuilder {
 		}
 		}
 		else if (lines < 0) {
-		int innerY = globalY - 44;
+		int innerY = globalY + 88;
 		for (int i = 0; i > lines; i--) {
 			contentStream = new PDPageContentStream(doc, doc.getPage(currentPage), PDPageContentStream.AppendMode.APPEND, false);
 			contentStream.drawImage(pageImage, globalX, innerY);
