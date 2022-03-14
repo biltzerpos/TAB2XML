@@ -27,7 +27,11 @@
     }
 .button {
 	-fx-content-display: top;
-	-fx-background-color: linear-gradient(null, #120f1c, #120f2c);
+	-fx-border-color: transparent;
+	-fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+
 }
 .button:hover {
 	-fx-background-color: #0e0c1e;
