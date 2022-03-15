@@ -1,22 +1,33 @@
 package design2;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import org.apache.fontbox.ttf.TrueTypeFont;
+
 import GUI.MainViewController;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
+import java.awt.*;
 
 public class CanvasGen extends Canvas {
 	private GraphicsContext gc;
-	private int fontSize = 40;
+	private int fontSize = 260;
 	
 	private MainViewController mvc;
 
-	public CanvasGen(double height, double width, MainViewController mvc) {
+	public CanvasGen(double height, double width, MainViewController mvc) throws FileNotFoundException {
 		// Configure Canvas
 		this.setWidth(height);
 		this.setHeight(width);
 		gc = this.getGraphicsContext2D();
-		gc.setFont(new Font("Bravura", fontSize)); // fontSize changes size of every drawn element
+//		InputStream fontStream = getClass().getResourceAsStream(System.getProperty("user.home") + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "fonts" + File.separator + "NotoMusic-Regular.ttf");
+//		Font font = Font.loadFont(fontStream, 90);
+		Font font = Font.loadFont(new FileInputStream(new File(System.getProperty("user.home") + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "fonts" + File.separator + "NotoMusic-Regular.ttf")), 40);
+		gc.setFont(font); // fontSize changes size of every drawn element
 
 //		 this.setStyle("-fx-padding: 10;" +
 //		            "-fx-border-style: solid inside;" +

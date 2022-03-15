@@ -1,5 +1,6 @@
 package GUI;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -90,14 +91,14 @@ public class PlayMusicController extends Application {
 
 	}
 
-	public void display() {
+	public void display() throws FileNotFoundException {
 		canvas = new CanvasGen(canvas.getHeight(), canvas.getWidth(), this.mvc);
 		centerpane.getChildren().add(canvas);
 		((CanvasGen) canvas).draw();
 	}
 
 	@FXML
-	public void initialize() {
+	public void initialize() throws FileNotFoundException {
 		//		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
 		pauseButton.setDisable(true);
 		rewindButton.setDisable(true);
