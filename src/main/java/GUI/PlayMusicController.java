@@ -39,6 +39,7 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import player.DrumInstrument;
 import player.StringInstruments;
+import previewer.CanvasGen;
 import utility.Settings;
 
 public class PlayMusicController extends Application {
@@ -90,7 +91,7 @@ public class PlayMusicController extends Application {
 	}
 
 	public void display() {
-		canvas = new CanvasTabController(canvas.getHeight(), canvas.getWidth());
+		canvas = new CanvasGen(canvas.getHeight(), canvas.getWidth());
 		centerpane.getChildren().add(canvas);
 	}
 

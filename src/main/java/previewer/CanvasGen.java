@@ -1,14 +1,14 @@
-package GUI;
+package previewer;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
 
-public class CanvasTabController extends Canvas {
+public class CanvasGen extends Canvas {
 	private GraphicsContext gc;
 	private int fontSize = 40;
 			
-	public CanvasTabController(double height, double width) {
+	public CanvasGen(double height, double width) {
 		// Configure Canvas
 		this.setWidth(height);
 		this.setHeight(width);
