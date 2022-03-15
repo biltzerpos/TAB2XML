@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.UnsupportedLookAndFeelException;
+
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
@@ -47,7 +49,7 @@ public class ShowMXLController extends Application {
 	}
 
 	@FXML
-	private void saveMXLButtonHandle() {
+	private void saveMXLButtonHandle() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		mvc.saveMXLButtonHandle();
 	}
 

@@ -3,7 +3,11 @@ package previewer;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+
+import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -13,6 +17,11 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import converter.Score;
 import custom_exceptions.TXMLException;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import models.Part;
 import models.measure.Measure;
 import models.measure.note.Note;
@@ -99,7 +108,7 @@ counter maxNotesHoldable
 ------------------------------------------------------------------------------------------------------------------------------------------
  */
 
-public class pdfbuilder {
+public class pdfbuilder extends Pane {
 	// JAVA doc object, has an array of pages which are of type PDPage
 	public PDDocument doc;
 	private static PDPage page;
@@ -179,19 +188,46 @@ public class pdfbuilder {
 			measure++;
 		}
 
-		doc.save("SheetMusic.pdf");
-		doc.close();
-
-		if(System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("Linux") ) {
-			ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "sensible-browser SheetMusic.pdf");
-			processBuilder.start();
-		}
-		else {
-			Desktop.getDesktop().open(new File("SheetMusic.pdf"));
-		}
+		//		doc.save("SheetMusic.pdf");
+		//		doc.close();
+		//
+		//		if(System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("Linux") ) {
+		//			ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "sensible-browser SheetMusic.pdf");
+		//			processBuilder.start();
+		//		}
+		//		else {
+		//			Desktop.getDesktop().open(new File("SheetMusic.pdf"));
+		//		}
 
 		// doc.close();
 	}
+
+	public void save() throws IOException {
+		String userDirectory = System.getProperty("user.home");
+		FileChooser fc = new FileChooser();
+		fc.setInitialDirectory(new File(userDirectory + "/Desktop"));
+		fc.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("PDF", "*.pdf")
+				);
+		File directory = fc.showSaveDialog(null);
+		if (directory != null) {
+			directory = new File(directory.getAbsolutePath());
+		}
+
+		WritableImage nodeshot = this.snapshot(new SnapshotParameters(), null);
+		File file = new File("musicXML.png");
+
+		try {
+			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file);
+			doc.save(directory);
+			doc.close();
+			file.delete();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 
 	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure) throws IOException, TXMLException {
 		if ((lines < 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {
@@ -340,7 +376,7 @@ public class pdfbuilder {
 
 			if (instr.equals("Guitar")) {
 				contentStream.drawImage(pageImage, globalX + 5,
-				innerYT - (7 * (n.getNotations().getTechnical().getString() - 1)));
+						innerYT - (7 * (n.getNotations().getTechnical().getString() - 1)));
 			} else {
 
 			}

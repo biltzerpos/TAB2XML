@@ -87,7 +87,7 @@ task testDebug {
 
 javafx {
     version = "17.0.1"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.base', 'javafx.media', 'javafx.graphics', 'javafx.web' ]
 }
 
 run {

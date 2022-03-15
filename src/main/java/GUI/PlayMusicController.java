@@ -27,11 +27,13 @@ import custom_exceptions.TXMLException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 //import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
@@ -41,7 +43,7 @@ import utility.Settings;
 
 public class PlayMusicController extends Application {
 
-//	public File saveFile;
+	//	public File saveFile;
 
 	private MainViewController mvc;
 	public Highlighter highlighter;
@@ -49,13 +51,13 @@ public class PlayMusicController extends Application {
 	private DrumInstrument drumPlayer;
 	private StringInstruments stringsPlayer;
 
-//	private boolean playCondition = false;
+	//	private boolean playCondition = false;
 
 	@FXML
 	public CodeArea mxlText;
 
-//	@FXML
-//	Button playMusicNotes;
+	//	@FXML
+	//	Button playMusicNotes;
 
 	@FXML
 	TextField gotoMeasureField;
@@ -77,16 +79,28 @@ public class PlayMusicController extends Application {
 	@FXML
 	private Button stopButton;
 
+	@FXML
+	private Pane centerpane;
+	
+	@FXML
+    private Canvas canvas;
+
 	public PlayMusicController() {
 
 	}
 
+	public void display() {
+		canvas = new CanvasTabController(canvas.getHeight(), canvas.getWidth());
+		centerpane.getChildren().add(canvas);
+	}
+
 	@FXML
 	public void initialize() {
-//		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
+		//		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
 		pauseButton.setDisable(true);
 		rewindButton.setDisable(true);
 		stopButton.setDisable(true);
+		display();
 	}
 
 	public void setMainViewController(MainViewController mvcInput) {
