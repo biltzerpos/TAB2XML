@@ -4,8 +4,8 @@ package previewer;
 // First Global y = 901
 // Second Global y = 726 (change in y 901 - 726 = 175)
 // so on.....
-public enum NotesUni {
-	E2offsety(,60, 7), // 1
+public enum NotesOffset {
+	E2offsety(60, 7), // 1
 	F2offsety(54, 6), // 2
 	G2offsety(48, 6), // 3
 	A2offsety(42, 5), // 4
@@ -42,7 +42,7 @@ public enum NotesUni {
 	protected final Integer offset;
 	protected final Integer lines;
 
-	NotesUni(int i, int j) {
+	NotesOffset(int i, int j) {
 		this.offset = i;
 		this.lines = j;
 	}

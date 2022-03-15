@@ -13,91 +13,91 @@ public class NoteIdentifier {
 		if(instr.equals("Guitar")) {
 			switch (pitchFret) {
 			case "E2": // 1
-				pdfbuilder.arbitraryPath(NotesUni.E2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.E2offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.E2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.E2offsety.lines(), n, score, iteration, measure);
 				break;
 			case "F2": // 2
-				pdfbuilder.arbitraryPath(NotesUni.F2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.F2offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.F2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.F2offsety.lines(), n, score, iteration, measure);
 				break;
 			case "G2": // 3
-				pdfbuilder.arbitraryPath(NotesUni.G2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.G2offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.G2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.G2offsety.lines(), n, score, iteration, measure);
 				break;
 			case "A2": // 4
-				pdfbuilder.arbitraryPath(NotesUni.A2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.A2offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.A2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.A2offsety.lines(), n, score, iteration, measure);
 				break;
 			case "B2": // 5
-				pdfbuilder.arbitraryPath(NotesUni.B2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.B2offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.B2offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.B2offsety.lines(), n, score, iteration, measure);
 				break;
 			case "C3": // 6
-				pdfbuilder.arbitraryPath(NotesUni.C3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.C3offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.C3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.C3offsety.lines(), n, score, iteration, measure);
 				break;
 			case "D3": // 7
-				pdfbuilder.arbitraryPath(NotesUni.D3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.D3offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.D3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.D3offsety.lines(), n, score, iteration, measure);
 				break;
 			case "E3": // 8
-				pdfbuilder.arbitraryPath(NotesUni.E3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.E3offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.E3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.E3offsety.lines(), n, score, iteration, measure);
 				break;
 			case "F3": // 9
-				pdfbuilder.arbitraryPath(NotesUni.F3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.F3offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.F3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.F3offsety.lines(), n, score, iteration, measure);
 				break;
 			case "G3": // 10
-				pdfbuilder.arbitraryPath(NotesUni.G3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.G3offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.G3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.G3offsety.lines(), n, score, iteration, measure);
 				break;
 			case "A3": // 11
-				pdfbuilder.arbitraryPath(NotesUni.A3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.A3offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.A3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.A3offsety.lines(), n, score, iteration, measure);
 				break;
 			case "B3": // 12
-				pdfbuilder.arbitraryPath(NotesUni.B3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.B3offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.B3offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.B3offsety.lines(), n, score, iteration, measure);
 				break;
 			case "C4": // 13
-				pdfbuilder.arbitraryPath(NotesUni.C4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.C4offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.C4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.C4offsety.lines(), n, score, iteration, measure);
 				break;
 			case "D4": // 14
-				pdfbuilder.arbitraryPath(NotesUni.D4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.D4offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.D4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.D4offsety.lines(), n, score, iteration, measure);
 				break;
 			case "E4": // 15
-				pdfbuilder.arbitraryPath(NotesUni.E4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.E4offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.E4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.E4offsety.lines(), n, score, iteration, measure);
 				break;
 			case "F4": // 16
-				pdfbuilder.arbitraryPath(NotesUni.F4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.F4offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.F4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.F4offsety.lines(), n, score, iteration, measure);
 				break;
 			case "G4": // 17
-				pdfbuilder.arbitraryPath(NotesUni.G4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.G4offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.G4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.G4offsety.lines(), n, score, iteration, measure);
 				break;
 			case "A4": // 18
-				pdfbuilder.arbitraryPath(NotesUni.A4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.A4offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.A4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.A4offsety.lines(), n, score, iteration, measure);
 				break;
 			case "B4": // 19
-				pdfbuilder.arbitraryPath(NotesUni.B4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.B4offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.B4offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.B4offsety.lines(), n, score, iteration, measure);
 				break;
 			case "C5": // 20
-				pdfbuilder.arbitraryPath(NotesUni.C5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.C5offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.C5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.C5offsety.lines(), n, score, iteration, measure);
 				break;
 			case "D5": // 21
-				pdfbuilder.arbitraryPath(NotesUni.D5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.D5offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.D5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.D5offsety.lines(), n, score, iteration, measure);
 				break;
 			case "E5": // 22
-				pdfbuilder.arbitraryPath(NotesUni.E5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.E5offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.E5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.E5offsety.lines(), n, score, iteration, measure);
 				break;
 			case "F5": // 23
-				pdfbuilder.arbitraryPath(NotesUni.F5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.F5offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.F5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.F5offsety.lines(), n, score, iteration, measure);
 				break;
 			case "G5": // 24
-				pdfbuilder.arbitraryPath(NotesUni.G5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.G5offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.G5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.G5offsety.lines(), n, score, iteration, measure);
 				break;
 			case "A5": // 25
-				pdfbuilder.arbitraryPath(NotesUni.A5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.A5offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.A5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.A5offsety.lines(), n, score, iteration, measure);
 				break;
 			case "B5": // 26
-				pdfbuilder.arbitraryPath(NotesUni.B5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.B5offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.B5offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.B5offsety.lines(), n, score, iteration, measure);
 				break;
 			case "C6": // 27
-				pdfbuilder.arbitraryPath(NotesUni.C6offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.C6offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.C6offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.C6offsety.lines(), n, score, iteration, measure);
 				break;
 			case "D6": // 28
-				pdfbuilder.arbitraryPath(NotesUni.D6offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.D6offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.D6offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.D6offsety.lines(), n, score, iteration, measure);
 				break;
 			case "E6": // 29
-				pdfbuilder.arbitraryPath(NotesUni.E6offsety.offset(), n.getNotations().getTechnical().getFret(), NotesUni.E6offsety.lines(), n, score, iteration, measure);
+				pdfbuilder.arbitraryPath(NotesOffset.E6offsety.offset(), n.getNotations().getTechnical().getFret(), NotesOffset.E6offsety.lines(), n, score, iteration, measure);
 				break;
 			default:
 				break;

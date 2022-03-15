@@ -24,6 +24,7 @@ import org.jfugue.player.Player;
 
 import converter.Instrument;
 import custom_exceptions.TXMLException;
+import design2.CanvasGen;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,7 +40,6 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import player.DrumInstrument;
 import player.StringInstruments;
-import previewer.CanvasGen;
 import utility.Settings;
 
 public class PlayMusicController extends Application {
@@ -91,8 +91,9 @@ public class PlayMusicController extends Application {
 	}
 
 	public void display() {
-		canvas = new CanvasGen(canvas.getHeight(), canvas.getWidth());
+		canvas = new CanvasGen(canvas.getHeight(), canvas.getWidth(), this.mvc);
 		centerpane.getChildren().add(canvas);
+		((CanvasGen) canvas).draw();
 	}
 
 	@FXML

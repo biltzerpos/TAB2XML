@@ -24,7 +24,7 @@ public class Note {
 	Integer duration;
 	Instrument instrument;
 	Integer voice;
-	String type;
+	public String type;
 	@JacksonXmlProperty(localName = "dot")
 	@JacksonXmlElementWrapper(useWrapping = false)
 	List<Dot> dots;
