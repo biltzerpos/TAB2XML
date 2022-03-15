@@ -1,5 +1,11 @@
 .DS_Store
 
+# Eclipse Core		
+.project		
+
+# JDT-specific (Eclipse Java Development Tools)		
+.classpath		 
+
 # Ignore Gradle project-specific cache directory
 .gradle
 
@@ -9,5 +15,4 @@ build
 /lib/.project
 /.settings/org.eclipse.jdt.core.prefs
 /.settings/org.eclipse.buildship.core.prefs
-.classpath
-SheetMusic.pdf
+/.classpath
