@@ -272,7 +272,7 @@ public class Guitar {
 		}
 
 		vocals.add(noteSteps);
-		System.out.println(vocals.toString());
+		//System.out.println(vocals.toString());
 		vocals.setInstrument("GUITAR");
 		vocals.setVoice(voice);
 		vocals.setTempo(120);
