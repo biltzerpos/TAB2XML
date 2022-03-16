@@ -39,7 +39,7 @@ public class GuitarTest extends ApplicationTest{
 		Score score = new Score(input);
 		MusicXMLCreator mxlc = new MusicXMLCreator(score);
 		scorePartwise = mxlc.getScorePartwise();
-		g = new Guitar(scorePartwise, null);
+		g = new Guitar(scorePartwise, null, 50);
 		m1 = g.getMeasureList().get(0);
 		
 	}
@@ -49,7 +49,7 @@ public class GuitarTest extends ApplicationTest{
 	void testExtractClef() {
 		
 		//clef from the extractClef
-		Clef c1 = g.extractClef(m1);
+		Clef c1 = g.getClef();
 		
 		//Actual clef
 		Clef c2 = scorePartwise.getParts().get(0).getMeasures().get(0).getAttributes().getClef();
@@ -138,7 +138,7 @@ public class GuitarTest extends ApplicationTest{
 		Score score1 = new Score(input1);
 		MusicXMLCreator mxlc1 = new MusicXMLCreator(score1);
 		ScorePartwise scorePartwise1 = mxlc1.getScorePartwise();
-		Guitar g1 = new Guitar(scorePartwise1, null);
+		Guitar g1 = new Guitar(scorePartwise1, null, 50);
 		List<Measure> newList = g1.getMeasureList();
 		
 		//setting the meaasure of the g to newList

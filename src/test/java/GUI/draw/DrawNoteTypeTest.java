@@ -39,11 +39,12 @@ public class DrawNoteTypeTest {
 		Score score = new Score(input);
 		MusicXMLCreator mxlc = new MusicXMLCreator(score);
 		ScorePartwise scorePartwise = mxlc.getScorePartwise();
-		Guitar g = new Guitar(scorePartwise, null);
+		Guitar g = new Guitar(scorePartwise, null, 50);
 		Measure m1 = g.getMeasureList().get(0);
 		List<Note> noteList = m1.getNotesBeforeBackup();
+		Note n = noteList.get(0);
 
-		this.dNT = new DrawNoteType(p, noteList, x, y);
+		this.dNT = new DrawNoteType(p, n , x, y);
 	}
 
 	// tests the getPane Method o make sure the method returns the expected pane

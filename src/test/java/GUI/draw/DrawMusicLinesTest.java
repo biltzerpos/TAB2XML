@@ -23,7 +23,7 @@ public class DrawMusicLinesTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 
-		this.dML = new DrawMusicLines(p);
+		this.dML = new DrawMusicLines(p, (int) length);
 		x = 0;
 		y = 0;
 		dML.draw(x, y);
