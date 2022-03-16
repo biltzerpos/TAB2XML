@@ -159,7 +159,7 @@ public class NoteIdentifier {
 		if(instr.equals("Guitar")) {
 			switch (pitchFret) {
 			case "E2": // 1
-				offset = Offset.E2offsety.lines();
+				offset = Offset.E2offsety.lines() + Offset.E2offsety.onLine;
 				break;
 			case "F2": // 2
 				offset = Offset.F2offsety.lines();
