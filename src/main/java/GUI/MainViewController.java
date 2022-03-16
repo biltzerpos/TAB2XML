@@ -3,6 +3,7 @@ package GUI;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -296,17 +297,17 @@ public class MainViewController extends Application {
 	private void saveTabButtonHandle() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, TXMLException {
 		Parent root;
 		try {
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/previewSheetMusic.fxml"));
-//			root = loader.load();
-//			PreviewSheetMusicController controller = loader.getController();
-//			controller.setMainViewController(this);
-//			controller.update();
-//			controller.saveBtn();
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/convertWindow.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/previewSheetMusic.fxml"));
 			root = loader.load();
-			SaveMXLController controller = loader.getController();
+			PreviewSheetMusicController controller = loader.getController();
 			controller.setMainViewController(this);
-			convertWindow = this.openNewWindow(root, "ConversionOptions");
+			controller.saveTab(controller.mainTab = mainText.getText());
+//			controller.saveBtn();
+//			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/convertWindow.fxml"));
+//			root = loader.load();
+//			SaveMXLController controller = loader.getController();
+//			controller.setMainViewController(this);
+//			convertWindow = this.openNewWindow(root, "ConversionOptions");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
@@ -434,13 +435,13 @@ public class MainViewController extends Application {
 					previewButton.setDisable(true);
 					showMXLButton.setDisable(true);
 					playMusicButton.setDisable(true);
-//					saveTabButton.setDisable(true);
+					saveTabButton.setDisable(true);
 				} else {
 					saveMXLButton.setDisable(false);
 					previewButton.setDisable(false);
 					showMXLButton.setDisable(false);
 					playMusicButton.setDisable(false);
-//					saveTabButton.setDisable(false);
+					saveTabButton.setDisable(false);
 				}
 				return highlighter.computeHighlighting(text);
 			}

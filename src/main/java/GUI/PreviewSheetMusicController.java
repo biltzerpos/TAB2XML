@@ -1,7 +1,9 @@
 package GUI;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,18 +49,30 @@ public class PreviewSheetMusicController extends Application {
 	TextField gotoMeasureField;
 	@FXML
 	Button goToline;
+	
+	public String mainTab;
 
 	public PreviewSheetMusicController() {
 
 	}
 	
 	public void saveBtn() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-		pdf.save();
+//		pdf.save();
+	}
+	
+	public void saveTab(String tab) {
+		try (PrintWriter out = new PrintWriter("Tab.txt")) {
+			out.println(tab);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
 	public void initialize() {
 		pdf = new pdfbuilder();
+		saveTab(mainTab);
 	}
 
 	public void setMainViewController(MainViewController mvcInput) {

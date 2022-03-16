@@ -188,45 +188,45 @@ public class pdfbuilder extends Pane {
 			measure++;
 		}
 
-		//		doc.save("SheetMusic.pdf");
-		//		doc.close();
-		//
-		//		if(System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("Linux") ) {
-		//			ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "sensible-browser SheetMusic.pdf");
-		//			processBuilder.start();
-		//		}
-		//		else {
-		//			Desktop.getDesktop().open(new File("SheetMusic.pdf"));
-		//		}
+		doc.save("SheetMusic.pdf");
+		doc.close();
+
+		if(System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("Linux") ) {
+			ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "sensible-browser SheetMusic.pdf");
+			processBuilder.start();
+		}
+		else {
+			Desktop.getDesktop().open(new File("SheetMusic.pdf"));
+		}
 
 		// doc.close();
 	}
 
-	public void save() throws IOException {
-		String userDirectory = System.getProperty("user.home");
-		FileChooser fc = new FileChooser();
-		fc.setInitialDirectory(new File(userDirectory + "/Desktop"));
-		fc.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("PDF", "*.pdf")
-				);
-		File directory = fc.showSaveDialog(null);
-		if (directory != null) {
-			directory = new File(directory.getAbsolutePath());
-		}
-
-		WritableImage nodeshot = this.snapshot(new SnapshotParameters(), null);
-		File file = new File("musicXML.png");
-
-		try {
-			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file);
-			doc.save(directory);
-			doc.close();
-			file.delete();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	//	public void save() throws IOException {
+	//		String userDirectory = System.getProperty("user.home");
+	//		FileChooser fc = new FileChooser();
+	//		fc.setInitialDirectory(new File(userDirectory + "/Desktop"));
+	//		fc.getExtensionFilters().addAll(
+	//				new FileChooser.ExtensionFilter("PDF", "*.pdf")
+	//				);
+	//		File directory = fc.showSaveDialog(null);
+	//		if (directory != null) {
+	//			directory = new File(directory.getAbsolutePath());
+	//		}
+	//
+	//		WritableImage nodeshot = this.snapshot(new SnapshotParameters(), null);
+	//		File file = new File("musicXML.png");
+	//
+	//		try {
+	//			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file);
+	//			doc.save(directory);
+	//			doc.close();
+	//			file.delete();
+	//		} catch (IOException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//	}
 
 
 	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure) throws IOException, TXMLException {
