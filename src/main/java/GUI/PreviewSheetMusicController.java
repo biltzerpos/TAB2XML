@@ -24,15 +24,11 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import custom_exceptions.TXMLException;
 import javafx.application.Application;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.scene.SnapshotParameters;
 //import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import previewer.pdfbuilder;
 
@@ -55,11 +51,6 @@ public class PreviewSheetMusicController extends Application {
 	public String mainTab;
 
 	public PreviewSheetMusicController() {
-
-	}
-	
-	public void saveBtn() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-//		pdf.save();
 	}
 
 	@FXML

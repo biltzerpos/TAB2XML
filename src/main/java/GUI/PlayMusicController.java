@@ -1,26 +1,11 @@
 package GUI;
 
-import java.io.IOException;
-
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.Sequencer;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Track;
-import javax.xml.parsers.ParserConfigurationException;
 
 //import java.io.File;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
-
-import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
-import org.jfugue.integration.MusicXmlParser;
-import org.jfugue.midi.MidiParserListener;
-import org.jfugue.player.Player;
 
 import converter.Instrument;
 import custom_exceptions.TXMLException;
@@ -30,42 +15,31 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 //import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 import player.DrumInstrument;
 import player.StringInstruments;
 import utility.Settings;
 
 public class PlayMusicController extends Application {
 
-	//	public File saveFile;
-
 	private MainViewController mvc;
 	public Highlighter highlighter;
-
 	private DrumInstrument drumPlayer;
 	private StringInstruments stringsPlayer;
+//	private boolean playCondition = false;
 
-	//	private boolean playCondition = false;
-
-	@FXML
-	public CodeArea mxlText;
-
-	//	@FXML
-	//	Button playMusicNotes;
-
-	@FXML
-	TextField gotoMeasureField;
-
-	// Music Player Attributes
-
+	// FXML Attributes
+	
 	@FXML
 	private BorderPane borderPane;
+	
+	@FXML
+	private Pane centerpane;
+
+	@FXML
+	private Canvas canvas;
 
 	@FXML
 	private Button playButton;
@@ -79,35 +53,28 @@ public class PlayMusicController extends Application {
 	@FXML
 	private Button stopButton;
 
-	@FXML
-	private Pane centerpane;
-	
-	@FXML
-    private Canvas canvas;
-
 	public PlayMusicController() {
-
-	}
-
-	public void display() {
-		canvas = new CanvasTabController(canvas.getHeight(), canvas.getWidth());
-		centerpane.getChildren().add(canvas);
 	}
 
 	@FXML
 	public void initialize() {
-		//		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
+//		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
+		display();
 		pauseButton.setDisable(true);
 		rewindButton.setDisable(true);
 		stopButton.setDisable(true);
-		display();
 	}
 
 	public void setMainViewController(MainViewController mvcInput) {
 		mvc = mvcInput;
 	}
+	
+	public void display() {
+		canvas = new CanvasTabController(canvas.getHeight(), canvas.getWidth());
+		centerpane.getChildren().add(canvas);
+	}
 
-	// Closes previewer and goes back to TAB2XML input panel
+	// Close previewer and go back to TAB2XML input panel
 	@FXML
 	private void homeBtn(ActionEvent event) {
 		if (Settings.getInstance().getInstrument() == Instrument.DRUMS) {
@@ -119,7 +86,8 @@ public class PlayMusicController extends Application {
 		Stage stage = (Stage) borderPane.getScene().getWindow();
 		stage.close();
 	}
-
+	
+	// Initialize Instrument
 	public void update() throws TXMLException {
 		if (Settings.getInstance().getInstrument() == Instrument.DRUMS) {
 			drumPlayer = new DrumInstrument();
