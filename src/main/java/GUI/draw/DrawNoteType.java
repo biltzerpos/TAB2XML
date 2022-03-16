@@ -33,7 +33,7 @@ public class DrawNoteType {
 	public void drawType() {
 
 		if (note.getChord() == null) {
-			startX += 25;
+			//startX += 25;
 
 			String current = note.getType();
 			if (current == "half") {
@@ -43,7 +43,7 @@ public class DrawNoteType {
 			} else if (current == "eighth") {
 				drawEighthNotes();
 			}
-			startX += 25;
+			//startX += 25;
 
 		}
 	}
@@ -85,11 +85,11 @@ public class DrawNoteType {
 	}
 
 	// draw the beam itself
-	private void drawBeam(double startX, double startY) {
+	public void drawBeam(double startX, double startY, double length) {
 		double y1 = startY + 37;
 		Line l = new Line();
 		l.setStartX(startX);
-		l.setEndX(startX + 50);
+		l.setEndX(startX + length);
 		l.setStartY(y1);
 		l.setEndY(y1);
 		l.setStrokeWidth(3);

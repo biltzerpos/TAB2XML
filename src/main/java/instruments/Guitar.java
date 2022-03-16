@@ -14,7 +14,6 @@ import javafx.scene.shape.Rectangle;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
-import models.measure.note.Dot;
 import models.measure.note.Note;
 import GUI.draw.*;
 
@@ -31,6 +30,7 @@ public class Guitar {
 	private HashMap<Measure, Double> yCoordinates;
 	private double spacing;
 	private int LineSpacing;
+	private int noteTypeCounter; 
 
 	public Guitar() {
 	}
@@ -135,11 +135,10 @@ public class Guitar {
 	}
 
 	private void drawMeasureNotes(Measure measure) {
+		this.noteTypeCounter = 3; 
 		List<Note> noteList = measure.getNotesBeforeBackup();
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			// DrawNoteType type = new DrawNoteType(getPane(), note, x, y);
-			// type.drawType();
 			if (noteHasTechnical(note)) {
 				drawNoteWithTechnical(note, noteList);
 			}
@@ -157,18 +156,43 @@ public class Guitar {
 		int string = note.getNotations().getTechnical().getString();
 		// if the note belongs to a chord then they are drawn on the same line
 		if (!noteHasChord(note)) {
+			String nextType = ""; 
+			
 			d.draw(x, y);
 			double positionY = getLineCoordinateY(string);
 			DrawNote noteDrawer = new DrawNote(this.pane, note, x + spacing / 2, positionY + 3 + y);
 			x += spacing;
 			noteDrawer.drawFret();
 			drawBend(note);
+			double py = getLastLineCoordinateY(); 
+			DrawNoteType type = new DrawNoteType(pane, note, x-spacing/2, py+y);
+			type.drawType();
+			
+			int index = noteList.indexOf(note);
+			if (index >= 0  && index <noteList.size()-1) {
+				Note next = noteList.get(index+1);
+				nextType = next.getType();
+			}
+			if (note.getType() == "eighth" && nextType=="eighth" ) {
+				if (this.noteTypeCounter > 0) {
+					type.drawBeam(x-spacing/2, py+y, spacing);
+					this.noteTypeCounter--;
+				}
+				else {
+					this.noteTypeCounter = 3; 
+				}
+			}
+			
 
 		} else {
 			double positionY = getLineCoordinateY(string);
 			DrawNote noteDrawer = new DrawNote(this.pane, note, x - spacing / 2, positionY + 3 + y);
 			noteDrawer.drawFret();
 			drawBend(note);
+			double py = getLastLineCoordinateY(); 
+			DrawNoteType type = new DrawNoteType(pane, note, x-spacing/2, py);
+			type.drawType();
+			
 		}
 
 	}
