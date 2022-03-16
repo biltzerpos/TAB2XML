@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.fontbox.ttf.TrueTypeFont;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import GUI.MainViewController;
 import converter.Score;
@@ -80,8 +81,8 @@ public class CanvasGen extends Canvas {
 	}
 
 	public void drawStaff(Score score) throws TXMLException {
-		while(globalX < getWidth() * 2) {
-			globalX = 10;
+		globalX = 10;
+		while(globalX < this.getWidth()) {
 			gc.fillText(getStaffType(score.getModel().getPartList().getScoreParts().get(0).getPartName()), globalX, globalY);
 			globalX += 30;
 		}
@@ -98,26 +99,65 @@ public class CanvasGen extends Canvas {
 					pitchFret = "" + n.getPitch().getStep() + n.getPitch().getOctave();
 					if(globalX >= 600) {
 						globalX = 40;
-						globalY += 100;
+						globalY += 150;
+						drawClef(score);
+						drawStaff(score);
 					}
 					if (n.getChord() != null) {
 						globalX -= 40;
 						// currentNOPG--;
 					}
-					gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) == 0) {
+						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+					}
+					else {
+						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
+					}
 					globalX += 40;
 				}
 				else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
 					pitchFret = "" + n.getInstrument().getId();
 					if(globalX >= 600) {
 						globalX = 40;
-						globalY += 100;
+						globalY += 150;
+						drawClef(score);
+						drawStaff(score);
 					}
-					gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) == 0) {
+						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+					}
+					else {
+						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
+					}
 					globalX += 40;
 				}
 				// TODO remove print
 				System.out.println(pitchFret);
+			}
+		}
+	}
+	
+	public void drawLines(int lines, Score score, Note n) throws IOException, TXMLException {
+		if (lines > 0) {
+			// TODO remove print 
+			System.out.println(globalY);
+			int innerY = globalY + 15
+					+ noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave());
+			for (int i = 0; i < lines; i++) {
+				gc.fillText("\uD834\uDD16", globalX , innerY, 20);
+				innerY -= 6;
+			}
+		}
+		else if (lines < 0) {
+			// TODO remove print 
+			System.out.println(globalY);
+			int innerY = globalY + 15
+					+ noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave());
+			for (int i = 0; i < lines; i++) {
+				gc.fillText("\uD834\uDD16", globalX , innerY, 20);
+				innerY += 6;
 			}
 		}
 	}
