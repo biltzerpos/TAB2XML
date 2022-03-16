@@ -99,8 +99,8 @@ public class Guitar {
 
 			}
 
-			// xCoordinates.put(measure, x);
-			// yCoordinates.put(measure, y);
+			 xCoordinates.put(measure, x);
+			 yCoordinates.put(measure, y);
 			DrawBar bar = new DrawBar(this.pane, x, y);
 			bar.draw();
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
@@ -238,6 +238,7 @@ public class Guitar {
 	public void highlightMeasureArea(Measure measure) {
 		double x = 0;
 		double y = 0;
+
 		ObservableList<?> children = pane.getChildren();
 		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
 		for (Iterator<?> iterator = children.iterator(); iterator.hasNext();) {
@@ -258,7 +259,7 @@ public class Guitar {
 			double w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
 			double yf = getYCoordinatesForGivenMeasure(measureList.get(i));
 			if (yf > y) {
-				// we hav moved on to new Line
+				// we have moved on to new Line
 				x = 0;
 				w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
 				y = yf;
