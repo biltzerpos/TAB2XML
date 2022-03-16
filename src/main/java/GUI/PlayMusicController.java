@@ -83,7 +83,7 @@ public class PlayMusicController extends Application {
 
 	@FXML
 	private Pane centerpane;
-	
+
 	@FXML
     private Canvas canvas;
 
@@ -91,14 +91,14 @@ public class PlayMusicController extends Application {
 
 	}
 
-	public void display() throws FileNotFoundException {
+	public void display() throws FileNotFoundException, TXMLException {
 		canvas = new CanvasGen(canvas.getHeight(), canvas.getWidth(), this.mvc);
 		centerpane.getChildren().add(canvas);
-		((CanvasGen) canvas).draw();
+
 	}
 
 	@FXML
-	public void initialize() throws FileNotFoundException {
+	public void initialize() throws FileNotFoundException, TXMLException {
 		//		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
 		pauseButton.setDisable(true);
 		rewindButton.setDisable(true);
@@ -108,6 +108,7 @@ public class PlayMusicController extends Application {
 
 	public void setMainViewController(MainViewController mvcInput) {
 		mvc = mvcInput;
+//		((CanvasGen) canvas).mvc = mvcInput;
 	}
 
 	// Closes previewer and goes back to TAB2XML input panel
@@ -123,7 +124,7 @@ public class PlayMusicController extends Application {
 		stage.close();
 	}
 
-	public void update() throws TXMLException {
+	public void update() throws TXMLException, IOException {
 		if (Settings.getInstance().getInstrument() == Instrument.DRUMS) {
 			drumPlayer = new DrumInstrument();
 			drumPlayer.setupDrums(mvc.converter.getScore().getModel().getParts().get(0).getMeasures(),
@@ -132,6 +133,7 @@ public class PlayMusicController extends Application {
 			stringsPlayer = new StringInstruments();
 			stringsPlayer.setupStringInstruments(mvc.converter.getScore());
 		}
+		((CanvasGen) canvas).draw(this.mvc.converter.getScore());
 
 		//		if (Settings.getInstance().getInstrument() == Instrument.DRUMS) {
 		//			DrumInstrument drumPlayer = new DrumInstrument();

@@ -17,6 +17,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import converter.Score;
 import custom_exceptions.TXMLException;
+import design2.NoteIdentifier;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -182,7 +183,7 @@ public class pdfbuilder extends Pane {
 				// TODO remove print
 				System.out.println(pitchFret);
 
-				noteIdentifier.identifyNote(instr, pitchFret, n, score, iteration, measure, this);
+//				noteIdentifier.identifyNote(instr, pitchFret, n, score, iteration, measure, this);
 				iteration++;
 			}
 			measure++;
