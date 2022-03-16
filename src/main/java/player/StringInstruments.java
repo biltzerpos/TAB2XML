@@ -14,6 +14,7 @@ import models.measure.note.Note;
 
 public class StringInstruments {
 	private String wholeString = "";
+	private int tempo;
 	public Player player;
 	public StaccatoParser parser = new StaccatoParser();
 	public MidiParserListener midilistener = new MidiParserListener();
@@ -21,11 +22,13 @@ public class StringInstruments {
 	public void setupStringInstruments(Score score) throws TXMLException {
 		player = new Player();
 
-		wholeString += "T180 I[Guitar] ";
+		tempo = 280;
+
+		wholeString += "T" + tempo + " I[Guitar] ";
 
 		for (Measure measure : score.getModel().getParts().get(0).getMeasures()) {
 			if (measure.getNotesBeforeBackup() != null) {
-				for (int i = 0; (i < measure.getNotesBeforeBackup().size()); i++) {					
+				for (int i = 0; (i < measure.getNotesBeforeBackup().size()); i++) {
 					if (measure.getNotesBeforeBackup().get(i).getChord() != null) {
 						wholeString += String.format("+%s%s", checkIrregularNotes(measure.getNotesBeforeBackup().get(i)), getDurationMIDI(measure.getNotesBeforeBackup().get(i).getDuration()));
 					} else if (measure.getNotesBeforeBackup().get(i).getChord() == null) {
@@ -34,7 +37,7 @@ public class StringInstruments {
 				}
 			}
 		}
-		
+
 		parser.addParserListener(midilistener);
 		parser.parse(wholeString);
 

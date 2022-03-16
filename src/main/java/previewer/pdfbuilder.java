@@ -17,7 +17,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import converter.Score;
 import custom_exceptions.TXMLException;
-import javafx.embed.swing.SwingFXUtils;
+import design2.NoteIdentifier;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
@@ -182,7 +182,7 @@ public class pdfbuilder extends Pane {
 				// TODO remove print
 				System.out.println(pitchFret);
 
-				noteIdentifier.identifyNote(instr, pitchFret, n, score, iteration, measure, this);
+//				noteIdentifier.identifyNote(instr, pitchFret, n, score, iteration, measure, this);
 				iteration++;
 			}
 			measure++;
@@ -227,7 +227,6 @@ public class pdfbuilder extends Pane {
 	//			e.printStackTrace();
 	//		}
 	//	}
-
 
 	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure) throws IOException, TXMLException {
 		if ((lines < 0) && (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar"))) {

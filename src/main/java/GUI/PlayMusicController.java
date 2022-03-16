@@ -1,5 +1,8 @@
 package GUI;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
@@ -9,6 +12,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 import converter.Instrument;
 import custom_exceptions.TXMLException;
+import design2.CanvasGen;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,7 +61,7 @@ public class PlayMusicController extends Application {
 	}
 
 	@FXML
-	public void initialize() {
+	public void initialize() throws FileNotFoundException, TXMLException {
 //		mxlText.setParagraphGraphicFactory(LineNumberFactory.get(mxlText));
 		display();
 		pauseButton.setDisable(true);
@@ -67,10 +71,11 @@ public class PlayMusicController extends Application {
 
 	public void setMainViewController(MainViewController mvcInput) {
 		mvc = mvcInput;
+//		((CanvasGen) canvas).mvc = mvcInput;
 	}
 	
-	public void display() {
-		canvas = new CanvasTabController(canvas.getHeight(), canvas.getWidth());
+	public void display() throws FileNotFoundException, TXMLException {
+		canvas = new CanvasGen(canvas.getHeight(), canvas.getWidth(), this.mvc);
 		centerpane.getChildren().add(canvas);
 	}
 
@@ -88,7 +93,7 @@ public class PlayMusicController extends Application {
 	}
 	
 	// Initialize Instrument
-	public void update() throws TXMLException {
+	public void update() throws TXMLException, IOException {
 		if (Settings.getInstance().getInstrument() == Instrument.DRUMS) {
 			drumPlayer = new DrumInstrument();
 			drumPlayer.setupDrums(mvc.converter.getScore().getModel().getParts().get(0).getMeasures(),
@@ -97,6 +102,7 @@ public class PlayMusicController extends Application {
 			stringsPlayer = new StringInstruments();
 			stringsPlayer.setupStringInstruments(mvc.converter.getScore());
 		}
+		((CanvasGen) canvas).draw(this.mvc.converter.getScore());
 
 		//		if (Settings.getInstance().getInstrument() == Instrument.DRUMS) {
 		//			DrumInstrument drumPlayer = new DrumInstrument();
