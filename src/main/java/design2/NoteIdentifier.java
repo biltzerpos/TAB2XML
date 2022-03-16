@@ -162,88 +162,88 @@ public class NoteIdentifier {
 				offset = Offset.E2offsety.lines() + Offset.E2offsety.onLine;
 				break;
 			case "F2": // 2
-				offset = Offset.F2offsety.lines();
+				offset = Offset.F2offsety.lines() + Offset.F2offsety.onLine;
 				break;
 			case "G2": // 3
-				offset = Offset.G2offsety.lines();
+				offset = Offset.G2offsety.lines() + Offset.G2offsety.onLine;
 				break;
 			case "A2": // 4
-				offset = Offset.A2offsety.lines();
+				offset = Offset.A2offsety.lines() + Offset.A2offsety.onLine;
 				break;
 			case "B2": // 5
-				offset = Offset.B2offsety.lines();
+				offset = Offset.B2offsety.lines() + Offset.B2offsety.onLine;
 				break;
 			case "C3": // 6
-				offset = Offset.C3offsety.lines();
+				offset = Offset.C3offsety.lines() + Offset.C3offsety.onLine;
 				break;
 			case "D3": // 7
-				offset = Offset.D3offsety.lines();
+				offset = Offset.D3offsety.lines() + Offset.D3offsety.onLine;
 				break;
 			case "E3": // 8
-				offset = Offset.E3offsety.lines();
+				offset = Offset.E3offsety.lines() + Offset.E3offsety.onLine;
 				break;
 			case "F3": // 9
-				offset = Offset.F3offsety.lines();
+				offset = Offset.F3offsety.lines() + Offset.F3offsety.onLine;
 				break;
 			case "G3": // 10
-				offset = Offset.G3offsety.lines();
+				offset = Offset.G3offsety.lines() + Offset.G3offsety.onLine;
 				break;
 			case "A3": // 11
-				offset = Offset.A3offsety.lines();
+				offset = Offset.A3offsety.lines() + Offset.A3offsety.onLine;
 				break;
 			case "B3": // 12
-				offset = Offset.B3offsety.lines();
+				offset = Offset.B3offsety.lines() + Offset.B3offsety.onLine;
 				break;
 			case "C4": // 13
-				offset = Offset.C4offsety.lines();
+				offset = Offset.C4offsety.lines() + Offset.C4offsety.onLine;
 				break;
 			case "D4": // 14
-				offset = Offset.D4offsety.lines();
+				offset = Offset.D4offsety.lines() + Offset.D4offsety.onLine;
 				break;
 			case "E4": // 15
-				offset = Offset.E4offsety.lines();
+				offset = Offset.E4offsety.lines() + Offset.E4offsety.onLine;
 				break;
 			case "F4": // 16
-				offset = Offset.F4offsety.lines();
+				offset = Offset.F4offsety.lines() + Offset.F4offsety.onLine;
 				break;
 			case "G4": // 17
-				offset = Offset.G4offsety.lines();
+				offset = Offset.G4offsety.lines() + Offset.G4offsety.onLine;
 				break;
 			case "A4": // 18
-				offset = Offset.A4offsety.lines();
+				offset = Offset.A4offsety.lines() + Offset.A4offsety.onLine;
 				break;
 			case "B4": // 19
-				offset = Offset.B4offsety.lines();
+				offset = Offset.B4offsety.lines() + Offset.B4offsety.onLine;
 				break;
 			case "C5": // 20
-				offset = Offset.C5offsety.lines();
+				offset = Offset.C5offsety.lines() + Offset.C5offsety.onLine;
 				break;
 			case "D5": // 21
-				offset = Offset.D5offsety.lines();
+				offset = Offset.D5offsety.lines() + Offset.D5offsety.onLine;
 				break;
 			case "E5": // 22
-				offset = Offset.E5offsety.lines();
+				offset = Offset.E5offsety.lines() + Offset.E5offsety.onLine;
 				break;
 			case "F5": // 23
-				offset = Offset.F5offsety.lines();
+				offset = Offset.F5offsety.lines() + Offset.F5offsety.onLine;
 				break;
 			case "G5": // 24
-				offset = Offset.G5offsety.lines();
+				offset = Offset.G5offsety.lines() + Offset.G5offsety.onLine;
 				break;
 			case "A5": // 25
-				offset = Offset.A5offsety.lines();
+				offset = Offset.A5offsety.lines() + Offset.A5offsety.onLine;
 				break;
 			case "B5": // 26
-				offset = Offset.B5offsety.lines();
+				offset = Offset.B5offsety.lines() + Offset.B5offsety.onLine;
 				break;
 			case "C6": // 27
-				offset = Offset.C6offsety.lines();
+				offset = Offset.C6offsety.lines() + Offset.C6offsety.onLine;
 				break;
 			case "D6": // 28
-				offset = Offset.D6offsety.lines();
+				offset = Offset.D6offsety.lines() + Offset.D6offsety.onLine;
 				break;
 			case "E6": // 29
-				offset = Offset.E6offsety.lines();
+				offset = Offset.E6offsety.lines() + Offset.E6offsety.onLine;
 				break;
 			default:
 				break;
