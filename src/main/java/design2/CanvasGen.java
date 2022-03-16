@@ -25,7 +25,10 @@ public class CanvasGen extends Canvas {
 	private int fontSize = 40;
 	private Font f;
 
-	private int globalX = 50;
+	
+	private int initialX = 60;
+	private int shiftX = 40; 
+	private int globalX = initialX;
 	private int globalY = 150;
 	private NoteIdentifier noteIdentifier;
 
@@ -36,8 +39,11 @@ public class CanvasGen extends Canvas {
 		gc = this.getGraphicsContext2D();
 		gc.setFont(new Font("Bravura", fontSize)); // fontSize changes size of every drawn element
 		try {
-			f = Font.loadFont(new FileInputStream(new File(System.getProperty("user.home") + File.separator + "git" + File.separator + "TAB2XML" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "fonts" + File.separator + "NotoMusic-Regular.ttf")), fontSize);
-		} catch (FileNotFoundException e) {
+			f = Font.loadFont(new FileInputStream(new File(System.getProperty("user.home") + File.separator + "git" + File.separator + "TAB2XML" + 
+																					File.separator + "src" + File.separator + "main" + File.separator + "resources" + 
+																					File.separator + "fonts" + File.separator + "NotoMusic-Regular.ttf")), fontSize);
+		} 
+		catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -60,6 +66,19 @@ public class CanvasGen extends Canvas {
 
 		drawClef(score);
 		drawStaff(score);
+		
+//		System.out.println("X:" + globalX + " | Y: " + globalY);
+//		gc.fillText("\uD834\uDD5D", globalX, globalY);
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX, globalY - 5);
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX * 2, globalY - 10);
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX * 3, globalY - 15); 
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX * 4, globalY - 20);
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX * 5, globalY - 25);
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX * 6, globalY - 30);
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX * 7, globalY - 35);
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX * 8, globalY - 40);
+//		gc.fillText("\uD834\uDD5D", globalX + shiftX * 9, globalY - 45);
+		
 		drawNotes(score);
 
 //		gc.fillText(getNoteType(64), 10, 50); // whole
@@ -83,58 +102,63 @@ public class CanvasGen extends Canvas {
 	public void drawStaff(Score score) throws TXMLException {
 		globalX = 10;
 		while(globalX < this.getWidth()) {
-			gc.fillText(getStaffType(score.getModel().getPartList().getScoreParts().get(0).getPartName()), globalX, globalY);
-			globalX += 30;
+			for(int i = -2; i < 4; i++) {
+				System.out.println("IN STAFF METHOD X:" + globalX + " | Y: " + globalY);
+				gc.fillText(getStaffType(score.getModel().getPartList().getScoreParts().get(0).getPartName()), globalX, globalY - (10 * i));
+			}
+			globalX += shiftX;
 		}
-		globalX = 40;
+		globalX = initialX;
 	}
 
 	public void drawNotes(Score score) throws TXMLException, IOException {
 		for (Measure m : score.getModel().getParts().get(0).getMeasures()) {
 			for (Note n : m.getNotesBeforeBackup()) {
-				String pitchFret = "";
 				NoteIdentifier noteIdentifier = new NoteIdentifier();
 
 				if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
-					pitchFret = "" + n.getPitch().getStep() + n.getPitch().getOctave();
 					if(globalX >= 600) {
-						globalX = 40;
 						globalY += 150;
 						drawClef(score);
 						drawStaff(score);
 					}
 					if (n.getChord() != null) {
-						globalX -= 40;
+						globalX -= shiftX;
 						// currentNOPG--;
 					}
 					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) == 0) {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 					}
 					else {
+//						if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) < 0) {
+//							gc.scale(1, -1);
+//						}
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
-					globalX += 40;
+					globalX += shiftX;
 				}
 				else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
-					pitchFret = "" + n.getInstrument().getId();
 					if(globalX >= 600) {
-						globalX = 40;
+						globalX = 50;
 						globalY += 150;
 						drawClef(score);
 						drawStaff(score);
 					}
-					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) == 0) {
-						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+					if (n.getChord() != null) {
+						globalX -= shiftX;
+						// currentNOPG--;
+					}
+					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()) == 0) {
+						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 					}
 					else {
-						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+						// TODO use vertivaly flipped notes
+						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
-					globalX += 40;
+					globalX += shiftX;
 				}
-				// TODO remove print
-				System.out.println(pitchFret);
 			}
 		}
 	}
@@ -142,22 +166,23 @@ public class CanvasGen extends Canvas {
 	public void drawLines(int lines, Score score, Note n) throws IOException, TXMLException {
 		if (lines > 0) {
 			// TODO remove print 
-			System.out.println(globalY);
+			System.out.println("lines < 0 | " + globalY);
 			int innerY = globalY + 15
+					- noteIdentifier.noteOnLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave())
 					+ noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave());
 			for (int i = 0; i < lines; i++) {
 				gc.fillText("\uD834\uDD16", globalX , innerY, 20);
-				innerY -= 6;
+				innerY -= 10;
 			}
 		}
 		else if (lines < 0) {
 			// TODO remove print 
-			System.out.println(globalY);
-			int innerY = globalY + 15
+			System.out.println("lines > 0 | " + globalY);
+			int innerY = globalY - 15
 					+ noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave());
-			for (int i = 0; i < lines; i++) {
+			for (int i = 0; i < (-1 * lines); i++) {
 				gc.fillText("\uD834\uDD16", globalX , innerY, 20);
-				innerY += 6;
+				innerY += 10;
 			}
 		}
 	}
@@ -166,7 +191,10 @@ public class CanvasGen extends Canvas {
 		String staffType = "";
 
 		switch(instrument) {
-		case "Guitar":
+		case "Sixer":
+			staffType = "\uD834\uDD1B"; // six line staff
+			break;
+		case "Drumset":
 			staffType = "\uD834\uDD1B"; // six line staff
 			break;
 		case "F": // TODO check instrument name
@@ -181,7 +209,7 @@ public class CanvasGen extends Canvas {
 		case "D1": // TODO check instrument name
 			staffType = "\uD834\uDD17"; // two line staff
 			break;
-		case "D2": // TODO check instrument name
+		case "Guitar": // TODO check instrument name
 			staffType = "\uD834\uDD16"; // one line staff
 			break;
 		}
@@ -213,7 +241,7 @@ public class CanvasGen extends Canvas {
 		case "F Bassa": // TODO check instrument name
 			clefType = "\uD834\uDD24"; // f clef octava bassa
 			break;
-		case "D1": // TODO check instrument name
+		case "Drumset": // TODO check instrument name
 			clefType = "\uD834\uDD25"; // drum clef-1
 			break;
 		case "D2": // TODO check instrument name
