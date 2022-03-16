@@ -295,23 +295,20 @@ public class MainViewController extends Application {
 
 	@FXML
 	private void saveTabButtonHandle() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, TXMLException {
-		Parent root;
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/previewSheetMusic.fxml"));
-			root = loader.load();
-			PreviewSheetMusicController controller = loader.getController();
-			controller.setMainViewController(this);
-			controller.saveTab(controller.mainTab = mainText.getText());
-//			controller.saveBtn();
+		SaveTabController tab = new SaveTabController(mainText.getText());
+		tab.save();
+		
+//		Parent root;
+//		try {
 //			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/convertWindow.fxml"));
 //			root = loader.load();
 //			SaveMXLController controller = loader.getController();
 //			controller.setMainViewController(this);
 //			convertWindow = this.openNewWindow(root, "ConversionOptions");
-		} catch (IOException e) {
-			Logger logger = Logger.getLogger(getClass().getName());
-			logger.log(Level.SEVERE, "Failed to create new Window.", e);
-		}
+//		} catch (IOException e) {
+//			Logger logger = Logger.getLogger(getClass().getName());
+//			logger.log(Level.SEVERE, "Failed to create new Window.", e);
+//		}
 	}
 
 	@FXML
@@ -374,7 +371,7 @@ public class MainViewController extends Application {
 			PlayMusicController controller = loader.getController();
 			controller.setMainViewController(this);
 			// Initialize music player
-			controller.update(); 
+			controller.update();
 			convertWindow = this.openNewWindow(root, "Music Player");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());

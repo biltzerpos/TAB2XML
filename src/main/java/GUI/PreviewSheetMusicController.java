@@ -45,8 +45,10 @@ public class PreviewSheetMusicController extends Application {
 
 	@FXML
 	public ImageView imageview;
+	
 	@FXML
 	TextField gotoMeasureField;
+	
 	@FXML
 	Button goToline;
 	
@@ -59,20 +61,10 @@ public class PreviewSheetMusicController extends Application {
 	public void saveBtn() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 //		pdf.save();
 	}
-	
-	public void saveTab(String tab) {
-		try (PrintWriter out = new PrintWriter("Tab.txt")) {
-			out.println(tab);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	@FXML
 	public void initialize() {
 		pdf = new pdfbuilder();
-		saveTab(mainTab);
 	}
 
 	public void setMainViewController(MainViewController mvcInput) {
