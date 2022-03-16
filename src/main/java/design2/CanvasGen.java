@@ -130,6 +130,9 @@ public class CanvasGen extends Canvas {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 					}
 					else {
+//						if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) < 0) {
+//							gc.scale(1, -1);
+//						}
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
@@ -150,6 +153,7 @@ public class CanvasGen extends Canvas {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 					}
 					else {
+						// TODO use vertivaly flipped notes
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
@@ -163,8 +167,8 @@ public class CanvasGen extends Canvas {
 		if (lines > 0) {
 			// TODO remove print 
 			System.out.println("lines < 0 | " + globalY);
-			int innerY = globalY
-					+ noteIdentifier.identifyNote(getAccessibleRoleDescription(), getAccessibleHelp())
+			int innerY = globalY + 15
+					- noteIdentifier.noteOnLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave())
 					+ noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave());
 			for (int i = 0; i < lines; i++) {
 				gc.fillText("\uD834\uDD16", globalX , innerY, 20);
@@ -174,7 +178,7 @@ public class CanvasGen extends Canvas {
 		else if (lines < 0) {
 			// TODO remove print 
 			System.out.println("lines > 0 | " + globalY);
-			int innerY = globalY
+			int innerY = globalY - 15
 					+ noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave());
 			for (int i = 0; i < (-1 * lines); i++) {
 				gc.fillText("\uD834\uDD16", globalX , innerY, 20);
