@@ -15,51 +15,36 @@ public class DrawNoteType {
 	private double startY;
 	private final double HalfNoteLength = 15;
 	private final double QuarterNoteLength = 30;
-	private List<Note> noteList;
-	private int counter = 3;
+	private Note note;
 
 	public DrawNoteType() {
 
 	}
 
-	public DrawNoteType(Pane pane, List<Note> noteList, double startX, double startY) {
+	public DrawNoteType(Pane pane, Note note, double startX, double startY) {
 		super();
 		this.pane = pane;
 		this.startX = startX;
 		this.startY = startY;
-		this.noteList = noteList;
+		this.note = note;
+
 	}
 
-	public void drawDuration() {
-		for (int i = 0; i < noteList.size(); i++) {
-			Note note = noteList.get(i);
-			if (note.getChord() == null) {
-				startX += 25;
+	public void drawType() {
 
-				String current = note.getType();
-				String next = "";
-				if (!(i < 0 || i >= noteList.size() - 1)) {
-					next = noteList.get(i + 1).getType();
-				}
+		if (note.getChord() == null) {
+			startX += 25;
 
-				if (current == "half") {
-					drawHalfNotes();
-				} else if (current == "quarter") {
-					drawQuarterNotes();
-				} else if (current == "eighth") {
-					drawEighthNotes();
-					if (next == "eighth") {
-						if (counter > 0) {
-							drawBeam();
-							counter--;
-						} else {
-							counter = 3;
-						}
-					}
-				}
-				startX += 25;
-
+			String current = note.getType();
+			if (current == "half") {
+				drawHalfNotes();
+			} else if (current == "quarter") {
+				drawQuarterNotes();
+			} else if (current == "eighth") {
+				drawEighthNotes();
 			}
+			startX += 25;
+
 		}
 	}
 
@@ -100,7 +85,7 @@ public class DrawNoteType {
 	}
 
 	// draw the beam itself
-	private void drawBeam() {
+	private void drawBeam(double startX, double startY) {
 		double y1 = startY + 37;
 		Line l = new Line();
 		l.setStartX(startX);

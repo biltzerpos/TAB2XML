@@ -3,12 +3,9 @@ package GUI.draw;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import models.measure.note.Note;
 
@@ -19,9 +16,6 @@ public class DrawBend {
 	private Pane pane;
 	private double startX;
 	private double startY;
-	private final double radiusX = 25;
-	private final double radiusY = 30;
-	private final double length = 100;
 	private double firstML;
 
 	public DrawBend(Pane pane, Note note, double x, double y, double firstML) {
@@ -50,13 +44,6 @@ public class DrawBend {
 		Text bend = new Text(quadCurve.getEndX()+5, quadCurve.getEndY()-5, getBendvalue());
 		bend.setFont(Font.font("Comic Sans MS", FontPosture.REGULAR, 10));
 		pane.getChildren().add(bend);
-
-		/*
-		 * Text start = new Text(x1, y1, "start"); Text end = new Text(x2, y2, "end");
-		 * Text control = new Text(controlX, controlY, "c");
-		 * pane.getChildren().add(start); pane.getChildren().add(end);
-		 * pane.getChildren().add(control);
-		 */
 
 	}
 

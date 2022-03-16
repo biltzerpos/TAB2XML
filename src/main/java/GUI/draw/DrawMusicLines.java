@@ -12,7 +12,7 @@ public class DrawMusicLines extends Node {
 
 	@FXML
 	private Pane pane;
-	private final double length = 50.0;
+	private double length;
 	private MLine musicLine;
 	private List<MLine> musicLineList;
 
@@ -22,10 +22,11 @@ public class DrawMusicLines extends Node {
 	}
 
 	// Constructor 2
-	public DrawMusicLines(Pane pane) {
+	public DrawMusicLines(Pane pane, int lenght) {
 		super();
 		this.pane = pane;
 		this.musicLineList = new ArrayList<MLine>();
+		this.length = lenght; 
 
 	}
 

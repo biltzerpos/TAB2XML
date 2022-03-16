@@ -16,9 +16,9 @@
          <children>
             <AnchorPane layoutY="13.0" prefHeight="600.0" prefWidth="974.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="32.0">
                <children>
-                  <ScrollPane fitToWidth="true" pannable="true" stylesheets="@scrollPane_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ScrollPane pannable="true" stylesheets="@scrollPane_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
-                        <AnchorPane fx:id="anchorPane" prefWidth="973.0" style="-fx-background-color: white;">
+                        <AnchorPane fx:id="anchorPane" style="-fx-background-color: white;">
                            <children>
                               <Pane fx:id="pane" maxWidth="920.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0" />
                            </children>

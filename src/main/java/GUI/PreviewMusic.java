@@ -75,7 +75,8 @@ public class PreviewMusic extends Application {
 		 */
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			this.guitar = new Guitar(scorePartwise, pane);
+			int spacing = 30; 
+			this.guitar = new Guitar(scorePartwise, pane, spacing);
 			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
 			this.drum = new Drumset(scorePartwise, pane);
@@ -124,7 +125,7 @@ public class PreviewMusic extends Application {
 	public void playHandle() {
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			this.guitar.playGuitarNote(); // Play method in Guitar class
+			//this.guitar.playGuitarNote(); // Play method in Guitar class
 		} else if (instrument == "Drumset") {
 			this.drum.playDrumNote(); // Play method in Drumset class
 		}
@@ -143,7 +144,7 @@ public class PreviewMusic extends Application {
 			for (Iterator<Measure> iterator = measureList.iterator(); iterator.hasNext();) {
 				Measure measure = (Measure) iterator.next();
 				if (measureNumber == count) {
-					this.guitar.highlightMeasureArea(measure);
+					//this.guitar.highlightMeasureArea(measure);
 					measureFound = true;
 					break;
 				}
