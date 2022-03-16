@@ -96,7 +96,6 @@ public class CanvasGen extends Canvas {
 				NoteIdentifier noteIdentifier = new NoteIdentifier();
 
 				if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
-					pitchFret = "" + n.getPitch().getStep() + n.getPitch().getOctave();
 					if(globalX >= 600) {
 						globalX = 40;
 						globalY += 150;
@@ -117,18 +116,21 @@ public class CanvasGen extends Canvas {
 					globalX += 40;
 				}
 				else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
-					pitchFret = "" + n.getInstrument().getId();
 					if(globalX >= 600) {
 						globalX = 40;
 						globalY += 150;
 						drawClef(score);
 						drawStaff(score);
 					}
-					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) == 0) {
-						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+					if (n.getChord() != null) {
+						globalX -= 40;
+						// currentNOPG--;
+					}
+					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()) == 0) {
+						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 					}
 					else {
-						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
+						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
 					globalX += 40;
@@ -167,6 +169,9 @@ public class CanvasGen extends Canvas {
 
 		switch(instrument) {
 		case "Guitar":
+			staffType = "\uD834\uDD1B"; // six line staff
+			break;
+		case "Drumset":
 			staffType = "\uD834\uDD1B"; // six line staff
 			break;
 		case "F": // TODO check instrument name
@@ -213,7 +218,7 @@ public class CanvasGen extends Canvas {
 		case "F Bassa": // TODO check instrument name
 			clefType = "\uD834\uDD24"; // f clef octava bassa
 			break;
-		case "D1": // TODO check instrument name
+		case "Drumset": // TODO check instrument name
 			clefType = "\uD834\uDD25"; // drum clef-1
 			break;
 		case "D2": // TODO check instrument name
