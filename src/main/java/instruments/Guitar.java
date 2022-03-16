@@ -14,13 +14,8 @@ import javafx.scene.shape.Rectangle;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
-import models.measure.note.Dot;
-import models.measure.note.Grace;
 import models.measure.note.Note;
-import models.measure.note.Rest;
-import models.measure.note.notations.Tied;
 import GUI.draw.*;
-import converter.note.GuitarNote;
 
 public class Guitar {
 
@@ -212,6 +207,19 @@ public class Guitar {
 			DrawNote noteDrawer = new DrawNote(this.pane, note, x - 25, positionY + 3 + y);
 			noteDrawer.drawFret();
 		}
+		
+		//Bend
+		if(noteHasBend(note)) {
+			double firstMusicLine = getFirstLineCoordinateY();
+			DrawBend db = new DrawBend(pane, note, x, y, firstMusicLine);
+			db.draw();
+		}
+	}
+
+	private boolean noteHasBend(Note note) {
+		Boolean res = note.getNotations().getTechnical().getBend() == null ? false : true; 
+		return res; 
+		
 	}
 
 	// gets the Y coordinate of specific group of music lines based on given string
@@ -223,6 +231,10 @@ public class Guitar {
 
 	private double getLastLineCoordinateY() {
 		return this.d.getMusicLineList().get(5).getStartY(6);
+
+	}
+	private double getFirstLineCoordinateY() {
+		return this.d.getMusicLineList().get(0).getStartY(1);
 
 	}
 	public Boolean noteHasTie(Note n) {
