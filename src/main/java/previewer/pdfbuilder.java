@@ -18,7 +18,6 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import converter.Score;
 import custom_exceptions.TXMLException;
 import design2.NoteIdentifier;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
@@ -203,31 +202,31 @@ public class pdfbuilder extends Pane {
 		// doc.close();
 	}
 
-	public void save() throws IOException {
-		String userDirectory = System.getProperty("user.home");
-		FileChooser fc = new FileChooser();
-		fc.setInitialDirectory(new File(userDirectory + "/Desktop"));
-		fc.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("PDF", "*.pdf")
-				);
-		File directory = fc.showSaveDialog(null);
-		if (directory != null) {
-			directory = new File(directory.getAbsolutePath());
-		}
-
-		WritableImage nodeshot = this.snapshot(new SnapshotParameters(), null);
-		File file = new File("musicXML.png");
-
-		try {
-			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file);
-			doc.save(directory);
-			doc.close();
-			file.delete();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public void save() throws IOException {
+//		String userDirectory = System.getProperty("user.home");
+//		FileChooser fc = new FileChooser();
+//		fc.setInitialDirectory(new File(userDirectory + "/Desktop"));
+//		fc.getExtensionFilters().addAll(
+//				new FileChooser.ExtensionFilter("PDF", "*.pdf")
+//				);
+//		File directory = fc.showSaveDialog(null);
+//		if (directory != null) {
+//			directory = new File(directory.getAbsolutePath());
+//		}
+//
+//		WritableImage nodeshot = this.snapshot(new SnapshotParameters(), null);
+//		File file = new File("musicXML.png");
+//
+//		try {
+//			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file);
+//			doc.save(directory);
+//			doc.close();
+//			file.delete();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 
 	public void arbitraryPath(int offset, int fret, int lines, Note n, Score score, int iteration, int measure) throws IOException, TXMLException {

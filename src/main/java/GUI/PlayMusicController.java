@@ -94,7 +94,6 @@ public class PlayMusicController extends Application {
 	public void display() throws FileNotFoundException, TXMLException {
 		canvas = new CanvasGen(canvas.getHeight(), canvas.getWidth(), this.mvc);
 		centerpane.getChildren().add(canvas);
-
 	}
 
 	@FXML

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 
-
-<AnchorPane prefHeight="890" prefWidth="700"
-	xmlns:fx="http://javafx.com/fxml/1"
-	xmlns="http://javafx.com/javafx/2.2"
-	fx:controller="GUI.PreviewSheetMusicController">
+<AnchorPane prefHeight="890" prefWidth="700" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PreviewSheetMusicController">
 	<children>
-			<ImageView fx:id="imageview" fitHeight="880" fitWidth="710"
-				layoutX="10.0" layoutY="10.0" pickOnBounds="false"
-				preserveRatio="true">
-
-			</ImageView>
+      <ScrollPane prefHeight="890.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <Pane fx:id="centerpane" prefHeight="890.0" prefWidth="700.0">
+               <children>
+                  <Canvas fx:id="canvas" height="890.0" width="700.0" />
+               </children>
+            </Pane>
+         </content>
+      </ScrollPane>
 	</children>
 </AnchorPane>

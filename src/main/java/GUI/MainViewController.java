@@ -354,9 +354,10 @@ public class MainViewController extends Application {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/previewSheetMusic.fxml"));
 			root = loader.load();
 			PreviewSheetMusicController controller = loader.getController();
+			// Initialize sheet preview
 			controller.setMainViewController(this);
 			controller.update();
-			//	convertWindow = this.openNewWindow(root, "Sheet Music Preview");
+			convertWindow = this.openNewWindow(root, "Sheet Music Preview");
 		} catch (IOException e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
@@ -371,8 +372,8 @@ public class MainViewController extends Application {
 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/playMusic.fxml"));
 			root = loader.load();
 			PlayMusicController controller = loader.getController();
-			controller.setMainViewController(this);
 			// Initialize music player
+			controller.setMainViewController(this);
 			controller.update(); 
 			convertWindow = this.openNewWindow(root, "Music Player");
 		} catch (IOException e) {
