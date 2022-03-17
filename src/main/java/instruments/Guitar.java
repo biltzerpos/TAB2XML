@@ -179,21 +179,9 @@ public class Guitar {
 
 	}
 	
-	//Regualr chords
-	private void drawChordWithoutGrace(Note note, List<Note> noteList) {
-		int string = note.getNotations().getTechnical().getString();
-		double positionY = getLineCoordinateY(string);
-		// DrawNote noteDrawer = new DrawNote(this.pane, note, x - spacing / 2,
-		// positionY + 3 + y);
-		noteDrawer.setPane(pane);
-		noteDrawer.setNote(note);
-		noteDrawer.setStartX(noteDrawer.getStartX());
-		noteDrawer.setStartY(positionY + 3 + y);
-		noteDrawer.drawFret();
-		drawBend(note);
-		double py = getLastLineCoordinateY();
-		DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
-		type.drawType();
+	private void drawChordsWithGraceNotes(Note note, List<Note> noteList) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
@@ -238,6 +226,9 @@ public class Guitar {
 			if (noteHasGrace(next)) {
 				this.numOfGraceNotesInMeasure++;
 			}
+			else {
+				break;
+			}
 		}
 	}
 
@@ -273,8 +264,8 @@ public class Guitar {
 		}
 		if (lastNoteIsGrace) {
 			// DrawNote noteDrawer = new DrawNote(this.pane, note, x , positionY + 3 + y);
-			System.out.println(this.numOfGraceNotesInMeasure + 1);
-			x -= (spacing / 6) * (this.numOfGraceNotesInMeasure + 1);
+			System.out.println(this.numOfGraceNotesInMeasure+1);
+			x -= (spacing / 6) * (this.numOfGraceNotesInMeasure+1);
 			noteDrawer.setPane(pane);
 			noteDrawer.setNote(note);
 			noteDrawer.setStartX(x + spacing / 2);
@@ -316,6 +307,22 @@ public class Guitar {
 			}
 		}
 	}
+	//Regular chords
+		private void drawChordWithoutGrace(Note note, List<Note> noteList) {
+			int string = note.getNotations().getTechnical().getString();
+			double positionY = getLineCoordinateY(string);
+			// DrawNote noteDrawer = new DrawNote(this.pane, note, x - spacing / 2,
+			// positionY + 3 + y);
+			noteDrawer.setPane(pane);
+			noteDrawer.setNote(note);
+			noteDrawer.setStartX(noteDrawer.getStartX());
+			noteDrawer.setStartY(positionY + 3 + y);
+			noteDrawer.drawFret();
+			drawBend(note);
+			double py = getLastLineCoordinateY();
+			DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
+			type.drawType();
+		}
 
 
 	// Getters and setters

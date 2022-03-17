@@ -61,7 +61,7 @@ public class DrawNote {
 		text.toFront();
 		// for background
 		Blend blend = new Blend();
-		ColorInput topInput = new ColorInput(getStartX() - 3, getStartY() - 10, 15, 15, Color.WHITE);
+		ColorInput topInput = new ColorInput(getStartX() - 2, getStartY() - 10, 15, 15, Color.WHITE);
 		blend.setTopInput(topInput);
 		blend.setMode(BlendMode.OVERLAY);
 
@@ -77,7 +77,7 @@ public class DrawNote {
 		text.toFront();
 		// for background
 		Blend blend = new Blend();
-		ColorInput topInput = new ColorInput(getStartX() - 1, getStartY() - 10, 13, 13, Color.WHITE);
+		ColorInput topInput = new ColorInput(getStartX() - 1, getStartY() - 10, 13, 13, Color.RED);
 		blend.setTopInput(topInput);
 		blend.setMode(BlendMode.OVERLAY);
 
