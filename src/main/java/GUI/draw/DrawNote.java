@@ -69,6 +69,22 @@ public class DrawNote {
 
 		pane.getChildren().add(text);
 	}
+	
+	public void drawGuitarGrace() {
+		int fret = note.getNotations().getTechnical().getFret();
+		Text text = new Text(getStartX(), getStartY(), Integer.toString(fret));
+		text.setFont(Font.font("Comic Sans MS", FontPosture.REGULAR, 8));
+		text.toFront();
+		// for background
+		Blend blend = new Blend();
+		ColorInput topInput = new ColorInput(getStartX() - 1, getStartY() - 10, 13, 13, Color.WHITE);
+		blend.setTopInput(topInput);
+		blend.setMode(BlendMode.OVERLAY);
+
+		text.setEffect(blend);
+
+		pane.getChildren().add(text);
+	}
 
 	public void drawX() {
 		// Drawing the "x" with two lines
