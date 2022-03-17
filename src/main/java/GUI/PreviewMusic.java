@@ -95,8 +95,10 @@ public class PreviewMusic extends Application {
 
 		double pagePrintableWidth = layout.getPrintableWidth();
 		double pagePrintableHeight = layout.getPrintableHeight();
-
-		final double scaleX = pagePrintableWidth / screenshot.getWidth();
+		//Elmira: Something (most likely the structure of Guitar) cause problem with scaling
+		//As a quick fix I multiplied the width of the anchorPane by 1.5. @Irsa, if you find a better fix
+		// (or decide this fix is good enough) delete this comment. 
+		final double scaleX = pagePrintableWidth / (1.5*screenshot.getWidth());
 		final double scaleY = pagePrintableHeight / screenshot.getHeight();
 		final ImageView print_node = new ImageView(screenshot);
 		print_node.getTransforms().add(new Scale(scaleX, scaleX));
@@ -106,7 +108,6 @@ public class PreviewMusic extends Application {
 		if (printSheet != null && printSheet.showPrintDialog(pane.getScene().getWindow())) {
 
 			double numberOfPages = Math.ceil(scaleX / scaleY);
-
 			Translate gridTransform = new Translate(0, 0);
 			print_node.getTransforms().add(gridTransform);
 			for (int i = 0; i < numberOfPages; i++) {
