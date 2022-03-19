@@ -3,6 +3,8 @@ package GUI.draw;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import models.measure.note.Note;
 
@@ -33,7 +35,7 @@ public class DrawNoteType {
 	public void drawType() {
 
 		if (note.getChord() == null) {
-			//startX += 25;
+			// startX += 25;
 
 			String current = note.getType();
 			if (current == "half") {
@@ -42,10 +44,23 @@ public class DrawNoteType {
 				drawQuarterNotes();
 			} else if (current == "eighth") {
 				drawEighthNotes();
+			} else if (current == "16th") {
+				draw16thNotes();
 			}
-			//startX += 25;
+			// startX += 25;
 
 		}
+	}
+
+	private void draw16thNotes() {
+		double y1 = startY + 37;
+		Line l = new Line();
+		l.setStartX(startX);
+		l.setEndX(startX);
+		l.setStartY(y1);
+		l.setEndY(y1 - QuarterNoteLength);
+		pane.getChildren().add(l);
+
 	}
 
 	// shorter stick
@@ -94,6 +109,13 @@ public class DrawNoteType {
 		l.setEndY(y1);
 		l.setStrokeWidth(3);
 		pane.getChildren().add(l);
+	}
+
+	// draw a dot
+	public void drawDot(double centerX, double centerY, double r) {
+		Circle circle = new Circle(centerX, centerY, r);
+		circle.setFill(Color.BLACK);
+		pane.getChildren().add(circle);
 	}
 
 	// setters

@@ -14,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
+import models.measure.note.Dot;
 import models.measure.note.Note;
 import GUI.draw.*;
 
@@ -250,10 +251,9 @@ public class Guitar {
 	// draw regular notes (no grace, no chords)
 	private void drawNoteWithoutGrace(Note note, List<Note> noteList) {
 		int string = note.getNotations().getTechnical().getString();
-		String nextType = "";
+		
 		double positionY = getLineCoordinateY(string) + 3;// +getLineCoordinateY(string+1))/2;
 
-		int index = noteList.indexOf(note);
 
 		d.draw(x, y);
 		noteDrawer.setPane(pane);
@@ -264,28 +264,8 @@ public class Guitar {
 		noteDrawer.drawFret();
 
 		drawBend(note);
-
-		double py = getLastLineCoordinateY();
-		DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 4, py + y);
-		type.drawType();
-
-		for (int j = index + 1; j < noteList.size(); j++) {
-
-			Note next = noteList.get(j);
-			if (!noteHasGrace(next)) {
-				nextType = next.getType();
-				break;
-			}
-
-		}
-		if (note.getType() == "eighth" && nextType == "eighth") {
-			if (this.noteTypeCounter > 0) {
-				type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing);
-				this.noteTypeCounter--;
-			} else {
-				this.noteTypeCounter = 3;
-			}
-		}
+		drawType(note, noteList);
+		
 	}
 
 	// Regular chords
@@ -301,6 +281,7 @@ public class Guitar {
 		double py = getLastLineCoordinateY();
 		DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
 		type.drawType();
+		drawType(note, noteList);
 	}
 	
 	//draw grace notes that have chords
@@ -317,6 +298,79 @@ public class Guitar {
 		double py = getLastLineCoordinateY();
 		DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
 		type.drawType();
+	}
+	
+	private void drawType(Note note, List<Note> noteList) {
+		String nextType = "";
+		int index = noteList.indexOf(note);
+		double py = getLastLineCoordinateY();
+		DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 4, py + y);
+		type.drawType();
+		String current = note.getType();
+		
+		Note next = null; 
+		for(int j = index; j<noteList.size()-1; j++) {
+			next = noteList.get(j+1);
+			if(!noteHasGrace(next)) {
+				nextType = next.getType();
+				break; 
+			}
+			
+		}
+		
+		if (current.equals("eighth") && nextType.equals("eighth")) {
+			if (this.noteTypeCounter > 0) {
+				type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing);
+				this.noteTypeCounter--;
+			} else {
+				this.noteTypeCounter = 3;
+			}
+		}
+		else if (current == "16th"){
+			switch(nextType) {
+				case "16th":
+					if(!noteHasChord(next)) {
+						type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing);
+						type.drawBeam(noteDrawer.getStartX() + 4, py + y-5, spacing);
+					}
+					break;
+				case "eighth":
+					type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing);
+					break;
+				default:
+					if(next!=null)
+					type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing/4);	
+			}
+		}
+		else if (current == "quarter" && noteHasDot(note)) {
+			int count = countDotNumber(note);
+			double xCenter = noteDrawer.getStartX() + 10; 
+			double yCenter =  py + y+10;
+			double radius = spacing/25;
+			while(count>0) {
+				type.drawDot(xCenter, yCenter, radius);
+				xCenter+=2*radius+ radius;
+				count--;
+			}
+		}
+	}
+
+	private int countDotNumber(Note note) {
+		// TODO Auto-generated method stub
+		int res = 0;
+		List<Dot> dotList = note.getDots();
+		for(int i = 0; i<dotList.size(); i++) {
+			res++; 
+		}
+		
+		return res;
+	}
+
+	//returns true if note has a dot
+	private boolean noteHasDot(Note note) {
+		// TODO Auto-generated method stub
+		Boolean res = note.getDots() == null ? false:true;
+		return res;
 	}
 
 	public void highlightMeasureArea(Measure measure) {
