@@ -165,17 +165,12 @@ public class Guitar {
 
 		} else if (noteHasChord(note)) {
 			if (noteHasGrace(note)) {
-				// drawChordsWithGraceNotes(note, noteList);
+				 drawChordsWithGraceNotes(note, noteList);
 			} else {
 				drawChordWithoutGrace(note, noteList);
 
 			}
 		}
-
-	}
-
-	private void drawChordsWithGraceNotes(Note note, List<Note> noteList) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -297,8 +292,6 @@ public class Guitar {
 	private void drawChordWithoutGrace(Note note, List<Note> noteList) {
 		int string = note.getNotations().getTechnical().getString();
 		double positionY = getLineCoordinateY(string);
-		// DrawNote noteDrawer = new DrawNote(this.pane, note, x - spacing / 2,
-		// positionY + 3 + y);
 		noteDrawer.setPane(pane);
 		noteDrawer.setNote(note);
 		noteDrawer.setStartX(noteDrawer.getStartX());
@@ -309,42 +302,22 @@ public class Guitar {
 		DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
 		type.drawType();
 	}
-
-	// Getters and setters
-
-	public ScorePartwise getScorePartwise() {
-		return scorePartwise;
+	
+	//draw grace notes that have chords
+	private void drawChordsWithGraceNotes(Note note, List<Note> noteList) {
+		// TODO Auto-generated method stub
+		int string = note.getNotations().getTechnical().getString();
+		double positionY = getLineCoordinateY(string);
+		noteDrawer.setPane(pane);
+		noteDrawer.setNote(note);
+		noteDrawer.setStartX(noteDrawer.getStartX());
+		noteDrawer.setStartY(positionY + 3 + y);
+		noteDrawer.drawGuitarGrace();;
+		drawBend(note);
+		double py = getLastLineCoordinateY();
+		DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
+		type.drawType();
 	}
-
-	public void setScorePartwise(ScorePartwise scorePartwise) {
-		this.scorePartwise = scorePartwise;
-	}
-
-	public Pane getPane() {
-		return pane;
-	}
-
-	public void setPane(Pane pane) {
-		this.pane = pane;
-	}
-
-	public List<Measure> getMeasureList() {
-		return measureList;
-	}
-
-	public void setMeasureList(List<Measure> measureList) {
-		this.measureList = measureList;
-	}
-
-	public double getSpacing() {
-		return spacing;
-	}
-
-	public void setSpacing(int spacing) {
-		this.spacing = spacing;
-	}
-
-	// getters and setters
 
 	public void highlightMeasureArea(Measure measure) {
 		double x = 0;
@@ -471,4 +444,40 @@ public class Guitar {
 		}
 		return res;
 	}
+	
+	// Getters and setters
+
+	public ScorePartwise getScorePartwise() {
+		return scorePartwise;
+	}
+
+	public void setScorePartwise(ScorePartwise scorePartwise) {
+		this.scorePartwise = scorePartwise;
+	}
+
+	public Pane getPane() {
+		return pane;
+	}
+
+	public void setPane(Pane pane) {
+		this.pane = pane;
+	}
+
+	public List<Measure> getMeasureList() {
+		return measureList;
+	}
+
+	public void setMeasureList(List<Measure> measureList) {
+		this.measureList = measureList;
+	}
+
+	public double getSpacing() {
+		return spacing;
+	}
+
+	public void setSpacing(int spacing) {
+		this.spacing = spacing;
+	}
+
+	// End getters and setters
 }

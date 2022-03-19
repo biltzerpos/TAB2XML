@@ -85,10 +85,10 @@ public class DrawNote {
 	}
 
 	public void drawGuitarGrace() {
-		int f = font - 2;
+		int f = font - 4;
 		int fret = note.getNotations().getTechnical().getFret();
 		Text text = new Text(getStartX(), getStartY(), Integer.toString(fret));
-		text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, f));
+		text.setFont(Font.font("Comic Sans MS", FontPosture.REGULAR, f));
 		// for background
 		Blend blend = new Blend();
 		ColorInput topInput = new ColorInput();
