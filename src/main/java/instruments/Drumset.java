@@ -211,6 +211,10 @@ public class Drumset {
 			if (this.x > 849) {
 				this.x = 0;
 				this.y += 100;
+
+				drumclef = new DrawClef(this.pane, clef, x+25, this.y);
+				drumclef.drawDrumClef1();
+				drumclef.drawDrumClef2();
 			}
 
 			this.drawMeasure(measure);
