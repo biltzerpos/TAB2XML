@@ -52,7 +52,7 @@ public class DrawNoteTest {
 		    	for (Note note : measure.getNotesBeforeBackup()) {
 		    		// Draw note
 		    		int fret = note.getNotations().getTechnical().getFret();
-		    		DrawNote drawNote = new DrawNote(pane, note, x, y);
+		    		DrawNote drawNote = new DrawNote(pane, note, x, y, 12);
 		    		drawNote.drawFret();
 
 		    		// Check pane to make sure the note was added

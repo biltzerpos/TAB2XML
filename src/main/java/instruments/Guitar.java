@@ -32,7 +32,6 @@ public class Guitar {
 	private int LineSpacing;
 	private int noteTypeCounter;
 	private DrawNote noteDrawer;
-	private int numOfGraceNotesInMeasure;
 
 	public Guitar() {
 	}
@@ -49,6 +48,7 @@ public class Guitar {
 		this.spacing = length;
 		this.d = new DrawMusicLines(this.pane, length);
 		this.noteDrawer = new DrawNote();
+		this.noteDrawer.setFont(12);
 		this.LineSpacing = 200;
 	}
 
@@ -57,7 +57,6 @@ public class Guitar {
 	 */
 
 	public void drawGuitar() {
-		Measure m1 = measureList.get(0);
 		Clef clef = getClef();
 		double width = this.pane.getMaxWidth();
 
@@ -156,8 +155,6 @@ public class Guitar {
 
 	private void drawNoteWithTechnical(Note note, List<Note> noteList) {
 		if (!noteHasChord(note)) {
-			/**/
-
 			// Draw grace notes
 			if (noteHasGrace(note)) {
 				drawGraceNotes(note, noteList);
@@ -166,11 +163,9 @@ public class Guitar {
 
 			}
 
-		} 
-		else if (noteHasChord(note)) 
-		{
+		} else if (noteHasChord(note)) {
 			if (noteHasGrace(note)) {
-				//drawChordsWithGraceNotes(note, noteList);
+				// drawChordsWithGraceNotes(note, noteList);
 			} else {
 				drawChordWithoutGrace(note, noteList);
 
@@ -178,13 +173,12 @@ public class Guitar {
 		}
 
 	}
-	
+
 	private void drawChordsWithGraceNotes(Note note, List<Note> noteList) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 	// draws bend elements if they exists
 	private void drawBend(Note note) {
 		if (noteHasBend(note)) {
@@ -218,71 +212,62 @@ public class Guitar {
 	}
 
 	// count the number of graces in a row
-	private void countGrace(Note n, List<Note> noteList) {
-		// TODO Auto-generated method stub
+	private int countGraceSpace(Note n, List<Note> noteList) {
 		int index = noteList.indexOf(n);
-		for (int i = index + 1; i < noteList.size() - 1; i++) {
-			Note next = noteList.get(i);
-			if (noteHasGrace(next)) {
-				this.numOfGraceNotesInMeasure++;
-			}
-			else {
+		int res = 0;
+		for (int i = index; i < noteList.size() - 1; i++) {
+			Note current = noteList.get(i);
+			Note next = noteList.get(i + 1);
+			if (noteHasGrace(current) && !noteHasGrace(next)) {
+				res++;
+
+			} else if (noteHasGrace(current) && noteHasGrace(next)) {
+				if (!noteHasChord(next)) {
+					res++;
+				}
+			} else {
 				break;
 			}
 		}
+		return res;
 	}
 
 	// Draws the grace notes
 	private void drawGraceNotes(Note note, List<Note> noteList) {
 		int string = note.getNotations().getTechnical().getString();
-		countGrace(note, noteList);
-		double graceSpacing = x;
-		d.setLength(spacing / 6);
-		d.draw(x, y);
+		int num = countGraceSpace(note, noteList);
+		double xPosition = x + spacing / 2;
+		int fret = note.getNotations().getTechnical().getFret();
+		double graceSpacing = 0;
+		if (fret < 10) {
+			graceSpacing = xPosition - (spacing / (4 / num));
+		} else {
+			graceSpacing = xPosition - (spacing / (4 / num) + num);
+		}
 		double positionY = getLineCoordinateY(string);
 		noteDrawer.setPane(pane);
 		noteDrawer.setNote(note);
 		noteDrawer.setStartX(graceSpacing);
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
-		x += spacing / 6;
 	}
+
 	// draw regular notes (no grace, no chords)
 	private void drawNoteWithoutGrace(Note note, List<Note> noteList) {
-		// TODO Auto-generated method stub
 		int string = note.getNotations().getTechnical().getString();
 		String nextType = "";
-		d.setLength(spacing);
-		d.draw(x, y);
-		double positionY = getLineCoordinateY(string);
+		double positionY = getLineCoordinateY(string) + 3;// +getLineCoordinateY(string+1))/2;
 
-		Boolean lastNoteIsGrace = false;
 		int index = noteList.indexOf(note);
-		if (index > 0) {
-			Note last = noteList.get(index - 1);
-			lastNoteIsGrace = noteHasGrace(last);
-		}
-		if (lastNoteIsGrace) {
-			// DrawNote noteDrawer = new DrawNote(this.pane, note, x , positionY + 3 + y);
-			System.out.println(this.numOfGraceNotesInMeasure+1);
-			x -= (spacing / 6) * (this.numOfGraceNotesInMeasure+1);
-			noteDrawer.setPane(pane);
-			noteDrawer.setNote(note);
-			noteDrawer.setStartX(x + spacing / 2);
-			noteDrawer.setStartY(positionY + 3 + y);
-			x += spacing;
-			noteDrawer.drawFret();
-			this.numOfGraceNotesInMeasure = 0;
-		} else {
-			// DrawNote noteDrawer = new DrawNote(this.pane, note, x + spacing / 2,
-			// positionY + 3 + y);
-			noteDrawer.setPane(pane);
-			noteDrawer.setNote(note);
-			noteDrawer.setStartX(x + spacing / 2);
-			noteDrawer.setStartY(positionY + 3 + y);
-			x += spacing;
-			noteDrawer.drawFret();
-		}
+
+		d.draw(x, y);
+		noteDrawer.setPane(pane);
+		noteDrawer.setNote(note);
+		noteDrawer.setStartX(x + spacing / 2);
+		noteDrawer.setStartY(positionY);
+		x += spacing;
+		noteDrawer.drawFret();
+
 		drawBend(note);
 
 		double py = getLastLineCoordinateY();
@@ -307,23 +292,23 @@ public class Guitar {
 			}
 		}
 	}
-	//Regular chords
-		private void drawChordWithoutGrace(Note note, List<Note> noteList) {
-			int string = note.getNotations().getTechnical().getString();
-			double positionY = getLineCoordinateY(string);
-			// DrawNote noteDrawer = new DrawNote(this.pane, note, x - spacing / 2,
-			// positionY + 3 + y);
-			noteDrawer.setPane(pane);
-			noteDrawer.setNote(note);
-			noteDrawer.setStartX(noteDrawer.getStartX());
-			noteDrawer.setStartY(positionY + 3 + y);
-			noteDrawer.drawFret();
-			drawBend(note);
-			double py = getLastLineCoordinateY();
-			DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
-			type.drawType();
-		}
 
+	// Regular chords
+	private void drawChordWithoutGrace(Note note, List<Note> noteList) {
+		int string = note.getNotations().getTechnical().getString();
+		double positionY = getLineCoordinateY(string);
+		// DrawNote noteDrawer = new DrawNote(this.pane, note, x - spacing / 2,
+		// positionY + 3 + y);
+		noteDrawer.setPane(pane);
+		noteDrawer.setNote(note);
+		noteDrawer.setStartX(noteDrawer.getStartX());
+		noteDrawer.setStartY(positionY + 3 + y);
+		noteDrawer.drawFret();
+		drawBend(note);
+		double py = getLastLineCoordinateY();
+		DrawNoteType type = new DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
+		type.drawType();
+	}
 
 	// Getters and setters
 
