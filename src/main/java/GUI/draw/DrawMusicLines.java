@@ -53,4 +53,13 @@ public class DrawMusicLines extends Node {
 		this.pane = pane;
 	}
 
+	public double getLength() {
+		return length;
+	}
+
+	public void setLength(double length) {
+		this.length = length;
+	}
+	
+
 }
