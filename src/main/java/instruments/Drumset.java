@@ -33,6 +33,9 @@ public class Drumset {
 	private HashMap<Measure, Double> xCoordinates;
 	private HashMap<Measure, Double> yCoordinates;
 
+	private double x;
+	private double y;
+
 	public Drumset(ScorePartwise scorePartwise, Pane pane) {
 		super();
 		this.scorePartwise = scorePartwise;
@@ -42,13 +45,147 @@ public class Drumset {
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
 
+		this.x = 0;
+		this.y = 0;
+	}
+
+	private void drawGroupedNotes(List<Note> notes) {
+		Note currentNote, nextNote;
+		DrawDrumsetNote noteDrawer;
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
+
+		d.draw(this.x, this.y);
+
+		for (int i = 0; i < notes.size(); i++) {
+			currentNote = notes.get(i);
+			nextNote = null;
+			for (int j = i + 1; j < notes.size(); j++) {
+				if (notes.get(j).getChord() == null) {
+					nextNote = notes.get(j);
+				}
+			}
+
+			d.draw(this.x, this.y);
+			noteDrawer = new DrawDrumsetNote(
+				this.pane,
+				currentNote,
+				this.y,
+				currentNote.getChord() == null ? this.x + 25 : this.x - 25,
+				d.getYPositionFromOctaveAndStep(
+					currentNote.getUnpitched().getDisplayOctave(),
+					currentNote.getUnpitched().getDisplayStep()
+				)
+			);
+
+			if (currentNote.getChord() != null) {
+				noteDrawer.draw();
+			} else if (currentNote.getType().equals("eighth") && nextNote != null) {
+				noteDrawer.draw();
+				noteDrawer.drawBeam();
+			} else if (currentNote.getType().equals("16th") && nextNote != null && nextNote.getType().equals("16th")) {
+				noteDrawer.draw();
+				noteDrawer.drawBeam();
+			} else {
+				noteDrawer.draw();
+			}
+
+			this.x += currentNote.getChord() == null ? 50 : 0;
+		}
+	}
+
+	private void drawUngroupedNotes(List<Note> notes) {
+		System.out.println("-----");
+		for (Note note : notes) {
+			System.out.println(note.getUnpitched().getDisplayStep());
+		}
+		System.out.println("-----");
+		Note currentNote;
+		DrawDrumsetNote noteDrawer;
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
+
+		d.draw(this.x, this.y);
+
+		for (int i = 0; i < notes.size(); i++) {
+			currentNote = notes.get(i);
+
+			if (currentNote.getChord() == null) {
+				d.draw(this.x, this.y);
+			}
+
+			noteDrawer = new DrawDrumsetNote(
+				this.pane,
+				currentNote,
+				this.y,
+				currentNote.getChord() == null ? this.x + 25 : this.x - 25,
+				d.getYPositionFromOctaveAndStep(
+					currentNote.getUnpitched().getDisplayOctave(),
+					currentNote.getUnpitched().getDisplayStep()
+				)
+			);
+
+			noteDrawer.draw();
+			if (currentNote.getChord() != null) {
+				noteDrawer.drawFlag();
+			}
+
+			this.x += currentNote.getChord() == null ? 50 : 0;
+		}
+	}
+
+	private void drawMeasure(Measure measure) {
+
+		int divisions = measure.getAttributes().getDivisions();
+
+		List<Note> noteList = measure.getNotesBeforeBackup();
+		int i = 0;
+		Note currentNote;
+
+		List<Note> group = new ArrayList<>();
+		int durationSum = 0;
+
+		while (i < noteList.size()) {
+			System.out.println(i);
+			currentNote = noteList.get(i);
+			group.add(currentNote);
+			durationSum += currentNote.getChord() == null ? currentNote.getDuration() : 0;
+			i++;
+
+			// When durationSum % divisions == 0, that means we stopped at a beat
+			while (durationSum != 0 && durationSum % divisions != 0) {
+				currentNote = noteList.get(i);
+				group.add(currentNote);
+				durationSum += currentNote.getChord() == null ? currentNote.getDuration() : 0;
+				i++;
+			}
+
+			// If the last note in the group is followed by chord notes, they will not be found by the above loop.
+			// This loop makes sure they are added to the group.
+			while (i < noteList.size() && noteList.get(i).getChord() != null) {
+				group.add(noteList.get(i));
+				i++;
+			}
+
+			// If durationSum == divisions, then the group is one beat (so draw the group together).
+			// Else, the group extends over more than one beat (so draw the group as individual notes
+			// because it may be too complex to draw).
+			if (durationSum == divisions) {
+				this.drawGroupedNotes(group);
+			} else {
+				this.drawUngroupedNotes(group);
+			}
+
+			// Reset the group and duration sum for the next group of notes
+			group.clear();
+			durationSum = 0;
+		}
+
 	}
 
 	public void draw() {
 
 		// Initialize x and y coordinates
-		double x = 0;
-		double y = 0;
+		this.x = 0;
+		this.y = 0;
 
 //		// Draw scale for testing
 //		for (int i = 0; i < 500; i += 5) {
@@ -62,74 +199,27 @@ public class Drumset {
 
 		// Draw the initial music lines
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
-		d.draw(x,y);
+		d.draw(this.x, this.y);
+
+		DrawClef drumclef = new DrawClef(this.pane, clef, x+25, 0);
+		drumclef.drawDrumClef1();
+		drumclef.drawDrumClef2();
 
 		// Iterate through the list of measures
 		for (Measure measure : measureList) {
-			if ( x > 849) {
-				x = 0;
-				y += 100;
+
+			if (this.x > 849) {
+				this.x = 0;
+				this.y += 100;
 			}
 
-			// Iterate through the notes in the current measure
-			for (int i = 0; i < measure.getNotesBeforeBackup().size(); i++) {
-				Note note = measure.getNotesBeforeBackup().get(i);
+			this.drawMeasure(measure);
 
-				String step = note.getUnpitched().getDisplayStep();
-				int octave = note.getUnpitched().getDisplayOctave();
-
-				// Get the y-position based on the octave and step
-				double positionY = y + d.getYPositionFromOctaveAndStep(octave, step);
-
-				DrawDrumsetNote noteDrawer;
-
-				if (note.getChord() == null) {
-					// Only draw music lines if not a chord.
-					// This is because if it is a chord, the music lines from the last chord will be used.
-					// Also draw the music lines before drawing the note so that the note appears on top.
-					d.draw(x,y);
-					
-					DrawClef drumclef = new DrawClef(this.pane, clef, x+25, positionY+3);
-					drumclef.drawDrumClef1();
-					drumclef.drawDrumClef2();
-
-					noteDrawer = new DrawDrumsetNote(this.pane, note, y, x+25, positionY+3);
-
-					noteDrawer.draw();
-
-					x+=50;
-				}
-				else {
-					noteDrawer = new DrawDrumsetNote(this.pane, note, y, x-25, positionY+3 );
-					noteDrawer.draw();
-				}
-
-				// Drawing beams or flags
-
-				Note previousNote = i > 0 ? measure.getNotesBeforeBackup().get(i - 1) : null;
-				Note nextNote = i < measure.getNotesBeforeBackup().size() - 1 ? measure.getNotesBeforeBackup().get(i + 1) : null;
-
-				// Draw connection if current note and next note have same type and the next note is not a chord
-				if (nextNote != null && note.getType().equals(nextNote.getType()) && nextNote.getChord() == null) {
-					noteDrawer.drawBeam();
-				} else if (previousNote != null && note.getType().equals(previousNote.getType()) && note.getChord() == null) {
-					// Do nothing if current note and previous note have same type and the current note is not a chord,
-					// because a beam would have already been drawn.
-				} else {
-					// Draw flag only on the last chord note of a chord so that it is not drawn more than once.
-					if (nextNote != null && nextNote.getChord() == null) {
-						System.out.println(i);
-						noteDrawer.drawFlag();
-					}
-				}
-
-			}
-
-			xCoordinates.put(measure, x);
-			yCoordinates.put(measure, y - 30);
+			xCoordinates.put(measure, this.x);
+			yCoordinates.put(measure, this.y - 30);
 			// Draw bar line after every measure
 			DrawDrumsetBar bar = new DrawDrumsetBar(this.pane);
-			bar.draw(x, y);
+			bar.draw(this.x, this.y);
 		}
 	}
 
