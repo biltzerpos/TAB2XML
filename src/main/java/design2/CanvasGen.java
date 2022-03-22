@@ -27,16 +27,18 @@ public class CanvasGen extends Canvas {
 
 	
 	private int initialX = 60;
-	private int shiftX = 40; 
+	private int shiftX = 25; 
 	private int globalX = initialX;
 	private int globalY = 150;
-	private int measureWidth = 300;
+	private int lineWidth;
+	private int measureWidth = 400; 
 	private NoteIdentifier noteIdentifier;
 
 	public CanvasGen(double height, double width, MainViewController mvc) throws FileNotFoundException {
 		// Configure Canvas
-		this.setWidth(height);
-		this.setHeight(width);
+		this.setWidth(width);
+		lineWidth=(int) (Math.floor(width/measureWidth)*measureWidth); // to make it a multiple of measure width, so each line show whole measures
+		this.setHeight(height);
 		gc = this.getGraphicsContext2D();
 		gc.setFont(new Font("Bravura", fontSize)); // fontSize changes size of every drawn element
 		try {
@@ -102,32 +104,47 @@ public class CanvasGen extends Canvas {
 
 	public void drawStaff(Score score) throws TXMLException {
 		globalX = 10;
-		while(globalX < this.getWidth()) {
+		
+		while(globalX < lineWidth) {
 			for(int i = -2; i < 4; i++) {
 				System.out.println("IN STAFF METHOD X:" + globalX + " | Y: " + globalY);
-				gc.fillText(getStaffType(score.getModel().getPartList().getScoreParts().get(0).getPartName()), globalX, globalY - (10 * i));
+				gc.fillText(getStaffType(score.getModel().getPartList().getScoreParts().get(0).getPartName()), globalX-10, globalY - (10 * i));
 			}	
 			globalX += shiftX;
 		}
+		gc.fillText("\uD834\uDD00",globalX, globalY); 
+		gc.fillText("\uD834\uDD00",globalX, globalY-10);
 		globalX = initialX;
 	}
 
 	public void drawNotes(Score score) throws TXMLException, IOException {
 		for (Measure m : score.getModel().getParts().get(0).getMeasures()) {
 			gc.fillText("\uD834\uDD00",globalX, globalY); 
+			gc.fillText("\uD834\uDD00",globalX, globalY-10);
 			
-			//note: m.getAttributes().time not working properly so I have to do this to get measure time
+			//note: no idea how to get the time signature, m.getAttributes().getTime() not working. so i'm just adding all the notes in the measure instead
+			// eg 4 4 beat is 4/4 = 1 whole note, measurTime=1
 			//float measureTime=(float)m.getAttributes().getTime().getBeats()/(float)m.getAttributes().getTime().getBeatType();
 			float measureTime=0;
+			boolean isChord=false;
 			for (Note n : m.getNotesBeforeBackup()) {
-				measureTime+=1/(float)n.getDuration();
+				if(n.getChord()==null) {
+					isChord=false;
+					measureTime+=1/(float)n.getDuration();
+				}else if(!isChord) {
+					isChord=true;
+					measureTime+=1/(float)n.getDuration();
+				}
+				
 			}
+			//replace the above if we get time signature working
+			
 			
 			for (Note n : m.getNotesBeforeBackup()) {
 				NoteIdentifier noteIdentifier = new NoteIdentifier();
 
 				if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
-					if(globalX >= 600) {
+					if(globalX >= lineWidth) {
 						globalY += 150;
 						drawClef(score);
 						drawStaff(score);
@@ -148,7 +165,7 @@ public class CanvasGen extends Canvas {
 					}
 				}
 				else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
-					if(globalX >= 600) {
+					if(globalX >= lineWidth) {
 						globalX = 50;
 						globalY += 150;
 						drawClef(score);
