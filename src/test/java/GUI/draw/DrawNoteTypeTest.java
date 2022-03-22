@@ -44,7 +44,7 @@ public class DrawNoteTypeTest {
 		List<Note> noteList = m1.getNotesBeforeBackup();
 		Note n = noteList.get(0);
 
-		this.dNT = new DrawNoteType(p, n , x, y);
+		this.dNT = new DrawNoteType(p, x, y, 15);
 	}
 
 	// tests the getPane Method o make sure the method returns the expected pane
