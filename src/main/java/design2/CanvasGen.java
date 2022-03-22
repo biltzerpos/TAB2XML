@@ -118,6 +118,7 @@ public class CanvasGen extends Canvas {
 	}
 
 	public void drawNotes(Score score) throws TXMLException, IOException {
+		float lastNoteXDisplacement=0; // for fixing chord notes wrong x placement
 		for (Measure m : score.getModel().getParts().get(0).getMeasures()) {
 			gc.fillText("\uD834\uDD00",globalX, globalY); 
 			gc.fillText("\uD834\uDD00",globalX, globalY-10);
@@ -129,29 +130,22 @@ public class CanvasGen extends Canvas {
 			boolean isChord=false;
 			for (Note n : m.getNotesBeforeBackup()) {
 				if(n.getChord()==null) {
-					isChord=false;
-					measureTime+=1/(float)n.getDuration();
-				}else if(!isChord) {
-					isChord=true;
 					measureTime+=1/(float)n.getDuration();
 				}
 				
 			}
 			//replace the above if we get time signature working
-			
-			
 			for (Note n : m.getNotesBeforeBackup()) {
 				NoteIdentifier noteIdentifier = new NoteIdentifier();
 
 				if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
+					if (n.getChord() == null) {
+						globalX += lastNoteXDisplacement;
+					}
 					if(globalX >= lineWidth) {
 						globalY += 150;
 						drawClef(score);
 						drawStaff(score);
-					}
-					if (n.getChord() != null) {
-						globalX -= measureWidth/n.getDuration()/measureTime;
-						// currentNOPG--;
 					}
 					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) == 0) {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
@@ -163,20 +157,18 @@ public class CanvasGen extends Canvas {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
-						globalX += measureWidth/n.getDuration()/measureTime;
+						lastNoteXDisplacement = measureWidth/n.getDuration()/measureTime;
 				}
 				else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
+					if (n.getChord() == null) {
+						globalX += lastNoteXDisplacement;
+					}
 					if(globalX >= lineWidth) {
 						globalX = 50;
 						globalY += 150;
 						drawClef(score);
 						drawStaff(score);
 					}
-					if (n.getChord() != null) {
-						globalX -= measureWidth/n.getDuration()/measureTime;
-						// currentNOPG--;
-					}
-
 					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()) == 0) {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 					}
@@ -185,7 +177,7 @@ public class CanvasGen extends Canvas {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
-						globalX += measureWidth/n.getDuration()/measureTime;
+						lastNoteXDisplacement = measureWidth/n.getDuration()/measureTime;
 				}
 			}
 		}
