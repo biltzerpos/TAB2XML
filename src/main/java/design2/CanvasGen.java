@@ -27,17 +27,18 @@ public class CanvasGen extends Canvas {
 
 	
 	private int initialX = 60;
-	private int shiftX = 25; 
+	private int initialY = 150;
 	private int globalX = initialX;
-	private int globalY = 150;
-	private int lineWidth;
+	private int globalY = initialY;
+	private int shiftX = 40; 
 	private int measureWidth = 400; 
+	private int numberOfMeasurePerLine;
 	private NoteIdentifier noteIdentifier;
 
 	public CanvasGen(double height, double width, MainViewController mvc) throws FileNotFoundException {
 		// Configure Canvas
 		this.setWidth(width);
-		lineWidth=(int) (Math.floor(width/measureWidth)*measureWidth); // to make it a multiple of measure width, so each line show whole measures
+		numberOfMeasurePerLine=(int) Math.floor(width/measureWidth);
 		this.setHeight(height);
 		gc = this.getGraphicsContext2D();
 		gc.setFont(new Font("Bravura", fontSize)); // fontSize changes size of every drawn element
@@ -103,50 +104,54 @@ public class CanvasGen extends Canvas {
 	}
 
 	public void drawStaff(Score score) throws TXMLException {
-		globalX = 10;
-		
-		while(globalX < lineWidth) {
+		int x = 10;
+		while(x < numberOfMeasurePerLine*measureWidth+40) {
 			for(int i = -2; i < 4; i++) {
-				System.out.println("IN STAFF METHOD X:" + globalX + " | Y: " + globalY);
-				gc.fillText(getStaffType(score.getModel().getPartList().getScoreParts().get(0).getPartName()), globalX-10, globalY - (10 * i));
+				System.out.println("IN STAFF METHOD X:" + x + " | Y: " + globalY);
+				gc.fillText(getStaffType(score.getModel().getPartList().getScoreParts().get(0).getPartName()), x, globalY - (10 * i));
 			}	
-			globalX += shiftX;
+			x += shiftX;
+			
 		}
-		gc.fillText("\uD834\uDD00",globalX, globalY); 
-		gc.fillText("\uD834\uDD00",globalX, globalY-10);
-		globalX = initialX;
+		for(int measureSeperationX=initialX-10; measureSeperationX<=numberOfMeasurePerLine*measureWidth+50; measureSeperationX+=measureWidth) {
+				gc.fillText("\uD834\uDD00",measureSeperationX, globalY); 
+				gc.fillText("\uD834\uDD00",measureSeperationX, globalY-10);
+		}
 	}
 
 	public void drawNotes(Score score) throws TXMLException, IOException {
-		float lastNoteXDisplacement=0; // for fixing chord notes wrong x placement
+
+		int measureCount=0;
 		for (Measure m : score.getModel().getParts().get(0).getMeasures()) {
-			gc.fillText("\uD834\uDD00",globalX, globalY); 
-			gc.fillText("\uD834\uDD00",globalX, globalY-10);
-			
 			//note: no idea how to get the time signature, m.getAttributes().getTime() not working. so i'm just adding all the notes in the measure instead
 			// eg 4 4 beat is 4/4 = 1 whole note, measurTime=1
-			//float measureTime=(float)m.getAttributes().getTime().getBeats()/(float)m.getAttributes().getTime().getBeatType();
+			//float measureTime=(float)m.getAttributes().getTime().getBeats()/(float)m.getAttributes().getTime().getBeatType() ;
 			float measureTime=0;
 			boolean isChord=false;
 			for (Note n : m.getNotesBeforeBackup()) {
 				if(n.getChord()==null) {
-					measureTime+=1/(float)n.getDuration();
+					measureTime+=1/(float)n.getDuration( );
 				}
-				
 			}
 			//replace the above if we get time signature working
+			float lastNoteXDisplacement=0; // for fixing chord notes wrong x placement
+			globalX=initialX + (measureCount% numberOfMeasurePerLine) *measureWidth ;
+			globalY=initialY + (measureCount/ numberOfMeasurePerLine)*150;
+			if(measureCount% numberOfMeasurePerLine==0) {
+				drawClef(score);
+				drawStaff(score);
+			}
+			
+			globalX += measureWidth*0.1f; //for esthetic 
 			for (Note n : m.getNotesBeforeBackup()) {
 				NoteIdentifier noteIdentifier = new NoteIdentifier();
-
+				
+				
 				if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Guitar")) {
 					if (n.getChord() == null) {
 						globalX += lastNoteXDisplacement;
 					}
-					if(globalX >= lineWidth) {
-						globalY += 150;
-						drawClef(score);
-						drawStaff(score);
-					}
+
 					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) == 0) {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 					}
@@ -157,17 +162,11 @@ public class CanvasGen extends Canvas {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
-						lastNoteXDisplacement = measureWidth/n.getDuration()/measureTime;
+						lastNoteXDisplacement = measureWidth/n.getDuration()/measureTime *0.8f; //0.8 is for esthetic 
 				}
 				else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
 					if (n.getChord() == null) {
 						globalX += lastNoteXDisplacement;
-					}
-					if(globalX >= lineWidth) {
-						globalX = 50;
-						globalY += 150;
-						drawClef(score);
-						drawStaff(score);
 					}
 					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()) == 0) {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
@@ -177,9 +176,11 @@ public class CanvasGen extends Canvas {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
-						lastNoteXDisplacement = measureWidth/n.getDuration()/measureTime;
+						lastNoteXDisplacement = measureWidth/n.getDuration()/measureTime*0.8f;// 0.8 is for esthetic 
 				}
 			}
+			globalX += measureWidth*0.1f; //for esthetic 
+			measureCount++;
 		}
 	}
 	
