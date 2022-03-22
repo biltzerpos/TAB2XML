@@ -327,20 +327,11 @@ public class Guitar {
 		switch (current) {
 		case "half":
 			type.drawShortLine();
+			drawDot(note, type, py+shortStick);
 			break;
 		case "quarter":
 			type.drawLongLine();
-			if (noteHasDot(note)) {
-				int count = countDotNumber(note);
-				double xCenter = noteDrawer.getStartX() + 10;
-				double yCenter = py + y + 10;
-				double radius = spacing / 25;
-				while (count > 0) {
-					type.drawDot(xCenter, yCenter, radius);
-					xCenter += 2 * radius + radius;
-					count--;
-				}
-			}
+			drawDot(note, type, py);
 			break;
 		case "eighth":
 			type.drawLongLine();
@@ -387,6 +378,21 @@ public class Guitar {
 			}
 		}
 
+	}
+
+	private void drawDot(Note note, DrawNoteType type, double py) {
+		// TODO Auto-generated method stub
+		if (noteHasDot(note)) {
+			int count = countDotNumber(note);
+			double xCenter = noteDrawer.getStartX() + 10;
+			double yCenter = py + y + 10;
+			double radius = spacing / 25;
+			while (count > 0) {
+				type.drawDot(xCenter, yCenter, radius);
+				xCenter += 2 * radius + radius;
+				count--;
+			}
+		}
 	}
 
 	private boolean noteHasActual(Note note) {
