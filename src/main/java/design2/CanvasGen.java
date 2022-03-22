@@ -149,6 +149,10 @@ public class CanvasGen extends Canvas {
 						drawClef(score);
 						drawStaff(score);
 					}
+					if (n.getChord() != null) {
+						globalX -= measureWidth/n.getDuration()/measureTime;
+						// currentNOPG--;
+					}
 					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()) == 0) {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 					}
@@ -159,10 +163,7 @@ public class CanvasGen extends Canvas {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
-					if (n.getChord() == null) {
 						globalX += measureWidth/n.getDuration()/measureTime;
-						// currentNOPG--;
-					}
 				}
 				else if (score.getModel().getPartList().getScoreParts().get(0).getPartName().equals("Drumset")) {
 					if(globalX >= lineWidth) {
@@ -170,6 +171,10 @@ public class CanvasGen extends Canvas {
 						globalY += 150;
 						drawClef(score);
 						drawStaff(score);
+					}
+					if (n.getChord() != null) {
+						globalX -= measureWidth/n.getDuration()/measureTime;
+						// currentNOPG--;
 					}
 
 					if(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()) == 0) {
@@ -180,10 +185,7 @@ public class CanvasGen extends Canvas {
 						gc.fillText(getNoteType(n.getDuration()), globalX, globalY + noteIdentifier.identifyNote(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getInstrument().getId()));
 						drawLines(noteIdentifier.noteLines(score.getModel().getPartList().getScoreParts().get(0).getPartName(), "" + n.getPitch().getStep() + n.getPitch().getOctave()), score, n);
 					}
-					if (n.getChord() == null) {
 						globalX += measureWidth/n.getDuration()/measureTime;
-						// currentNOPG--;
-					}
 				}
 			}
 		}
