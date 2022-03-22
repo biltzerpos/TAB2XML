@@ -259,7 +259,7 @@ public class Guitar {
 		noteDrawer.setPane(pane);
 		noteDrawer.setNote(note);
 		noteDrawer.setStartX(x + spacing / 2);
-		noteDrawer.setStartY(positionY);
+		noteDrawer.setStartY(positionY+y);
 		x += spacing;
 		noteDrawer.drawFret();
 
