@@ -2,13 +2,18 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="450.0" minWidth="640.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PreviewMusic">
    <center>
@@ -69,6 +74,87 @@
       </AnchorPane>
    </bottom>
    <right>
-      <AnchorPane prefHeight="629.0" prefWidth="283.0" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="571.0" prefWidth="283.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER_LEFT" layoutY="53.0" prefHeight="563.0" prefWidth="282.0" spacing="15.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label prefWidth="120.0" text="Note Spacing: " />
+                        <Slider prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label prefWidth="120.0" text="Font: " />
+                        <ChoiceBox prefHeight="0.0" prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="282.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="120.0">
+                           <children>
+                              <Label text="Font Style: " />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="150.0">
+                           <children>
+                              <ChoiceBox prefHeight="0.0" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label prefWidth="120.0" text="Font Size:" />
+                        <Slider prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label prefWidth="120.0" text="Staff Spacing:" />
+                        <Slider prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label prefWidth="120.0" text="Music Line Spacing:" />
+                        <Slider prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label prefWidth="120.0" text="Justify:" />
+                        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Yes" textFill="#f7f6f6" />
+                        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefWidth="70.0" text="No" textFill="#f7f1f1" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="15.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefWidth="100.0" text="Default Setting" />
+                        <Button mnemonicParsing="false" prefWidth="100.0" text="Apply" />
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Separator>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label prefWidth="120.0" text="Tempo:" />
+                        <Slider prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Button mnemonicParsing="false" text="Button" />
+                        <Button mnemonicParsing="false" text="Button" />
+                        <Button mnemonicParsing="false" text="Button" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children></AnchorPane>
    </right>
 </BorderPane>
