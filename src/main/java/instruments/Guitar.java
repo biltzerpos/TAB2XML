@@ -33,12 +33,12 @@ public class Guitar {
 	private int LineSpacing;
 	private int noteTypeCounter;
 	private DrawNote noteDrawer;
-	private int font = 12;
+	private int font;
 
 	public Guitar() {
 	}
 
-	public Guitar(ScorePartwise scorePartwise, Pane pane, int length) {
+	public Guitar(ScorePartwise scorePartwise, Pane pane, int length, int font) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
@@ -52,6 +52,7 @@ public class Guitar {
 		this.noteDrawer = new DrawNote();
 		this.noteDrawer.setFont(font);
 		this.LineSpacing = 200;
+		this.font = font; 
 	}
 
 	/*

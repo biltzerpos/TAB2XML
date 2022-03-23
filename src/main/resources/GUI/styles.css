@@ -40,3 +40,7 @@
 #tabPlayerDisplay {
     -fx-font-family: Monospaced;
 }
+
+.slider .axis { -fx-tick-label-fill: white; }
+
+

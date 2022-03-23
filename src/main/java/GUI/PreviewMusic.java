@@ -9,6 +9,8 @@ import instruments.Drumset;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
@@ -18,6 +20,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -48,6 +51,10 @@ public class PreviewMusic extends Application {
 	private Drumset drum;
 	@FXML
 	private Button closePreviewButton;
+	@FXML
+	private Slider noteSpacing; 
+	@FXML 
+	private Slider FontSizeSlider; 
 
 	public PreviewMusic() {
 	}
@@ -73,10 +80,33 @@ public class PreviewMusic extends Application {
 		 * get the first item, which is the Part, then we get the measures from that
 		 * Part.
 		 */
+		FontSizeSlider.setMax(Math.round(noteSpacing.getValue()/2));
+		FontSizeSlider.setMin(8); 
+		FontSizeSlider.setValue(12);
+		FontSizeSlider.setShowTickLabels(true);
+		FontSizeSlider.setShowTickMarks(true);
+		// Linking noteSpace slider to the output:
+		noteSpacing.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				// TODO Auto-generated method stub
+				noteSpacing.setValue((double) newValue);
+				//System.out.println(noteSpacing.getValue());
+				double newMax = noteSpacing.getValue()/2;
+				FontSizeSlider.setMax(Math.round(newMax));
+				FontSizeSlider.setMin(8); 
+				FontSizeSlider.setValue((newMax+8) / 2);
+				FontSizeSlider.setShowTickLabels(true);
+				FontSizeSlider.setShowTickMarks(true);
+			
+			}
+	      });
+	
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			int spacing = 50;
-			this.guitar = new Guitar(scorePartwise, pane, spacing);
+			int spacing = 60; //min = 20 
+			int font = 8; 
+			this.guitar = new Guitar(scorePartwise, pane, spacing, font);
 			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
 			this.drum = new Drumset(scorePartwise, pane);

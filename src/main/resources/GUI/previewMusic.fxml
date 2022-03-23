@@ -80,7 +80,7 @@
                   <HBox alignment="CENTER_LEFT">
                      <children>
                         <Label prefWidth="120.0" text="Note Spacing: " />
-                        <Slider prefWidth="150.0" />
+                        <Slider fx:id="noteSpacing" blockIncrement="5.0" majorTickUnit="5.0" max="60.0" min="20.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" value="40.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT">
@@ -106,7 +106,7 @@
                   <HBox alignment="CENTER_LEFT">
                      <children>
                         <Label prefWidth="120.0" text="Font Size:" />
-                        <Slider prefWidth="150.0" />
+                        <Slider fx:id="FontSizeSlider" blockIncrement="1.0" majorTickUnit="1.0" max="0.0" minorTickCount="0" prefWidth="150.0" snapToTicks="true" stylesheets="@styles.css" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT">
