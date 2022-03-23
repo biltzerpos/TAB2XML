@@ -12,15 +12,15 @@
 
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="450.0" minWidth="640.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PreviewMusic">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="666.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="200.0" prefWidth="690.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane layoutY="13.0" prefHeight="600.0" prefWidth="974.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="32.0">
+            <AnchorPane layoutY="13.0" prefHeight="597.0" prefWidth="690.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="32.0">
                <children>
                   <ScrollPane pannable="true" stylesheets="@scrollPane_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <AnchorPane fx:id="anchorPane" style="-fx-background-color: white;">
                            <children>
-                              <Pane fx:id="pane" maxWidth="920.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0" />
+                              <Pane fx:id="pane" maxWidth="600.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -68,4 +68,7 @@
          </children>
       </AnchorPane>
    </bottom>
+   <right>
+      <AnchorPane prefHeight="629.0" prefWidth="283.0" BorderPane.alignment="CENTER" />
+   </right>
 </BorderPane>
