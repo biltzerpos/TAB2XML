@@ -33,7 +33,7 @@ public class Guitar {
 	private int LineSpacing;
 	private int noteTypeCounter;
 	private DrawNote noteDrawer;
-	private int font;
+	private int fontSize;
 	private int staffSpacing; 
 
 	public Guitar() {
@@ -52,7 +52,7 @@ public class Guitar {
 		this.noteDrawer = new DrawNote();
 		this.noteDrawer.setFont(font);
 		this.LineSpacing = LineSpacing;
-		this.font = font; 
+		this.fontSize = font; 
 		this.staffSpacing = StaffSpacing; 
 		this.d = new DrawMusicLines(this.pane, noteSpacing, staffSpacing);
 	}
@@ -377,7 +377,7 @@ public class Guitar {
 			int currentActual = note.getTimeModification().getActualNotes();
 			if (currentActual == actualLast) {
 				// type.setStartX(noteDrawer.getStartX());
-				type.drawActual(actualLast, spacing, font);
+				type.drawActual(actualLast, spacing, fontSize);
 			}
 		}
 
@@ -577,7 +577,31 @@ public class Guitar {
 		return spacing;
 	}
 
-	public void setSpacing(int spacing) {
+	public int getLineSpacing() {
+		return LineSpacing;
+	}
+
+	public void setLineSpacing(int lineSpacing) {
+		LineSpacing = lineSpacing;
+	}
+
+	public int getFontSize() {
+		return fontSize;
+	}
+
+	public void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public int getStaffSpacing() {
+		return staffSpacing;
+	}
+
+	public void setStaffSpacing(int staffSpacing) {
+		this.staffSpacing = staffSpacing;
+	}
+
+	public void setSpacing(double spacing) {
 		this.spacing = spacing;
 	}
 
