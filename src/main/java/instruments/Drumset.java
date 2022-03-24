@@ -127,6 +127,10 @@ public class Drumset {
 				// in the group are chords.)
 				noteDrawer.draw();
 
+				if (nextNote.getGrace() != null && i + 2 < notes.size()) {
+					nextNote = notes.get(i + 2);
+				}
+
 				if (nextNote.getType().equals("eighth")) {
 					// Draw a single beam because the next note is an eighth note
 					noteDrawer.drawSingleBeam();
