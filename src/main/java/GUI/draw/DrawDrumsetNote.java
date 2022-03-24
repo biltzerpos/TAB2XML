@@ -199,29 +199,20 @@ public class DrawDrumsetNote {
 
 	public void drawFlag() {
 		if (note.getType().equals("eighth")) {
-			CubicCurve cubicCurve = new CubicCurve(
-				getStartX()+8, getStartY()-35,
-				getStartX()+8, getStartY()-30,
-				getStartX()+20, getStartY()-25,
-				getStartX()+18, getStartY()-15
-			);
-	    	pane.getChildren().add(cubicCurve);
-		} else if (note.getType().equals("16th")) {
-			CubicCurve cubicCurve1 = new CubicCurve(
-				getStartX()+8, getStartY()-35,
-				getStartX()+8, getStartY()-30,
-				getStartX()+20, getStartY()-25,
-				getStartX()+18, getStartY()-15
-			);
-	    	pane.getChildren().add(cubicCurve1);
+			Line flag = new Line(getStartX()+8, this.top, getStartX()+20, this.top + 20);
+			flag.setStrokeWidth(1.5);
 
-			CubicCurve cubicCurve2 = new CubicCurve(
-				getStartX()+8, getStartY()-30,
-				getStartX()+8, getStartY()-25,
-				getStartX()+20, getStartY()-20,
-				getStartX()+18, getStartY()-10
-			);
-	    	pane.getChildren().add(cubicCurve2);
+	    	pane.getChildren().add(flag);
+		} else if (note.getType().equals("16th")) {
+			Line flag = new Line(getStartX()+8, this.top, getStartX()+20, this.top + 20);
+			flag.setStrokeWidth(1.5);
+
+	    	pane.getChildren().add(flag);
+
+			flag = new Line(getStartX()+8, this.top+15, getStartX()+20, this.top + 35);
+			flag.setStrokeWidth(1.5);
+
+	    	pane.getChildren().add(flag);
 		}
 	}
 
