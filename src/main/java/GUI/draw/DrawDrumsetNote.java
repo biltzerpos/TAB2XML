@@ -30,7 +30,7 @@ public class DrawDrumsetNote {
 		this.note = note;
 		this.startX = startX;
 		this.top = top - 25;
-		this.startY = startY;
+		this.startY = startY+3;
 		this.pane = pane;
 	}
 
@@ -207,6 +207,10 @@ public class DrawDrumsetNote {
 	}
 
 	public void draw() {
+		if (note.getDuration() == null) {
+			return;
+		}
+
 		// If note head exists and is an x, then draw "x", otherwise draw "o"
 		if (note.getNotehead() != null && note.getNotehead().getType().equals("x")) {
 			this.drawX();

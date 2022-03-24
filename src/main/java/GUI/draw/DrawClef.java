@@ -40,7 +40,7 @@ public class DrawClef {
 		r1.setWidth(3);
 		r1.setHeight(20);
 		r1.setTranslateX(5);
-		r1.setTranslateY(20);
+		r1.setTranslateY(this.y + 20);
 		pane.getChildren().add(r1);
 		
 	}
@@ -51,7 +51,7 @@ public class DrawClef {
 		r1.setWidth(3);
 		r1.setHeight(20);
 		r1.setTranslateX(10);
-		r1.setTranslateY(20);
+		r1.setTranslateY(this.y + 20);
 		pane.getChildren().add(r1);
 		
 	}
