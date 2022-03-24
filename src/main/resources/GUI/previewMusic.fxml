@@ -75,28 +75,72 @@
    <right>
       <AnchorPane prefHeight="571.0" prefWidth="283.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" layoutY="53.0" prefHeight="531.0" prefWidth="282.0" spacing="15.0">
+            <VBox layoutY="53.0" prefHeight="531.0" prefWidth="282.0" spacing="15.0">
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label prefWidth="120.0" text="Note Spacing: " />
-                        <Slider fx:id="noteSpacing" blockIncrement="5.0" majorTickUnit="5.0" max="60.0" min="20.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" value="40.0" />
+                        <VBox prefWidth="110.0">
+                           <children>
+                              <Label alignment="TOP_LEFT" prefWidth="120.0" text="Staff Spacing:" />
+                           </children>
+                        </VBox>
+                        <VBox prefWidth="150.0">
+                           <children>
+                              <Slider fx:id="StaffSpacingSlider" blockIncrement="5.0" majorTickUnit="5.0" max="30.0" min="10.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label prefWidth="120.0" text="Font: " />
-                        <ChoiceBox prefHeight="0.0" prefWidth="150.0" />
+                        <VBox prefWidth="110.0">
+                           <children>
+                              <Label prefWidth="120.0" text="Note Spacing: " />
+                           </children>
+                        </VBox>
+                        <VBox prefWidth="150.0">
+                           <children>
+                              <Slider fx:id="noteSpacing" blockIncrement="5.0" majorTickUnit="5.0" max="60.0" min="20.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" value="40.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <VBox prefWidth="110.0">
+                           <children>
+                              <Label prefWidth="120.0" text="Music Line Spacing:" />
+                           </children>
+                        </VBox>
+                        <VBox prefWidth="150.0">
+                           <children>
+                              <Slider prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <VBox prefWidth="110.0">
+                           <children>
+                              <Label prefWidth="120.0" text="Font: " />
+                           </children>
+                        </VBox>
+                        <VBox prefWidth="150.0">
+                           <children>
+                              <ChoiceBox prefHeight="0.0" prefWidth="150.0" />
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="282.0">
                      <children>
-                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="120.0">
+                        <VBox alignment="CENTER_LEFT" prefWidth="110.0">
                            <children>
                               <Label text="Font Style: " />
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="150.0">
+                        <VBox alignment="CENTER_LEFT" prefWidth="150.0">
                            <children>
                               <ChoiceBox prefHeight="0.0" prefWidth="150.0" />
                            </children>
@@ -105,20 +149,16 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label prefWidth="120.0" text="Font Size:" />
-                        <Slider fx:id="FontSizeSlider" blockIncrement="1.0" majorTickUnit="1.0" max="0.0" minorTickCount="0" prefWidth="150.0" snapToTicks="true" stylesheets="@styles.css" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT">
-                     <children>
-                        <Label prefWidth="120.0" text="Staff Spacing:" />
-                        <Slider prefWidth="150.0" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT">
-                     <children>
-                        <Label prefWidth="120.0" text="Music Line Spacing:" />
-                        <Slider prefWidth="150.0" />
+                        <VBox prefWidth="110.0">
+                           <children>
+                              <Label prefWidth="120.0" text="Font Size:" />
+                           </children>
+                        </VBox>
+                        <VBox prefWidth="150.0">
+                           <children>
+                              <Slider fx:id="FontSizeSlider" blockIncrement="1.0" majorTickUnit="1.0" max="0.0" minorTickCount="0" prefWidth="150.0" snapToTicks="true" stylesheets="@styles.css" />
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT">
