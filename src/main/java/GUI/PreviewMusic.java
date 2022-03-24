@@ -92,7 +92,7 @@ public class PreviewMusic extends Application {
 		 * spacing: 20-60 Range of the music Line spacing: 120 - 300
 		 */
 		// initial Font size slider values:
-		FontSizeSlider.setMax(Math.round(noteSpacing.getValue() / 2));
+		FontSizeSlider.setMax(12);
 		FontSizeSlider.setMin(8);
 		FontSizeSlider.setValue(12);
 		FontSizeSlider.setShowTickLabels(true);
@@ -350,6 +350,8 @@ public class PreviewMusic extends Application {
 	private void defaultSetting() {
 		pane.getChildren().clear();
 		
+		this.guitar = new Guitar(scorePartwise, pane, 40, 12, 10, 200);
+		this.guitar.drawGuitar();
 	}
 
 	
