@@ -335,6 +335,22 @@ public class PreviewMusic extends Application {
 		return instrument;
 
 	}
+	
+	@FXML private void ApplySettings() {
+		pane.getChildren().clear();
+		
+		String instrument = getInstrument();
+		if (instrument == "Guitar") {
+			this.guitar = new Guitar(scorePartwise, pane, getNoteSpacingValue(), getFontSize(), getStaffSpacingValue(), getMusicLineSpacingValue());
+			this.guitar.drawGuitar();
+		} 
+			
+	}
+	@FXML 
+	private void defaultSetting() {
+		pane.getChildren().clear();
+		
+	}
 
 	
 	public int getNoteSpacingValue() {
