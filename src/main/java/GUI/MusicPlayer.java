@@ -82,7 +82,7 @@ public class MusicPlayer {
 	public void playDrumNote() {
 		Player player = new Player();
 		Pattern vocals = new Pattern();
-		String drumNote = "";
+		String drumNote = "V9 ";
 		int voice = 0;
 
 		for (int i = 0; i < measureList.size(); i++) {
@@ -99,7 +99,7 @@ public class MusicPlayer {
 				String dur = addDuration(note);
 
 				if (note.getChord() == null) {
-					drumNote += " V9 " + ns + dur;
+					drumNote += " " + ns + dur;
 				}else {
 					drumNote += "+" + ns + dur;
 				}
