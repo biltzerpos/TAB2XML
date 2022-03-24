@@ -72,8 +72,6 @@ public class MusicPlayer {
 		System.out.println(vocals.toString());
 		vocals.setInstrument("GUITAR");
 		vocals.setVoice(voice);
-		vocals.setTempo(120);
-	//	vocals.add("E2i B2i E3i G3i B3i E4i B3i G3i  E4w+B3w+G3w+E3w+B2w+E2w");   // Guitar example
 		player.play(vocals);
 
 	}
