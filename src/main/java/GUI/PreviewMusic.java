@@ -49,6 +49,7 @@ public class PreviewMusic extends Application {
 	TextField gotoMeasureField;
 	private Guitar guitar;
 	private Drumset drum;
+	private MusicPlayer play;
 	@FXML
 	private Button closePreviewButton;
 	@FXML
@@ -58,6 +59,7 @@ public class PreviewMusic extends Application {
 	@FXML private Slider StaffSpacingSlider; 
 
 	public PreviewMusic() {
+		
 	}
 
 	@FXML
@@ -209,12 +211,14 @@ public class PreviewMusic extends Application {
 	// Method that handles `play note` button
 	@FXML
 	public void playHandle() {
+		this.play = new MusicPlayer(scorePartwise, pane);
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			this.guitar.playGuitarNote(); // Play method in Guitar class
+			this.play.playGuitarNote(); // Play method in Guitar class
 		} else if (instrument == "Drumset") {
-			this.drum.playDrumNote(); // Play method in Drumset class
+			this.play.playDrumNote(); // Play method in Drumset class
 		}
+	
 	}
 
 	// Method that handle navigating to specific measure (1- size of measure list)
