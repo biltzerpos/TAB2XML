@@ -51,7 +51,7 @@ public class Drumset {
 		this.x = 0;
 		this.y = 0;
 
-		this.spacing = 40;
+		this.spacing = 30;
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class Drumset {
 	private void drawGroupedNotes(List<Note> notes) {
 		Note currentNote, nextNote;
 		DrawDrumsetNote noteDrawer;
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing);
 
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
@@ -105,7 +105,7 @@ public class Drumset {
 					currentNote.getUnpitched().getDisplayStep());
 
 			// Set note drawer for the current note
-			noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, xPositionNote, yPositionNote);
+			noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
 
 			if (currentNote.getChord() != null || currentNote.getGrace() != null) {
 				// If the note is a chord or grace note, then the beam will already have been
@@ -159,7 +159,7 @@ public class Drumset {
 	private void drawUngroupedNotes(List<Note> notes) {
 		Note currentNote;
 		DrawDrumsetNote noteDrawer;
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing);
 
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
@@ -191,7 +191,7 @@ public class Drumset {
 					currentNote.getUnpitched().getDisplayStep());
 
 			// Set note drawer for the current note
-			noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, xPositionNote, yPositionNote);
+			noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
 
 			// Draw the note
 			noteDrawer.draw();
@@ -297,7 +297,7 @@ public class Drumset {
 		double width = this.pane.getMaxWidth();
 
 		// Draw the initial music lines
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing);
 		d.draw(this.x, this.y);
 
 		DrawClef drumclef = new DrawClef(this.pane, clef, x + 25, 0);

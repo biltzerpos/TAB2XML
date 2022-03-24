@@ -26,14 +26,14 @@ public class DrawDrumsetNote {
 	@FXML private Pane pane;
 	private double spacing;
 
-	public DrawDrumsetNote(Pane pane, Note note, double top, double startX, double startY) {
+	public DrawDrumsetNote(Pane pane, Note note, double top, double spacing, double startX, double startY) {
 		super();
 		this.note = note;
 		this.startX = startX;
 		this.top = top - 25;
 		this.startY = startY+3;
 		this.pane = pane;
-		this.spacing = 40;
+		this.spacing = spacing;
 	}
 
 	public double getStartX() {

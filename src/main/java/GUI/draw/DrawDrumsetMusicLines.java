@@ -24,6 +24,13 @@ public class DrawDrumsetMusicLines extends Node {
 		this.length = 40;
 	}
 
+	public DrawDrumsetMusicLines(Pane pane, double spacing) {
+		super();
+		this.pane = pane;
+		this.musicLineList = new ArrayList<Line>();
+		this.length = spacing;
+	}
+
 	/**
 	 * Draws the sheet music lines and adds invisible lines for placing notes above and below lines.
 	 *
