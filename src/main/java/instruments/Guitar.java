@@ -33,12 +33,13 @@ public class Guitar {
 	private int LineSpacing;
 	private int noteTypeCounter;
 	private DrawNote noteDrawer;
-	private int font = 12;
+	private int font;
+	private int staffSpacing; 
 
 	public Guitar() {
 	}
 
-	public Guitar(ScorePartwise scorePartwise, Pane pane, int length) {
+	public Guitar(ScorePartwise scorePartwise, Pane pane, int noteSpacing, int font, int StaffSpacing) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
@@ -47,11 +48,13 @@ public class Guitar {
 		this.y = 0;
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
-		this.spacing = length;
-		this.d = new DrawMusicLines(this.pane, length);
+		this.spacing = noteSpacing;
 		this.noteDrawer = new DrawNote();
 		this.noteDrawer.setFont(font);
 		this.LineSpacing = 200;
+		this.font = font; 
+		this.staffSpacing = StaffSpacing; 
+		this.d = new DrawMusicLines(this.pane, noteSpacing, staffSpacing);
 	}
 
 	/*
