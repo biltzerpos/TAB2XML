@@ -105,8 +105,8 @@ public class Drumset {
 			// Set note drawer for the current note
 			noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, xPositionNote, yPositionNote);
 
-			if (currentNote.getChord() != null) {
-				// If the note is a chord, then the beam will already have been drawn, so just draw the note
+			if (currentNote.getChord() != null || currentNote.getGrace() != null) {
+				// If the note is a chord or grace note, then the beam will already have been drawn, so just draw the note
 				noteDrawer.draw();
 			} else if (currentNote.getType().equals("eighth") && nextNote != null) {
 				// If the current note is an eighth note and the next note is not null,
@@ -114,7 +114,7 @@ public class Drumset {
 				// (Note that the next note being null also can mean that the rest of the notes in the group are chords.)
 				noteDrawer.draw();
 				noteDrawer.drawBeam();
-			} else if (currentNote.getType().equals("16th") && nextNote != null && nextNote.getType().equals("16th")) {
+			} else if (currentNote.getType().equals("16th") && nextNote != null) {
 				// If the current note is a 16th note and the next note is not null and is a 16th note,
 				// draw a beam for the next note to be connected to.
 				// (Note that the next note being null also can mean that the rest of the notes in the group are chords.)
@@ -128,7 +128,7 @@ public class Drumset {
 			}
 
 			// If the current note is not a chord, increment x position
-			this.x += currentNote.getChord() == null ? 50 : 0;
+			this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? 50 : 0;
 		}
 	}
 
@@ -231,7 +231,7 @@ public class Drumset {
 				group.add(currentNote);
 				// Only add to the duration sum if it not a chord
 				// (because they do not increase the duration of the group since they are played as a chord).
-				durationSum += currentNote.getChord() == null ? currentNote.getDuration() : 0;
+				durationSum += currentNote.getChord() == null && currentNote.getGrace() == null ? currentNote.getDuration() : 0;
 				i++;
 			}
 

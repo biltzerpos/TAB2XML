@@ -160,6 +160,24 @@ public class DrawDrumsetNote {
 
 	}
 
+	public void drawGrace() {
+		// The note is drawn with an ellipse
+		Ellipse ellipse;
+		ellipse = new Ellipse(getStartX()-15, getStartY()-3, 6.0, 4.5);
+		ellipse.setRotate(330);
+		ellipse.setId("drum-note-o");
+		ellipse.toFront();
+
+		Line stem = new Line(getStartX()-10, getStartY()-5, getStartX()-10, getStartY()-20);
+		stem.setStrokeWidth(1.5);
+		Line flag = new Line(getStartX()-10, getStartY()-20, getStartX()-3, getStartY()-15);
+		flag.setStrokeWidth(1.5);
+
+    	pane.getChildren().add(ellipse);
+    	pane.getChildren().add(stem);
+    	pane.getChildren().add(flag);
+	}
+
 	public void drawBeam() {
 		if (note.getType().equals("eighth")) {
 			// Beamed eighth notes have one beam connecting them
@@ -207,8 +225,8 @@ public class DrawDrumsetNote {
 	}
 
 	public void draw() {
-		if (note.getDuration() == null) {
-			return;
+		if (note.getGrace() != null) {
+			this.drawGrace();
 		}
 
 		// If note head exists and is an x, then draw "x", otherwise draw "o"
