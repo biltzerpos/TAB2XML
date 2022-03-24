@@ -199,7 +199,7 @@ public class Drumset {
 			// Draw the flag only if the current note is not a chord
 			// (if the current note is a chord, then the flag will have already
 			// been drawn by the previous note).
-			if (currentNote.getChord() != null) {
+			if (currentNote.getChord() == null) {
 				noteDrawer.drawFlag();
 			}
 
