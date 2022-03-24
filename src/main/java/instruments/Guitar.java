@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -476,76 +474,6 @@ public class Guitar {
 
 	}
 
-	public Boolean noteHasTie(Note n) {
-		Boolean result = n.getNotations().getTieds() == null ? false : true;
-		return result;
-	}
-
-	public Boolean noteHasRest(Note n) {
-		Boolean result = n.getRest() == null ? false : true;
-		return result;
-	}
-
-	// This method plays the notes
-	public void playGuitarNote() {
-		Player player = new Player();
-		Pattern vocals = new Pattern();
-		String noteSteps = "";
-		int voice = 0;
-
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			List<Note> noteList = measure.getNotesBeforeBackup();
-
-			for (int j = 0; j < noteList.size(); j++) {
-				String ns = new String();
-				Note note = noteList.get(j);
-//					Grace gra = note.getGrace();
-//					List<Dot> dot = note.getDots();
-//					Rest res = note.getRest();
-//					Integer alt = note.getPitch().getAlter();
-				int octave = note.getPitch().getOctave();
-				String oct = Integer.toString(octave);
-				String dur = getDuration(note);
-				voice = note.getVoice();
-				ns = note.getPitch().getStep() + oct + dur;
-				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
-				// " + alt);
-
-				if (!noteHasChord(note) && !noteHasTie(note)) {
-					noteSteps += " " + ns;
-				} else if (noteHasChord(note)) {
-					noteSteps += "+" + ns;
-				} else if (noteHasTie(note)) {
-					noteSteps += "-" + ns;
-				} else if (noteHasRest(note)) {
-					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
-					;
-				}
-			}
-		}
-
-		vocals.add(noteSteps);
-		// System.out.println(vocals.toString());
-		vocals.setInstrument("GUITAR");
-		vocals.setVoice(voice);
-		vocals.setTempo(120);
-		player.play(vocals);
-
-	}
-
-	// returns string representation of a duration for a given note
-	private String getDuration(Note note) {
-		String res = "";
-		int duration = note.getDuration();
-		if (duration == 8) {
-			res = "i";
-		}
-		if (duration == 64) {
-			res = "w";
-		}
-		return res;
-	}
 
 	// Getters and setters
 

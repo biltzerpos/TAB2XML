@@ -57,6 +57,10 @@ public class DrawDrumsetMusicLines extends Node {
 
         	y += 5;
     	}
+
+		// Make the last line invisible.
+		// We do this so that we can draw notes below the staff without the user seeing the line.
+		this.addLine(x, y, false);
 	}
 
 	/**
@@ -133,6 +137,9 @@ public class DrawDrumsetMusicLines extends Node {
 					break;
 				case "E":
 					yPosition = this.musicLineList.get(10).getStartY();
+					break;
+				case "D":
+					yPosition = this.musicLineList.get(11).getStartY();
 					break;
 				}
 				break;
