@@ -309,6 +309,8 @@ public class Drumset {
 		drumclef.drawDrumClef1();
 		drumclef.drawDrumClef2();
 
+		this.x += this.spacing;
+
 		// Iterate through the list of measures
 		for (Measure measure : measureList) {
 			// If the current line is getting too long, then make a new line
@@ -317,9 +319,29 @@ public class Drumset {
 				this.x = 0;
 				this.y += 100;
 
-				drumclef = new DrawClef(this.pane, clef, x + 25, this.y);
+				// Draw music lines for drum clef, then draw drum clef and incremement x
+				d.draw(this.x, this.y);
+
+				drumclef = new DrawClef(this.pane, clef, x + 20, this.y);
 				drumclef.drawDrumClef1();
 				drumclef.drawDrumClef2();
+
+				this.x += this.spacing;
+			}
+
+			// If the measure has a time signature, then draw it
+			if (measure.getAttributes() != null && measure.getAttributes().getTime() != null) {
+				// Draw music lines for the time signature
+				d.draw(this.x, this.y);
+				this.x += this.spacing;
+
+				// Draw the time signature
+				drumclef.drawTimeSignature(
+					measure.getAttributes().getTime().getBeats(),
+					measure.getAttributes().getTime().getBeats(),
+					this.x - this.spacing / 2,
+					this.y
+				);
 			}
 
 			// Draw the current measure
