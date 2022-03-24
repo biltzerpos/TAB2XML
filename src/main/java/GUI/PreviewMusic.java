@@ -52,10 +52,17 @@ public class PreviewMusic extends Application {
 	@FXML
 	private Button closePreviewButton;
 	@FXML
-	private Slider noteSpacing; 
-	@FXML 
-	private Slider FontSizeSlider; 
-	@FXML private Slider StaffSpacingSlider; 
+	private Slider noteSpacing;
+	private int noteSpacingValue;
+	@FXML
+	private Slider FontSizeSlider;
+	private int fontSize;
+	@FXML
+	private Slider StaffSpacingSlider;
+	private int staffSpacingValue;
+	@FXML
+	private Slider musicLineSlider;
+	private int musicLineSpacingValue;
 
 	public PreviewMusic() {
 	}
@@ -70,9 +77,6 @@ public class PreviewMusic extends Application {
 
 	// method to update the preview window
 	public void update() throws IOException {
-		// Get the ScorePartwise object directly
-
-		scorePartwise = mvc.converter.getScorePartwise();
 
 		/*
 		 * Get the list of measures from the ScorePartwise object.
@@ -81,87 +85,133 @@ public class PreviewMusic extends Application {
 		 * get the first item, which is the Part, then we get the measures from that
 		 * Part.
 		 */
-		//initial Font size slider:
-		FontSizeSlider.setMax(Math.round(noteSpacing.getValue()/2));
-		FontSizeSlider.setMin(8); 
+		scorePartwise = mvc.converter.getScorePartwise();
+		/*
+		 * The value for the menus are set here: Range of the font size 8 - 30 and font
+		 * is 1/2 notespacing. Range of staff spacing: 10 - 30 Range of the note
+		 * spacing: 20-60 Range of the music Line spacing: 120 - 300
+		 */
+		// initial Font size slider values:
+		FontSizeSlider.setMax(Math.round(noteSpacing.getValue() / 2));
+		FontSizeSlider.setMin(8);
 		FontSizeSlider.setValue(12);
 		FontSizeSlider.setShowTickLabels(true);
 		FontSizeSlider.setShowTickMarks(true);
-		
-		
-		// Linking noteSpace slider to the output: changing note Space slider affects the 
-		// range for the Font Size
-		noteSpacing.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				// TODO Auto-generated method stub
-				noteSpacing.setValue((double) newValue);
-				//System.out.println(noteSpacing.getValue());
-				double newMax = noteSpacing.getValue()/2;
-				FontSizeSlider.setMax(Math.floor(newMax));
-				FontSizeSlider.setMin(8); 
-				FontSizeSlider.setValue((newMax+8) / 2);
-				FontSizeSlider.setShowTickLabels(true);
-				FontSizeSlider.setShowTickMarks(true);
-			
-			}
-	      });
-		StaffSpacingSlider.valueProperty().addListener(new ChangeListener<Number>(){
+
+		// Changing the staff spacing slider affects the note spacing, font size, and
+		// music line sliders
+
+//		 staff spacing = 10:
+//		 	Font max = 12
+//		 	MusicLine spacing min = 120
+//		  		noteSpacing Max = 25
+//		 staff spacing = 15:
+//		  		Font max = 17
+//		  		MusicLine spacing min = 150
+//		  		noteSpacing Max = 35
+//		  staff spacing = 20:
+//		  		Font max = 22
+//		  		MusicLine spacing min = 180
+//		 		noteSpacing Max = 45
+//		  staff spacing = 25:
+//		  		Font max = 27
+//		  		MusicLine spacing min = 210
+//		  		noteSpacing Max = 55
+//		   staff spacing = 30:
+//		  		Font max = 30
+//		  		MusicLine spacing min = 240
+//		  		noteSpacing Max = 60
+
+		StaffSpacingSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				// TODO Auto-generated method stub
 				StaffSpacingSlider.setValue((double) newValue);
 				int newSpacing = (int) StaffSpacingSlider.getValue();
-				switch(newSpacing) {
+				switch (newSpacing) {
 				case 10:
-					//FontSizeSlider.setMin(8);
 					FontSizeSlider.setMax(12);
 					FontSizeSlider.setValue(10);
+
 					noteSpacing.setMax(25);
 					noteSpacing.setValue(noteSpacing.getMin());
+
+					musicLineSlider.setMin(120);
+					musicLineSlider.setValue(musicLineSlider.getMin());
 					break;
 				case 15:
-					//FontSizeSlider.setMin(8);
 					FontSizeSlider.setMax(17);
 					FontSizeSlider.setValue(12);
+
 					noteSpacing.setMax(35);
 					noteSpacing.setValue(noteSpacing.getMin());
-					break; 
+
+					musicLineSlider.setMin(150);
+					musicLineSlider.setValue(musicLineSlider.getMin());
+					break;
 				case 20:
-					//FontSizeSlider.setMin(8);
 					FontSizeSlider.setMax(22);
 					FontSizeSlider.setValue(12);
+
 					noteSpacing.setMax(45);
 					noteSpacing.setValue(noteSpacing.getMin());
+
+					musicLineSlider.setMin(180);
+					musicLineSlider.setValue(musicLineSlider.getMin());
 					break;
 				case 25:
-					//FontSizeSlider.setMin(8);
 					FontSizeSlider.setMax(27);
 					FontSizeSlider.setValue(12);
+
 					noteSpacing.setMax(55);
 					noteSpacing.setValue(noteSpacing.getMin());
+
+					musicLineSlider.setMin(210);
+					musicLineSlider.setValue(musicLineSlider.getMin());
 					break;
 				case 30:
-					//FontSizeSlider.setMin(8);
 					FontSizeSlider.setMax(30);
 					FontSizeSlider.setValue(12);
+
 					noteSpacing.setMax(60);
 					noteSpacing.setValue(noteSpacing.getMin());
+
+					musicLineSlider.setMin(240);
+					musicLineSlider.setValue(musicLineSlider.getMin());
 					break;
 				}
 				FontSizeSlider.setShowTickLabels(true);
 				FontSizeSlider.setShowTickMarks(true);
+				musicLineSlider.setShowTickLabels(true);
+				musicLineSlider.setShowTickMarks(true);
 			}
-			
+
 		});
-	
+
+		// Linking noteSpace slider to the output: changing note Space slider affects
+		// the
+		// range for the Font Size
+		noteSpacing.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				noteSpacing.setValue((double) newValue);
+				double newMax = noteSpacing.getValue() / 2;
+				FontSizeSlider.setMax(Math.floor(newMax));
+				FontSizeSlider.setMin(8);
+				FontSizeSlider.setValue((newMax + 8) / 2);
+				FontSizeSlider.setShowTickLabels(true);
+				FontSizeSlider.setShowTickMarks(true);
+
+			}
+		});
+
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			int noteSpacing = 50; //min = 20 , max = 60
-			int font = 12;
-			int staffSpacing = 10; //min = 10; 
-			this.guitar = new Guitar(scorePartwise, pane, noteSpacing, font, staffSpacing);
+			int noteSpacing = 50; // min = 20 , max = 60
+			int font = 24;
+			int staffSpacing = 30; // min = 10;
+			int LineSpacing = 240;
+			this.guitar = new Guitar(scorePartwise, pane, noteSpacing, font, staffSpacing, LineSpacing);
 			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
 			this.drum = new Drumset(scorePartwise, pane);
@@ -180,10 +230,12 @@ public class PreviewMusic extends Application {
 
 		double pagePrintableWidth = layout.getPrintableWidth();
 		double pagePrintableHeight = layout.getPrintableHeight();
-		//Elmira: Something (most likely the structure of Guitar) cause problem with scaling
-		//As a quick fix I multiplied the width of the anchorPane by 1.5. @Irsa, if you find a better fix
-		// (or decide this fix is good enough) delete this comment. 
-		final double scaleX = pagePrintableWidth / (1.5*screenshot.getWidth());
+		// Elmira: Something (most likely the structure of Guitar) cause problem with
+		// scaling
+		// As a quick fix I multiplied the width of the anchorPane by 1.5. @Irsa, if you
+		// find a better fix
+		// (or decide this fix is good enough) delete this comment.
+		final double scaleX = pagePrintableWidth / (1.5 * screenshot.getWidth());
 		final double scaleY = pagePrintableHeight / screenshot.getHeight();
 		final ImageView print_node = new ImageView(screenshot);
 		print_node.getTransforms().add(new Scale(scaleX, scaleX));

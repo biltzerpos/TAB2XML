@@ -114,7 +114,7 @@
                         </VBox>
                         <VBox prefWidth="150.0">
                            <children>
-                              <Slider prefWidth="150.0" />
+                              <Slider fx:id="musicLineSlider" blockIncrement="50.0" majorTickUnit="10.0" max="300.0" min="120.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="150.0" />
                            </children>
                         </VBox>
                      </children>

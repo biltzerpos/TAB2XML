@@ -39,7 +39,7 @@ public class Guitar {
 	public Guitar() {
 	}
 
-	public Guitar(ScorePartwise scorePartwise, Pane pane, int noteSpacing, int font, int StaffSpacing) {
+	public Guitar(ScorePartwise scorePartwise, Pane pane, int noteSpacing, int font, int StaffSpacing, int LineSpacing) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
@@ -51,7 +51,7 @@ public class Guitar {
 		this.spacing = noteSpacing;
 		this.noteDrawer = new DrawNote();
 		this.noteDrawer.setFont(font);
-		this.LineSpacing = 200;
+		this.LineSpacing = LineSpacing;
 		this.font = font; 
 		this.staffSpacing = StaffSpacing; 
 		this.d = new DrawMusicLines(this.pane, noteSpacing, staffSpacing);
