@@ -207,17 +207,22 @@ public class PreviewMusic extends Application {
 
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			int noteSpacing = 50; // min = 20 , max = 60
-			int font = 24;
-			int staffSpacing = 30; // min = 10;
-			int LineSpacing = 240;
-			this.guitar = new Guitar(scorePartwise, pane, noteSpacing, font, staffSpacing, LineSpacing);
+			setDefault();
+			this.guitar = new Guitar(scorePartwise, pane, getNoteSpacingValue(), getFontSize(), getStaffSpacingValue(), getMusicLineSpacingValue());
 			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
 			this.drum = new Drumset(scorePartwise, pane);
 			this.drum.draw();
 		}
 
+	}
+
+	private void setDefault() {
+		// TODO Auto-generated method stub
+		setNoteSpacingValue(40); 
+		setFontSize(12); 
+		setStaffSpacingValue(10); 
+		setMusicLineSpacingValue(200); 
 	}
 
 	// Method that handles the `print music sheet` button
@@ -329,6 +334,43 @@ public class PreviewMusic extends Application {
 		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
 		return instrument;
 
+	}
+
+	
+	public int getNoteSpacingValue() {
+		this.noteSpacingValue = (int) noteSpacing.getValue();
+		return noteSpacingValue;
+	}
+
+	public int getFontSize() {
+		this.fontSize = (int) FontSizeSlider.getValue();
+		return fontSize;
+	}
+
+	public int getStaffSpacingValue() {
+		this.staffSpacingValue = (int) StaffSpacingSlider.getValue();
+		return staffSpacingValue;
+	}
+
+	public int getMusicLineSpacingValue() {
+		this.musicLineSpacingValue = (int) musicLineSlider.getValue();
+		return musicLineSpacingValue;
+	}
+
+	public void setNoteSpacingValue(int noteSpacingValue) {
+		this.noteSpacingValue = noteSpacingValue;
+	}
+
+	public void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public void setStaffSpacingValue(int staffSpacingValue) {
+		this.staffSpacingValue = staffSpacingValue;
+	}
+
+	public void setMusicLineSpacingValue(int musicLineSpacingValue) {
+		this.musicLineSpacingValue = musicLineSpacingValue;
 	}
 
 	@Override
