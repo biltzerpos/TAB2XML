@@ -235,8 +235,15 @@ public class Drumset {
 			// Add the first note of the measure to the group
 			currentNote = noteList.get(i);
 			group.add(currentNote);
-			durationSum += currentNote.getDuration();
 			i++;
+
+			if (currentNote.getGrace() != null) {
+				currentNote = noteList.get(i);
+				group.add(currentNote);
+				i++;
+			}
+
+			durationSum += currentNote.getDuration();
 
 			// When durationSum % divisions == 0, that means we stopped at a beat (quarter
 			// note).
