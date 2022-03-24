@@ -37,9 +37,9 @@ public class DrawClef {
 	public void drawDrumClef1() {
 
 		Rectangle r1 = new Rectangle();
-		r1.setWidth(3);
+		r1.setWidth(5);
 		r1.setHeight(20);
-		r1.setTranslateX(5);
+		r1.setTranslateX(10);
 		r1.setTranslateY(this.y + 20);
 		pane.getChildren().add(r1);
 		
@@ -48,9 +48,9 @@ public class DrawClef {
 	public void drawDrumClef2() {
 
 		Rectangle r1 = new Rectangle();
-		r1.setWidth(3);
+		r1.setWidth(5);
 		r1.setHeight(20);
-		r1.setTranslateX(10);
+		r1.setTranslateX(18);
 		r1.setTranslateY(this.y + 20);
 		pane.getChildren().add(r1);
 		
@@ -82,6 +82,25 @@ public class DrawClef {
 			pane.getChildren().add(text);
 			y += 15;
 		}
+	}
+
+	/**
+	 * Draw the time signature.
+	 *
+	 * @param beats     - The beats of the time signature (top number)
+	 * @param beatType  - The beat type of the time signature (bottom number)
+	 * @param xPosition - The x-position of the time signature
+	 * @param yPosition - The y-position of the top of the measure
+	 */
+	public void drawTimeSignature(int beats, int beatType, double xPosition, double yPosition) {
+		Text beatsText = new Text(xPosition - 5, yPosition + 30, Integer.toString(beats));
+		Text beatTypeText = new Text(xPosition - 5, yPosition + 50, Integer.toString(beatType));
+
+		beatsText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+		beatTypeText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+
+		pane.getChildren().add(beatsText);
+		pane.getChildren().add(beatTypeText);
 	}
 
 	// Getters and Setters
