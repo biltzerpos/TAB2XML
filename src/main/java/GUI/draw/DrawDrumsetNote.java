@@ -24,6 +24,7 @@ public class DrawDrumsetNote {
 	private double startY;
 	private Note note;
 	@FXML private Pane pane;
+	private double spacing;
 
 	public DrawDrumsetNote(Pane pane, Note note, double top, double startX, double startY) {
 		super();
@@ -32,6 +33,7 @@ public class DrawDrumsetNote {
 		this.top = top - 25;
 		this.startY = startY+3;
 		this.pane = pane;
+		this.spacing = 40;
 	}
 
 	public double getStartX() {
@@ -178,22 +180,21 @@ public class DrawDrumsetNote {
     	pane.getChildren().add(flag);
 	}
 
-	public void drawBeam() {
-		if (note.getType().equals("eighth")) {
-			// Beamed eighth notes have one beam connecting them
-			Rectangle beam = new Rectangle(getStartX()+8, this.top-1, 50, 5);
-			pane.getChildren().add(beam);
-		} else if (note.getType().equals("16th")) {
-			// Beamed 16th notes have two beams connecting them
+	public void drawSingleBeam() {
+		// Beamed eighth notes have one beam connecting them
+		Rectangle beam = new Rectangle(getStartX()+8, this.top-1, this.spacing, 5);
+		pane.getChildren().add(beam);
+	}
 
-			// Draw first beam
-			Rectangle beam = new Rectangle(getStartX()+8, this.top-1, 50, 5);
-			pane.getChildren().add(beam);
+	public void drawDoubleBeam() {
+		// Beamed 16th notes have two beams connecting them
+		// Draw first beam
+		Rectangle beam = new Rectangle(getStartX()+8, this.top-1, this.spacing, 5);
+		pane.getChildren().add(beam);
 
-			// Draw second beam below the first beam
-			beam = new Rectangle(getStartX()+8, this.top+7, 50, 5);
-			pane.getChildren().add(beam);
-		}
+		// Draw second beam below the first beam
+		beam = new Rectangle(getStartX()+8, this.top+7, this.spacing, 5);
+		pane.getChildren().add(beam);
 	}
 
 	public void drawFlag() {

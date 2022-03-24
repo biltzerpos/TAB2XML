@@ -27,7 +27,8 @@ import GUI.draw.DrawDrumsetNote;
 public class Drumset {
 
 	private ScorePartwise scorePartwise;
-	@FXML private Pane pane;
+	@FXML
+	private Pane pane;
 	private List<Measure> measureList;
 	private Clef clef;
 	private HashMap<Measure, Double> xCoordinates;
@@ -35,6 +36,8 @@ public class Drumset {
 
 	private double x;
 	private double y;
+
+	private double spacing;
 
 	public Drumset(ScorePartwise scorePartwise, Pane pane) {
 		super();
@@ -47,12 +50,13 @@ public class Drumset {
 
 		this.x = 0;
 		this.y = 0;
+
+		this.spacing = 40;
 	}
 
 	/**
-	 * Draw a group of notes that should be beamed together.
-	 * This will handle chords, beaming, and positioning of notes.
-	 * This also draws the music lines.
+	 * Draw a group of notes that should be beamed together. This will handle
+	 * chords, beaming, and positioning of notes. This also draws the music lines.
 	 *
 	 * @param notes - List of notes that should be beamed together.
 	 */
@@ -92,35 +96,44 @@ public class Drumset {
 			// x-position of the note
 			// If it is a chord, we subtract 25 to align it with the previous note,
 			// otherwise, we add 25 to draw it on its own column.
-			xPositionNote = currentNote.getChord() == null ? this.x + 25 : this.x - 25;
+			xPositionNote = currentNote.getChord() == null ? this.x + this.spacing / 2 : this.x - this.spacing / 2;
 
 			// y-position of note
 			// Get the y-position of the note based on its octave and step
 			// and the position of the music lines it will be drawn on.
-			yPositionNote = d.getYPositionFromOctaveAndStep(
-					currentNote.getUnpitched().getDisplayOctave(),
-					currentNote.getUnpitched().getDisplayStep()
-			);
+			yPositionNote = d.getYPositionFromOctaveAndStep(currentNote.getUnpitched().getDisplayOctave(),
+					currentNote.getUnpitched().getDisplayStep());
 
 			// Set note drawer for the current note
 			noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, xPositionNote, yPositionNote);
 
 			if (currentNote.getChord() != null || currentNote.getGrace() != null) {
-				// If the note is a chord or grace note, then the beam will already have been drawn, so just draw the note
+				// If the note is a chord or grace note, then the beam will already have been
+				// drawn, so just draw the note
 				noteDrawer.draw();
 			} else if (currentNote.getType().equals("eighth") && nextNote != null) {
 				// If the current note is an eighth note and the next note is not null,
 				// draw a beam for the next note to be connected to.
-				// (Note that the next note being null also can mean that the rest of the notes in the group are chords.)
+				// The beam must be a single beam because it is an eighth note.
+				// (Note that the next note being null also can mean that the rest of the notes
+				// in the group are chords.)
 				noteDrawer.draw();
-				noteDrawer.drawBeam();
+				noteDrawer.drawSingleBeam();
 			} else if (currentNote.getType().equals("16th") && nextNote != null) {
-				// If the current note is a 16th note and the next note is not null and is a 16th note,
+				// If the current note is a 16th note and the next note is not null and is a
+				// 16th note,
 				// draw a beam for the next note to be connected to.
-				// (Note that the next note being null also can mean that the rest of the notes in the group are chords.)
+				// (Note that the next note being null also can mean that the rest of the notes
+				// in the group are chords.)
 				noteDrawer.draw();
-				// This will draw a double beam because it is a 16th note
-				noteDrawer.drawBeam();
+
+				if (nextNote.getType().equals("eighth")) {
+					// Draw a single beam because the next note is an eighth note
+					noteDrawer.drawSingleBeam();
+				} else if (nextNote.getType().equals("16th")) {
+					// Draw a double beam because the current note and next note are both 16th notes
+					noteDrawer.drawDoubleBeam();
+				}
 			} else {
 				// This probably means this is the last note in the group, just draw the note
 				// (if it is beamed, then the beam will already have been drawn).
@@ -128,14 +141,14 @@ public class Drumset {
 			}
 
 			// If the current note is not a chord, increment x position
-			this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? 50 : 0;
+			this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
 		}
 	}
 
 	/**
-	 * Draw a group of notes that should NOT be beamed together (draw flags instead).
-	 * This will handle chords, flags, and positioning of notes.
-	 * This also draws the music lines.
+	 * Draw a group of notes that should NOT be beamed together (draw flags
+	 * instead). This will handle chords, flags, and positioning of notes. This also
+	 * draws the music lines.
 	 *
 	 * @param notes - List of notes (that will not be beamed together).
 	 */
@@ -165,15 +178,13 @@ public class Drumset {
 			// x-position of the note
 			// If it is a chord, we subtract 25 to align it with the previous note,
 			// otherwise, we add 25 to draw it on its own column.
-			xPositionNote = currentNote.getChord() == null ? this.x + 25 : this.x - 25;
+			xPositionNote = currentNote.getChord() == null ? this.x + this.spacing / 2 : this.x - this.spacing / 2;
 
 			// y-position of note
 			// Get the y-position of the note based on its octave and step
 			// and the position of the music lines it will be drawn on.
-			yPositionNote = d.getYPositionFromOctaveAndStep(
-					currentNote.getUnpitched().getDisplayOctave(),
-					currentNote.getUnpitched().getDisplayStep()
-			);
+			yPositionNote = d.getYPositionFromOctaveAndStep(currentNote.getUnpitched().getDisplayOctave(),
+					currentNote.getUnpitched().getDisplayStep());
 
 			// Set note drawer for the current note
 			noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, xPositionNote, yPositionNote);
@@ -189,16 +200,15 @@ public class Drumset {
 			}
 
 			// If the current note is a chord, increment x position
-			this.x += currentNote.getChord() == null ? 50 : 0;
+			this.x += currentNote.getChord() == null ? this.spacing : 0;
 		}
 	}
 
 	/**
 	 * Draws a measure of notes.
 	 *
-	 * This separates the measure into groups of notes,
-	 * decides for each group of notes whether to beam them together or not,
-	 * and draws each group.
+	 * This separates the measure into groups of notes, decides for each group of
+	 * notes whether to beam them together or not, and draws each group.
 	 *
 	 * @param measure - The measure to draw.
 	 */
@@ -224,26 +234,33 @@ public class Drumset {
 			durationSum += currentNote.getDuration();
 			i++;
 
-			// When durationSum % divisions == 0, that means we stopped at a beat (quarter note).
+			// When durationSum % divisions == 0, that means we stopped at a beat (quarter
+			// note).
 			// Otherwise, keep iterating until we find a beat.
 			while (durationSum != 0 && durationSum % divisions != 0) {
 				currentNote = noteList.get(i);
 				group.add(currentNote);
 				// Only add to the duration sum if it not a chord
-				// (because they do not increase the duration of the group since they are played as a chord).
-				durationSum += currentNote.getChord() == null && currentNote.getGrace() == null ? currentNote.getDuration() : 0;
+				// (because they do not increase the duration of the group since they are played
+				// as a chord).
+				durationSum += currentNote.getChord() == null && currentNote.getGrace() == null
+						? currentNote.getDuration()
+						: 0;
 				i++;
 			}
 
-			// If the last note in the group is followed by chord notes, they will not be found by the above loop.
+			// If the last note in the group is followed by chord notes, they will not be
+			// found by the above loop.
 			// This loop makes sure they are added to the group.
 			while (i < noteList.size() && noteList.get(i).getChord() != null) {
 				group.add(noteList.get(i));
 				i++;
 			}
 
-			// If durationSum == divisions, then the group is one beat (quarter note) (so draw the group together).
-			// Else, the group extends over more than one beat (so draw the group as individual notes because it may be too complex to draw).
+			// If durationSum == divisions, then the group is one beat (quarter note) (so
+			// draw the group together).
+			// Else, the group extends over more than one beat (so draw the group as
+			// individual notes because it may be too complex to draw).
 			if (durationSum == divisions) {
 				this.drawGroupedNotes(group);
 			} else {
@@ -266,11 +283,13 @@ public class Drumset {
 		this.x = 0;
 		this.y = 0;
 
+		double width = this.pane.getMaxWidth();
+
 		// Draw the initial music lines
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane);
 		d.draw(this.x, this.y);
 
-		DrawClef drumclef = new DrawClef(this.pane, clef, x+25, 0);
+		DrawClef drumclef = new DrawClef(this.pane, clef, x + 25, 0);
 		drumclef.drawDrumClef1();
 		drumclef.drawDrumClef2();
 
@@ -278,11 +297,11 @@ public class Drumset {
 		for (Measure measure : measureList) {
 			// If the current line is getting too long, then make a new line
 			// and draw a drum clef for the new line.
-			if (this.x > 849) {
+			if (this.x + this.getMeasureLength(measure) > width) {
 				this.x = 0;
 				this.y += 100;
 
-				drumclef = new DrawClef(this.pane, clef, x+25, this.y);
+				drumclef = new DrawClef(this.pane, clef, x + 25, this.y);
 				drumclef.drawDrumClef1();
 				drumclef.drawDrumClef2();
 			}
@@ -297,6 +316,25 @@ public class Drumset {
 			DrawDrumsetBar bar = new DrawDrumsetBar(this.pane);
 			bar.draw(this.x, this.y);
 		}
+	}
+
+	/**
+	 * Calculates the length of the measure based on the spacing and the
+	 * number of notes that are not chords or grace notes.
+	 *
+	 * @return The length of the measure in pixels.
+	 */
+	private double getMeasureLength(Measure measure) {
+		List<Note> notes = measure.getNotesBeforeBackup();
+		int length = 0;
+
+		for (Note note : notes) {
+			if (note.getChord() == null && note.getGrace() == null) {
+				length += this.spacing;
+			}
+		}
+
+		return length;
 	}
 
 	public void highlightMeasureArea(Measure measure) {
@@ -352,35 +390,34 @@ public class Drumset {
 		}
 	}
 
-
 	public String getDrumNoteFullName(String Id) {
 		String fullName = "";
 
-		if(Id == "P1-I50") {
+		if (Id == "P1-I50") {
 			fullName = "Crash_Cymbal_1";
-		} else if(Id == "P1-I36"){
+		} else if (Id == "P1-I36") {
 			fullName = "Bass_Drum";
-		} else if(Id == "P1-I39"){
+		} else if (Id == "P1-I39") {
 			fullName = "Acoustic_Snare";
-		} else if(Id == "P1-I43"){
+		} else if (Id == "P1-I43") {
 			fullName = "Closed_Hi_Hat";
-		} else if(Id == "P1-I47"){
+		} else if (Id == "P1-I47") {
 			fullName = "Open_Hi_Hat";
-		} else if(Id == "P1-I52"){
+		} else if (Id == "P1-I52") {
 			fullName = "Ride_Cymbal_1";
-		} else if(Id == "P1-I54"){
+		} else if (Id == "P1-I54") {
 			fullName = "Ride_Bell";
-		} else if(Id == "P1-I53"){
+		} else if (Id == "P1-I53") {
 			fullName = "Chinese_Cymbal_1";
-		} else if(Id == "P1-I48"){
+		} else if (Id == "P1-I48") {
 			fullName = "Lo_Mid_Tom";
-		} else if(Id == "P1-I46"){
+		} else if (Id == "P1-I46") {
 			fullName = "Lo_Tom";
-		} else if(Id == "P1-I44"){
+		} else if (Id == "P1-I44") {
 			fullName = "High_Floor_Tom";
-		} else if(Id == "P1-I42"){
+		} else if (Id == "P1-I42") {
 			fullName = "Low_Floor_Tom";
-		} else if(Id == "P1-I45"){
+		} else if (Id == "P1-I45") {
 			fullName = "Pedal_Hi_Hat";
 		} else {
 			fullName = "Bass_Drum"; // Make it default for now
@@ -388,6 +425,7 @@ public class Drumset {
 
 		return fullName;
 	}
+
 	private String addDuration(Note note) {
 		String res = "";
 		String type = note.getType();
@@ -437,14 +475,14 @@ public class Drumset {
 
 				if (note.getChord() == null) {
 					drumNote += " V9 " + ns + dur;
-				}else {
+				} else {
 					drumNote += "+" + ns + dur;
 				}
 			}
 		}
 
 		vocals.add(drumNote);
-		//System.out.println(vocals.toString());
+		// System.out.println(vocals.toString());
 		vocals.setVoice(voice);
 		vocals.setTempo(120);
 		player.play(vocals);

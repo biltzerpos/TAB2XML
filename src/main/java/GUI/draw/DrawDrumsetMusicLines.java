@@ -11,7 +11,7 @@ import javafx.scene.shape.Line;
 public class DrawDrumsetMusicLines extends Node {
 
 	@FXML private Pane pane;
-	private final double length = 50.0;
+	private double length;
 	private MLine musicLine;
 	private List<Line> musicLineList;
 
@@ -21,6 +21,7 @@ public class DrawDrumsetMusicLines extends Node {
 		super();
 		this.pane = pane;
 		this.musicLineList = new ArrayList<Line>();
+		this.length = 40;
 	}
 
 	/**
