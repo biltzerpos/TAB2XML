@@ -77,8 +77,10 @@ public class Guitar {
 			// clef of first line
 			if (x == 0) {
 				d.draw(x, y);
-				DrawClef dc = new DrawClef(this.pane, clef, x + 5, y + 15);
-				dc.draw();
+				double clefSpacing = this.staffSpacing + (this.staffSpacing/2); 
+				DrawClef dc = new DrawClef(this.pane, clef, x , y + clefSpacing);
+				dc.setFontSize(this.fontSize+6);
+				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
 			}
@@ -100,8 +102,10 @@ public class Guitar {
 				width = this.pane.getMaxWidth();
 
 				d.draw(x, y);
-				DrawClef dc = new DrawClef(this.pane, clef, x + 5, y + 15);
-				dc.draw();
+				double clefSpacing = this.staffSpacing + (this.staffSpacing/2); 
+				DrawClef dc = new DrawClef(this.pane, clef, x , y + clefSpacing);
+				dc.setFontSize(this.fontSize+6);
+				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
 

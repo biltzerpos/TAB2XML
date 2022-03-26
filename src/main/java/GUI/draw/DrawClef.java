@@ -18,6 +18,7 @@ public class DrawClef {
 	private Pane pane;
 	private double x;
 	private double y;
+	private double fontSize; 
 
 	// Constructor 1
 	public DrawClef(Pane pane, Clef clef, double x, double y) {
@@ -59,10 +60,10 @@ public class DrawClef {
 
 	// the method called for the drawing the clef on Pane.
 
-	public void draw() {
+	public void draw(double spacing) {
 		String name = this.clef.getSign();
 		if (name == "TAB") {
-			drawVertical(name);
+			drawVertical(name, spacing);
 		}
 	}
 
@@ -73,14 +74,14 @@ public class DrawClef {
 	 * A 
 	 * B
 	 */
-	private void drawVertical(String name) {
+	private void drawVertical(String name, double spacing) {
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
 			String s = Character.toString(c);
 			Text text = new Text(this.x, this.y, s);
-			text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 18));
+			text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, getFontSize()));
 			pane.getChildren().add(text);
-			y += 15;
+			y += spacing;
 		}
 	}
 
@@ -115,6 +116,12 @@ public class DrawClef {
 
 	public void setY(double y) {
 		this.y = y;
+	}
+	public double getFontSize() {
+		return fontSize; 
+	}
+	public void setFontSize(double font) {
+		this.fontSize = font; 
 	}
 
 }
