@@ -112,7 +112,8 @@ public class Guitar {
 
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
-			DrawBar bar = new DrawBar(this.pane, x, y);
+			double len = getLastLineCoordinateY() - getFirstLineCoordinateY(); 
+			DrawBar bar = new DrawBar(this.pane, x, y, len);
 			bar.draw();
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
