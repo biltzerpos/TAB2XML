@@ -8,7 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 // this class draws music lines (group of 6 lines) with the width of  50; 
-public class DrawMusicLines extends Node {
+public class DrawMusicLines {
 
 	@FXML
 	private Pane pane;
