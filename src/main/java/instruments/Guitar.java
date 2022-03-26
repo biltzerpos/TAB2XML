@@ -14,6 +14,7 @@ import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Dot;
 import models.measure.note.Note;
+import models.measure.note.notations.Slur;
 import GUI.draw.*;
 
 public class Guitar {
@@ -32,7 +33,8 @@ public class Guitar {
 	private int noteTypeCounter;
 	private DrawNote noteDrawer;
 	private int fontSize;
-	private int staffSpacing; 
+	private int staffSpacing;
+	private DrawSlur slurDrawer; 
 
 	public Guitar() {
 	}
@@ -44,15 +46,18 @@ public class Guitar {
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 		this.x = 0;
 		this.y = 0;
+		this.LineSpacing = LineSpacing;
+		this.fontSize = font; 
+		this.staffSpacing = StaffSpacing;
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
 		this.spacing = noteSpacing;
 		this.noteDrawer = new DrawNote();
-		this.noteDrawer.setFont(font);
-		this.LineSpacing = LineSpacing;
-		this.fontSize = font; 
-		this.staffSpacing = StaffSpacing; 
+		this.noteDrawer.setFont(this.fontSize); 
+		this.noteDrawer.setGraceFontSize(this.fontSize-4);
 		this.d = new DrawMusicLines(this.pane, noteSpacing, staffSpacing);
+		this.slurDrawer = new DrawSlur();
+		this.slurDrawer.setPane(this.pane);
 	}
 
 	/*
@@ -70,8 +75,10 @@ public class Guitar {
 			// clef of first line
 			if (x == 0) {
 				d.draw(x, y);
-				DrawClef dc = new DrawClef(this.pane, clef, x + 5, y + 15);
-				dc.draw();
+				double clefSpacing = this.staffSpacing + (this.staffSpacing/2); 
+				DrawClef dc = new DrawClef(this.pane, clef, x , y + clefSpacing);
+				dc.setFontSize(this.fontSize+6);
+				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
 			}
@@ -93,8 +100,10 @@ public class Guitar {
 				width = this.pane.getMaxWidth();
 
 				d.draw(x, y);
-				DrawClef dc = new DrawClef(this.pane, clef, x + 5, y + 15);
-				dc.draw();
+				double clefSpacing = this.staffSpacing + (this.staffSpacing/2); 
+				DrawClef dc = new DrawClef(this.pane, clef, x , y + clefSpacing);
+				dc.setFontSize(this.fontSize+6);
+				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
 
@@ -105,7 +114,8 @@ public class Guitar {
 
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
-			DrawBar bar = new DrawBar(this.pane, x, y);
+			double len = getLastLineCoordinateY() - getFirstLineCoordinateY(); 
+			DrawBar bar = new DrawBar(this.pane, x, y, len);
 			bar.draw();
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
@@ -165,6 +175,7 @@ public class Guitar {
 				drawNoteWithoutGrace(note, noteList);
 
 			}
+			drawSlur(note, noteList);
 
 		} else if (noteHasChord(note)) {
 			if (noteHasGrace(note)) {
@@ -173,6 +184,7 @@ public class Guitar {
 				drawChordWithoutGrace(note, noteList);
 
 			}
+			drawSlur(note, noteList);
 		}
 
 	}
@@ -248,6 +260,7 @@ public class Guitar {
 		noteDrawer.setStartX(graceSpacing);
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
+		//drawSlur(note, noteList);
 	}
 
 	// draw regular notes (no grace, no chords)
@@ -266,6 +279,7 @@ public class Guitar {
 
 		drawBend(note);
 		drawType(note, noteList);
+		//drawSlur(note, noteList);
 
 	}
 
@@ -296,8 +310,8 @@ public class Guitar {
 		noteDrawer.setStartX(noteDrawer.getStartX());
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
-		;
 		drawBend(note);
+		//drawSlur(note, noteList);
 		/*
 		 * double py = getLastLineCoordinateY(); DrawNoteType type = new
 		 * DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
@@ -416,6 +430,56 @@ public class Guitar {
 	private boolean noteHasDot(Note note) {
 		// TODO Auto-generated method stub
 		Boolean res = note.getDots() == null ? false : true;
+		return res;
+	}
+	
+	private void drawSlur(Note note, List<Note> noteList) {
+		if(noteHasSlur(note)) {
+			int string = note.getNotations().getTechnical().getString();
+			double positionY = getLineCoordinateY(string);
+			List<Slur> slurList = note.getNotations().getSlurs();
+			int lastNum = 0; 
+			int index = noteList.indexOf(note);
+			for (int i = index; i>0; i--) {
+				Note last = noteList.get(i); 
+				if(noteHasSlur(last)) {
+					List<Slur> lastSlurList = last.getNotations().getSlurs();
+					if(lastSlurList.size() == 1) {
+						Slur s = lastSlurList.get(0); 
+						lastNum = s.getNumber(); 
+						break; 
+					}
+				}
+			}
+			if(slurList.size() == 1) {
+				Slur s = slurList.get(0);
+				String currentType = s.getType();
+				int currentNum = s.getNumber(); 
+				if(currentType == "start") {
+					slurDrawer.setStartX(noteDrawer.getStartX());
+					String place = s.getPlacement(); 
+					if(place == "below") {
+						slurDrawer.setStartY(positionY + 10);
+						slurDrawer.setPlace(1);
+					}
+					else {
+						slurDrawer.setStartY(positionY - 10);
+						slurDrawer.setPlace(-1);
+					}
+				}
+				if(currentType == "stop") {
+					slurDrawer.setEndX(noteDrawer.getStartX());
+					if(lastNum == currentNum) {
+					slurDrawer.draw();}
+				}
+			}
+		}
+		
+	}
+
+
+	private boolean noteHasSlur(Note note) {
+		Boolean res = note.getNotations().getSlurs() == null ? false: true;
 		return res;
 	}
 

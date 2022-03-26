@@ -11,11 +11,12 @@ class DrawBarTest {
 	private Pane p = new Pane();
 	private final double x = 30.00;
 	private final double y = 40.00;
+	private final double len = 10; 
 
 	@BeforeEach
 	public void setUp() throws Exception {
 
-		this.bar = new DrawBar(p, x, y);
+		this.bar = new DrawBar(p, x, y, len);
 	}
 
 	// tests the getPane Method from the DrawBar class
