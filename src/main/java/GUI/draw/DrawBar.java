@@ -11,17 +11,19 @@ public class DrawBar {
 	private Pane pane;
 	private double startX;
 	private double startY;
+	private double len; 
 
 	// Constructor 1
 	public DrawBar() {
 	}
 
 	// Constructor 2
-	public DrawBar(Pane pane, double startX, double startY) {
+	public DrawBar(Pane pane, double startX, double startY, double len) {
 		super();
 		this.pane = pane;
 		this.startX = startX;
 		this.startY = startY;
+		this.len = len; 
 	}
 
 	// method that is called for the drawing
@@ -30,7 +32,7 @@ public class DrawBar {
 		bar1.setStartX(getStartX());
 		bar1.setStartY(getStartY());
 		bar1.setEndX(getStartX());
-		bar1.setEndY(getStartY() + 50);
+		bar1.setEndY(getStartY() + len);
 		pane.getChildren().add(bar1);
 	}
 

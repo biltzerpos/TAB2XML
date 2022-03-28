@@ -1,6 +1,5 @@
 package GUI.draw;
 
-import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -10,7 +9,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import models.measure.note.Note;
 
 // This class draws note type under the music lines
 public class DrawNoteType {
@@ -19,9 +17,6 @@ public class DrawNoteType {
 	private Pane pane;
 	private double startX;
 	private double startY;
-	// private final double HalfNoteLength = 15;
-	// private final double QuarterNoteLength = 30;
-	// private Note note;
 	private double shortStick;
 	private double longStick;
 
@@ -34,56 +29,11 @@ public class DrawNoteType {
 		this.pane = pane;
 		this.startX = startX;
 		this.startY = startY;
-		/// this.note = note;
 		this.shortStick = shortStick;
 		this.longStick = 2 * shortStick;
 
 	}
 
-	/*
-	 * public void drawType() {
-	 * 
-	 * if (note.getChord() == null) { // startX += 25;
-	 * 
-	 * String current = note.getType(); if (current == "half") { drawHalfNotes(); }
-	 * else if (current == "quarter") { drawQuarterNotes(); } else if (current ==
-	 * "eighth") { drawEighthNotes(); } else if (current == "16th") {
-	 * draw16thNotes(); } // startX += 25;
-	 * 
-	 * } }
-	 * 
-	 * private void draw16thNotes() { double y1 = startY + 37; Line l = new Line();
-	 * l.setStartX(startX); l.setEndX(startX); l.setStartY(y1); l.setEndY(y1 -
-	 * QuarterNoteLength); pane.getChildren().add(l);
-	 * 
-	 * }
-	 * 
-	 * // shorter stick private void drawHalfNotes() { double y1 = startY + 37; Line
-	 * l = new Line(); l.setStartX(startX); l.setEndX(startX); l.setStartY(y1);
-	 * l.setEndY(y1 - HalfNoteLength); pane.getChildren().add(l);
-	 * 
-	 * }
-	 * 
-	 * // longer stick private void drawQuarterNotes() { double y1 = startY + 37;
-	 * Line l = new Line(); l.setStartX(startX); l.setEndX(startX); l.setStartY(y1);
-	 * l.setEndY(y1 - QuarterNoteLength); pane.getChildren().add(l);
-	 * 
-	 * }
-	 * 
-	 * // draw notes with beam private void drawEighthNotes() { double y1 = startY +
-	 * 37; Line l = new Line(); l.setStartX(startX); l.setEndX(startX);
-	 * l.setStartY(y1); l.setEndY(y1 - QuarterNoteLength);
-	 * pane.getChildren().add(l);
-	 * 
-	 * }
-	 * 
-	 * // draw the beam itself
-	 * 
-	 * 
-	 * // draw a dot public void drawDot(double centerX, double centerY, double r) {
-	 * Circle circle = new Circle(centerX, centerY, r); circle.setFill(Color.BLACK);
-	 * pane.getChildren().add(circle); }
-	 */
 	public void drawShortLine() {
 		double y1 = startY + 37;
 		Line l = new Line();
@@ -149,10 +99,8 @@ public class DrawNoteType {
 	}
 
 	public void drawActual(int actualLast, double length, int font) {
-		// TODO Auto-generated method stub
 		double y1 = startY + 50;
 		double x = startX + length / 4;
-		// int f = font - 4;
 		// divide the spacing between in the form of |--int--|
 		double totalLength = length + (length / 2);
 		double len = (totalLength - font) / 2;

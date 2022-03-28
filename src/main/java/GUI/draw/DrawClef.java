@@ -18,6 +18,7 @@ public class DrawClef {
 	private Pane pane;
 	private double x;
 	private double y;
+	private double fontSize; 
 
 	// Constructor 1
 	public DrawClef(Pane pane, Clef clef, double x, double y) {
@@ -37,9 +38,9 @@ public class DrawClef {
 	public void drawDrumClef1() {
 
 		Rectangle r1 = new Rectangle();
-		r1.setWidth(3);
+		r1.setWidth(5);
 		r1.setHeight(20);
-		r1.setTranslateX(5);
+		r1.setTranslateX(10);
 		r1.setTranslateY(this.y + 20);
 		pane.getChildren().add(r1);
 		
@@ -48,9 +49,9 @@ public class DrawClef {
 	public void drawDrumClef2() {
 
 		Rectangle r1 = new Rectangle();
-		r1.setWidth(3);
+		r1.setWidth(5);
 		r1.setHeight(20);
-		r1.setTranslateX(10);
+		r1.setTranslateX(18);
 		r1.setTranslateY(this.y + 20);
 		pane.getChildren().add(r1);
 		
@@ -59,10 +60,10 @@ public class DrawClef {
 
 	// the method called for the drawing the clef on Pane.
 
-	public void draw() {
+	public void draw(double spacing) {
 		String name = this.clef.getSign();
 		if (name == "TAB") {
-			drawVertical(name);
+			drawVertical(name, spacing);
 		}
 	}
 
@@ -73,15 +74,34 @@ public class DrawClef {
 	 * A 
 	 * B
 	 */
-	private void drawVertical(String name) {
+	private void drawVertical(String name, double spacing) {
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
 			String s = Character.toString(c);
 			Text text = new Text(this.x, this.y, s);
-			text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 18));
+			text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, getFontSize()));
 			pane.getChildren().add(text);
-			y += 15;
+			y += spacing;
 		}
+	}
+
+	/**
+	 * Draw the time signature.
+	 *
+	 * @param beats     - The beats of the time signature (top number)
+	 * @param beatType  - The beat type of the time signature (bottom number)
+	 * @param xPosition - The x-position of the time signature
+	 * @param yPosition - The y-position of the top of the measure
+	 */
+	public void drawTimeSignature(int beats, int beatType, double xPosition, double yPosition) {
+		Text beatsText = new Text(xPosition - 5, yPosition + 30, Integer.toString(beats));
+		Text beatTypeText = new Text(xPosition - 5, yPosition + 50, Integer.toString(beatType));
+
+		beatsText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+		beatTypeText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+
+		pane.getChildren().add(beatsText);
+		pane.getChildren().add(beatTypeText);
 	}
 
 	// Getters and Setters
@@ -115,6 +135,12 @@ public class DrawClef {
 
 	public void setY(double y) {
 		this.y = y;
+	}
+	public double getFontSize() {
+		return fontSize; 
+	}
+	public void setFontSize(double font) {
+		this.fontSize = font; 
 	}
 
 }

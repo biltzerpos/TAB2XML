@@ -24,14 +24,16 @@ public class DrawDrumsetNote {
 	private double startY;
 	private Note note;
 	@FXML private Pane pane;
+	private double spacing;
 
-	public DrawDrumsetNote(Pane pane, Note note, double top, double startX, double startY) {
+	public DrawDrumsetNote(Pane pane, Note note, double top, double spacing, double startX, double startY) {
 		super();
 		this.note = note;
 		this.startX = startX;
 		this.top = top - 25;
 		this.startY = startY+3;
 		this.pane = pane;
+		this.spacing = spacing;
 	}
 
 	public double getStartX() {
@@ -160,55 +162,63 @@ public class DrawDrumsetNote {
 
 	}
 
-	public void drawBeam() {
-		if (note.getType().equals("eighth")) {
-			// Beamed eighth notes have one beam connecting them
-			Rectangle beam = new Rectangle(getStartX()+8, this.top-1, 50, 5);
-			pane.getChildren().add(beam);
-		} else if (note.getType().equals("16th")) {
-			// Beamed 16th notes have two beams connecting them
+	public void drawGrace() {
+		// The note is drawn with an ellipse
+		Ellipse ellipse;
+		ellipse = new Ellipse(getStartX()-15, getStartY()-3, 6.0, 4.5);
+		ellipse.setRotate(330);
+		ellipse.setId("drum-note-o");
+		ellipse.toFront();
 
-			// Draw first beam
-			Rectangle beam = new Rectangle(getStartX()+8, this.top-1, 50, 5);
-			pane.getChildren().add(beam);
+		Line stem = new Line(getStartX()-10, getStartY()-5, getStartX()-10, getStartY()-20);
+		stem.setStrokeWidth(1.5);
+		Line flag = new Line(getStartX()-10, getStartY()-20, getStartX()-3, getStartY()-15);
+		flag.setStrokeWidth(1.5);
 
-			// Draw second beam below the first beam
-			beam = new Rectangle(getStartX()+8, this.top+7, 50, 5);
-			pane.getChildren().add(beam);
-		}
+    	pane.getChildren().add(ellipse);
+    	pane.getChildren().add(stem);
+    	pane.getChildren().add(flag);
+	}
+
+	public void drawSingleBeam() {
+		// Beamed eighth notes have one beam connecting them
+		Rectangle beam = new Rectangle(getStartX()+8, this.top-1, this.spacing, 5);
+		pane.getChildren().add(beam);
+	}
+
+	public void drawDoubleBeam() {
+		// Beamed 16th notes have two beams connecting them
+		// Draw first beam
+		Rectangle beam = new Rectangle(getStartX()+8, this.top-1, this.spacing, 5);
+		pane.getChildren().add(beam);
+
+		// Draw second beam below the first beam
+		beam = new Rectangle(getStartX()+8, this.top+7, this.spacing, 5);
+		pane.getChildren().add(beam);
 	}
 
 	public void drawFlag() {
 		if (note.getType().equals("eighth")) {
-			CubicCurve cubicCurve = new CubicCurve(
-				getStartX()+8, getStartY()-35,
-				getStartX()+8, getStartY()-30,
-				getStartX()+20, getStartY()-25,
-				getStartX()+18, getStartY()-15
-			);
-	    	pane.getChildren().add(cubicCurve);
-		} else if (note.getType().equals("16th")) {
-			CubicCurve cubicCurve1 = new CubicCurve(
-				getStartX()+8, getStartY()-35,
-				getStartX()+8, getStartY()-30,
-				getStartX()+20, getStartY()-25,
-				getStartX()+18, getStartY()-15
-			);
-	    	pane.getChildren().add(cubicCurve1);
+			Line flag = new Line(getStartX()+8, this.top, getStartX()+20, this.top + 20);
+			flag.setStrokeWidth(1.5);
 
-			CubicCurve cubicCurve2 = new CubicCurve(
-				getStartX()+8, getStartY()-30,
-				getStartX()+8, getStartY()-25,
-				getStartX()+20, getStartY()-20,
-				getStartX()+18, getStartY()-10
-			);
-	    	pane.getChildren().add(cubicCurve2);
+	    	pane.getChildren().add(flag);
+		} else if (note.getType().equals("16th")) {
+			Line flag = new Line(getStartX()+8, this.top, getStartX()+20, this.top + 20);
+			flag.setStrokeWidth(1.5);
+
+	    	pane.getChildren().add(flag);
+
+			flag = new Line(getStartX()+8, this.top+15, getStartX()+20, this.top + 35);
+			flag.setStrokeWidth(1.5);
+
+	    	pane.getChildren().add(flag);
 		}
 	}
 
 	public void draw() {
-		if (note.getDuration() == null) {
-			return;
+		if (note.getGrace() != null) {
+			this.drawGrace();
 		}
 
 		// If note head exists and is an x, then draw "x", otherwise draw "o"

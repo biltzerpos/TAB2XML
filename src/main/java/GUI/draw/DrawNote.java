@@ -23,6 +23,7 @@ public class DrawNote {
 	private Pane pane;
 	private Note note;
 	private int font;
+	private int graceFontSize;
 
 	/**
 	 * constructor
@@ -40,6 +41,7 @@ public class DrawNote {
 		this.startY = startY;
 		this.pane = pane;
 		this.font = font;
+		this.graceFontSize = font - 4;
 	}
 
 	/**
@@ -85,7 +87,7 @@ public class DrawNote {
 	}
 
 	public void drawGuitarGrace() {
-		int f = font - 4;
+		int f = getGraceFontSize();
 		int fret = note.getNotations().getTechnical().getFret();
 		Text text = new Text(getStartX(), getStartY(), Integer.toString(fret));
 		text.setFont(Font.font("Comic Sans MS", FontPosture.REGULAR, f));
@@ -217,6 +219,14 @@ public class DrawNote {
 
 	public void setFont(int font) {
 		this.font = font;
+	}
+
+	public int getGraceFontSize() {
+		return graceFontSize;
+	}
+
+	public void setGraceFontSize(int graceFontSize) {
+		this.graceFontSize = graceFontSize;
 	}
 
 }

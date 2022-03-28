@@ -39,7 +39,7 @@ public class DrawNoteTypeTest {
 		Score score = new Score(input);
 		MusicXMLCreator mxlc = new MusicXMLCreator(score);
 		ScorePartwise scorePartwise = mxlc.getScorePartwise();
-		Guitar g = new Guitar(scorePartwise, null, 50);
+		Guitar g = new Guitar(scorePartwise, null, 50, 4, 6, 20);
 		Measure m1 = g.getMeasureList().get(0);
 		List<Note> noteList = m1.getNotesBeforeBackup();
 		Note n = noteList.get(0);

@@ -19,11 +19,13 @@ public class DrawMusicLinesTest {
 	private double x;
 	private double y;
 	private final double length = 50;
+	private final int noteSpacing = 30; 
+	private final int staffSpacing = 20; 
 
 	@BeforeEach
 	public void setUp() throws Exception {
 
-		this.dML = new DrawMusicLines(p, (int) length);
+		this.dML = new DrawMusicLines(this.p, this.noteSpacing, this.staffSpacing);
 		x = 0;
 		y = 0;
 		dML.draw(x, y);

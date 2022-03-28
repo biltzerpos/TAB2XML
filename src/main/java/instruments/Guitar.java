@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -16,6 +14,7 @@ import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Dot;
 import models.measure.note.Note;
+import models.measure.note.notations.Slur;
 import GUI.draw.*;
 
 public class Guitar {
@@ -33,25 +32,32 @@ public class Guitar {
 	private int LineSpacing;
 	private int noteTypeCounter;
 	private DrawNote noteDrawer;
-	private int font = 12;
+	private int fontSize;
+	private int staffSpacing;
+	private DrawSlur slurDrawer; 
 
 	public Guitar() {
 	}
 
-	public Guitar(ScorePartwise scorePartwise, Pane pane, int length) {
+	public Guitar(ScorePartwise scorePartwise, Pane pane, int noteSpacing, int font, int StaffSpacing, int LineSpacing) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 		this.x = 0;
 		this.y = 0;
+		this.LineSpacing = LineSpacing;
+		this.fontSize = font; 
+		this.staffSpacing = StaffSpacing;
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
-		this.spacing = length;
-		this.d = new DrawMusicLines(this.pane, length);
+		this.spacing = noteSpacing;
 		this.noteDrawer = new DrawNote();
-		this.noteDrawer.setFont(font);
-		this.LineSpacing = 200;
+		this.noteDrawer.setFont(this.fontSize); 
+		this.noteDrawer.setGraceFontSize(this.fontSize-4);
+		this.d = new DrawMusicLines(this.pane, noteSpacing, staffSpacing);
+		this.slurDrawer = new DrawSlur();
+		this.slurDrawer.setPane(this.pane);
 	}
 
 	/*
@@ -69,8 +75,10 @@ public class Guitar {
 			// clef of first line
 			if (x == 0) {
 				d.draw(x, y);
-				DrawClef dc = new DrawClef(this.pane, clef, x + 5, y + 15);
-				dc.draw();
+				double clefSpacing = this.staffSpacing + (this.staffSpacing/2); 
+				DrawClef dc = new DrawClef(this.pane, clef, x , y + clefSpacing);
+				dc.setFontSize(this.fontSize+6);
+				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
 			}
@@ -92,8 +100,10 @@ public class Guitar {
 				width = this.pane.getMaxWidth();
 
 				d.draw(x, y);
-				DrawClef dc = new DrawClef(this.pane, clef, x + 5, y + 15);
-				dc.draw();
+				double clefSpacing = this.staffSpacing + (this.staffSpacing/2); 
+				DrawClef dc = new DrawClef(this.pane, clef, x , y + clefSpacing);
+				dc.setFontSize(this.fontSize+6);
+				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
 
@@ -104,7 +114,8 @@ public class Guitar {
 
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
-			DrawBar bar = new DrawBar(this.pane, x, y);
+			double len = getLastLineCoordinateY() - getFirstLineCoordinateY(); 
+			DrawBar bar = new DrawBar(this.pane, x, y, len);
 			bar.draw();
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
@@ -164,6 +175,7 @@ public class Guitar {
 				drawNoteWithoutGrace(note, noteList);
 
 			}
+			drawSlur(note, noteList);
 
 		} else if (noteHasChord(note)) {
 			if (noteHasGrace(note)) {
@@ -172,6 +184,7 @@ public class Guitar {
 				drawChordWithoutGrace(note, noteList);
 
 			}
+			drawSlur(note, noteList);
 		}
 
 	}
@@ -247,6 +260,7 @@ public class Guitar {
 		noteDrawer.setStartX(graceSpacing);
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
+		//drawSlur(note, noteList);
 	}
 
 	// draw regular notes (no grace, no chords)
@@ -265,6 +279,7 @@ public class Guitar {
 
 		drawBend(note);
 		drawType(note, noteList);
+		//drawSlur(note, noteList);
 
 	}
 
@@ -295,8 +310,8 @@ public class Guitar {
 		noteDrawer.setStartX(noteDrawer.getStartX());
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
-		;
 		drawBend(note);
+		//drawSlur(note, noteList);
 		/*
 		 * double py = getLastLineCoordinateY(); DrawNoteType type = new
 		 * DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
@@ -374,7 +389,7 @@ public class Guitar {
 			int currentActual = note.getTimeModification().getActualNotes();
 			if (currentActual == actualLast) {
 				// type.setStartX(noteDrawer.getStartX());
-				type.drawActual(actualLast, spacing, font);
+				type.drawActual(actualLast, spacing, fontSize);
 			}
 		}
 
@@ -415,6 +430,56 @@ public class Guitar {
 	private boolean noteHasDot(Note note) {
 		// TODO Auto-generated method stub
 		Boolean res = note.getDots() == null ? false : true;
+		return res;
+	}
+	
+	private void drawSlur(Note note, List<Note> noteList) {
+		if(noteHasSlur(note)) {
+			int string = note.getNotations().getTechnical().getString();
+			double positionY = getLineCoordinateY(string);
+			List<Slur> slurList = note.getNotations().getSlurs();
+			int lastNum = 0; 
+			int index = noteList.indexOf(note);
+			for (int i = index; i>0; i--) {
+				Note last = noteList.get(i); 
+				if(noteHasSlur(last)) {
+					List<Slur> lastSlurList = last.getNotations().getSlurs();
+					if(lastSlurList.size() == 1) {
+						Slur s = lastSlurList.get(0); 
+						lastNum = s.getNumber(); 
+						break; 
+					}
+				}
+			}
+			if(slurList.size() == 1) {
+				Slur s = slurList.get(0);
+				String currentType = s.getType();
+				int currentNum = s.getNumber(); 
+				if(currentType == "start") {
+					slurDrawer.setStartX(noteDrawer.getStartX());
+					String place = s.getPlacement(); 
+					if(place == "below") {
+						slurDrawer.setStartY(positionY + 10);
+						slurDrawer.setPlace(1);
+					}
+					else {
+						slurDrawer.setStartY(positionY - 10);
+						slurDrawer.setPlace(-1);
+					}
+				}
+				if(currentType == "stop") {
+					slurDrawer.setEndX(noteDrawer.getStartX());
+					if(lastNum == currentNum) {
+					slurDrawer.draw();}
+				}
+			}
+		}
+		
+	}
+
+
+	private boolean noteHasSlur(Note note) {
+		Boolean res = note.getNotations().getSlurs() == null ? false: true;
 		return res;
 	}
 
@@ -473,76 +538,6 @@ public class Guitar {
 
 	}
 
-	public Boolean noteHasTie(Note n) {
-		Boolean result = n.getNotations().getTieds() == null ? false : true;
-		return result;
-	}
-
-	public Boolean noteHasRest(Note n) {
-		Boolean result = n.getRest() == null ? false : true;
-		return result;
-	}
-
-	// This method plays the notes
-	public void playGuitarNote() {
-		Player player = new Player();
-		Pattern vocals = new Pattern();
-		String noteSteps = "";
-		int voice = 0;
-
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			List<Note> noteList = measure.getNotesBeforeBackup();
-
-			for (int j = 0; j < noteList.size(); j++) {
-				String ns = new String();
-				Note note = noteList.get(j);
-//					Grace gra = note.getGrace();
-//					List<Dot> dot = note.getDots();
-//					Rest res = note.getRest();
-//					Integer alt = note.getPitch().getAlter();
-				int octave = note.getPitch().getOctave();
-				String oct = Integer.toString(octave);
-				String dur = getDuration(note);
-				voice = note.getVoice();
-				ns = note.getPitch().getStep() + oct + dur;
-				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
-				// " + alt);
-
-				if (!noteHasChord(note) && !noteHasTie(note)) {
-					noteSteps += " " + ns;
-				} else if (noteHasChord(note)) {
-					noteSteps += "+" + ns;
-				} else if (noteHasTie(note)) {
-					noteSteps += "-" + ns;
-				} else if (noteHasRest(note)) {
-					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
-					;
-				}
-			}
-		}
-
-		vocals.add(noteSteps);
-		// System.out.println(vocals.toString());
-		vocals.setInstrument("GUITAR");
-		vocals.setVoice(voice);
-		vocals.setTempo(120);
-		player.play(vocals);
-
-	}
-
-	// returns string representation of a duration for a given note
-	private String getDuration(Note note) {
-		String res = "";
-		int duration = note.getDuration();
-		if (duration == 8) {
-			res = "i";
-		}
-		if (duration == 64) {
-			res = "w";
-		}
-		return res;
-	}
 
 	// Getters and setters
 
@@ -574,7 +569,31 @@ public class Guitar {
 		return spacing;
 	}
 
-	public void setSpacing(int spacing) {
+	public int getLineSpacing() {
+		return LineSpacing;
+	}
+
+	public void setLineSpacing(int lineSpacing) {
+		LineSpacing = lineSpacing;
+	}
+
+	public int getFontSize() {
+		return fontSize;
+	}
+
+	public void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public int getStaffSpacing() {
+		return staffSpacing;
+	}
+
+	public void setStaffSpacing(int staffSpacing) {
+		this.staffSpacing = staffSpacing;
+	}
+
+	public void setSpacing(double spacing) {
 		this.spacing = spacing;
 	}
 

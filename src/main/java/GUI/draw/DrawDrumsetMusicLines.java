@@ -11,7 +11,7 @@ import javafx.scene.shape.Line;
 public class DrawDrumsetMusicLines extends Node {
 
 	@FXML private Pane pane;
-	private final double length = 50.0;
+	private double length;
 	private MLine musicLine;
 	private List<Line> musicLineList;
 
@@ -21,6 +21,14 @@ public class DrawDrumsetMusicLines extends Node {
 		super();
 		this.pane = pane;
 		this.musicLineList = new ArrayList<Line>();
+		this.length = 40;
+	}
+
+	public DrawDrumsetMusicLines(Pane pane, double spacing) {
+		super();
+		this.pane = pane;
+		this.musicLineList = new ArrayList<Line>();
+		this.length = spacing;
 	}
 
 	/**
@@ -49,6 +57,10 @@ public class DrawDrumsetMusicLines extends Node {
 
         	y += 5;
     	}
+
+		// Make the last line invisible.
+		// We do this so that we can draw notes below the staff without the user seeing the line.
+		this.addLine(x, y, false);
 	}
 
 	/**
@@ -125,6 +137,9 @@ public class DrawDrumsetMusicLines extends Node {
 					break;
 				case "E":
 					yPosition = this.musicLineList.get(10).getStartY();
+					break;
+				case "D":
+					yPosition = this.musicLineList.get(11).getStartY();
 					break;
 				}
 				break;
