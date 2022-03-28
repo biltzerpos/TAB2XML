@@ -110,6 +110,13 @@ public class MusicPlayer {
 		vocals.setTempo(120);
 		player.play(vocals);
 	}
+	
+//	public void pauseMusic() {
+//		Player player = new Player();
+//		Thread vocals = new Pattern();
+//		
+//		player
+//	}
 
 	
 	// returns string representation of a drum duration for a given note
@@ -153,23 +160,23 @@ public class MusicPlayer {
 //	}
 	
 
-	public Boolean noteHasTie(Note n) {
+	private Boolean noteHasTie(Note n) {
 		Boolean result = n.getNotations().getTieds() == null ? false : true;
 		return result;
 	}
 
-	public Boolean noteHasRest(Note n) {
+	private Boolean noteHasRest(Note n) {
 		Boolean result = n.getRest() == null ? false : true;
 		return result;
 	}
 
 	// returns true if the guitar note has chord element
-	public Boolean noteHasChord(Note n) {
+	private Boolean noteHasChord(Note n) {
 		Boolean result = n.getChord() == null ? false : true;
 		return result;
 	}
 	
-	public String getDrumNoteFullName(String Id) {
+	private String getDrumNoteFullName(String Id) {
 		String fullName = "";
 
 		if(Id == "P1-I50") {
