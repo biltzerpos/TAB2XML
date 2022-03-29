@@ -11,7 +11,7 @@ import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.note.Note;
 
-public class MusicPlayer {
+public class MusicPlayer implements Runnable {
 
 	private ScorePartwise scorePartwise;
 	@FXML
@@ -32,6 +32,9 @@ public class MusicPlayer {
 
 	// This method plays the notes
 	public void playGuitarNote() {
+		MusicPlayer obj = new MusicPlayer();
+	    Thread thread = new Thread(obj);
+	    thread.start();
 		Player player = new Player();
 		Pattern vocals = new Pattern();
 		String noteSteps = "";
@@ -236,6 +239,12 @@ public class MusicPlayer {
 
 	public void setMeasureList(List<Measure> measureList) {
 		this.measureList = measureList;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		System.out.println("This code is running in a thread");
 	}
 
 
