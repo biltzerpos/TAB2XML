@@ -25,12 +25,12 @@ public class MLine extends Line {
 		this.endX = endX;
 		this.endY = endY;
 		this.lineTag = tag;
-		createLines();
+		//createLines();
 
 	}
 
 	// Method to draw line on pane
-	private void createLines() {
+	public void createLines() {
 		Line line = new Line();
 		line.setStartX(startX);
 		line.setStartY(startY);

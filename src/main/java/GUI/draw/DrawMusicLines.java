@@ -36,6 +36,7 @@ public class DrawMusicLines {
 	public void draw(double x, double y) {
 		for (int i = 0; i < 6; i++) {
 			musicLine = new MLine(pane, x, y, x + this.noteSpacing, y, i + 1);
+			musicLine.createLines();
 			y += staffSpacing;
 			musicLineList.add(musicLine);
 		}
