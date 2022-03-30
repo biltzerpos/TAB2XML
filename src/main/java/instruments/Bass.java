@@ -438,62 +438,6 @@ public class Bass {
 		return result;
 	}
 
-	// This method plays the notes
-	public void playBassNote() {
-		Player player = new Player();
-		Pattern vocals = new Pattern();
-		String noteSteps = "";
-		int voice = 0;
-
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			List<Note> noteList = measure.getNotesBeforeBackup();
-
-			for (int j = 0; j < noteList.size(); j++) {
-				String ns = new String();
-				Note note = noteList.get(j);
-				int octave = note.getPitch().getOctave();
-				String oct = Integer.toString(octave);
-				String dur = getDuration(note);
-				voice = note.getVoice();
-				ns = note.getPitch().getStep() + oct + dur;
-				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
-				// " + alt);
-
-				if (!noteHasChord(note) && !noteHasTie(note)) {
-					noteSteps += " " + ns;
-				} else if (noteHasChord(note)) {
-					noteSteps += "+" + ns;
-				} else if (noteHasTie(note)) {
-					noteSteps += "-" + ns;
-				} else if (noteHasRest(note)) {
-					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
-					;
-				}
-			}
-		}
-
-		vocals.add(noteSteps);
-		// System.out.println(vocals.toString());
-		vocals.setInstrument("Acoustic_Bass");
-		vocals.setVoice(voice);
-		vocals.setTempo(120);
-		player.play(vocals);
-
-	}
-
-	// returns string representation of a duration for a given note
-	private String getDuration(Note note) {
-		String res = "";
-		int duration = note.getDuration();
-		if (duration == 8) {
-			res = "i";
-		}
-		if (duration == 64) {
-			res = "w";
-		}
-		return res;
-	}
 	
 	// Getters and setters
 

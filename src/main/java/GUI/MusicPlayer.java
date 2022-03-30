@@ -2,6 +2,7 @@ package GUI;
 
 import java.util.List;
 
+
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
@@ -11,13 +12,15 @@ import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.note.Note;
 
-public class MusicPlayer implements Runnable {
+public class MusicPlayer implements Runnable{
 
 	private ScorePartwise scorePartwise;
 	@FXML
 	private Pane pane;
 	private List<Measure> measureList;
-
+	private MusicPlayer play;
+	
+	
 	public MusicPlayer() {
 
 	}
@@ -28,13 +31,29 @@ public class MusicPlayer implements Runnable {
 		this.pane = pane;
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 	}
+	
+	@Override
+	public void run() {
+//		this.play = new MusicPlayer(scorePartwise, pane);
+//		String instrument = getInstrument();
+//		if (instrument == "Guitar") {
+//			this.play.playGuitarNote(); // Play method in Guitar class
+//		} else if (instrument == "Drumset") {
+//			this.play.playDrumNote(); // Play method in Drumset class
+//		} else if (instrument == "Bass") {
+//			this.play.playBassNote(); // Play method in Bass class
+//		}
+		
+	}
 
+
+	private String getInstrument() {
+		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
+		return instrument;
+	}
 
 	// This method plays the notes
 	public void playGuitarNote() {
-		MusicPlayer obj = new MusicPlayer();
-	    Thread thread = new Thread(obj);
-	    thread.start();
 		Player player = new Player();
 		Pattern vocals = new Pattern();
 		String noteSteps = "";
@@ -72,7 +91,7 @@ public class MusicPlayer implements Runnable {
 		}
 
 		vocals.add(noteSteps);
-		System.out.println(vocals.toString());
+		System.out.println("Guitar: " + vocals.toString());
 		vocals.setInstrument("GUITAR");
 		vocals.setVoice(voice);
 		player.play(vocals);
@@ -108,20 +127,59 @@ public class MusicPlayer implements Runnable {
 		}
 
 		vocals.add(drumNote);
-		System.out.println(vocals.toString());
+		System.out.println("Drum: " + vocals.toString());
 		vocals.setVoice(voice);
 		vocals.setTempo(120);
 		player.play(vocals);
 	}
 	
-//	public void pauseMusic() {
-//		Player player = new Player();
-//		Thread vocals = new Pattern();
-//		
-//		player
-//	}
+	// This method plays the notes
+	public void playBassNote() {
+		Player player = new Player();
+		Pattern vocals = new Pattern();
+		String noteSteps = "";
+		int voice = 0;
 
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
+
+			for (int j = 0; j < noteList.size(); j++) {
+				String ns = new String();
+				Note note = noteList.get(j);
+				int octave = note.getPitch().getOctave();
+				String oct = Integer.toString(octave);
+				String dur = addDuration(note);
+				voice = note.getVoice();
+				ns = note.getPitch().getStep() + oct + dur;
+				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
+				// " + alt);
+
+				if (!noteHasChord(note) && !noteHasTie(note)) {
+					noteSteps += " " + ns;
+				} else if (noteHasChord(note)) {
+					noteSteps += "+" + ns;
+				} else if (noteHasTie(note)) {
+					noteSteps += "-" + ns;
+				} else if (noteHasRest(note)) {
+					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
+					;
+				}
+			}
+		}
+
+		vocals.add(noteSteps);
+		System.out.println("Bass: " + vocals.toString());
+		vocals.setInstrument("Acoustic_Bass");
+		vocals.setVoice(voice);
+		vocals.setTempo(120);
+		player.play(vocals);
+
+	}
 	
+
+
+
 	// returns string representation of a drum duration for a given note
 	private String addDuration(Note note) {
 		String res = "";
@@ -241,11 +299,7 @@ public class MusicPlayer implements Runnable {
 		this.measureList = measureList;
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		System.out.println("This code is running in a thread");
-	}
+
 
 
 
