@@ -281,8 +281,8 @@ public class PreviewMusic extends Application {
 			this.play.playDrumNote();
 		} else if (instrument == "Bass") {
 			this.play.playBassNote();
-		}else {
-			this.play.playDrumNote();
+		} else {
+			System.out.println("The instrument is not support by system.");
 		}
 	}
 	
