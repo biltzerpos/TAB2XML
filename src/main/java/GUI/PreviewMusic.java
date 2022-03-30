@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import instruments.Guitar;
 import instruments.Drumset;
+import instruments.Bass;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -49,6 +50,7 @@ public class PreviewMusic extends Application {
 	TextField gotoMeasureField;
 	private Guitar guitar;
 	private Drumset drum;
+	private Bass bass;
 	private MusicPlayer play;
 	@FXML
 	private Button closePreviewButton;
@@ -215,8 +217,11 @@ public class PreviewMusic extends Application {
 		} else if (instrument == "Drumset") {
 			this.drum = new Drumset(scorePartwise, pane);
 			this.drum.draw();
+		} else if (instrument == "Bass") {
+			int spacing = 50;
+			this.bass = new Bass(scorePartwise, pane, spacing);
+			this.bass.drawBass();
 		}
-
 	}
 
 	private void setDefault() {
@@ -274,8 +279,9 @@ public class PreviewMusic extends Application {
 			this.play.playGuitarNote(); // Play method in Guitar class
 		} else if (instrument == "Drumset") {
 			this.play.playDrumNote(); // Play method in Drumset class
+		} else if (instrument == "Bass") {
+			this.bass.playBassNote(); // Play method in Bass class
 		}
-	
 	}
 
 	// Method that handle navigating to specific measure (1- size of measure list)
@@ -303,6 +309,17 @@ public class PreviewMusic extends Application {
 				Measure measure = (Measure) iterator.next();
 				if (measureNumber == count) {
 					this.drum.highlightMeasureArea(measure);
+					measureFound = true;
+					break;
+				}
+				count++;
+			}
+		} else if (instrument == "Bass") {
+			List<Measure> measureList = this.bass.getMeasureList();
+			for (Iterator<Measure> iterator = measureList.iterator(); iterator.hasNext();) {
+				Measure measure = (Measure) iterator.next();
+				if (measureNumber == count) {
+					this.bass.highlightMeasureArea(measure);
 					measureFound = true;
 					break;
 				}
