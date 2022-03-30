@@ -272,18 +272,20 @@ public class PreviewMusic extends Application {
 
 	// Method that handles `play note` button
 	@FXML
-	public void playHandle() {
+	public void playHandle() {  
 		this.play = new MusicPlayer(scorePartwise, pane);
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			this.play.playGuitarNote(); // Play method in Guitar class
+			this.play.playGuitarNote();
 		} else if (instrument == "Drumset") {
-			this.play.playDrumNote(); // Play method in Drumset class
+			this.play.playDrumNote();
 		} else if (instrument == "Bass") {
-			this.bass.playBassNote(); // Play method in Bass class
+			this.play.playBassNote();
+		}else {
+			this.play.playDrumNote();
 		}
 	}
-
+	
 	// Method that handle navigating to specific measure (1- size of measure list)
 	// through 'Go' button
 	public void handleGotoMeasure() {
