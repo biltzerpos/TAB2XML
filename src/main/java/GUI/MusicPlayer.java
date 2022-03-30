@@ -12,7 +12,7 @@ import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.note.Note;
 
-public class MusicPlayer implements Runnable{
+public class MusicPlayer{
 
 	private ScorePartwise scorePartwise;
 	@FXML
@@ -32,25 +32,7 @@ public class MusicPlayer implements Runnable{
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 	}
 	
-	@Override
-	public void run() {
-//		this.play = new MusicPlayer(scorePartwise, pane);
-//		String instrument = getInstrument();
-//		if (instrument == "Guitar") {
-//			this.play.playGuitarNote(); // Play method in Guitar class
-//		} else if (instrument == "Drumset") {
-//			this.play.playDrumNote(); // Play method in Drumset class
-//		} else if (instrument == "Bass") {
-//			this.play.playBassNote(); // Play method in Bass class
-//		}
-		
-	}
 
-
-	private String getInstrument() {
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
-		return instrument;
-	}
 
 	// This method plays the notes
 	public void playGuitarNote() {
@@ -176,9 +158,6 @@ public class MusicPlayer implements Runnable{
 		player.play(vocals);
 
 	}
-	
-
-
 
 	// returns string representation of a drum duration for a given note
 	private String addDuration(Note note) {

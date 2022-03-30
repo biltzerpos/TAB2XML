@@ -272,40 +272,20 @@ public class PreviewMusic extends Application {
 
 	// Method that handles `play note` button
 	@FXML
-	public void playHandle() {
-		MusicPlayer obj = new MusicPlayer();
-	    Thread thread = new Thread(obj);
-	    thread.start();
-	    
+	public void playHandle() {  
 		this.play = new MusicPlayer(scorePartwise, pane);
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			this.play.playGuitarNote(); // Play method in Guitar class
+			this.play.playGuitarNote();
 		} else if (instrument == "Drumset") {
-			this.play.playDrumNote(); // Play method in Drumset class
+			this.play.playDrumNote();
 		} else if (instrument == "Bass") {
-			this.play.playBassNote(); // Play method in Bass class
+			this.play.playBassNote();
+		}else {
+			this.play.playDrumNote();
 		}
 	}
 	
-	public void run() {
-		// TODO Auto-generated method stub
-		System.out.println("This code is running in a thread");
-	}
-
-	@FXML
-	public void pauseMusic() {
-		Thread.currentThread().interrupt();
-		System.out.println("Pause bottom is clicked");
-//		while(!isInterrupted()) {
-//		    try {
-//		       // do something (like play song)
-//		    } catch (InterruptedException e) {
-//		    	Thread.currentThread().interrupt();
-//		    }
-//		}
-	}
-
 	// Method that handle navigating to specific measure (1- size of measure list)
 	// through 'Go' button
 	public void handleGotoMeasure() {
