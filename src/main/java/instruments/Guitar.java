@@ -175,7 +175,7 @@ public class Guitar {
 				drawNoteWithoutGrace(note, noteList);
 
 			}
-			drawSlur(note, noteList);
+			//drawSlur(note, noteList);
 
 		} else if (noteHasChord(note)) {
 			if (noteHasGrace(note)) {
@@ -184,9 +184,9 @@ public class Guitar {
 				drawChordWithoutGrace(note, noteList);
 
 			}
-			drawSlur(note, noteList);
+			//drawSlur(note, noteList);
 		}
-
+		drawSlur(note, noteList);
 	}
 
 	// draws bend elements if they exists
