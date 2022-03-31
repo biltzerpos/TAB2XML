@@ -14,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
+import models.measure.barline.BarLine;
 import models.measure.note.Dot;
 import models.measure.note.Note;
 import GUI.draw.*;
@@ -54,7 +55,7 @@ public class Bass {
 	}
 
 	/*
-	 * This method is where the actual drawing of the bass elements happen
+	 * This method is where the actual drawing of the guitar elements happen
 	 */
 
 	public void drawBass() {
@@ -63,7 +64,10 @@ public class Bass {
 
 		for (int i = 0; i < measureList.size(); i++) {
 			int spaceRequired = 0;
+			int repeatIndex = 0;
 			Measure measure = measureList.get(i);
+			//if barlines size = 2, meaning same measure has open and close repeat
+			String repDirection = getRepeatDirection(measure, repeatIndex);
 
 			// clef of first line
 			if (x == 0) {
@@ -76,15 +80,14 @@ public class Bass {
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			spaceRequired += countNoteSpacesRequired(noteList);
 			if (width >= spaceRequired) {
+				if (repDirection != null && repDirection.equals("forward")) {
+					DrawBassRepeat br = new DrawBassRepeat(pane, x + 15, y);
+					br.drawForward();
+					repeatIndex++;
+				}
 				drawMeasureNotes(measure);
 				width = width - spaceRequired;
-
 			} else {
-//				while (width > 0) {
-//					d.draw(x, y);
-//					width -= spacing;
-//					x += spacing;
-//				}
 
 				this.x = 0.0;
 				this.y += this.LineSpacing;
@@ -95,6 +98,11 @@ public class Bass {
 				dc.draw();
 				x += spacing;
 				spaceRequired += getSpacing();
+				if (repDirection != null && repDirection.equals("forward")) {
+					DrawBassRepeat br = new DrawBassRepeat(pane, x + 15, y);
+					br.drawForward();
+					repeatIndex++;
+				}
 
 				drawMeasureNotes(measure);
 				width = width - spaceRequired;
@@ -105,9 +113,28 @@ public class Bass {
 			yCoordinates.put(measure, y);
 			DrawBassBar bar = new DrawBassBar(this.pane, x, y);
 			bar.draw();
+			repDirection = getRepeatDirection(measure, repeatIndex);
+			if (repDirection != null && repDirection.equals("backward")) {
+				DrawBassRepeat br = new DrawBassRepeat(pane, x, y);
+				br.drawBackward();
+				System.out.println("Found a Repeat Note");
+			}
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
+	}
 
+	private String getRepeatDirection(Measure measure, int index) {
+		List<BarLine> barLines = measure.getBarlines();
+		int barlinesSize = 0;
+		if(barLines != null) {
+			barlinesSize = barLines.size();
+			if(barlinesSize == 2) {
+				return measure.getBarlines().get(index).getRepeat().getDirection();
+			} else {
+				return measure.getBarlines().get(0).getRepeat().getDirection();
+			}
+		}
+		return null;
 	}
 
 	// This method extracts a clef from a given measure
@@ -130,7 +157,7 @@ public class Bass {
 		return space;
 	}
 
-	// returns true if the bass note has chord element
+	// returns true if the guitar note has chord element
 	public Boolean noteHasChord(Note n) {
 		Boolean result = n.getChord() == null ? false : true;
 		return result;
@@ -165,7 +192,7 @@ public class Bass {
 
 		} else if (noteHasChord(note)) {
 			if (noteHasGrace(note)) {
-				 drawChordsWithGraceNotes(note, noteList);
+				drawChordsWithGraceNotes(note, noteList);
 			} else {
 				drawChordWithoutGrace(note, noteList);
 
@@ -252,7 +279,7 @@ public class Bass {
 	// draw regular notes (no grace, no chords)
 	private void drawNoteWithoutGrace(Note note, List<Note> noteList) {
 		int string = note.getNotations().getTechnical().getString();
-		
+
 		double positionY = getLineCoordinateY(string) + 3;// +getLineCoordinateY(string+1))/2;
 
 		d.draw(x, y);
@@ -265,7 +292,7 @@ public class Bass {
 
 		drawBend(note);
 		drawType(note, noteList);
-		
+
 	}
 
 	// Regular chords
@@ -283,8 +310,8 @@ public class Bass {
 		type.drawType();
 		drawType(note, noteList);
 	}
-	
-	//draw grace notes that have chords
+
+	// draw grace notes that have chords
 	private void drawChordsWithGraceNotes(Note note, List<Note> noteList) {
 		// TODO Auto-generated method stub
 		int string = note.getNotations().getTechnical().getString();
@@ -293,13 +320,14 @@ public class Bass {
 		noteDrawer.setNote(note);
 		noteDrawer.setStartX(noteDrawer.getStartX());
 		noteDrawer.setStartY(positionY + 3 + y);
-		noteDrawer.drawGuitarGrace();;
+		noteDrawer.drawGuitarGrace();
+		;
 		drawBend(note);
 		double py = getLastLineCoordinateY();
 		DrawBassNoteType type = new DrawBassNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
 		type.drawType();
 	}
-	
+
 	private void drawType(Note note, List<Note> noteList) {
 		String nextType = "";
 		int index = noteList.indexOf(note);
@@ -307,17 +335,17 @@ public class Bass {
 		DrawBassNoteType type = new DrawBassNoteType(pane, note, noteDrawer.getStartX() + 4, py + y);
 		type.drawType();
 		String current = note.getType();
-		
-		Note next = null; 
-		for(int j = index; j<noteList.size()-1; j++) {
-			next = noteList.get(j+1);
-			if(!noteHasGrace(next)) {
+
+		Note next = null;
+		for (int j = index; j < noteList.size() - 1; j++) {
+			next = noteList.get(j + 1);
+			if (!noteHasGrace(next)) {
 				nextType = next.getType();
-				break; 
+				break;
 			}
-			
+
 		}
-		
+
 		if (current.equals("eighth") && nextType.equals("eighth")) {
 			if (this.noteTypeCounter > 0) {
 				type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing);
@@ -325,31 +353,29 @@ public class Bass {
 			} else {
 				this.noteTypeCounter = 3;
 			}
-		}
-		else if (current == "16th"){
-			switch(nextType) {
-				case "16th":
-					if(!noteHasChord(next)) {
-						type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing);
-						type.drawBeam(noteDrawer.getStartX() + 4, py + y-5, spacing);
-					}
-					break;
-				case "eighth":
+		} else if (current == "16th") {
+			switch (nextType) {
+			case "16th":
+				if (!noteHasChord(next)) {
 					type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing);
-					break;
-				default:
-					if(next!=null)
-					type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing/4);	
+					type.drawBeam(noteDrawer.getStartX() + 4, py + y - 5, spacing);
+				}
+				break;
+			case "eighth":
+				type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing);
+				break;
+			default:
+				if (next != null)
+					type.drawBeam(noteDrawer.getStartX() + 4, py + y, spacing / 4);
 			}
-		}
-		else if (current == "quarter" && noteHasDot(note)) {
+		} else if (current == "quarter" && noteHasDot(note)) {
 			int count = countDotNumber(note);
-			double xCenter = noteDrawer.getStartX() + 10; 
-			double yCenter =  py + y+10;
-			double radius = spacing/25;
-			while(count>0) {
+			double xCenter = noteDrawer.getStartX() + 10;
+			double yCenter = py + y + 10;
+			double radius = spacing / 25;
+			while (count > 0) {
 				type.drawDot(xCenter, yCenter, radius);
-				xCenter+=2*radius+ radius;
+				xCenter += 2 * radius + radius;
 				count--;
 			}
 		}
@@ -359,17 +385,17 @@ public class Bass {
 		// TODO Auto-generated method stub
 		int res = 0;
 		List<Dot> dotList = note.getDots();
-		for(int i = 0; i<dotList.size(); i++) {
-			res++; 
+		for (int i = 0; i < dotList.size(); i++) {
+			res++;
 		}
-		
+
 		return res;
 	}
 
-	//returns true if note has a dot
+	// returns true if note has a dot
 	private boolean noteHasDot(Note note) {
 		// TODO Auto-generated method stub
-		Boolean res = note.getDots() == null ? false:true;
+		Boolean res = note.getDots() == null ? false : true;
 		return res;
 	}
 
@@ -438,7 +464,63 @@ public class Bass {
 		return result;
 	}
 
-	
+	// This method plays the notes
+	public void playBassNote() {
+		Player player = new Player();
+		Pattern vocals = new Pattern();
+		String noteSteps = "";
+		int voice = 0;
+
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
+
+			for (int j = 0; j < noteList.size(); j++) {
+				String ns = new String();
+				Note note = noteList.get(j);
+				int octave = note.getPitch().getOctave();
+				String oct = Integer.toString(octave);
+				String dur = getDuration(note);
+				voice = note.getVoice();
+				ns = note.getPitch().getStep() + oct + dur;
+				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
+				// " + alt);
+
+				if (!noteHasChord(note) && !noteHasTie(note)) {
+					noteSteps += " " + ns;
+				} else if (noteHasChord(note)) {
+					noteSteps += "+" + ns;
+				} else if (noteHasTie(note)) {
+					noteSteps += "-" + ns;
+				} else if (noteHasRest(note)) {
+					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
+					;
+				}
+			}
+		}
+
+		vocals.add(noteSteps);
+		// System.out.println(vocals.toString());
+		vocals.setInstrument("GUITAR");
+		vocals.setVoice(voice);
+		vocals.setTempo(120);
+		player.play(vocals);
+
+	}
+
+	// returns string representation of a duration for a given note
+	private String getDuration(Note note) {
+		String res = "";
+		int duration = note.getDuration();
+		if (duration == 8) {
+			res = "i";
+		}
+		if (duration == 64) {
+			res = "w";
+		}
+		return res;
+	}
+
 	// Getters and setters
 
 	public ScorePartwise getScorePartwise() {
