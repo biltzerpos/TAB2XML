@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequencer;
+
 import instruments.Guitar;
 import instruments.Drumset;
 import instruments.Bass;
@@ -272,10 +278,26 @@ public class PreviewMusic extends Application {
 
 	// Method that handles `play note` button
 	@FXML
-	public void playHandle() {
-		MusicPlayer obj = new MusicPlayer();
-	    Thread thread = new Thread(obj);
-	    thread.start();
+	public void playHandle() throws MidiUnavailableException, InvalidMidiDataException {
+		
+		this.play = new MusicPlayer(scorePartwise, pane);
+		
+		Sequencer sequencer = MidiSystem.getSequencer();
+		
+		String instrument = getInstrument();
+		if (instrument == "Guitar") {
+			sequencer.setSequence(play.getGuitarString());
+			sequencer.open();
+			sequencer.start();
+		} else if (instrument == "Drumset") {
+			sequencer.setSequence(play.getDrumString());
+			sequencer.open();
+			sequencer.start();
+		} else if (instrument == "Bass") {
+			this.play.playBassNote();
+		} else {
+			System.out.println("The instrument is not support by system.");
+		}
 	}
 
 	@FXML

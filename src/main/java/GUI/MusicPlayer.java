@@ -2,6 +2,7 @@ package GUI;
 
 import java.util.List;
 
+import javax.sound.midi.Sequence;
 
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
@@ -12,7 +13,7 @@ import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.note.Note;
 
-public class MusicPlayer implements Runnable{
+public class MusicPlayer {
 
 	private ScorePartwise scorePartwise;
 	@FXML
@@ -30,29 +31,6 @@ public class MusicPlayer implements Runnable{
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
-	}
-	
-	@Override
-	public void run() {
-		System.out.println("Run() This code is running in a thread");
-		this.play = new MusicPlayer(scorePartwise, pane);
-		String instrument = getInstrument();
-		if (instrument == "Guitar") {
-			this.play.playGuitarNote();
-		} else if (instrument == "Drumset") {
-			this.play.playDrumNote();
-		} else if (instrument == "Bass") {
-			this.play.playBassNote();
-		} else {
-			System.out.println("The instrument is not support by system.");
-		}
-		
-	}
-
-
-	private String getInstrument() {
-		String instrument = scorePartwise.getPartList().getScoreParts().get(0).getPartName();
-		return instrument;
 	}
 
 	// This method plays the notes
@@ -101,6 +79,52 @@ public class MusicPlayer implements Runnable{
 
 	}
 	
+	public Sequence getGuitarString() {
+		Player player = new Player();
+		Pattern vocals = new Pattern();
+		String noteSteps = "";
+		int voice = 0;
+
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
+
+			for (int j = 0; j < noteList.size(); j++) {
+				String ns = new String();
+				Note note = noteList.get(j);
+				//					Grace gra = note.getGrace();
+				//					List<Dot> dot = note.getDots();
+				//					Rest res = note.getRest();
+				//					Integer alt = note.getPitch().getAlter();
+				int octave = note.getPitch().getOctave();
+				String oct = Integer.toString(octave);
+				String dur = addDuration(note);
+				voice = note.getVoice();
+				ns = note.getPitch().getStep() + oct + dur;
+				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
+				// " + alt);
+
+				if (!noteHasChord(note) && !noteHasTie(note)) {
+					noteSteps += " " + ns;
+				} else if (noteHasChord(note)) {
+					noteSteps += "+" + ns;
+				} else if (noteHasTie(note)) {
+					noteSteps += "-" + ns;
+				} else if (noteHasRest(note)) {
+					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
+				}
+			}
+		}
+
+		vocals.add(noteSteps);
+		System.out.println("Guitar: " + vocals.toString());
+		vocals.setInstrument("GUITAR");
+		vocals.setVoice(voice);
+		
+		return player.getSequence(vocals);
+
+	}
+	
 	// This method plays the notes
 	public void playDrumNote() {
 		Player player = new Player();
@@ -134,6 +158,40 @@ public class MusicPlayer implements Runnable{
 		vocals.setVoice(voice);
 		vocals.setTempo(120);
 		player.play(vocals);
+	}
+	
+	public Sequence getDrumString() {
+		Player player = new Player();
+		Pattern vocals = new Pattern();
+		String drumNote = "V9 ";
+		int voice = 0;
+
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
+
+			for (int j = 0; j < noteList.size(); j++) {
+				String drumId = "";
+				String ns = new String();
+				Note note = noteList.get(j);
+				voice = note.getVoice();
+				drumId = note.getInstrument().getId();
+				ns = "[" + getDrumNoteFullName(drumId) + "]";
+				String dur = addDuration(note);
+
+				if (note.getChord() == null) {
+					drumNote += " " + ns + dur;
+				}else {
+					drumNote += "+" + ns + dur;
+				}
+			}
+		}
+
+		vocals.add(drumNote);
+		System.out.println("Drum: " + vocals.toString());
+		vocals.setVoice(voice);
+		
+		return player.getSequence(vocals);
 	}
 	
 	// This method plays the notes
