@@ -298,6 +298,19 @@ public class PreviewMusic extends Application {
 		}
 	}
 	
+	@FXML
+	public void pauseMusic() {
+		Thread.currentThread().interrupt();
+		System.out.println("Pause bottom is clicked");
+//		while(!isInterrupted()) {
+//		    try {
+//		       // do something (like play song)
+//		    } catch (InterruptedException e) {
+//		    	Thread.currentThread().interrupt();
+//		    }
+//		}
+	}
+	
 	// Method that handle navigating to specific measure (1- size of measure list)
 	// through 'Go' button
 	public void handleGotoMeasure() {
