@@ -13,7 +13,7 @@ import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.note.Note;
 
-public class MusicPlayer {
+public class MusicPlayer{
 
 	private ScorePartwise scorePartwise;
 	@FXML
@@ -113,7 +113,50 @@ public class MusicPlayer {
 		return player.getSequence(vocals);
 	}
 	
-	
+	// This method plays the notes
+	public void playBassNote() {
+		Player player = new Player();
+		Pattern vocals = new Pattern();
+		String noteSteps = "";
+		int voice = 0;
+
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			List<Note> noteList = measure.getNotesBeforeBackup();
+
+			for (int j = 0; j < noteList.size(); j++) {
+				String ns = new String();
+				Note note = noteList.get(j);
+				int octave = note.getPitch().getOctave();
+				String oct = Integer.toString(octave);
+				String dur = addDuration(note);
+				voice = note.getVoice();
+				ns = note.getPitch().getStep() + oct + dur;
+				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
+				// " + alt);
+
+				if (!noteHasChord(note) && !noteHasTie(note)) {
+					noteSteps += " " + ns;
+				} else if (noteHasChord(note)) {
+					noteSteps += "+" + ns;
+				} else if (noteHasTie(note)) {
+					noteSteps += "-" + ns;
+				} else if (noteHasRest(note)) {
+					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
+					;
+				}
+			}
+		}
+
+		vocals.add(noteSteps);
+		System.out.println("Bass: " + vocals.toString());
+		vocals.setInstrument("Acoustic_Bass");
+		vocals.setVoice(voice);
+		vocals.setTempo(120);
+		player.play(vocals);
+
+	}
+
 	// returns string representation of a drum duration for a given note
 	private String addDuration(Note note) {
 		String res = "";
