@@ -1,6 +1,7 @@
 package GUI;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -73,9 +74,11 @@ public class PreviewMusic extends Application {
 	@FXML
 	private Slider musicLineSlider;
 	private int musicLineSpacingValue;
+	
+	private Sequencer sequencer;
 
-	public PreviewMusic() {
-		
+	public PreviewMusic() throws MidiUnavailableException {
+		sequencer = MidiSystem.getSequencer();
 	}
 
 	@FXML
@@ -281,7 +284,6 @@ public class PreviewMusic extends Application {
 	@FXML
 	public void playHandle() throws MidiUnavailableException, InvalidMidiDataException {  
 		this.play = new MusicPlayer(scorePartwise, pane);
-		Sequencer sequencer = MidiSystem.getSequencer();
 		
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
@@ -294,13 +296,16 @@ public class PreviewMusic extends Application {
 			System.out.println("The instrument is not support by system.");
 		}
 		
-		sequencer.open();  //run time error bug
+		sequencer.open();
 		sequencer.start();
 	}
 	
 	@FXML
-	public void pauseMusic() {
-		Thread.currentThread().interrupt();
+	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
+		if (sequencer.isRunning()) {
+			sequencer.stop();
+		}
+		
 		System.out.println("Pause bottom is clicked");
 	}
 	
