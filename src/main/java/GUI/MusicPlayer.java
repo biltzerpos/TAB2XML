@@ -113,8 +113,7 @@ public class MusicPlayer{
 		return player.getSequence(vocals);
 	}
 	
-	// This method plays the notes
-	public void playBassNote() {
+	public Sequence getBassString() {
 		Player player = new Player();
 		Pattern vocals = new Pattern();
 		String noteSteps = "";
@@ -152,9 +151,8 @@ public class MusicPlayer{
 		System.out.println("Bass: " + vocals.toString());
 		vocals.setInstrument("Acoustic_Bass");
 		vocals.setVoice(voice);
-		vocals.setTempo(120);
-		player.play(vocals);
-
+		
+		return player.getSequence(vocals);
 	}
 
 	// returns string representation of a drum duration for a given note

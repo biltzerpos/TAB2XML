@@ -10,6 +10,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 
+
 import instruments.Guitar;
 import instruments.Drumset;
 import instruments.Bass;
@@ -288,12 +289,12 @@ public class PreviewMusic extends Application {
 		} else if (instrument == "Drumset") {
 			sequencer.setSequence(play.getDrumString());
 		} else if (instrument == "Bass") {
-			this.play.playBassNote();
+			sequencer.setSequence(play.getBassString());
 		} else {
 			System.out.println("The instrument is not support by system.");
 		}
 		
-		sequencer.open();
+		sequencer.open();  //run time error bug
 		sequencer.start();
 	}
 	
@@ -301,13 +302,6 @@ public class PreviewMusic extends Application {
 	public void pauseMusic() {
 		Thread.currentThread().interrupt();
 		System.out.println("Pause bottom is clicked");
-//		while(!isInterrupted()) {
-//		    try {
-//		       // do something (like play song)
-//		    } catch (InterruptedException e) {
-//		    	Thread.currentThread().interrupt();
-//		    }
-//		}
 	}
 	
 	// Method that handle navigating to specific measure (1- size of measure list)
