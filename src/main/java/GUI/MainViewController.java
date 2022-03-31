@@ -21,6 +21,7 @@ import converter.Converter;
 import converter.measure.TabMeasure;
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.css.converter.StringConverter.SequenceConverter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

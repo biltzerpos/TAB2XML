@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import models.ScorePartwise;
 import models.measure.Measure;
+import models.measure.barline.BarLine;
 import models.measure.note.Grace;
 import models.measure.note.Note;
 
@@ -72,13 +73,65 @@ public class MusicPlayer{
 		}
 
 		vocals.add(noteSteps);
-		System.out.println("Guitar: " + vocals.toString());
+		//System.out.println("Guitar: " + vocals.toString());
 		vocals.setInstrument("GUITAR");
 		vocals.setVoice(voice);
 		
-		return player.getSequence(vocals);
+		System.out.println("Repeat: " + getRepeatTime());
+		
+		return player.getSequence(vocals.repeat(getRepeatTime()));
 
 	}
+	
+	public int getRepeatTime() {
+		int time = 0;
+		if(noteHasRepeatLeft() && noteHasRepeatRight()) {
+			time = Integer.valueOf(getRightBarLine().getRepeat().getTimes());
+		}
+		return time;
+	}
+	public BarLine getRightBarLine() {
+		BarLine rightBar = null;
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			rightBar = getBarLine(measure.getBarlines(), "right");
+		}
+		return rightBar;
+	}
+	
+	public BarLine getBarLine(List<BarLine> barlines,  String location) {
+    	if (barlines != null) {
+			for (BarLine info : barlines) {
+				   if (info.getLocation().equals(location)) {
+					   return info;
+				   }
+			}
+		}
+    	return null;
+    }
+	
+	private Boolean noteHasRepeatLeft() {
+		boolean result = false;
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			if (getBarLine(measure.getBarlines(), "left") != null) {
+				return true;
+			}
+		}
+		return result;
+	}
+	private Boolean noteHasRepeatRight() {
+		boolean result = false;
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			if (getBarLine(measure.getBarlines(), "right") != null) {
+				return true;
+			}
+		}
+		return result;
+	}
+	
+
 	
 	public Sequence getDrumString() {
 		Player player = new Player();
@@ -108,10 +161,11 @@ public class MusicPlayer{
 		}
 
 		vocals.add(drumNote);
-		System.out.println("Drum: " + vocals.toString());
+		//System.out.println("Drum: " + vocals.toString());
 		vocals.setVoice(voice);
 		
-		return player.getSequence(vocals);
+		System.out.println("Repeat: " + getRepeatTime());
+		return player.getSequence(vocals.repeat(getRepeatTime()));
 	}
 	
 	public Sequence getBassString() {
@@ -292,8 +346,8 @@ public class MusicPlayer{
 	public void setMeasureList(List<Measure> measureList) {
 		this.measureList = measureList;
 	}
-
-
+	
+	
 
 
 
