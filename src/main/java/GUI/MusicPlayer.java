@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import models.ScorePartwise;
 import models.measure.Measure;
+import models.measure.note.Grace;
 import models.measure.note.Note;
 
 public class MusicPlayer{
@@ -46,7 +47,7 @@ public class MusicPlayer{
 			for (int j = 0; j < noteList.size(); j++) {
 				String ns = new String();
 				Note note = noteList.get(j);
-				//					Grace gra = note.getGrace();
+				Grace grace = note.getGrace();
 				//					List<Dot> dot = note.getDots();
 				//					Rest res = note.getRest();
 				//					Integer alt = note.getPitch().getAlter();
@@ -195,6 +196,20 @@ public class MusicPlayer{
 //		return res;
 //	}
 	
+	public String getAlter(Note note) {
+		String res = "";
+		Integer alter = note.getPitch().getAlter();
+		
+		if (alter == null) {
+			res = "";
+		}else if (alter == -1) {
+			res = "b";
+		}else if (alter == 1) {
+			res = "#";
+		}
+		return res;
+	}
+	
 
 	private Boolean noteHasTie(Note n) {
 		Boolean result = n.getNotations().getTieds() == null ? false : true;
@@ -209,6 +224,10 @@ public class MusicPlayer{
 	// returns true if the guitar note has chord element
 	private Boolean noteHasChord(Note n) {
 		Boolean result = n.getChord() == null ? false : true;
+		return result;
+	}
+	private Boolean noteHasGrace(Note n) {
+		Boolean result = n.getGrace() == null ? false : true;
 		return result;
 	}
 	
