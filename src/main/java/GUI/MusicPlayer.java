@@ -19,7 +19,6 @@ public class MusicPlayer{
 	@FXML
 	private Pane pane;
 	private List<Measure> measureList;
-	private MusicPlayer play;
 	
 	
 	public MusicPlayer() {
@@ -32,6 +31,7 @@ public class MusicPlayer{
 		this.pane = pane;
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 	}
+	
 	
 	public Sequence getGuitarString() {
 		Player player = new Player();

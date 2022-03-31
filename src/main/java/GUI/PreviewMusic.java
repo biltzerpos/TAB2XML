@@ -278,10 +278,8 @@ public class PreviewMusic extends Application {
 
 	// Method that handles `play note` button
 	@FXML
-	public void playHandle() throws MidiUnavailableException, InvalidMidiDataException {
-		
+	public void playHandle() throws MidiUnavailableException, InvalidMidiDataException {  
 		this.play = new MusicPlayer(scorePartwise, pane);
-		
 		Sequencer sequencer = MidiSystem.getSequencer();
 		
 		String instrument = getInstrument();
@@ -299,20 +297,7 @@ public class PreviewMusic extends Application {
 			System.out.println("The instrument is not support by system.");
 		}
 	}
-
-	@FXML
-	public void pauseMusic() {
-		Thread.currentThread().interrupt();
-		System.out.println("Pause bottom is clicked");
-//		while(!isInterrupted()) {
-//		    try {
-//		       // do something (like play song)
-//		    } catch (InterruptedException e) {
-//		    	Thread.currentThread().interrupt();
-//		    }
-//		}
-	}
-
+	
 	// Method that handle navigating to specific measure (1- size of measure list)
 	// through 'Go' button
 	public void handleGotoMeasure() {
