@@ -285,17 +285,16 @@ public class PreviewMusic extends Application {
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
 			sequencer.setSequence(play.getGuitarString());
-			sequencer.open();
-			sequencer.start();
 		} else if (instrument == "Drumset") {
 			sequencer.setSequence(play.getDrumString());
-			sequencer.open();
-			sequencer.start();
 		} else if (instrument == "Bass") {
 			this.play.playBassNote();
 		} else {
 			System.out.println("The instrument is not support by system.");
 		}
+		
+		sequencer.open();
+		sequencer.start();
 	}
 	
 	@FXML
