@@ -80,6 +80,7 @@ public class DrawSlur {
 		double controlY = y1+(10*getPlace());
 		
 		quadCurve = getCurve(x1, y1, x2, y2, controlX, controlY);
+		quadCurve.setViewOrder(-1);
 		pane.getChildren().add(quadCurve);
 	
 	}

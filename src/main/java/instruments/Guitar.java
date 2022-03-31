@@ -34,12 +34,13 @@ public class Guitar {
 	private DrawNote noteDrawer;
 	private int fontSize;
 	private int staffSpacing;
-	private DrawSlur slurDrawer; 
+	private DrawSlur slurDrawer;
 
 	public Guitar() {
 	}
 
-	public Guitar(ScorePartwise scorePartwise, Pane pane, int noteSpacing, int font, int StaffSpacing, int LineSpacing) {
+	public Guitar(ScorePartwise scorePartwise, Pane pane, int noteSpacing, int font, int StaffSpacing,
+			int LineSpacing) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
@@ -47,14 +48,14 @@ public class Guitar {
 		this.x = 0;
 		this.y = 0;
 		this.LineSpacing = LineSpacing;
-		this.fontSize = font; 
+		this.fontSize = font;
 		this.staffSpacing = StaffSpacing;
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
 		this.spacing = noteSpacing;
 		this.noteDrawer = new DrawNote();
-		this.noteDrawer.setFont(this.fontSize); 
-		this.noteDrawer.setGraceFontSize(this.fontSize-4);
+		this.noteDrawer.setFont(this.fontSize);
+		this.noteDrawer.setGraceFontSize(this.fontSize - 4);
 		this.d = new DrawMusicLines(this.pane, noteSpacing, staffSpacing);
 		this.slurDrawer = new DrawSlur();
 		this.slurDrawer.setPane(this.pane);
@@ -75,9 +76,9 @@ public class Guitar {
 			// clef of first line
 			if (x == 0) {
 				d.draw(x, y);
-				double clefSpacing = this.staffSpacing + (this.staffSpacing/2); 
-				DrawClef dc = new DrawClef(this.pane, clef, x , y + clefSpacing);
-				dc.setFontSize(this.fontSize+6);
+				double clefSpacing = this.staffSpacing + (this.staffSpacing / 2);
+				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing);
+				dc.setFontSize(this.fontSize + 6);
 				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
@@ -100,9 +101,9 @@ public class Guitar {
 				width = this.pane.getMaxWidth();
 
 				d.draw(x, y);
-				double clefSpacing = this.staffSpacing + (this.staffSpacing/2); 
-				DrawClef dc = new DrawClef(this.pane, clef, x , y + clefSpacing);
-				dc.setFontSize(this.fontSize+6);
+				double clefSpacing = this.staffSpacing + (this.staffSpacing / 2);
+				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing);
+				dc.setFontSize(this.fontSize + 6);
 				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
@@ -114,7 +115,7 @@ public class Guitar {
 
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
-			double len = getLastLineCoordinateY() - getFirstLineCoordinateY(); 
+			double len = getLastLineCoordinateY() - getFirstLineCoordinateY();
 			DrawBar bar = new DrawBar(this.pane, x, y, len);
 			bar.draw();
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
@@ -175,7 +176,7 @@ public class Guitar {
 				drawNoteWithoutGrace(note, noteList);
 
 			}
-			//drawSlur(note, noteList);
+			// drawSlur(note, noteList);
 
 		} else if (noteHasChord(note)) {
 			if (noteHasGrace(note)) {
@@ -184,7 +185,7 @@ public class Guitar {
 				drawChordWithoutGrace(note, noteList);
 
 			}
-			//drawSlur(note, noteList);
+			// drawSlur(note, noteList);
 		}
 		drawSlur(note, noteList);
 	}
@@ -260,7 +261,7 @@ public class Guitar {
 		noteDrawer.setStartX(graceSpacing);
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
-		//drawSlur(note, noteList);
+		// drawSlur(note, noteList);
 	}
 
 	// draw regular notes (no grace, no chords)
@@ -279,7 +280,7 @@ public class Guitar {
 
 		drawBend(note);
 		drawType(note, noteList);
-		//drawSlur(note, noteList);
+		// drawSlur(note, noteList);
 
 	}
 
@@ -311,7 +312,7 @@ public class Guitar {
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
 		drawBend(note);
-		//drawSlur(note, noteList);
+		// drawSlur(note, noteList);
 		/*
 		 * double py = getLastLineCoordinateY(); DrawNoteType type = new
 		 * DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
@@ -342,7 +343,7 @@ public class Guitar {
 		switch (current) {
 		case "half":
 			type.drawShortLine();
-			drawDot(note, type, py+shortStick);
+			drawDot(note, type, py + shortStick);
 			break;
 		case "quarter":
 			type.drawLongLine();
@@ -432,54 +433,62 @@ public class Guitar {
 		Boolean res = note.getDots() == null ? false : true;
 		return res;
 	}
-	
+
 	private void drawSlur(Note note, List<Note> noteList) {
-		if(noteHasSlur(note)) {
+		if (noteHasSlur(note)) {
+			// int f = note.getNotations().getTechnical().getFret();
+			// System.out.println(f +"\n");
 			int string = note.getNotations().getTechnical().getString();
 			double positionY = getLineCoordinateY(string);
 			List<Slur> slurList = note.getNotations().getSlurs();
-			int lastNum = 0; 
-			int index = noteList.indexOf(note);
-			for (int i = index; i>0; i--) {
-				Note last = noteList.get(i); 
-				if(noteHasSlur(last)) {
-					List<Slur> lastSlurList = last.getNotations().getSlurs();
-					if(lastSlurList.size() == 1) {
-						Slur s = lastSlurList.get(0); 
-						lastNum = s.getNumber(); 
-						break; 
-					}
-				}
-			}
-			if(slurList.size() == 1) {
-				Slur s = slurList.get(0);
-				String currentType = s.getType();
-				int currentNum = s.getNumber(); 
-				if(currentType == "start") {
+			for (Slur s : slurList) {
+				int num = s.getNumber();
+				String type = s.getType();
+				if (type == "start") {
 					slurDrawer.setStartX(noteDrawer.getStartX());
-					String place = s.getPlacement(); 
-					if(place == "below") {
-						slurDrawer.setStartY(positionY + 10);
-						slurDrawer.setPlace(1);
+					int index = noteList.indexOf(note);
+					lookForStop:
+					for (int i = index; i < noteList.size() - 1; i++) {
+						Note next = noteList.get(i + 1);
+						if (noteHasSlur(next)) {
+							List<Slur> nextSlurs = next.getNotations().getSlurs();
+							for (Slur ns : nextSlurs) {
+								int nsNum = ns.getNumber();
+								String nsType = ns.getType();
+								// String placement = "";
+								if (nsType == "stop" && nsNum == num) {
+									if (noteHasGrace(next)) {
+										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 4);
+									} else {
+										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 2);
+									}
+									String placement = "";
+									if (s.getPlacement() != null) {
+										placement = s.getPlacement();
+									}
+									if (noteHasChord(note)) {
+										slurDrawer.setStartY(positionY + fontSize);
+										slurDrawer.setPlace(1);
+									} else {
+										slurDrawer.setStartY(positionY - fontSize);
+										slurDrawer.setPlace(-1);
+									}
+									int c = note.getNotations().getTechnical().getFret(); 
+									int n = next.getNotations().getTechnical().getFret(); 
+									System.out.println("grace between: "+ c+ " and "+ n);
+									slurDrawer.draw();
+									break lookForStop;
+								}
+							}
+						}
 					}
-					else {
-						slurDrawer.setStartY(positionY - 10);
-						slurDrawer.setPlace(-1);
-					}
-				}
-				if(currentType == "stop") {
-					slurDrawer.setEndX(noteDrawer.getStartX());
-					if(lastNum == currentNum) {
-					slurDrawer.draw();}
 				}
 			}
 		}
-		
 	}
 
-
 	private boolean noteHasSlur(Note note) {
-		Boolean res = note.getNotations().getSlurs() == null ? false: true;
+		Boolean res = note.getNotations().getSlurs() == null ? false : true;
 		return res;
 	}
 
@@ -537,7 +546,6 @@ public class Guitar {
 		return this.d.getMusicLineList().get(5).getStartY(6);
 
 	}
-
 
 	// Getters and setters
 
