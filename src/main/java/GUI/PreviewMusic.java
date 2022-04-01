@@ -9,9 +9,13 @@ import java.util.Optional;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.jfugue.player.Player;
 
+import converter.Score;
 import instruments.Guitar;
 import instruments.Drumset;
 import instruments.Bass;
@@ -41,12 +45,15 @@ import javafx.stage.Window;
 import javafx.stage.Stage;
 import models.ScorePartwise;
 import models.measure.Measure;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 
 public class PreviewMusic extends Application {
 
 	private MainViewController mvc;
 	@FXML
 	private Pane pane;
+	private Score score;
 	public Window convertWindow;
 	@FXML
 	private Button printButton;
@@ -76,9 +83,43 @@ public class PreviewMusic extends Application {
 	private int musicLineSpacingValue;
 	
 	private Sequencer sequencer;
+	private Sequence sequence;
+	
 
-	public PreviewMusic() throws MidiUnavailableException {
+	public PreviewMusic() throws MidiUnavailableException, InvalidMidiDataException {
 		sequencer = MidiSystem.getSequencer();
+	//	sequencer.setSequence(getMusicString());
+		sequencer.open();
+	}
+
+	public Sequence getMusicString() throws InvalidMidiDataException {
+		this.play = new MusicPlayer(scorePartwise, pane);
+		Player player = new Player();
+		String instrument = getInstrument();
+
+		if (instrument == "Guitar") {
+			this.sequence =  play.getGuitarString();
+		} else if (instrument == "Drumset") {
+			this.sequence = play.getDrumString();
+		} else if (instrument == "Bass") {
+			this.sequence = play.getBassString();
+		} else {
+			String st = "The instrument is not support by system.";
+			this.sequence = player.getSequence(st);
+		}
+		return this.sequence;
+	}
+	
+	// Method that handles `play note` button
+	@FXML
+	public void playHandle() throws MidiUnavailableException, InvalidMidiDataException {  
+	//  this.play = new MusicPlayer(scorePartwise, pane);
+		
+	//	if (sequencer.getTickPosition() == sequencer.getTickLength()) sequencer.setTickPosition(0);
+		
+		sequencer.setSequence(getMusicString());
+	//	sequencer.open();
+		sequencer.start();
 	}
 
 	@FXML
@@ -280,25 +321,7 @@ public class PreviewMusic extends Application {
 
 	}
 
-	// Method that handles `play note` button
-	@FXML
-	public void playHandle() throws MidiUnavailableException, InvalidMidiDataException {  
-		this.play = new MusicPlayer(scorePartwise, pane);
-		
-		String instrument = getInstrument();
-		if (instrument == "Guitar") {
-			sequencer.setSequence(play.getGuitarString());
-		} else if (instrument == "Drumset") {
-			sequencer.setSequence(play.getDrumString());
-		} else if (instrument == "Bass") {
-			sequencer.setSequence(play.getBassString());
-		} else {
-			System.out.println("The instrument is not support by system.");
-		}
-		
-		sequencer.open();
-		sequencer.start();
-	}
+
 	
 	@FXML
 	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
