@@ -459,23 +459,26 @@ public class Guitar {
 								if (nsType == "stop" && nsNum == num) {
 									if (noteHasGrace(next)) {
 										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 4);
-									} else {
+									} else if ((noteHasGrace(note) && !noteHasGrace(next))|| (!noteHasGrace(note) && noteHasGrace(next))){
 										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 2);
+									}
+									else {
+										slurDrawer.setEndX(noteDrawer.getStartX() + spacing+ spacing / 4);
 									}
 									String placement = "";
 									if (s.getPlacement() != null) {
 										placement = s.getPlacement();
 									}
 									if (noteHasChord(note)) {
-										slurDrawer.setStartY(positionY + fontSize);
+										slurDrawer.setStartY(positionY + fontSize+y);
 										slurDrawer.setPlace(1);
 									} else {
-										slurDrawer.setStartY(positionY - fontSize);
+										slurDrawer.setStartY(positionY - fontSize+y);
 										slurDrawer.setPlace(-1);
 									}
-									int c = note.getNotations().getTechnical().getFret(); 
-									int n = next.getNotations().getTechnical().getFret(); 
-									System.out.println("grace between: "+ c+ " and "+ n);
+									//int c = note.getNotations().getTechnical().getFret(); 
+									//int n = next.getNotations().getTechnical().getFret(); 
+									//System.out.println("grace between: "+ c+ " and "+ n);
 									slurDrawer.draw();
 									break lookForStop;
 								}
