@@ -14,6 +14,10 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -21,7 +25,6 @@ import converter.Converter;
 import converter.measure.TabMeasure;
 import javafx.application.Application;
 import javafx.concurrent.Task;
-import javafx.css.converter.StringConverter.SequenceConverter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

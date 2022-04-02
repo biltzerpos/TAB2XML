@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import models.ScorePartwise;
 import models.measure.Measure;
+import models.measure.barline.BarLine;
+import models.measure.note.Chord;
 import models.measure.note.Grace;
 import models.measure.note.Note;
 
@@ -20,6 +22,7 @@ public class MusicPlayer {
 	@FXML
 	private Pane pane;
 	private List<Measure> measureList;
+	private List<BarLine> barLine;
 
 	
 	
@@ -27,11 +30,11 @@ public class MusicPlayer {
 
 	}
 
-	public MusicPlayer(ScorePartwise scorePartwise, Pane pane) {
+	public MusicPlayer(ScorePartwise scorePartwise) {
 		super();
 		this.scorePartwise = scorePartwise;
-		this.pane = pane;
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
+		this.barLine = this.measureList.get(0).getBarlines();
 	}
 	
 	public Sequence getGuitarString() {
@@ -82,36 +85,83 @@ public class MusicPlayer {
 	
 	public Sequence getDrumString() {
 		Player player = new Player();
-		Pattern vocals = new Pattern();
-		String drumNote = "V9 ";
-		int voice = 0;
+		StringBuilder vocals = new StringBuilder("V9 ");
+		StringBuilder repeat = new StringBuilder();
 
 		for (int i = 0; i < measureList.size(); i++) {
 			Measure measure = measureList.get(i);
 			List<Note> noteList = measure.getNotesBeforeBackup();
 
 			for (int j = 0; j < noteList.size(); j++) {
+				String format = "%s%s%s";
 				String drumId = "";
 				String ns = new String();
 				Note note = noteList.get(j);
-				voice = note.getVoice();
+
 				drumId = note.getInstrument().getId();
 				ns = "[" + getDrumNoteFullName(drumId) + "]";
 				String dur = addDuration(note);
 
-				if (note.getChord() == null) {
-					drumNote += " " + ns + dur;
-				}else {
-					drumNote += "+" + ns + dur;
+				String chord = createChord(note.getChord());
+				
+				vocals.append(String.format(format, chord, ns, dur));
+				
+				if(noteHasRepeatLeft()) {
+					repeat.append(String.format(format, chord, ns, dur));
+				}
+				if(noteHasRepeatRight()) {
+					vocals.append(repeat.toString().repeat(getRepeatTime()));
 				}
 			}
 		}
 
-		vocals.add(drumNote);
 		System.out.println("Drum: " + vocals.toString());
-		vocals.setVoice(voice);
-		
-		return player.getSequence(vocals);
+
+		return player.getSequence(vocals.toString());
+	}
+	
+	public String createChord(Chord chord) {
+		if (chord != null) {
+			return "+";
+		}
+		return " ";
+	}
+	
+	public int getRepeatTime() {
+		int time = 0;
+		if(noteHasRepeatLeft() && noteHasRepeatRight()) {
+			time = Integer.valueOf(getRightBarLine().getRepeat().getTimes());
+		}
+		return time;
+	}
+	public BarLine getRightBarLine() {
+		BarLine rightBar = null;
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			rightBar = getBarLineInfo(measure.getBarlines(), "right");
+		}
+		return rightBar;
+	}
+
+	private Boolean noteHasRepeatLeft() {
+		boolean result = false;
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			if (getBarLineInfo(measure.getBarlines(), "left") != null) {
+				return true;
+			}
+		}
+		return result;
+	}
+	private Boolean noteHasRepeatRight() {
+		boolean result = false;
+		for (int i = 0; i < measureList.size(); i++) {
+			Measure measure = measureList.get(i);
+			if (getBarLineInfo(measure.getBarlines(), "right") != null) {
+				return true;
+			}
+		}
+		return result;
 	}
 	
 	public Sequence getBassString() {
@@ -183,18 +233,6 @@ public class MusicPlayer {
 
 		return res;
 	}
-//	// returns string representation of a guitar duration for a given note
-//	public String getDuration(Note note) {
-//		String res = "";
-//		int duration = note.getDuration();
-//		if (duration == 8) {
-//			res = "i";
-//		}
-//		if (duration == 64) {
-//			res = "w";
-//		}
-//		return res;
-//	}
 	
 	public String getAlter(Note note) {
 		String res = "";
@@ -292,6 +330,18 @@ public class MusicPlayer {
 	public void setMeasureList(List<Measure> measureList) {
 		this.measureList = measureList;
 	}
+	
+	private BarLine getBarLineInfo(List<BarLine> barlines,  String location) {
+    	if (barlines != null) {
+			for (BarLine info : barlines) {
+				   if (info.getLocation().equals(location)) {
+					   return info;
+				   }
+			}
+		}
+    	return null;
+		
+    }
 
 
 
