@@ -14,6 +14,7 @@ public class DrawSlur {
 	private double startY; 
 	@FXML private Pane pane;
 	private int place; 
+	private int strokeWidth; 
 	
 	public DrawSlur() {}
 
@@ -66,6 +67,15 @@ public class DrawSlur {
 	public void setPlace(int place) {
 		this.place = place;
 	}
+	
+
+	public int getStrokeWidth() {
+		return strokeWidth;
+	}
+
+	public void setStrokeWidth(int strokeWidth) {
+		this.strokeWidth = strokeWidth;
+	}
 
 	public void draw() {
 		// TODO Auto-generated method stub
@@ -86,6 +96,8 @@ public class DrawSlur {
 	}
 	
 	private QuadCurve getCurve(double x1, double y1, double x2, double y2, double controlX, double controlY) {
+		int s = getStrokeWidth()/6; 
+		
 		QuadCurve quadCurve = new QuadCurve();
 		quadCurve.setStartX(x1);
 		quadCurve.setStartY(y1);
@@ -96,7 +108,7 @@ public class DrawSlur {
 
 		quadCurve.setFill(Color.TRANSPARENT);
 		quadCurve.setStroke(Color.BLACK);
-		quadCurve.setStrokeWidth(1);
+		quadCurve.setStrokeWidth(s);
 		return quadCurve;
 		
 	}

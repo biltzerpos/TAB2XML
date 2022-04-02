@@ -15,6 +15,7 @@ import models.measure.attributes.Clef;
 import models.measure.note.Dot;
 import models.measure.note.Note;
 import models.measure.note.notations.Slur;
+import models.measure.note.notations.Tied;
 import GUI.draw.*;
 
 public class Guitar {
@@ -155,7 +156,7 @@ public class Guitar {
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
 			if (noteHasTechnical(note)) {
-				drawNoteWithTechnical(note, noteList);
+				drawNoteWithTechnical(note, noteList, measure);
 			}
 
 		}
@@ -167,7 +168,7 @@ public class Guitar {
 		return result;
 	}
 
-	private void drawNoteWithTechnical(Note note, List<Note> noteList) {
+	private void drawNoteWithTechnical(Note note, List<Note> noteList, Measure measure) {
 		if (!noteHasChord(note)) {
 			// Draw grace notes
 			if (noteHasGrace(note)) {
@@ -188,6 +189,141 @@ public class Guitar {
 			// drawSlur(note, noteList);
 		}
 		drawSlur(note, noteList);
+		drawTie(note, noteList, measure);
+	}
+
+	private void drawTie(Note note, List<Note> noteList, Measure measure) {
+		// TODO Auto-generated method stub
+		if (noteHasTie(note)) {
+			slurDrawer.setStrokeWidth(this.fontSize);
+			if (!noteHasChord(note)) {
+				drawRegualrTied(note, noteList, measure); 
+			} else {
+//				int f = note.getNotations().getTechnical().getFret();
+//				List<Tied> tiedList = note.getNotations().getTieds();
+//				for (Tied t : tiedList) {
+//					String type = t.getType();
+//					if (type == "start") {
+//						// System.out.println(f +" "+ type + "\n");
+//					}
+//				}
+				drawChordTied(note, noteList, measure); 
+			}
+
+		}
+
+	}
+
+	private void drawChordTied(Note note, List<Note> noteList, Measure measure) {
+		// TODO Auto-generated method stub
+		List<Tied> tiedList = note.getNotations().getTieds();
+		for (Tied t : tiedList) {
+			String type = t.getType();
+			if (type == "start") {
+				int string = note.getNotations().getTechnical().getString();
+				double positionY = getLineCoordinateY(string);
+				slurDrawer.setStartX(noteDrawer.getStartX() + fontSize);
+				slurDrawer.setStartY(positionY + fontSize / 2 + y);
+				slurDrawer.setPlace(1);
+				int measureIndex = measureList.indexOf(measure);
+				Boolean foundStop = false;
+				loop: for (int i = noteList.indexOf(note); i < noteList.size() - 1; i++) {
+					Note next = noteList.get(i + 1);
+					if (noteHasTie(next)) {
+						if (noteHasChord(next)) {
+							//int n = next.getNotations().getTechnical().getFret();
+							List<Tied> nextList = next.getNotations().getTieds();
+							for (Tied nt : nextList) {
+								String nextType = nt.getType();
+								if (nextType == "stop") {
+									slurDrawer.setEndX(noteDrawer.getStartX() + spacing);
+									foundStop = true;
+									break loop;
+								}
+							}
+						}
+					}
+				}
+				if (!foundStop) {
+					Measure nextMeasure = measureList.get(measureIndex + 1);
+					List<Note> nextNoteList = nextMeasure.getNotesBeforeBackup();
+					loop1: for (Note n : nextNoteList) {
+						if (noteHasTie(n) && noteHasChord(n)) {
+							//int n1 = n.getNotations().getTechnical().getFret();
+							List<Tied> tiedList2 = n.getNotations().getTieds();
+							for (Tied nt : tiedList2) {
+								String nextType = nt.getType();
+								if (nextType == "stop") {
+									slurDrawer.setEndX(noteDrawer.getStartX() + spacing);
+									// System.out.println(f +" "+ type + " | "+ n1 + " "+ nextType +"\n");
+									break loop1;
+								}
+							}
+						}
+					}
+				}
+				slurDrawer.draw();
+			}
+		}
+	}
+
+	private void drawRegualrTied(Note note, List<Note> noteList, Measure measure) {
+		// TODO Auto-generated method stub
+		List<Tied> tiedList = note.getNotations().getTieds();
+		for (Tied t : tiedList) {
+			String type = t.getType();
+			if (type == "start") {
+				int string = note.getNotations().getTechnical().getString();
+				double positionY = getLineCoordinateY(string);
+				slurDrawer.setStartX(noteDrawer.getStartX() + fontSize);
+				slurDrawer.setStartY(positionY - fontSize / 2 + y);
+				slurDrawer.setPlace(-1);
+				int measureIndex = measureList.indexOf(measure);
+				Boolean foundStop = false;
+				loop: for (int i = noteList.indexOf(note); i < noteList.size() - 1; i++) {
+					Note next = noteList.get(i + 1);
+					if (noteHasTie(next)) {
+						if (!noteHasChord(next)) {
+							int n = next.getNotations().getTechnical().getFret();
+							List<Tied> nextList = next.getNotations().getTieds();
+							for (Tied nt : nextList) {
+								String nextType = nt.getType();
+								if (nextType == "stop") {
+									slurDrawer.setEndX(noteDrawer.getStartX() + spacing);
+									foundStop = true;
+									break loop;
+								}
+							}
+						}
+					}
+				}
+				if (!foundStop) {
+					Measure nextMeasure = measureList.get(measureIndex + 1);
+					List<Note> nextNoteList = nextMeasure.getNotesBeforeBackup();
+					loop1: for (Note n : nextNoteList) {
+						if (noteHasTie(n) && !noteHasChord(n)) {
+							int n1 = n.getNotations().getTechnical().getFret();
+							List<Tied> tiedList2 = n.getNotations().getTieds();
+							for (Tied nt : tiedList2) {
+								String nextType = nt.getType();
+								if (nextType == "stop") {
+									slurDrawer.setEndX(noteDrawer.getStartX() + spacing);
+									// System.out.println(f +" "+ type + " | "+ n1 + " "+ nextType +"\n");
+									break loop1;
+								}
+							}
+						}
+					}
+				}
+				slurDrawer.draw();
+			}
+		}
+	}
+
+	private boolean noteHasTie(Note note) {
+		// TODO Auto-generated method stub
+		Boolean res = note.getNotations().getTieds() == null ? false : true;
+		return res;
 	}
 
 	// draws bend elements if they exists
@@ -447,8 +583,7 @@ public class Guitar {
 				if (type == "start") {
 					slurDrawer.setStartX(noteDrawer.getStartX());
 					int index = noteList.indexOf(note);
-					lookForStop:
-					for (int i = index; i < noteList.size() - 1; i++) {
+					lookForStop: for (int i = index; i < noteList.size() - 1; i++) {
 						Note next = noteList.get(i + 1);
 						if (noteHasSlur(next)) {
 							List<Slur> nextSlurs = next.getNotations().getSlurs();
@@ -459,26 +594,26 @@ public class Guitar {
 								if (nsType == "stop" && nsNum == num) {
 									if (noteHasGrace(next)) {
 										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 4);
-									} else if ((noteHasGrace(note) && !noteHasGrace(next))|| (!noteHasGrace(note) && noteHasGrace(next))){
+									} else if ((noteHasGrace(note) && !noteHasGrace(next))
+											|| (!noteHasGrace(note) && noteHasGrace(next))) {
 										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 2);
-									}
-									else {
-										slurDrawer.setEndX(noteDrawer.getStartX() + spacing+ spacing / 4);
+									} else {
+										slurDrawer.setEndX(noteDrawer.getStartX() + spacing + spacing / 4);
 									}
 									String placement = "";
 									if (s.getPlacement() != null) {
 										placement = s.getPlacement();
 									}
 									if (noteHasChord(note)) {
-										slurDrawer.setStartY(positionY + fontSize+y);
+										slurDrawer.setStartY(positionY + fontSize + y);
 										slurDrawer.setPlace(1);
 									} else {
-										slurDrawer.setStartY(positionY - fontSize+y);
+										slurDrawer.setStartY(positionY - fontSize + y);
 										slurDrawer.setPlace(-1);
 									}
-									//int c = note.getNotations().getTechnical().getFret(); 
-									//int n = next.getNotations().getTechnical().getFret(); 
-									//System.out.println("grace between: "+ c+ " and "+ n);
+									// int c = note.getNotations().getTechnical().getFret();
+									// int n = next.getNotations().getTechnical().getFret();
+									// System.out.println("grace between: "+ c+ " and "+ n);
 									slurDrawer.draw();
 									break lookForStop;
 								}
