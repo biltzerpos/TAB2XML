@@ -8,7 +8,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
@@ -36,6 +41,7 @@ public class Guitar {
 	private int fontSize;
 	private int staffSpacing;
 	private DrawSlur slurDrawer;
+	private double harmonic;
 
 	public Guitar() {
 	}
@@ -60,6 +66,7 @@ public class Guitar {
 		this.d = new DrawMusicLines(this.pane, noteSpacing, staffSpacing);
 		this.slurDrawer = new DrawSlur();
 		this.slurDrawer.setPane(this.pane);
+		this.harmonic = 0;
 	}
 
 	/*
@@ -73,7 +80,6 @@ public class Guitar {
 		for (int i = 0; i < measureList.size(); i++) {
 			int spaceRequired = 0;
 			Measure measure = measureList.get(i);
-
 			// clef of first line
 			if (x == 0) {
 				d.draw(x, y);
@@ -87,6 +93,7 @@ public class Guitar {
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			spaceRequired += countNoteSpacesRequired(noteList);
 			if (width >= spaceRequired) {
+				drawMeasureNum(i); 
 				drawMeasureNotes(measure);
 				width = width - spaceRequired;
 
@@ -108,12 +115,11 @@ public class Guitar {
 				dc.draw(clefSpacing);
 				x += spacing;
 				spaceRequired += getSpacing();
-
+				drawMeasureNum(i); 
 				drawMeasureNotes(measure);
 				width = width - spaceRequired;
 
 			}
-
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
 			double len = getLastLineCoordinateY() - getFirstLineCoordinateY();
@@ -122,6 +128,18 @@ public class Guitar {
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
 
+	}
+
+	private void drawMeasureNum(int i) {
+		// TODO Auto-generated method stub
+		String n = Integer.toString(i+1); 
+		Text num = new Text();
+		num.setX(x);
+		num.setY(getFirstLineCoordinateY()+y-this.fontSize);
+		num.setText(n);
+		num.setViewOrder(-1);
+		num.setFont(Font.font("Comic Sans MS", FontPosture.REGULAR, this.fontSize-2));
+		this.pane.getChildren().add(num); 
 	}
 
 	// This method extracts a clef from a given measure
@@ -190,6 +208,40 @@ public class Guitar {
 		}
 		drawSlur(note, noteList);
 		drawTie(note, noteList, measure);
+		drawHarmonic(note, noteList);
+	}
+
+	private void drawHarmonic(Note note, List<Note> noteList) {
+		// TODO Auto-generated method stub
+		if (noteHasHarmonic(note)) {
+			double firstLine = getFirstLineCoordinateY();
+			double xCenter = noteDrawer.getStartX() + this.fontSize / 2;
+			double yCenter = firstLine + y - this.fontSize - (this.harmonic * this.fontSize);
+			double radius = spacing / 25;
+			Circle circle = new Circle(xCenter, yCenter, radius);
+			circle.setFill(Color.WHITE);
+			circle.setStroke(Color.BLACK);
+			pane.getChildren().add(circle);
+
+			for (int i = noteList.indexOf(note); i < noteList.size() - 1; i++) {
+				Note next = noteList.get(i + 1);
+				if (noteHasHarmonic(next)) {
+					this.harmonic++;
+					break;
+				} else {
+					this.harmonic = 0;
+					break;
+				}
+			}
+		} else {
+			this.harmonic = 0;
+		}
+	}
+
+	private boolean noteHasHarmonic(Note note) {
+		// TODO Auto-generated method stub
+		Boolean res = note.getNotations().getTechnical().getHarmonic() == null ? false : true;
+		return res;
 	}
 
 	private void drawTie(Note note, List<Note> noteList, Measure measure) {
@@ -197,7 +249,7 @@ public class Guitar {
 		if (noteHasTie(note)) {
 			slurDrawer.setStrokeWidth(this.fontSize);
 			if (!noteHasChord(note)) {
-				drawRegualrTied(note, noteList, measure); 
+				drawRegualrTied(note, noteList, measure);
 			} else {
 //				int f = note.getNotations().getTechnical().getFret();
 //				List<Tied> tiedList = note.getNotations().getTieds();
@@ -207,7 +259,7 @@ public class Guitar {
 //						// System.out.println(f +" "+ type + "\n");
 //					}
 //				}
-				drawChordTied(note, noteList, measure); 
+				drawChordTied(note, noteList, measure);
 			}
 
 		}
@@ -231,7 +283,7 @@ public class Guitar {
 					Note next = noteList.get(i + 1);
 					if (noteHasTie(next)) {
 						if (noteHasChord(next)) {
-							//int n = next.getNotations().getTechnical().getFret();
+							// int n = next.getNotations().getTechnical().getFret();
 							List<Tied> nextList = next.getNotations().getTieds();
 							for (Tied nt : nextList) {
 								String nextType = nt.getType();
@@ -249,7 +301,7 @@ public class Guitar {
 					List<Note> nextNoteList = nextMeasure.getNotesBeforeBackup();
 					loop1: for (Note n : nextNoteList) {
 						if (noteHasTie(n) && noteHasChord(n)) {
-							//int n1 = n.getNotations().getTechnical().getFret();
+							// int n1 = n.getNotations().getTechnical().getFret();
 							List<Tied> tiedList2 = n.getNotations().getTieds();
 							for (Tied nt : tiedList2) {
 								String nextType = nt.getType();
@@ -487,6 +539,7 @@ public class Guitar {
 			break;
 		case "eighth":
 			type.drawLongLine();
+			drawDot(note, type, py);
 			if (lastType == "eighth" && actualLast <= 0) {
 				if (this.noteTypeCounter > 0) {
 					type.drawBeam(-spacing);
@@ -503,21 +556,51 @@ public class Guitar {
 		case "16th":
 			type.drawLongLine();
 			if (lastType == "16th") {
-				type.drawBeam(-spacing);
-				type.setStartY(py + y - 5);
-				type.drawBeam(-spacing);
-			} else if (lastType == "eighth") {
 				if (this.noteTypeCounter > 0) {
+					type.drawBeam(-spacing);
+					type.setStartY(py + y - 5);
 					type.drawBeam(-spacing);
 					this.noteTypeCounter--;
 				} else {
 					this.noteTypeCounter = 3;
 				}
+			} else if (lastType == "eighth") {
+				System.out.println(this.noteTypeCounter);
+				if (this.noteTypeCounter == 3) {
+					type.drawBeam(-spacing);
+					type.setStartY(py + y - 5);
+					type.drawBeam(-spacing / 2);
+				} else {
+					type.drawBeam(-spacing);
+				}
+
 			} else {
 				type.drawBeam(spacing / 4);
 				type.setStartY(py + y - 5);
 				type.drawBeam(spacing / 4);
 			}
+		case "32nd":
+			type.drawLongLine();
+			if (lastType == "32nd") {
+				if (this.noteTypeCounter > 0) {
+					type.drawBeam(-spacing);
+					type.setStartY(py + y - 5);
+					type.drawBeam(-spacing);
+					type.setStartY(py + y - 10);
+					type.drawBeam(-spacing);
+					this.noteTypeCounter--;
+				} else {
+					type.drawBeam(-spacing);
+					this.noteTypeCounter = 3;
+				}
+			} /*
+				 * else if (lastType == "eighth") { System.out.println(this.noteTypeCounter);
+				 * if(this.noteTypeCounter == 3) { type.drawBeam(-spacing); type.setStartY(py +
+				 * y - 5); type.drawBeam(-spacing/2); } else { type.drawBeam(-spacing); }
+				 * 
+				 * } else { type.drawBeam(spacing / 4); type.setStartY(py + y - 5);
+				 * type.drawBeam(spacing / 4); }
+				 */
 
 			break;
 		}
@@ -582,7 +665,7 @@ public class Guitar {
 				String type = s.getType();
 				if (type == "start") {
 					slurDrawer.setStartX(noteDrawer.getStartX());
-					slurDrawer.setStrokeWidth(this.fontSize/2);
+					slurDrawer.setStrokeWidth(this.fontSize / 2);
 					int index = noteList.indexOf(note);
 					lookForStop: for (int i = index; i < noteList.size() - 1; i++) {
 						Note next = noteList.get(i + 1);
