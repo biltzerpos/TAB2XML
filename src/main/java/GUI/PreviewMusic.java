@@ -91,52 +91,24 @@ public class PreviewMusic extends Application {
 
 	private Sequencer sequencer;
 	private Sequence sequence;
+	int num = 0;
 
 
 	public PreviewMusic() throws MidiUnavailableException, InvalidMidiDataException {
 		sequencer = MidiSystem.getSequencer();
-		//	sequencer.setSequence(getMusicString());
 		sequencer.open();
 	}
 
-
 	@FXML
 	public void initialize() throws InvalidMidiDataException {
+		playButton.setOnMousePressed((event) -> {
+			num ++;
+		//	System.out.println("Count: " + num);
+		});
 		TempoSlider.valueProperty().addListener((bservableValue, oldValue, newValue) -> {
 			sequencer.setTempoFactor(newValue.floatValue() / 120f);	
 		});
-
-		//		playButton.setOnMousePressed((event) -> {
-		//			int count;
-		//			count = event.getClickCount();
-		//			//System.out.println("Count: " + count);
-		//			
-		//			if(count == 1) {
-		//				try {
-		//					sequencer.setSequence(getMusicString());
-		//					sequencer.open();
-		//				} catch (InvalidMidiDataException | MidiUnavailableException e) {
-		//					// TODO Auto-generated catch block
-		//					e.printStackTrace();
-		//				}
-		//			}else {
-		//				try {
-		//					playHandle();
-		//				} catch (InvalidMidiDataException e) {
-		//					// TODO Auto-generated catch block
-		//					e.printStackTrace();
-		//				}
-		//			}
-		//		});
 	}
-	//	public int getMousePressed(MouseEvent e) {
-	//		int count;
-	//		count = e.getClickCount();
-	//		return count;
-	//	}
-
-
-
 
 	public void setMainViewController(MainViewController mvcInput) {
 		mvc = mvcInput;
@@ -309,43 +281,29 @@ public class PreviewMusic extends Application {
 		}
 		return this.sequence;
 	}
-
+	
 	// Method that handles `play note` button
 	@FXML
 	public void playHandle() throws InvalidMidiDataException {  
-//		playButton.setOnMousePressed((event) -> {
-//			int count = 0;
-////			int num = event.getClickCount();
-////			for(count: num) {
-//			count ++;
-////			}
-//
-//			System.out.println("Count: " + count);
-//
-//			if(count == 1) {
-//				try {
-//					sequencer.setSequence(getMusicString());
-//					sequencer.start();
-//				} catch (InvalidMidiDataException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}else if(count > 1) {
-//				if (sequencer.getTickPosition() == sequencer.getTickLength()) {
-//					sequencer.setTickPosition(0);
-//
-//					sequencer.start();	
-//				}	
-//			}
-//		});
+		if (num == 1) {
+			sequencer.setSequence(getMusicString());
+		}
+		if (sequencer.getTickPosition() == sequencer.getTickLength()) {
+			sequencer.setTickPosition(0);
+		}
+		sequencer.start();	
 
-			//  this.play = new MusicPlayer(scorePartwise, pane);
-				if (sequencer.getTickPosition() == sequencer.getTickLength()) {
-					sequencer.setTickPosition(0);
-				}
-				sequencer.start();	
-				
 	}
+	
+	@FXML
+	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
+		if (sequencer.isRunning()) {
+			sequencer.stop();
+		}
+
+		System.out.println("Pause bottom is clicked");
+	}
+
 	@FXML
 	public void restartMusicHandle() throws InvalidMidiDataException {
 		sequencer.setSequence(getMusicString());
@@ -395,17 +353,6 @@ public class PreviewMusic extends Application {
 
 		}
 
-	}
-
-
-
-	@FXML
-	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
-		if (sequencer.isRunning()) {
-			sequencer.stop();
-		}
-
-		System.out.println("Pause bottom is clicked");
 	}
 
 	// Method that handle navigating to specific measure (1- size of measure list)
