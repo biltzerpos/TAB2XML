@@ -582,6 +582,7 @@ public class Guitar {
 				String type = s.getType();
 				if (type == "start") {
 					slurDrawer.setStartX(noteDrawer.getStartX());
+					slurDrawer.setStrokeWidth(this.fontSize/2);
 					int index = noteList.indexOf(note);
 					lookForStop: for (int i = index; i < noteList.size() - 1; i++) {
 						Note next = noteList.get(i + 1);

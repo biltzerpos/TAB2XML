@@ -97,7 +97,9 @@ public class DrawSlur {
 	
 	private QuadCurve getCurve(double x1, double y1, double x2, double y2, double controlX, double controlY) {
 		int s = getStrokeWidth()/6; 
-		
+		if(s<1) {
+			s = 1; 
+		}
 		QuadCurve quadCurve = new QuadCurve();
 		quadCurve.setStartX(x1);
 		quadCurve.setStartY(y1);
