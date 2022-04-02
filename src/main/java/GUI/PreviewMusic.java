@@ -218,8 +218,7 @@ public class PreviewMusic extends Application {
 			this.drum = new Drumset(scorePartwise, pane);
 			this.drum.draw();
 		} else if (instrument == "Bass") {
-			int spacing = 50;
-			this.bass = new Bass(scorePartwise, pane, spacing);
+			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
 			this.bass.drawBass();
 		}
 	}

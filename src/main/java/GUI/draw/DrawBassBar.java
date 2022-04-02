@@ -30,7 +30,7 @@ public class DrawBassBar {
 		bar1.setStartX(getStartX());
 		bar1.setStartY(getStartY());
 		bar1.setEndX(getStartX());
-		bar1.setEndY(getStartY() + 45);
+		bar1.setEndY(getStartY() + 30);
 		pane.getChildren().add(bar1);
 	}
 

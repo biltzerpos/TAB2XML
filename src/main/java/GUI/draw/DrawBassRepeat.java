@@ -6,6 +6,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 // This class draws a simple vertical bar (for Guitar)
 public class DrawBassRepeat {
@@ -38,7 +42,7 @@ public class DrawBassRepeat {
 		line1.setStroke(Color.BLACK);
 		line1.setStrokeWidth(5.0f);
 		line1.setEndX(getStartX() - 15);
-		line1.setEndY(getStartY() + 43);
+		line1.setEndY(getStartY() + 28);
 		circle1.setCenterX(getStartX() - 5);
 		circle1.setCenterY(getStartY() + 7);
 		circle1.setRadius(2.0f);
@@ -47,9 +51,9 @@ public class DrawBassRepeat {
 		line2.setStroke(Color.GRAY);
 		line2.setStrokeWidth(2.0f);
 		line2.setEndX(getStartX() - 10);
-		line2.setEndY(getStartY() + 43);
+		line2.setEndY(getStartY() + 28);
 		circle2.setCenterX(getStartX() - 5);
-		circle2.setCenterY(getStartY() + 38);
+		circle2.setCenterY(getStartY() + 23);
 		circle2.setRadius(2.0f);
 		pane.getChildren().add(line1);
 		pane.getChildren().add(line2);
@@ -69,13 +73,13 @@ public class DrawBassRepeat {
 
 		line1.setEndX(getStartX());
 		line2.setEndX(getStartX() - 5);
-		line1.setEndY(getStartY() + 43);
-		line2.setEndY(getStartY() + 43);
+		line1.setEndY(getStartY() + 28);
+		line2.setEndY(getStartY() + 28);
 
 		circle1.setCenterX(getStartX() - 10);
 		circle2.setCenterX(getStartX() - 10);
 		circle1.setCenterY(getStartY() + 7);
-		circle2.setCenterY(getStartY() + 38);
+		circle2.setCenterY(getStartY() + 23);
 
 		line1.setStroke(Color.BLACK);
 		line1.setStrokeWidth(5.0f);
@@ -89,6 +93,13 @@ public class DrawBassRepeat {
 		pane.getChildren().add(circle2);
 	}
 
+	public void drawRepeatText(String reps) {
+		String s = "x" + reps;
+		Text text = new Text(getStartX() - 10, getStartY() -5, s);
+		text.setFont(Font.font("Comic Sans MS", FontWeight.NORMAL, FontPosture.REGULAR, 10));
+		pane.getChildren().add(text);
+	}
+	
 	// Getters and setters
 	public Pane getPane() {
 		return pane;

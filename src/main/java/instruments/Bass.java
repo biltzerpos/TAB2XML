@@ -8,6 +8,8 @@ import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -27,31 +29,45 @@ public class Bass {
 	private List<Measure> measureList;
 	private double x;
 	private double y;
-	private DrawBassLines d;
+	private DrawBassLines drawBassLines;
 	private HashMap<Measure, Double> xCoordinates;
 	private HashMap<Measure, Double> yCoordinates;
 	private double spacing;
 	private int LineSpacing;
 	private int noteTypeCounter;
+	private String repetitions;
 	private DrawBassNote noteDrawer;
+	
+	private int fontSize;
+	private int staffSpacing;
+	private DrawSlur slurDrawer;
 
 	public Bass() {
 	}
 
-	public Bass(ScorePartwise scorePartwise, Pane pane, int length) {
+	public Bass(ScorePartwise scorePartwise, Pane pane, int noteSpacing, int font, int staffSpacing,
+			int LineSpacing) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 		this.x = 0;
 		this.y = 0;
+		this.repetitions = null;
+		this.LineSpacing = LineSpacing; //send it in as 150
+		this.fontSize = font; //send it in as 12
+		this.staffSpacing = staffSpacing; //send it as 50
+		
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
-		this.spacing = length;
-		this.d = new DrawBassLines(this.pane, length);
+		this.spacing = noteSpacing; //send it in as 50
 		this.noteDrawer = new DrawBassNote();
-		this.noteDrawer.setFont(12);
-		this.LineSpacing = 150;
+		this.noteDrawer.setFont(this.fontSize);
+		this.noteDrawer.setGraceFontSize(this.fontSize - 4);
+		this.drawBassLines = new DrawBassLines(this.pane, noteSpacing, staffSpacing);
+		this.slurDrawer = new DrawSlur();
+		this.slurDrawer.setPane(this.pane);
+		
 	}
 
 	/*
@@ -71,7 +87,7 @@ public class Bass {
 
 			// clef of first line
 			if (x == 0) {
-				d.draw(x, y);
+				drawBassLines.draw(x, y);
 				DrawBassClef dc = new DrawBassClef(this.pane, clef, x + 5, y + 15);
 				dc.draw();
 				x += spacing;
@@ -93,7 +109,7 @@ public class Bass {
 				this.y += this.LineSpacing;
 				width = this.pane.getMaxWidth();
 
-				d.draw(x, y);
+				drawBassLines.draw(x, y);
 				DrawBassClef dc = new DrawBassClef(this.pane, clef, x + 5, y + 15);
 				dc.draw();
 				x += spacing;
@@ -117,7 +133,7 @@ public class Bass {
 			if (repDirection != null && repDirection.equals("backward")) {
 				DrawBassRepeat br = new DrawBassRepeat(pane, x, y);
 				br.drawBackward();
-				System.out.println("Found a Repeat Note");
+				br.drawRepeatText(repetitions);
 			}
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
@@ -126,15 +142,22 @@ public class Bass {
 	private String getRepeatDirection(Measure measure, int index) {
 		List<BarLine> barLines = measure.getBarlines();
 		int barlinesSize = 0;
+		String direction = null;
 		if(barLines != null) {
 			barlinesSize = barLines.size();
 			if(barlinesSize == 2) {
-				return measure.getBarlines().get(index).getRepeat().getDirection();
+				direction = measure.getBarlines().get(index).getRepeat().getDirection();
+				if(direction.equals("backward")) {
+					repetitions = measure.getBarlines().get(index).getRepeat().getTimes();
+				}
 			} else {
-				return measure.getBarlines().get(0).getRepeat().getDirection();
+				direction = measure.getBarlines().get(0).getRepeat().getDirection();
+				if(direction.equals("backward")) {
+					repetitions = measure.getBarlines().get(0).getRepeat().getTimes();
+				}
 			}
 		}
-		return null;
+		return direction;
 	}
 
 	// This method extracts a clef from a given measure
@@ -213,14 +236,14 @@ public class Bass {
 	// gets the Y coordinate of specific group of music lines based on given string
 	// integer.
 	private double getLineCoordinateY(int string) {
-		MLine mline = d.getMusicLineList().get(string - 1);
+		MLine mline = drawBassLines.getMusicLineList().get(string - 1);
 		double startY = mline.getStartY(string - 1);
 		return startY;
 	}
 
 	// returns the y coordinate the first music line of the 6-line group
 	private double getFirstLineCoordinateY() {
-		return this.d.getMusicLineList().get(0).getStartY(1);
+		return this.drawBassLines.getMusicLineList().get(0).getStartY(1);
 	}
 
 	// returns true if note has a chord tag
@@ -282,7 +305,7 @@ public class Bass {
 
 		double positionY = getLineCoordinateY(string) + 3;// +getLineCoordinateY(string+1))/2;
 
-		d.draw(x, y);
+		drawBassLines.draw(x, y);
 		noteDrawer.setPane(pane);
 		noteDrawer.setNote(note);
 		noteDrawer.setStartX(x + spacing / 2);
@@ -429,10 +452,18 @@ public class Bass {
 				y = yf;
 			}
 			if (measure.equals(measureList.get(i))) {
-				Rectangle rectangle = new Rectangle(x, yf, w, 50);
+				Rectangle rectangle = new Rectangle(x, yf, w, 35);
 				rectangle.setFill(Color.TRANSPARENT);
 				rectangle.setStyle("-fx-stroke: red;");
 				pane.getChildren().add(rectangle);
+				Object b4 = pane.getParent().getParent().getParent().getParent();
+				if(b4 instanceof ScrollPane) {
+					ScrollPane sp = (ScrollPane)b4;
+					double rectBounds = rectangle.getBoundsInLocal().getMaxY();
+					double thisBounds = pane.getBoundsInLocal().getMaxY();
+					double val = rectBounds/thisBounds;
+					sp.setVvalue(val);
+				}
 			}
 			x = getXCoordinatesForGivenMeasure(measureList.get(i));
 			y = yf;
@@ -450,7 +481,7 @@ public class Bass {
 	}
 
 	private double getLastLineCoordinateY() {
-		return this.d.getMusicLineList().get(5).getStartY(6);
+		return this.drawBassLines.getMusicLineList().get(5).getStartY(6);
 
 	}
 
