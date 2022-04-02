@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -821,6 +822,14 @@ public class Guitar {
 				rectangle.setFill(Color.TRANSPARENT);
 				rectangle.setStyle("-fx-stroke: red;");
 				pane.getChildren().add(rectangle);
+				Object b4 = pane.getParent().getParent().getParent().getParent();
+				if(b4 instanceof ScrollPane) {
+					ScrollPane sp = (ScrollPane)b4;
+					double rectBounds = rectangle.getBoundsInLocal().getMaxY();
+					double thisBounds = pane.getBoundsInLocal().getMaxY();
+					double val = rectBounds/thisBounds;
+					sp.setVvalue(val);
+				}
 			}
 			x = getXCoordinatesForGivenMeasure(measureList.get(i));
 			y = yf;
