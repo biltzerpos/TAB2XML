@@ -265,6 +265,7 @@ public class PreviewMusic extends Application {
 		setStaffSpacingValue(10); 
 		setMusicLineSpacingValue(200); 
 	}
+	
 
 	public Sequence getMusicString() throws InvalidMidiDataException {
 		this.play = new MusicPlayer(scorePartwise);
@@ -284,15 +285,26 @@ public class PreviewMusic extends Application {
 	// Method that handles `play note` button
 	@FXML
 	public void playHandle() throws InvalidMidiDataException {  
+		String instrument = getInstrument();
 		if (num == 1) {
 			sequencer.setSequence(getMusicString());
+			if (instrument == "Guitar") {
+			} else if (instrument == "Drumset") {
+				this.drum.highlightNote();
+			}
 		}
 		if (sequencer.getTickPosition() == sequencer.getTickLength()) {
 			sequencer.setTickPosition(0);
+			if (instrument == "Guitar") {
+			} else if (instrument == "Drumset") {
+				this.drum.highlightNote();
+			}
 		}
 		sequencer.start();	
+		
 
 	}
+		
 	
 	@FXML
 	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
@@ -480,6 +492,9 @@ public class PreviewMusic extends Application {
 
 	public void setMusicLineSpacingValue(int musicLineSpacingValue) {
 		this.musicLineSpacingValue = musicLineSpacingValue;
+	}
+	public double getTempoFactor() {
+		return sequencer.getTempoFactor();
 	}
 
 	@Override
