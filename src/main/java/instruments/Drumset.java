@@ -466,7 +466,7 @@ public class Drumset {
 						y = yf;
 					}
 				
-					
+					if (noteList !=null) {
 					//iterate thru each note inside each measure
 					for (int j = 0; j < noteList.size(); j++) {
 						Rectangle rectangle = new Rectangle();
@@ -479,10 +479,12 @@ public class Drumset {
 						yPositionNote = getYCoordinatesForGivenMeasure(measureList.get(i));
 						rectangle.setX(xPositionNote-2);
 						rectangle.setY(yPositionNote);
-						r.add(rectangle);  
+						r.add(rectangle); 
+						if (currentNote.getDuration() !=null) {
 						int duration= currentNote.getDuration();
 						double duration2 =1000.0/((double)duration);
 						noteDuration.add(duration2);
+						}
 						System.out.println("Added rectangle"+r.get(i));
 						this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
 						//if current note is a chord do below
@@ -491,6 +493,7 @@ public class Drumset {
 						//if current note not a chord do
 						
 						}
+				}
 				}
 				
 				HighlightNote note = new HighlightNote(r, noteDuration);
@@ -501,10 +504,7 @@ public class Drumset {
 		 		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
 		 			Object object = (Object) iterator.next();
 		 			if (object instanceof Rectangle) {
-		 				// ONLY REMOVE RECTANGLES IF THEY ARE RED,
-		 				// OTHERWISE THE NOTE BEAMS WILL BE REMOVES BECAUSE THEY ARE ALSO RECTANGLES
 		 				if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
-		 					System.out.println("Rectangle Added to removal list.");
 		 					removeRect.add((Rectangle) object);
 		 				}
 		 			}
@@ -512,7 +512,6 @@ public class Drumset {
 
 		 		for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
 		 			Rectangle rect = (Rectangle) iterator.next();
-		 			System.out.println("Rectangle Removed as part of reset.");
 		 			pane.getChildren().remove(rect);
 		 		}
 	     }
