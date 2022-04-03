@@ -24,7 +24,6 @@ public class MusicPlayer {
 	@FXML
 	private Pane pane;
 	private List<Measure> measureList;
-	private List<BarLine> barLine;
 	
 	
 	public MusicPlayer() {
@@ -61,7 +60,6 @@ public class MusicPlayer {
 								continue;
 							}else {
 								int octave = n.getPitch().getOctave();
-								String dur = addDuration(n);
 								ns = n.getPitch().getStep() + getAlter(n)+ octave;
 							}
 						}
@@ -89,67 +87,9 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Drum: " + vocals.toString());
+		System.out.println("Guitar: " + vocals.toString());
 
 		return player.getSequence(vocals.toString());
-//		Player player = new Player();
-//		Pattern vocals = new Pattern();
-//		String noteSteps = "";
-//		int voice = 0;
-//
-//		for (int i = 0; i < measureList.size(); i++) {
-//			Measure measure = measureList.get(i);
-//			List<Note> noteList = measure.getNotesBeforeBackup();
-//
-//			for (int j = 0; j < noteList.size(); j++) {
-//				String ns = new String();
-//				Note note = noteList.get(j);
-//				Grace grace = note.getGrace();
-//				//					List<Dot> dot = note.getDots();
-//				//					Rest res = note.getRest();
-//				//					Integer alt = note.getPitch().getAlter();
-//				int octave = note.getPitch().getOctave();
-//				String oct = Integer.toString(octave);
-//				String dur = addDuration(note);
-//				voice = note.getVoice();
-//				ns = note.getPitch().getStep() + oct + dur;
-//				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
-//				// " + alt);
-//
-//				if (!noteHasChord(note) && !noteHasTie(note)) {
-//					noteSteps += " " + ns;
-//				} else if (noteHasChord(note)) {
-//					noteSteps += "+" + ns;
-//				} else if (noteHasTie(note)) {
-//					noteSteps += "-" + ns;
-//				} else if (noteHasRest(note)) {
-//					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
-//				}
-//			}
-//		}
-//
-//		vocals.add(noteSteps);
-//		System.out.println("Guitar: " + vocals.toString());
-//		vocals.setInstrument("GUITAR");
-//		vocals.setVoice(voice);
-//		
-//		return player.getSequence(vocals);
-
-	}
-	
-	public String getDurationWithTies(String duration, Note note) {
-		
-		if (note.getNotations() != null && note.getNotations().getTieds() != null) {
-			String s = duration;
-			for (Tied i : note.getNotations().getTieds()) {
-				
-				if (i.getType().equals("start")) s += "-";
-				if (i.getType().equals("stop")) s = "-" + s;
-				
-			}
-			return s;
-		}
-		return duration;
 	}
 	
 	public Sequence getDrumString() {
@@ -205,44 +145,58 @@ public class MusicPlayer {
 	
 	public Sequence getBassString() {
 		Player player = new Player();
-		Pattern vocals = new Pattern();
-		String noteSteps = "";
-		int voice = 0;
+		StringBuilder vocals = new StringBuilder("T180 V0 I[Acoustic_Bass] ");
+		StringBuilder repeat = new StringBuilder();
+		boolean addRepeat = false;
 
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			List<Note> noteList = measure.getNotesBeforeBackup();
+		for (Part i : scorePartwise.getParts()) {
+			for (Measure j : measureList) {
+				if (getBarLineInfo(j.getBarlines(), "left") != null) {
+					addRepeat = true;
+				}
+				if (j.getNotesBeforeBackup() != null) {
+					for (Note n : j.getNotesBeforeBackup()) {
+						String format = "%s%s%s";
+						String ns = new String();
+						
+						if (n.getRest() != null) {
+							ns = "R";
+						} else {
+							if (n.getGrace() != null) {
+								n.getGrace();
+								continue;
+							}else {
+								int octave = n.getPitch().getOctave();
+								ns = n.getPitch().getStep() + getAlter(n)+ octave;
+							}
+						}
 
-			for (int j = 0; j < noteList.size(); j++) {
-				String ns = new String();
-				Note note = noteList.get(j);
-				int octave = note.getPitch().getOctave();
-				String oct = Integer.toString(octave);
-				String dur = addDuration(note);
-				voice = note.getVoice();
-				ns = note.getPitch().getStep() + oct + dur;
-				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
-				// " + alt);
+						
+						String dur = addDuration(n);
+						String tie = getDurationWithTies(dur, n);
+						String chord = createChord(n.getChord());
 
-				if (!noteHasChord(note) && !noteHasTie(note)) {
-					noteSteps += " " + ns;
-				} else if (noteHasChord(note)) {
-					noteSteps += "+" + ns;
-				} else if (noteHasTie(note)) {
-					noteSteps += "-" + ns;
-				} else if (noteHasRest(note)) {
-					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
-					;
+						vocals.append(String.format(format, chord, ns, tie));
+
+						if(addRepeat) {
+							repeat.append(String.format(format, chord, ns, tie));
+						}
+
+					}
+
+				}
+				BarLine rightBar = getBarLineInfo(j.getBarlines(), "right");
+				if(rightBar != null) {
+					int time = Integer.valueOf(rightBar.getRepeat().getTimes());
+					vocals.append(repeat.toString().repeat(time -1));
+					addRepeat = false;
 				}
 			}
 		}
 
-		vocals.add(noteSteps);
 		System.out.println("Bass: " + vocals.toString());
-		vocals.setInstrument("Acoustic_Bass");
-		vocals.setVoice(voice);
-		
-		return player.getSequence(vocals);
+
+		return player.getSequence(vocals.toString());
 	}
 
 	// returns string representation of a drum duration for a given note
@@ -273,6 +227,21 @@ public class MusicPlayer {
 		return res;
 	}
 	
+	public String getDurationWithTies(String duration, Note note) {
+
+		if (note.getNotations() != null && note.getNotations().getTieds() != null) {
+			String s = duration;
+			for (Tied i : note.getNotations().getTieds()) {
+
+				if (i.getType().equals("start")) s += "-";
+				if (i.getType().equals("stop")) s = "-" + s;
+
+			}
+			return s;
+		}
+		return duration;
+	}
+	
 	public String createChord(Chord chord) {
 		if (chord != null) {
 			return "+";
@@ -294,26 +263,6 @@ public class MusicPlayer {
 		return res;
 	}
 	
-
-	private Boolean noteHasTie(Note n) {
-		Boolean result = n.getNotations().getTieds() == null ? false : true;
-		return result;
-	}
-
-	private Boolean noteHasRest(Note n) {
-		Boolean result = n.getRest() == null ? false : true;
-		return result;
-	}
-
-	// returns true if the guitar note has chord element
-	private Boolean noteHasChord(Note n) {
-		Boolean result = n.getChord() == null ? false : true;
-		return result;
-	}
-	private Boolean noteHasGrace(Note n) {
-		Boolean result = n.getGrace() == null ? false : true;
-		return result;
-	}
 	
 	private String getDrumNoteFullName(String Id) {
 		String fullName = "";
@@ -341,7 +290,7 @@ public class MusicPlayer {
 		} else if(Id == "P1-I44"){
 			fullName = "High_Floor_Tom";
 		} else if(Id == "P1-I42"){
-			fullName = "Low_Floor_Tom";
+			fullName = "Lo_Floor_Tom";
 		} else if(Id == "P1-I45"){
 			fullName = "Pedal_Hi_Hat";
 		} else {
