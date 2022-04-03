@@ -182,14 +182,14 @@
                   <HBox alignment="CENTER_LEFT">
                      <children>
                         <Label prefWidth="120.0" text="Tempo:" />
-                        <Slider majorTickUnit="20.0" max="180.0" min="20.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="120.0" />
+                        <Slider fx:id="TempoSlider" majorTickUnit="20.0" max="180.0" min="20.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="120.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" spacing="20.0">
                      <children>
                         <Button fx:id="playButton" mnemonicParsing="false" onAction="#playHandle" prefHeight="20.0" prefWidth="20.0" styleClass="playButton" stylesheets="@playButtonStyle.css" />
-                        <Button fx:id="pauseBottom" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" styleClass="PauseButton" stylesheets="@playButtonStyle.css" />
-                        <Button mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" styleClass="replayButton" stylesheets="@playButtonStyle.css" />
+                        <Button fx:id="pauseBottom" mnemonicParsing="false" onAction="#pauseMusic" prefHeight="20.0" prefWidth="20.0" styleClass="PauseButton" stylesheets="@playButtonStyle.css" />
+                        <Button fx:id="RestartMusicBottom" mnemonicParsing="false" onAction="#restartMusicHandle" prefHeight="20.0" prefWidth="20.0" styleClass="replayButton" stylesheets="@playButtonStyle.css" />
                      </children>
                   </HBox>
                </children>
