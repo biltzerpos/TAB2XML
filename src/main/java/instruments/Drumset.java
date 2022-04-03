@@ -380,6 +380,22 @@ public class Drumset {
 		return length;
 	}
 
+	public void clearHighlightMeasureArea() {
+		ObservableList<?> children = pane.getChildren();
+		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
+		for (Iterator<?> iterator = children.iterator(); iterator.hasNext();) {
+			Object object = (Object) iterator.next();
+			// ONLY REMOVE RECTANGLES IF THEY ARE RED,
+			if (((Rectangle) object).getStyle().equals("-fx-stroke: red;")) {
+				removeRect.add((Rectangle) object);
+			}
+		}
+		for (Iterator<Rectangle> iterator = removeRect.iterator(); iterator.hasNext();) {
+			Rectangle rect = (Rectangle) iterator.next();
+			pane.getChildren().remove(rect);
+		}
+	}
+	
 	public void highlightMeasureArea(Measure measure) {
 		double x = 0;
 		double y = 0;
