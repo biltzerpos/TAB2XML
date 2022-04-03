@@ -9,6 +9,7 @@ import org.jfugue.player.Player;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
+import models.Part;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.barline.BarLine;
@@ -23,7 +24,6 @@ public class MusicPlayer {
 	private Pane pane;
 	private List<Measure> measureList;
 	private List<BarLine> barLine;
-
 	
 	
 	public MusicPlayer() {
@@ -34,7 +34,6 @@ public class MusicPlayer {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
-		this.barLine = this.measureList.get(0).getBarlines();
 	}
 	
 	public Sequence getGuitarString() {
@@ -87,30 +86,37 @@ public class MusicPlayer {
 		Player player = new Player();
 		StringBuilder vocals = new StringBuilder("V9 ");
 		StringBuilder repeat = new StringBuilder();
+		boolean addRepeat = false;
 
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			List<Note> noteList = measure.getNotesBeforeBackup();
+		for (Part i : scorePartwise.getParts()) {
+			for (Measure j : measureList) {
+				if (getBarLineInfo(j.getBarlines(), "left") != null) {
+					addRepeat = true;
+				}
+				if (j.getNotesBeforeBackup() != null) {
+					for (Note n : j.getNotesBeforeBackup()) {
+						String format = "%s%s%s";
+						String drumId = "";
+						String ns = new String();
 
-			for (int j = 0; j < noteList.size(); j++) {
-				String format = "%s%s%s";
-				String drumId = "";
-				String ns = new String();
-				Note note = noteList.get(j);
+						drumId = n.getInstrument().getId();
+						ns = "[" + getDrumNoteFullName(drumId) + "]";
+						String dur = addDuration(n);
 
-				drumId = note.getInstrument().getId();
-				ns = "[" + getDrumNoteFullName(drumId) + "]";
-				String dur = addDuration(note);
+						String chord = createChord(n.getChord());
 
-				String chord = createChord(note.getChord());
-				
-				vocals.append(String.format(format, chord, ns, dur));
-				
-				if(noteHasRepeatLeft()) {
-					repeat.append(String.format(format, chord, ns, dur));
+						vocals.append(String.format(format, chord, ns, dur));
+
+						if(addRepeat) {
+							repeat.append(String.format(format, chord, ns, dur));
+						}
+
+					}
+
 				}
 				if(noteHasRepeatRight()) {
-					vocals.append(repeat.toString().repeat(getRepeatTime()));
+					vocals.append(repeat.toString().repeat(getRepeatTime()-1));
+					addRepeat = false;
 				}
 			}
 		}
@@ -129,30 +135,37 @@ public class MusicPlayer {
 	
 	public int getRepeatTime() {
 		int time = 0;
-		if(noteHasRepeatLeft() && noteHasRepeatRight()) {
+		if(getRightBarLine()!= null) {
 			time = Integer.valueOf(getRightBarLine().getRepeat().getTimes());
 		}
 		return time;
 	}
 	public BarLine getRightBarLine() {
 		BarLine rightBar = null;
+//		for (Part i : scorePartwise.getParts()) {
+//			for (Measure j : i.getMeasures()) {
+//				rightBar = getBarLineInfo(j.getBarlines(), "right");
+//			}
+//		}
 		for (int i = 0; i < measureList.size(); i++) {
 			Measure measure = measureList.get(i);
-			rightBar = getBarLineInfo(measure.getBarlines(), "right");
+			if (getBarLineInfo(measure.getBarlines(), "right") != null) {
+				rightBar = getBarLineInfo(measure.getBarlines(), "right");
+			}
 		}
 		return rightBar;
 	}
 
-	private Boolean noteHasRepeatLeft() {
-		boolean result = false;
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			if (getBarLineInfo(measure.getBarlines(), "left") != null) {
-				return true;
-			}
-		}
-		return result;
-	}
+//	private Boolean noteHasRepeatLeft() {
+//		boolean result = false;
+//		for (int i = 0; i < measureList.size(); i++) {
+//			Measure measure = measureList.get(i);
+//			if (getBarLineInfo(measure.getBarlines(), "left") != null) {
+//				return true;
+//			}
+//		}
+//		return result;
+//	}
 	private Boolean noteHasRepeatRight() {
 		boolean result = false;
 		for (int i = 0; i < measureList.size(); i++) {
