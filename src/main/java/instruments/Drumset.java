@@ -184,7 +184,10 @@ public class Drumset {
 			// otherwise, we add 25 to draw it on its own column.
 			xPositionNote = currentNote.getChord() == null ? this.x + this.spacing / 2 : this.x - this.spacing / 2;
 
-			if (currentNote.getRest() == null) {
+			if (currentNote.getRest() != null) {
+				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionMeasure + 15);
+				noteDrawer.draw();
+			} else {
 				// y-position of note
 				// Get the y-position of the note based on its octave and step
 				// and the position of the music lines it will be drawn on.

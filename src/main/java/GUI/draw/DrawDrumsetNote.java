@@ -162,6 +162,28 @@ public class DrawDrumsetNote {
 
 	}
 
+	public void drawRest() {
+//		Line line = new Line(this.startX, this.startY, this.startX + 5, this.startY + 7);
+//		pane.getChildren().add(line);
+
+		javafx.scene.shape.SVGPath rest = new javafx.scene.shape.SVGPath();
+		rest.setContent("m254.4 20.8c1.5 1.6 13 15.7 13 15.7s-6.4 6.1-6.4 12.5c0 7.5 8.6 14.3 8.6 14.3l-.9 1.1c-3.3-1.9-8.9-2.1-11.4.8-3.1 3.6 3.9 9.1 3.9 9.1l-.8 1.1c-2.4-1.8-12.6-11.4-8.3-16.1 2.6-2.9 5.8-3.8 10.3-1.4l-12.1-12.5c7-8.6 8.2-11.1 8.2-13.4 0-4.8-3.4-8.2-5.1-10.4-.6-.9-1.7-1.6-1-2.2.7-.5 1.1.3 2 1.4z");
+
+		rest.setLayoutX(this.startX - 250);
+		rest.setLayoutY(this.startY - 40);
+
+		rest.setScaleX(0.5);
+		rest.setScaleY(0.5);
+
+		pane.getChildren().add(rest);
+//		line = new Line(this.startX, this.startY + 7, this.startX - 5, this.startY + 10);
+//		line.setStrokeWidth(5);
+//		pane.getChildren().add(line);
+
+//		line = new Line(this.startX - 5, this.startY + 20, this.startX + 10, this.startY + 35);
+//		pane.getChildren().add(line);
+	}
+
 	public void drawGrace() {
 		// The note is drawn with an ellipse
 		Ellipse ellipse;
@@ -219,19 +241,21 @@ public class DrawDrumsetNote {
 	public void draw() {
 		if (note.getGrace() != null) {
 			this.drawGrace();
-		}
+		} else if (note.getRest() != null) {
+			this.drawRest();
+		} else {
+			// If note head exists and is an x, then draw "x", otherwise draw "o"
+			if (note.getNotehead() != null && note.getNotehead().getType().equals("x")) {
+				this.drawX();
+			}
+			else {
+				this.drawO();
+			}
 
-		// If note head exists and is an x, then draw "x", otherwise draw "o"
-		if (note.getNotehead() != null && note.getNotehead().getType().equals("x")) {
-			this.drawX();
-		}
-		else {
-			this.drawO();
-		}
-
-		// If the note is octave 5 and step A, then it is above the staff and a small line must be drawn in front of it
-		if (note.getUnpitched().getDisplayOctave() == 5 && note.getUnpitched().getDisplayStep().equals("A")) {
-			pane.getChildren().add(new Line(getStartX()-5, getStartY()-3, getStartX()+11, getStartY()-3));
+			// If the note is octave 5 and step A, then it is above the staff and a small line must be drawn in front of it
+			if (note.getUnpitched().getDisplayOctave() == 5 && note.getUnpitched().getDisplayStep().equals("A")) {
+				pane.getChildren().add(new Line(getStartX()-5, getStartY()-3, getStartX()+11, getStartY()-3));
+			}
 		}
 	}
 
