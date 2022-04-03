@@ -98,11 +98,16 @@ public class MusicPlayer {
 						String format = "%s%s%s";
 						String drumId = "";
 						String ns = new String();
+						
+						if (n.getRest() != null) {
+							ns = "R";
+						} else {
+							drumId = n.getInstrument().getId();
+							ns = "[" + getDrumNoteFullName(drumId) + "]";
+						}
 
-						drumId = n.getInstrument().getId();
-						ns = "[" + getDrumNoteFullName(drumId) + "]";
+						
 						String dur = addDuration(n);
-
 						String chord = createChord(n.getChord());
 
 						vocals.append(String.format(format, chord, ns, dur));
@@ -114,8 +119,10 @@ public class MusicPlayer {
 					}
 
 				}
-				if(noteHasRepeatRight()) {
-					vocals.append(repeat.toString().repeat(getRepeatTime()-1));
+				BarLine rightBar = getBarLineInfo(j.getBarlines(), "right");
+				if(rightBar != null) {
+					int time = Integer.valueOf(rightBar.getRepeat().getTimes());
+					vocals.append(repeat.toString().repeat(time -1));
 					addRepeat = false;
 				}
 			}
@@ -124,57 +131,6 @@ public class MusicPlayer {
 		System.out.println("Drum: " + vocals.toString());
 
 		return player.getSequence(vocals.toString());
-	}
-	
-	public String createChord(Chord chord) {
-		if (chord != null) {
-			return "+";
-		}
-		return " ";
-	}
-	
-	public int getRepeatTime() {
-		int time = 0;
-		if(getRightBarLine()!= null) {
-			time = Integer.valueOf(getRightBarLine().getRepeat().getTimes());
-		}
-		return time;
-	}
-	public BarLine getRightBarLine() {
-		BarLine rightBar = null;
-//		for (Part i : scorePartwise.getParts()) {
-//			for (Measure j : i.getMeasures()) {
-//				rightBar = getBarLineInfo(j.getBarlines(), "right");
-//			}
-//		}
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			if (getBarLineInfo(measure.getBarlines(), "right") != null) {
-				rightBar = getBarLineInfo(measure.getBarlines(), "right");
-			}
-		}
-		return rightBar;
-	}
-
-//	private Boolean noteHasRepeatLeft() {
-//		boolean result = false;
-//		for (int i = 0; i < measureList.size(); i++) {
-//			Measure measure = measureList.get(i);
-//			if (getBarLineInfo(measure.getBarlines(), "left") != null) {
-//				return true;
-//			}
-//		}
-//		return result;
-//	}
-	private Boolean noteHasRepeatRight() {
-		boolean result = false;
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			if (getBarLineInfo(measure.getBarlines(), "right") != null) {
-				return true;
-			}
-		}
-		return result;
 	}
 	
 	public Sequence getBassString() {
@@ -245,6 +201,13 @@ public class MusicPlayer {
 		}
 
 		return res;
+	}
+	
+	public String createChord(Chord chord) {
+		if (chord != null) {
+			return "+";
+		}
+		return " ";
 	}
 	
 	public String getAlter(Note note) {
