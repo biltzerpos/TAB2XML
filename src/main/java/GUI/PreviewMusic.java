@@ -1,9 +1,21 @@
 package GUI;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.jfugue.player.Player;
+
+import converter.Score;
 import instruments.Guitar;
 import instruments.Drumset;
 import instruments.Bass;
@@ -12,6 +24,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
@@ -25,6 +38,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Scale;
@@ -33,6 +47,8 @@ import javafx.stage.Window;
 import javafx.stage.Stage;
 import models.ScorePartwise;
 import models.measure.Measure;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 
 public class PreviewMusic extends Application {
 
@@ -67,12 +83,31 @@ public class PreviewMusic extends Application {
 	private Slider musicLineSlider;
 	private int musicLineSpacingValue;
 
-	public PreviewMusic() {
-		
+	@FXML
+	private Slider TempoSlider;
+	@FXML
+	private Button playButton;
+
+
+	private Sequencer sequencer;
+	private Sequence sequence;
+	int num = 0;
+
+
+	public PreviewMusic() throws MidiUnavailableException, InvalidMidiDataException {
+		sequencer = MidiSystem.getSequencer();
+		sequencer.open();
 	}
 
 	@FXML
-	public void initialize() {
+	public void initialize() throws InvalidMidiDataException {
+		playButton.setOnMousePressed((event) -> {
+			num ++;
+		//	System.out.println("Count: " + num);
+		});
+		TempoSlider.valueProperty().addListener((bservableValue, oldValue, newValue) -> {
+			sequencer.setTempoFactor(newValue.floatValue() / 120f);	
+		});
 	}
 
 	public void setMainViewController(MainViewController mvcInput) {
@@ -81,7 +116,7 @@ public class PreviewMusic extends Application {
 
 	// method to update the preview window
 	public void update() throws IOException {
-
+		
 		/*
 		 * Get the list of measures from the ScorePartwise object.
 		 *
@@ -105,26 +140,26 @@ public class PreviewMusic extends Application {
 		// Changing the staff spacing slider affects the note spacing, font size, and
 		// music line sliders
 
-//		 staff spacing = 10:
-//		 	Font max = 12
-//		 	MusicLine spacing min = 120
-//		  		noteSpacing Max = 25
-//		 staff spacing = 15:
-//		  		Font max = 17
-//		  		MusicLine spacing min = 150
-//		  		noteSpacing Max = 35
-//		  staff spacing = 20:
-//		  		Font max = 22
-//		  		MusicLine spacing min = 180
-//		 		noteSpacing Max = 45
-//		  staff spacing = 25:
-//		  		Font max = 27
-//		  		MusicLine spacing min = 210
-//		  		noteSpacing Max = 55
-//		   staff spacing = 30:
-//		  		Font max = 30
-//		  		MusicLine spacing min = 240
-//		  		noteSpacing Max = 60
+		//		 staff spacing = 10:
+		//		 	Font max = 12
+		//		 	MusicLine spacing min = 120
+		//		  		noteSpacing Max = 25
+		//		 staff spacing = 15:
+		//		  		Font max = 17
+		//		  		MusicLine spacing min = 150
+		//		  		noteSpacing Max = 35
+		//		  staff spacing = 20:
+		//		  		Font max = 22
+		//		  		MusicLine spacing min = 180
+		//		 		noteSpacing Max = 45
+		//		  staff spacing = 25:
+		//		  		Font max = 27
+		//		  		MusicLine spacing min = 210
+		//		  		noteSpacing Max = 55
+		//		   staff spacing = 30:
+		//		  		Font max = 30
+		//		  		MusicLine spacing min = 240
+		//		  		noteSpacing Max = 60
 
 		StaffSpacingSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
@@ -218,8 +253,7 @@ public class PreviewMusic extends Application {
 			this.drum = new Drumset(scorePartwise, pane);
 			this.drum.draw();
 		} else if (instrument == "Bass") {
-			int spacing = 50;
-			this.bass = new Bass(scorePartwise, pane, spacing);
+			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
 			this.bass.drawBass();
 		}
 	}
@@ -231,6 +265,56 @@ public class PreviewMusic extends Application {
 		setStaffSpacingValue(10); 
 		setMusicLineSpacingValue(200); 
 	}
+
+	public Sequence getMusicString() throws InvalidMidiDataException {
+		this.play = new MusicPlayer(scorePartwise);
+
+		String instrument = getInstrument();
+
+		if (instrument == "Guitar") {
+			this.sequence =  play.getGuitarString();
+		} else if (instrument == "Drumset") {
+			this.sequence = play.getDrumString();
+		} else if (instrument == "Bass") {
+			this.sequence = play.getBassString();
+		}
+		return this.sequence;
+	}
+	
+	// Method that handles `play note` button
+	@FXML
+	public void playHandle() throws InvalidMidiDataException {  
+		if (num == 1) {
+			sequencer.setSequence(getMusicString());
+		}
+		if (sequencer.getTickPosition() == sequencer.getTickLength()) {
+			sequencer.setTickPosition(0);
+		}
+		sequencer.start();	
+
+	}
+	
+	@FXML
+	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
+		if (sequencer.isRunning()) {
+			sequencer.stop();
+		}
+
+		System.out.println("Pause bottom is clicked");
+	}
+
+	@FXML
+	public void restartMusicHandle() throws InvalidMidiDataException {
+		sequencer.setSequence(getMusicString());
+		sequencer.start();	
+	}
+	
+	public void closeSequencer() {
+		this.sequencer.close();
+		System.out.println("closeSequencer");
+	}
+
+
 
 	// Method that handles the `print music sheet` button
 	@FXML
@@ -268,20 +352,6 @@ public class PreviewMusic extends Application {
 
 		}
 
-	}
-
-	// Method that handles `play note` button
-	@FXML
-	public void playHandle() {
-		this.play = new MusicPlayer(scorePartwise, pane);
-		String instrument = getInstrument();
-		if (instrument == "Guitar") {
-			this.play.playGuitarNote(); // Play method in Guitar class
-		} else if (instrument == "Drumset") {
-			this.play.playDrumNote(); // Play method in Drumset class
-		} else if (instrument == "Bass") {
-			this.bass.playBassNote(); // Play method in Bass class
-		}
 	}
 
 	// Method that handle navigating to specific measure (1- size of measure list)
@@ -346,8 +416,8 @@ public class PreviewMusic extends Application {
 
 		if (o.get() == ButtonType.YES) {
 			mvc.convertWindow.hide();
+			sequencer.close();
 		}
-
 	}
 
 	// return a string representation of the instrument
@@ -356,26 +426,26 @@ public class PreviewMusic extends Application {
 		return instrument;
 
 	}
-	
+
 	@FXML private void ApplySettings() {
 		pane.getChildren().clear();
-		
+
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
 			this.guitar = new Guitar(scorePartwise, pane, getNoteSpacingValue(), getFontSize(), getStaffSpacingValue(), getMusicLineSpacingValue());
 			this.guitar.drawGuitar();
 		} 
-			
+
 	}
 	@FXML 
 	private void defaultSetting() {
 		pane.getChildren().clear();
-		
+
 		this.guitar = new Guitar(scorePartwise, pane, 40, 12, 10, 200);
 		this.guitar.drawGuitar();
 	}
 
-	
+
 	public int getNoteSpacingValue() {
 		this.noteSpacingValue = (int) noteSpacing.getValue();
 		return noteSpacingValue;

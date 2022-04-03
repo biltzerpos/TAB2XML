@@ -15,6 +15,8 @@ public class DrawBassLines extends Node {
 	private double length;
 	private MLine musicLine;
 	private List<MLine> musicLineList;
+	private int staffSpacing; 
+	private double noteSpacing;
 
 	// Constructor 1
 	public DrawBassLines() {
@@ -22,19 +24,31 @@ public class DrawBassLines extends Node {
 	}
 
 	// Constructor 2
-	public DrawBassLines(Pane pane, int lenght) {
+	public DrawBassLines(Pane pane, int length) {
 		super();
 		this.pane = pane;
 		this.musicLineList = new ArrayList<MLine>();
-		this.length = lenght; 
+		this.length = length; 
+	}
 
+	// Constructor 3
+	public DrawBassLines(Pane pane, int noteSpacing, int staffSpacing) {
+		super();
+		this.pane = pane;
+		this.musicLineList = new ArrayList<MLine>();
+		this.noteSpacing= noteSpacing; 
+		this.staffSpacing = staffSpacing; 
 	}
 
 	// Method that does the actual drawing
 	public void draw(double x, double y) {
 		for (int i = 0; i < 4; i++) {
-			musicLine = new MLine(pane, x, y, x + this.length, y, i + 1);
-			y += 15;
+//			musicLine = new MLine(pane, x, y, x + this.length, y, i + 1);
+//			y += 15;
+//			musicLineList.add(musicLine);
+			musicLine = new MLine(pane, x, y, x + this.noteSpacing, y, i + 1);
+			musicLine.createLines();
+			y += staffSpacing;
 			musicLineList.add(musicLine);
 		}
 	}

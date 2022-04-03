@@ -2,126 +2,203 @@ package GUI;
 
 import java.util.List;
 
+import javax.sound.midi.Sequence;
+
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
+import models.Part;
 import models.ScorePartwise;
 import models.measure.Measure;
+import models.measure.barline.BarLine;
+import models.measure.note.Chord;
+import models.measure.note.Grace;
 import models.measure.note.Note;
+import models.measure.note.notations.Tied;
 
-public class MusicPlayer implements Runnable {
+public class MusicPlayer {
 
 	private ScorePartwise scorePartwise;
 	@FXML
 	private Pane pane;
 	private List<Measure> measureList;
-
+	
+	
 	public MusicPlayer() {
 
 	}
 
-	public MusicPlayer(ScorePartwise scorePartwise, Pane pane) {
+	public MusicPlayer(ScorePartwise scorePartwise) {
 		super();
 		this.scorePartwise = scorePartwise;
-		this.pane = pane;
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
 	}
-
-
-	// This method plays the notes
-	public void playGuitarNote() {
-		MusicPlayer obj = new MusicPlayer();
-	    Thread thread = new Thread(obj);
-	    thread.start();
+	
+	public Sequence getGuitarString() {
 		Player player = new Player();
-		Pattern vocals = new Pattern();
-		String noteSteps = "";
-		int voice = 0;
+		StringBuilder vocals = new StringBuilder("V0 I[Guitar] ");
+		StringBuilder repeat = new StringBuilder();
+		boolean addRepeat = false;
 
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			List<Note> noteList = measure.getNotesBeforeBackup();
+		for (Part i : scorePartwise.getParts()) {
+			for (Measure j : measureList) {
+				if (getBarLineInfo(j.getBarlines(), "left") != null) {
+					addRepeat = true;
+				}
+				if (j.getNotesBeforeBackup() != null) {
+					for (Note n : j.getNotesBeforeBackup()) {
+						String format = "%s%s%s";
+						String ns = new String();
+						
+						if (n.getRest() != null) {
+							ns = "R";
+						} else {
+							if (n.getGrace() != null) {
+								n.getGrace();
+								continue;
+							}else {
+								int octave = n.getPitch().getOctave();
+								ns = n.getPitch().getStep() + getAlter(n)+ octave;
+							}
+						}
 
-			for (int j = 0; j < noteList.size(); j++) {
-				String ns = new String();
-				Note note = noteList.get(j);
-				//					Grace gra = note.getGrace();
-				//					List<Dot> dot = note.getDots();
-				//					Rest res = note.getRest();
-				//					Integer alt = note.getPitch().getAlter();
-				int octave = note.getPitch().getOctave();
-				String oct = Integer.toString(octave);
-				String dur = addDuration(note);
-				voice = note.getVoice();
-				ns = note.getPitch().getStep() + oct + dur;
-				// System.out.println(" gra: " + gra + " dot: " + dot + " res: " + res + " alt:
-				// " + alt);
+						
+						String dur = addDuration(n);
+						String tie = getDurationWithTies(dur, n);
+						String chord = createChord(n.getChord());
 
-				if (!noteHasChord(note) && !noteHasTie(note)) {
-					noteSteps += " " + ns;
-				} else if (noteHasChord(note)) {
-					noteSteps += "+" + ns;
-				} else if (noteHasTie(note)) {
-					noteSteps += "-" + ns;
-				} else if (noteHasRest(note)) {
-					noteSteps += " " + note.getPitch().getStep() + "R" + oct + dur;
+						vocals.append(String.format(format, chord, ns, tie));
+
+						if(addRepeat) {
+							repeat.append(String.format(format, chord, ns, tie));
+						}
+
+					}
+
+				}
+				BarLine rightBar = getBarLineInfo(j.getBarlines(), "right");
+				if(rightBar != null) {
+					int time = Integer.valueOf(rightBar.getRepeat().getTimes());
+					vocals.append(repeat.toString().repeat(time -1));
+					addRepeat = false;
 				}
 			}
 		}
 
-		vocals.add(noteSteps);
-		System.out.println(vocals.toString());
-		vocals.setInstrument("GUITAR");
-		vocals.setVoice(voice);
-		player.play(vocals);
+		System.out.println("Guitar: " + vocals.toString());
 
+		return player.getSequence(vocals.toString());
 	}
 	
-	// This method plays the notes
-	public void playDrumNote() {
+	public Sequence getDrumString() {
 		Player player = new Player();
-		Pattern vocals = new Pattern();
-		String drumNote = "V9 ";
-		int voice = 0;
+		StringBuilder vocals = new StringBuilder("V9 ");
+		StringBuilder repeat = new StringBuilder();
+		boolean addRepeat = false;
 
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			List<Note> noteList = measure.getNotesBeforeBackup();
+		for (Part i : scorePartwise.getParts()) {
+			for (Measure j : measureList) {
+				if (getBarLineInfo(j.getBarlines(), "left") != null) {
+					addRepeat = true;
+				}
+				if (j.getNotesBeforeBackup() != null) {
+					for (Note n : j.getNotesBeforeBackup()) {
+						String format = "%s%s%s";
+						String drumId = "";
+						String ns = new String();
+						
+						if (n.getRest() != null) {
+							ns = "R";
+						} else {
+							drumId = n.getInstrument().getId();
+							ns = "[" + getDrumNoteFullName(drumId) + "]";
+						}
 
-			for (int j = 0; j < noteList.size(); j++) {
-				String drumId = "";
-				String ns = new String();
-				Note note = noteList.get(j);
-				voice = note.getVoice();
-				drumId = note.getInstrument().getId();
-				ns = "[" + getDrumNoteFullName(drumId) + "]";
-				String dur = addDuration(note);
+						
+						String dur = addDuration(n);
+						String chord = createChord(n.getChord());
 
-				if (note.getChord() == null) {
-					drumNote += " " + ns + dur;
-				}else {
-					drumNote += "+" + ns + dur;
+						vocals.append(String.format(format, chord, ns, dur));
+
+						if(addRepeat) {
+							repeat.append(String.format(format, chord, ns, dur));
+						}
+
+					}
+
+				}
+				BarLine rightBar = getBarLineInfo(j.getBarlines(), "right");
+				if(rightBar != null) {
+					int time = Integer.valueOf(rightBar.getRepeat().getTimes());
+					vocals.append(repeat.toString().repeat(time -1));
+					addRepeat = false;
 				}
 			}
 		}
 
-		vocals.add(drumNote);
-		System.out.println(vocals.toString());
-		vocals.setVoice(voice);
-		vocals.setTempo(120);
-		player.play(vocals);
+		System.out.println("Drum: " + vocals.toString());
+
+		return player.getSequence(vocals.toString());
 	}
 	
-//	public void pauseMusic() {
-//		Player player = new Player();
-//		Thread vocals = new Pattern();
-//		
-//		player
-//	}
+	public Sequence getBassString() {
+		Player player = new Player();
+		StringBuilder vocals = new StringBuilder("T180 V0 I[Acoustic_Bass] ");
+		StringBuilder repeat = new StringBuilder();
+		boolean addRepeat = false;
 
-	
+		for (Part i : scorePartwise.getParts()) {
+			for (Measure j : measureList) {
+				if (getBarLineInfo(j.getBarlines(), "left") != null) {
+					addRepeat = true;
+				}
+				if (j.getNotesBeforeBackup() != null) {
+					for (Note n : j.getNotesBeforeBackup()) {
+						String format = "%s%s%s";
+						String ns = new String();
+						
+						if (n.getRest() != null) {
+							ns = "R";
+						} else {
+							if (n.getGrace() != null) {
+								n.getGrace();
+								continue;
+							}else {
+								int octave = n.getPitch().getOctave();
+								ns = n.getPitch().getStep() + getAlter(n)+ octave;
+							}
+						}
+
+						
+						String dur = addDuration(n);
+						String tie = getDurationWithTies(dur, n);
+						String chord = createChord(n.getChord());
+
+						vocals.append(String.format(format, chord, ns, tie));
+
+						if(addRepeat) {
+							repeat.append(String.format(format, chord, ns, tie));
+						}
+
+					}
+
+				}
+				BarLine rightBar = getBarLineInfo(j.getBarlines(), "right");
+				if(rightBar != null) {
+					int time = Integer.valueOf(rightBar.getRepeat().getTimes());
+					vocals.append(repeat.toString().repeat(time -1));
+					addRepeat = false;
+				}
+			}
+		}
+
+		System.out.println("Bass: " + vocals.toString());
+
+		return player.getSequence(vocals.toString());
+	}
+
 	// returns string representation of a drum duration for a given note
 	private String addDuration(Note note) {
 		String res = "";
@@ -149,35 +226,43 @@ public class MusicPlayer implements Runnable {
 
 		return res;
 	}
-//	// returns string representation of a guitar duration for a given note
-//	public String getDuration(Note note) {
-//		String res = "";
-//		int duration = note.getDuration();
-//		if (duration == 8) {
-//			res = "i";
-//		}
-//		if (duration == 64) {
-//			res = "w";
-//		}
-//		return res;
-//	}
 	
+	public String getDurationWithTies(String duration, Note note) {
 
-	private Boolean noteHasTie(Note n) {
-		Boolean result = n.getNotations().getTieds() == null ? false : true;
-		return result;
-	}
+		if (note.getNotations() != null && note.getNotations().getTieds() != null) {
+			String s = duration;
+			for (Tied i : note.getNotations().getTieds()) {
 
-	private Boolean noteHasRest(Note n) {
-		Boolean result = n.getRest() == null ? false : true;
-		return result;
-	}
+				if (i.getType().equals("start")) s += "-";
+				if (i.getType().equals("stop")) s = "-" + s;
 
-	// returns true if the guitar note has chord element
-	private Boolean noteHasChord(Note n) {
-		Boolean result = n.getChord() == null ? false : true;
-		return result;
+			}
+			return s;
+		}
+		return duration;
 	}
+	
+	public String createChord(Chord chord) {
+		if (chord != null) {
+			return "+";
+		}
+		return " ";
+	}
+	
+	public String getAlter(Note note) {
+		String res = "";
+		Integer alter = note.getPitch().getAlter();
+		
+		if (alter == null) {
+			res = "";
+		}else if (alter == -1) {
+			res = "b";
+		}else if (alter == 1) {
+			res = "#";
+		}
+		return res;
+	}
+	
 	
 	private String getDrumNoteFullName(String Id) {
 		String fullName = "";
@@ -205,7 +290,7 @@ public class MusicPlayer implements Runnable {
 		} else if(Id == "P1-I44"){
 			fullName = "High_Floor_Tom";
 		} else if(Id == "P1-I42"){
-			fullName = "Low_Floor_Tom";
+			fullName = "Lo_Floor_Tom";
 		} else if(Id == "P1-I45"){
 			fullName = "Pedal_Hi_Hat";
 		} else {
@@ -240,12 +325,20 @@ public class MusicPlayer implements Runnable {
 	public void setMeasureList(List<Measure> measureList) {
 		this.measureList = measureList;
 	}
+	
+	private BarLine getBarLineInfo(List<BarLine> barlines,  String location) {
+    	if (barlines != null) {
+			for (BarLine info : barlines) {
+				   if (info.getLocation().equals(location)) {
+					   return info;
+				   }
+			}
+		}
+    	return null;
+		
+    }
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		System.out.println("This code is running in a thread");
-	}
+
 
 
 
