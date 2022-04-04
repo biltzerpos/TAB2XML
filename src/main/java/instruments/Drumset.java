@@ -173,6 +173,10 @@ public class Drumset {
 				}
 
 				this.drawTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
+			} else {
+				yPositionNote = d.getYPositionFromOctaveAndStep(4, "B");
+				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
+				noteDrawer.draw();
 			}
 
 			// If the current note is not a chord, increment x position
