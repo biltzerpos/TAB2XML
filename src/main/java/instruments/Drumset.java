@@ -35,6 +35,12 @@ public class Drumset {
 	private double x;
 	private double y;
 
+	private List<Double[]> drumTieCoords;
+	private List<Double[]> cymbalTieCoords;
+
+	private List<Double[]> drumSlurCoords;
+	private List<Double[]> cymbalSlurCoords;
+
 	private double spacing;
 
 	public Drumset(ScorePartwise scorePartwise, Pane pane) {
@@ -50,6 +56,12 @@ public class Drumset {
 		this.y = 0;
 
 		this.spacing = 30;
+
+		this.drumTieCoords = new ArrayList<Double[]>();
+		this.cymbalTieCoords = new ArrayList<Double[]>();
+
+		this.drumSlurCoords = new ArrayList<Double[]>();
+		this.cymbalSlurCoords = new ArrayList<Double[]>();
 	}
 
 	/**
@@ -142,6 +154,8 @@ public class Drumset {
 					// (if it is beamed, then the beam will already have been drawn).
 					noteDrawer.draw();
 				}
+
+				this.drawTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
 			}
 
 			// If the current note is not a chord, increment x position
@@ -206,10 +220,12 @@ public class Drumset {
 				if (currentNote.getChord() == null) {
 					noteDrawer.drawFlag();
 				}
+
+				this.drawTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
 			}
 
 			// If the current note is a chord, increment x position
-			this.x += currentNote.getChord() == null ? this.spacing : 0;
+			this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
 		}
 	}
 
@@ -357,6 +373,43 @@ public class Drumset {
 			// Draw bar line after every measure
 			DrawDrumsetBar bar = new DrawDrumsetBar(this.pane);
 			bar.draw(this.x, this.y);
+		}
+	}
+
+	private void drawTieOrSlur(Note note, DrawDrumsetNote noteDrawer, double xPosition, double yPosition) {
+		if (note.getNotations() != null) {
+			if (note.getNotations().getTieds() != null) {
+				if (note.getNotehead() == null) {
+					drumTieCoords.add(new Double[] {xPosition, yPosition});
+				} else {
+					cymbalTieCoords.add(new Double[] {xPosition, yPosition});
+				}
+	
+				if (drumTieCoords.size() == 2) {
+					noteDrawer.drawTie(drumTieCoords);
+					drumTieCoords.clear();
+				}
+				if (cymbalTieCoords.size() == 2) {
+					noteDrawer.drawTie(cymbalTieCoords);
+					cymbalTieCoords.clear();
+				}
+			}
+			if (note.getNotations().getSlurs() != null) {
+				if (note.getNotehead() == null) {
+					drumSlurCoords.add(new Double[] {xPosition, yPosition});
+				} else {
+					cymbalSlurCoords.add(new Double[] {xPosition, yPosition});
+				}
+	
+				if (drumSlurCoords.size() == 2) {
+					noteDrawer.drawSlur(drumSlurCoords);
+					drumSlurCoords.clear();
+				}
+				if (cymbalSlurCoords.size() == 2) {
+					noteDrawer.drawSlur(cymbalSlurCoords);
+					cymbalSlurCoords.clear();
+				}
+			}
 		}
 	}
 

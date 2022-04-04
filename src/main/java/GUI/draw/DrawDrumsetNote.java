@@ -1,5 +1,8 @@
 package GUI.draw;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.fxml.FXML;
 
 import javafx.scene.effect.Blend;
@@ -10,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.CubicCurve;
@@ -184,17 +188,55 @@ public class DrawDrumsetNote {
 //		pane.getChildren().add(line);
 	}
 
+	public void drawTie(List<Double[]> coordList) {
+		double x1 = coordList.get(0)[0] + 12;
+		double y1 = coordList.get(0)[1] + (this.note.getNotehead() == null ? 5 : -5);
+		double x2 = coordList.get(1)[0] - 5;
+		double y2 = coordList.get(1)[1] + (this.note.getNotehead() == null ? 5 : -5);
+
+		double controlX = (x2+x1)/2;
+		double controlY = this.note.getNotehead() == null ? y1 + 10 : y1 - 10;
+
+		QuadCurve quadCurve = new QuadCurve(x1, y1, controlX, controlY, x2, y2);
+
+		quadCurve.setFill(Color.TRANSPARENT);
+		quadCurve.setStroke(Color.BLACK);
+		quadCurve.setStrokeWidth(3);
+		quadCurve.setViewOrder(-1);
+
+		pane.getChildren().add(quadCurve);
+	}
+
+	public void drawSlur(List<Double[]> coordList) {
+		double x1 = coordList.get(0)[0] - 15;
+		double y1 = coordList.get(0)[1] + (this.note.getNotehead() == null ? 8 : -8);
+		double x2 = coordList.get(1)[0];
+		double y2 = coordList.get(1)[1] + (this.note.getNotehead() == null ? 8 : -8);
+
+		double controlX = (x2+x1)/2;
+		double controlY = this.note.getNotehead() == null ? y1 + 7 : y1 - 7;
+
+		QuadCurve quadCurve = new QuadCurve(x1, y1, controlX, controlY, x2, y2);
+
+		quadCurve.setFill(Color.TRANSPARENT);
+		quadCurve.setStroke(Color.BLACK);
+		quadCurve.setStrokeWidth(2);
+		quadCurve.setViewOrder(-1);
+
+		pane.getChildren().add(quadCurve);
+	}
+
 	public void drawGrace() {
 		// The note is drawn with an ellipse
 		Ellipse ellipse;
-		ellipse = new Ellipse(getStartX()-15, getStartY()-3, 6.0, 4.5);
+		ellipse = new Ellipse(this.startX - 15, this.startY - 3, 6.0, 4.5);
 		ellipse.setRotate(330);
 		ellipse.setId("drum-note-o");
 		ellipse.toFront();
 
-		Line stem = new Line(getStartX()-10, getStartY()-5, getStartX()-10, getStartY()-20);
+		Line stem = new Line(this.startX - 10, this.startY - 5, this.startX - 10, this.startY - 20);
 		stem.setStrokeWidth(1.5);
-		Line flag = new Line(getStartX()-10, getStartY()-20, getStartX()-3, getStartY()-15);
+		Line flag = new Line(this.startX - 10, this.startY - 20, this.startX - 3, this.startY - 15);
 		flag.setStrokeWidth(1.5);
 
     	pane.getChildren().add(ellipse);
