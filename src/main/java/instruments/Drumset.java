@@ -137,7 +137,7 @@ public class Drumset {
 					// (Note that the next note being null also can mean that the rest of the notes
 					// in the group are chords.)
 					noteDrawer.draw();
-	
+
 					if (nextNote.getGrace() != null && i + 2 < notes.size()) {
 						nextNote = notes.get(i + 2);
 					}
@@ -148,6 +148,23 @@ public class Drumset {
 					} else if (nextNote.getType().equals("16th")) {
 						// Draw a double beam because the current note and next note are both 16th notes
 						noteDrawer.drawDoubleBeam();
+					}
+				} else if (currentNote.getType().equals("32nd") && nextNote != null) {
+					noteDrawer.draw();
+
+					if (nextNote.getGrace() != null && i + 2 < notes.size()) {
+						nextNote = notes.get(i + 2);
+					}
+	
+					if (nextNote.getType().equals("eighth")) {
+						// Draw a single beam because the next note is an eighth note
+						noteDrawer.drawSingleBeam();
+					} else if (nextNote.getType().equals("16th")) {
+						// Draw a double beam because the current note is a 32nd note and the next note is a 16th note
+						noteDrawer.drawDoubleBeam();
+					} else if (nextNote.getType().equals("32nd")) {
+						// Draw a triple beam because the current note and next note are both 32nd notes
+						noteDrawer.drawTripleBeam();
 					}
 				} else {
 					// This probably means this is the last note in the group, just draw the note

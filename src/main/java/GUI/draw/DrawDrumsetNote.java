@@ -270,38 +270,68 @@ public class DrawDrumsetNote {
     	pane.getChildren().add(flag);
 	}
 
+	public void drawTremelo() {
+		Line line = new Line(this.startX  + 5, this.startY - 15, this.startX + 10, this.startY - 18);
+		line.setStrokeWidth(5);
+		pane.getChildren().add(line);
+	}
+
 	public void drawSingleBeam() {
 		// Beamed eighth notes have one beam connecting them
-		Rectangle beam = new Rectangle(getStartX()+8, this.top-1, this.spacing, 5);
+		Rectangle beam = new Rectangle(this.startX + 8, this.top - 1, this.spacing, 5);
 		pane.getChildren().add(beam);
 	}
 
 	public void drawDoubleBeam() {
 		// Beamed 16th notes have two beams connecting them
 		// Draw first beam
-		Rectangle beam = new Rectangle(getStartX()+8, this.top-1, this.spacing, 5);
-		pane.getChildren().add(beam);
+		this.drawSingleBeam();
 
 		// Draw second beam below the first beam
-		beam = new Rectangle(getStartX()+8, this.top+7, this.spacing, 5);
+		Rectangle beam = new Rectangle(this.startX + 8, this.top + 7, this.spacing, 5);
+		pane.getChildren().add(beam);
+	}
+
+	public void drawTripleBeam() {
+		// Beamed 32nd notes have three beams connecting them
+		// Draw first and second beams
+		this.drawDoubleBeam();
+
+		// Draw third beam below the second beam
+		Rectangle beam = new Rectangle(this.startX + 8, this.top + 15, this.spacing, 5);
 		pane.getChildren().add(beam);
 	}
 
 	public void drawFlag() {
 		if (note.getType().equals("eighth")) {
-			Line flag = new Line(getStartX()+8, this.top, getStartX()+20, this.top + 20);
+			Line flag = new Line(this.startX + 8, this.top, this.startX + 20, this.top + 20);
 			flag.setStrokeWidth(1.5);
 
 	    	pane.getChildren().add(flag);
 		} else if (note.getType().equals("16th")) {
-			Line flag = new Line(getStartX()+8, this.top, getStartX()+20, this.top + 20);
+			Line flag = new Line(this.startX + 8, this.top, this.startX + 20, this.top + 20);
 			flag.setStrokeWidth(1.5);
 
 	    	pane.getChildren().add(flag);
 
-			flag = new Line(getStartX()+8, this.top+15, getStartX()+20, this.top + 35);
+			flag = new Line(this.startX + 8, this.top + 15, this.startX + 20, this.top + 35);
 			flag.setStrokeWidth(1.5);
 
+	    	pane.getChildren().add(flag);
+		} else if (note.getType().equals("32nd")) {
+			Line flag = new Line(this.startX + 8, this.top, this.startX + 20, this.top + 20);
+			flag.setStrokeWidth(1.5);
+	
+	    	pane.getChildren().add(flag);
+	
+			flag = new Line(this.startX + 8, this.top + 15, this.startX + 20, this.top + 35);
+			flag.setStrokeWidth(1.5);
+	
+	    	pane.getChildren().add(flag);
+
+			flag = new Line(this.startX + 8, this.top + 30, this.startX + 20, this.top + 50);
+			flag.setStrokeWidth(1.5);
+	
 	    	pane.getChildren().add(flag);
 		}
 	}
@@ -318,6 +348,11 @@ public class DrawDrumsetNote {
 			}
 			else {
 				this.drawO();
+			}
+
+			// If the current note has a tremelo property, draw tremelo
+			if (note.getNotations() != null && note.getNotations().getOrnaments() != null && note.getNotations().getOrnaments().getTremolo() != null) {
+				this.drawTremelo();
 			}
 
 			// If the note is octave 5 and step A, then it is above the staff and a small line must be drawn in front of it
