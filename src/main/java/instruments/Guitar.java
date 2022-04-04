@@ -46,7 +46,9 @@ public class Guitar {
 	private DrawSlur slurDrawer;
 	private double harmonic;
 	private int ActualCounter;
-
+	private int six16thActual;
+	private int eight32ndnotes; 
+	
 	public Guitar() {
 	}
 
@@ -91,13 +93,13 @@ public class Guitar {
 				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing);
 				dc.setFontSize(this.fontSize + 6);
 				dc.draw(clefSpacing);
+				drawMeasureNum(i);
 				x += spacing;
 				spaceRequired += getSpacing();
 			}
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			spaceRequired += countNoteSpacesRequired(noteList);
 			if (width >= spaceRequired) {
-				drawMeasureNum(i);
 				drawMeasureNotes(measure);
 				width = width - spaceRequired;
 
@@ -117,9 +119,9 @@ public class Guitar {
 				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing);
 				dc.setFontSize(this.fontSize + 6);
 				dc.draw(clefSpacing);
+				drawMeasureNum(i);
 				x += spacing;
 				spaceRequired += getSpacing();
-				drawMeasureNum(i);
 				drawMeasureNotes(measure);
 				width = width - spaceRequired;
 
@@ -134,6 +136,15 @@ public class Guitar {
 
 	}
 
+	private double getSpaceRequired(Measure measure) {
+		double spaceRequired = 0;
+		List<Note> noteList = measure.getNotesBeforeBackup();
+		spaceRequired += countNoteSpacesRequired(noteList);
+		return spaceRequired;
+	}
+
+
+
 	private void drawMeasureNum(int i) {
 		// TODO Auto-generated method stub
 		String n = Integer.toString(i + 1);
@@ -142,7 +153,7 @@ public class Guitar {
 		num.setY(getFirstLineCoordinateY() + y - this.fontSize);
 		num.setText(n);
 		num.setViewOrder(-1);
-		num.setFont(Font.font("Comic Sans MS", FontPosture.REGULAR, this.fontSize - 2));
+		num.setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, this.fontSize));
 		this.pane.getChildren().add(num);
 	}
 
@@ -174,7 +185,9 @@ public class Guitar {
 
 	private void drawMeasureNotes(Measure measure) {
 		this.noteTypeCounter = 3;
-		this.ActualCounter = 0; 
+		this.ActualCounter = 2;
+		this.six16thActual = 5; 
+		this.eight32ndnotes = 7; 
 		List<Note> noteList = measure.getNotesBeforeBackup();
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
@@ -233,6 +246,7 @@ public class Guitar {
 					line.setStrokeWidth(this.fontSize / 6);
 					line.setStartX(noteDrawer.getStartX() + (this.fontSize));
 					line.setStartY(positionY + y + (this.fontSize / 2));
+					int count = 1; 
 					Loop: for (int i = noteList.indexOf(note); i < noteList.size() - 1; i++) {
 						Note next = noteList.get(i + 1);
 						if (noteHasSlide(next)) {
@@ -243,13 +257,19 @@ public class Guitar {
 								if (nextNum == num && nextType == "stop") {
 									int nextString = note.getNotations().getTechnical().getString();
 									double nextPositionY = getLineCoordinateY(nextString);
-									line.setEndX(noteDrawer.getStartX() + spacing);
+									line.setEndX(noteDrawer.getStartX() + (spacing*(count)));
 									line.setEndY(nextPositionY + y - (this.fontSize / 2));
 									this.pane.getChildren().add(line);
+									if(count > 1) {
+										Text t= new Text(noteDrawer.getStartX() + (this.fontSize),positionY + y - (this.fontSize/2), "gliss" ); 
+										t.setRotate(-20); 
+										this.pane.getChildren().add(t);
+									}
 									break Loop;
 								}
 							}
 						}
+						count++; 
 					}
 				}
 			}
@@ -319,7 +339,6 @@ public class Guitar {
 	}
 
 	private void drawChordTied(Note note, List<Note> noteList, Measure measure) {
-		// TODO Auto-generated method stub
 		List<Tied> tiedList = note.getNotations().getTieds();
 		for (Tied t : tiedList) {
 			String type = t.getType();
@@ -425,7 +444,6 @@ public class Guitar {
 	}
 
 	private boolean noteHasTie(Note note) {
-		// TODO Auto-generated method stub
 		Boolean res = note.getNotations().getTieds() == null ? false : true;
 		return res;
 	}
@@ -491,7 +509,7 @@ public class Guitar {
 		int fret = note.getNotations().getTechnical().getFret();
 		double graceSpacing = 0;
 		if (fret < 10) {
-			graceSpacing = xPosition - (spacing / (4 / num));
+			graceSpacing = xPosition - ((spacing*num) / (4 ));
 		} else {
 			graceSpacing = xPosition - (spacing / (4 / num) + num);
 		}
@@ -562,131 +580,305 @@ public class Guitar {
 
 	private void drawType(Note note, List<Note> noteList) {
 		String current = note.getType();
-		String lastType = "";
-		int index = noteList.indexOf(note);
-		// int actualCurrent = note.getTimeModification().getActualNotes();
-		int actualLast = 0;
-		int l = 0; 
-		for (int i = index; i > 0; i--) {
-			Note last = noteList.get(i - 1);
-			if (last != null && !noteHasChord(last) && !noteHasGrace(last)) {
-				l = last.getNotations().getTechnical().getFret(); 
-				lastType = last.getType();
-				if (noteHasActual(last)) {
-					actualLast = last.getTimeModification().getActualNotes();
-				}
-				
-					break;
-				
+		double py = getLastLineCoordinateY();
+		double shortStick = this.fontSize+3;
+		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + 4, py + y, shortStick);
+		if(noteHasActual(note)) {
+			//if(!beforeHasActual(note, noteList)) {
+			//get the number of the actuals in a row --> 2 or 3
+			int ActualCounter = getActualNum(note, noteList); 
+			//System.out.println(ActualCounter);
+				int f = note.getNotations().getTechnical().getFret(); 
+				//System.out.println("note is: "+ f+" | type: "+current+" | counter is: "+ ActualCounter);
+			//}	
+			drawActualTypes(current, note, noteList, type, py); 
+			if(ActualCounter == 2 &&(current == "eighth" || current == "quarter")) {
+				int actual = note.getTimeModification().getActualNotes(); 
+				//type.drawActual(actual, spacing, this.fontSize);
 			}
 		}
-		double py = getLastLineCoordinateY();
-		double shortStick = 15;
-		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + 4, py + y, shortStick);
-
-		switch (current) {
-		case "half":
-			type.drawShortLine();
-			drawDot(note, type, py + shortStick);
-			break;
-		case "quarter":
-			type.drawLongLine();
-			drawDot(note, type, py);
-			break;
-		case "eighth":
-			type.drawLongLine();
-			drawDot(note, type, py);
-			if (lastType == "eighth" && actualLast <= 0) {
-				if (this.noteTypeCounter > 0) {
-					type.drawBeam(-spacing);
-					this.noteTypeCounter--;
-				} else {
-					this.noteTypeCounter = 3;
-				}
-			} else if (lastType == "16th") {
-				type.drawBeam(-spacing);
-			} else {
-				type.drawBeam(spacing / 4);
+		else {
+			if(current =="half") {
+				type.drawShortLine();
+				drawDot(note, type, py + shortStick);
 			}
-			break;
-		case "16th":
-			type.drawLongLine();
-			if (lastType == "16th") {
-				if (this.noteTypeCounter > 0) {
-					type.drawBeam(-spacing);
-					type.setStartY(py + y - 5);
-					type.drawBeam(-spacing);
-					this.noteTypeCounter--;
-				} else {
-					this.noteTypeCounter = 3;
-				}
-			} else if (lastType == "eighth") {
-				//System.out.println(this.noteTypeCounter);
-				if (this.noteTypeCounter == 3) {
-					type.drawBeam(-spacing);
-					type.setStartY(py + y - 5);
-					type.drawBeam(-spacing / 2);
-				} else {
-					type.drawBeam(-spacing);
-				}
+			if(current == "quarter") {
+				type.drawLongLine();
+				drawDot(note, type, py);
+			}
+			if(current == "eighth"){
+				drawEighth(note, noteList, type, py); 
+			}
+			if(current == "16th") {
+				draw16th(note, noteList, type, py); 
+			}
+			if(current == "32nd") {
+				draw32ndnotes(note, noteList, type, py);
+			}
+		}
+	}
 
-			} else {
-				type.drawBeam(spacing / 4);
+	private void drawActualTypes(String current, Note note, List<Note> noteList, DrawNoteType type, double py) {
+		// TODO Auto-generated method stub
+		String nextType = getNextType(note, noteList); 
+		String lastType = getLastType(note, noteList); 
+		if(current=="quarter") {
+			type.drawLongLine();
+			drawDot(note, type, py);
+			if(nextType == "eighth") {
+				int actual = note.getTimeModification().getActualNotes(); 
+				type.drawActual(actual, spacing, this.fontSize);
+			}
+			
+		}
+		else if(current == "eighth") {
+			type.drawLongLine();
+			Boolean nextIsActual = nextHasActual(note, noteList); 
+			if(nextIsActual==false && lastType != "eighth") {
+				type.drawBeam(spacing/4);
+			}
+			//String nextType = getNextType(note, noteList); 
+			else {
+				if(nextType == "eighth" && this.ActualCounter > 0 && nextIsActual==true) {
+					type.drawBeam(spacing);
+					//type.setStartY(py + y - 5);
+					//type.drawBeam(spacing);
+					this.ActualCounter--; 
+				}
+				else if(nextType == "quarter" && nextIsActual==true) {
+					int actual = note.getTimeModification().getActualNotes(); 
+					type.drawActual(actual, spacing, this.fontSize);
+				}
+				else {
+					String actual = Integer.toString(note.getTimeModification().getActualNotes()); 
+					Text t = new Text(noteDrawer.getStartX() -spacing, py + y+50, actual);
+					t.setViewOrder(-1);
+					t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC,  this.fontSize));
+					this.pane.getChildren().add(t); 
+					this.ActualCounter = 2; 
+				}
+			}
+		}
+		else if(current == "16th") {
+			type.drawLongLine();
+			//String nextType = getNextType(note, noteList); 
+			if(nextType == "16th" && this.ActualCounter > 0) {
+				type.drawBeam(spacing);
 				type.setStartY(py + y - 5);
-				type.drawBeam(spacing / 4);
+				type.drawBeam(spacing);
+				this.ActualCounter--; 
 			}
-		case "32nd":
-		/*
-				 * else if (lastType == "eighth") { System.out.println(this.noteTypeCounter);
-				 * if(this.noteTypeCounter == 3) { type.drawBeam(-spacing); type.setStartY(py +
-				 * y - 5); type.drawBeam(-spacing/2); } else { type.drawBeam(-spacing); }
-				 * 
-				 * } else { type.drawBeam(spacing / 4); type.setStartY(py + y - 5);
-				 * type.drawBeam(spacing / 4); }
-				 */
+			else {
+				String actual = Integer.toString(note.getTimeModification().getActualNotes()); 
+				Text t = new Text(noteDrawer.getStartX() -spacing, py + y+50, actual);
+				t.setViewOrder(-1);
+				t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC,  this.fontSize));
+				this.pane.getChildren().add(t); 
+				this.ActualCounter = 2; 
+			}
+			if(this.six16thActual > 0 ) {
+				type.drawBeam(spacing);
+				this.six16thActual--; 
+			}
+			else {
+				this.six16thActual = 5; 
+			}
+		}
+	}
 
-			break;
+	private Boolean nextHasActual(Note note, List<Note> noteList) {
+		// TODO Auto-generated method stub
+		Boolean res = false; 
+		for (int i = noteList.indexOf(note); i<noteList.size()-1; i++) {
+			Note next = noteList.get(i+1); 
+			if(!noteHasGrace(next) && !noteHasChord(next)) {
+				if(noteHasActual(next)) {
+					res = true; 
+					break; 
+				}
+				else {
+					break; 
+				}
+			}
+		}
+		return res;
+	}
+
+	private int getActualNum(Note note, List<Note> noteList) {
+		int res = 0; 
+		for(int i = noteList.indexOf(note); i<noteList.size(); i++) {
+			Note next = noteList.get(i); 
+			if(!noteHasChord(next)) {
+				if(noteHasActual(next)) {
+					//int n = next.getNotations().getTechnical().getFret(); 
+					//System.out.println("the next note with technical is: "+ n + "\n\n");
+					res++; 
+				}
+				else {
+					break; 
+				}
+			}
+		}
+		return res;
+	}
+
+	private void draw32ndnotes(Note note, List<Note> noteList, DrawNoteType type, double py) {
+		type.drawLongLine();
+		drawDot(note, type, py);
+		String nextType = getNextType(note, noteList); 
+		String lastType = getLastType(note, noteList); 
+		if(nextType == "32nd") {
+			if(this.noteTypeCounter > 0) {
+				type.drawBeam(spacing);
+				type.setStartY(py + y - 5);
+				type.drawBeam(spacing);
+				type.setStartY(py + y - 10);
+				type.drawBeam(spacing);
+				this.noteTypeCounter--; 
+			}
+			else {
+				this.noteTypeCounter = 3; 
+			}
+			if(this.eight32ndnotes > 0 ) {
+				type.drawBeam(spacing);
+				this.eight32ndnotes--; 
+			}
+			else {
+				this.eight32ndnotes = 8; 
+			}
+		}
+		else {
+			if(lastType != "32nd") {
+				if( lastType!="16th") {
+					type.drawBeam(spacing/4);
+					type.setStartY(py + y - 5);
+					type.drawBeam(spacing/4);
+				}
+				else {
+					//type.drawBeam(-spacing/2);
+					type.setStartY(py + y - 10);
+					type.drawBeam(-spacing/2);
+				}
+			}
+			
+			this.noteTypeCounter =3; 
 		}
 		
-		if(current =="32nd") {
-			int f = note.getNotations().getTechnical().getFret(); 
-			//System.out.println("Current note: "+f+ " has type: "+ current+" | Last note is: "+ l+" | counter is: " + this.noteTypeCounter); 
-			type.drawLongLine();
-			if (lastType == "32nd") {
-				if (this.noteTypeCounter > 0) {
-					type.drawBeam(-spacing);
+	}
+	private void draw16th(Note note, List<Note> noteList, DrawNoteType type, double py) {
+		type.drawLongLine();
+		drawDot(note, type, py);
+		String nextType = getNextType(note, noteList); 
+		String lastType = getLastType(note, noteList); 
+		if(nextType == "16th") {
+			if(this.noteTypeCounter > 0) {
+				type.drawBeam(spacing);
+				type.setStartY(py + y - 5);
+				type.drawBeam(spacing);
+				this.noteTypeCounter--; 
+			}
+			else {
+				if(nextIsLastNote(note, noteList)) {
+					type.drawBeam(spacing);
 					type.setStartY(py + y - 5);
-					type.drawBeam(-spacing);
-					type.setStartY(py + y - 10);
-					type.drawBeam(-spacing);
-					this.noteTypeCounter--;
-					//System.out.println("The last note is 32nd, counter now is: "+this.noteTypeCounter); 
-			} else {
-					//type.drawBeam(-spacing);
-					this.noteTypeCounter = 3;
-					//System.out.println("The last note is not 32nd, counter now is: "+this.noteTypeCounter); 
+					type.drawBeam(spacing);
 				}
+				this.noteTypeCounter = 3; 
+			}
+		}
+		else if(nextType == "eighth") {
+			type.drawBeam(spacing);
+		}
+		else if(nextType =="32nd") {
+			type.drawBeam(spacing);
+			type.setStartY(py + y - 5);
+			type.drawBeam(spacing);
+		}
+		else {
+			if(lastType != "16th") {
+				if( lastType!="eighth") {
+					type.drawBeam(spacing/4);
+					type.setStartY(py + y - 5);
+					type.drawBeam(spacing/4);
+				}
+				else {
+					type.drawBeam(-spacing/2);
+					type.setStartY(py + y - 5);
+					type.drawBeam(-spacing/2);
+				}
+			}
+			
+			this.noteTypeCounter =3; 
+		}
+	}
+
+	private boolean nextIsLastNote(Note note, List<Note> noteList) {
+		// TODO Auto-generated method stub
+		Boolean res = false; 
+		int index = noteList.indexOf(note); 
+		if(index + 1 == noteList.size()-1) {
+			res = true; 
+		}
+		return res;
+	}
+
+	private void drawEighth(Note note, List<Note> noteList, DrawNoteType type, double py) {
+		// TODO Auto-generated method stub
+		type.drawLongLine();
+		drawDot(note, type, py);
+		String nextType = getNextType(note, noteList); 
+		String lastType = getLastType(note, noteList); 
+		if(nextType == "eighth") {
+			if(this.noteTypeCounter > 0) {
+				type.drawBeam(spacing);
+				this.noteTypeCounter--; 
 			}
 			else {
 				this.noteTypeCounter = 3; 
 			}
 		}
+		else if(nextType == "16th"&& this.noteTypeCounter > 0) {
+			type.drawBeam(spacing);
+			this.noteTypeCounter = 3; 
+		}
+		else {
+			if(lastType != "eighth") {
+				if(nextType == "16th") {
+					type.drawBeam(spacing);
+				}
+				else {
+				type.drawBeam(spacing/4);}
+			}
+			
+			this.noteTypeCounter = 3; 
+		}
+	}
 
-//		if (noteHasActual(note)) {
-//			System.out.println(this.ActualCounter);
-//			if (this.ActualCounter < 2 ) {
-//				int currentActual = note.getTimeModification().getActualNotes();
-//				if (currentActual == actualLast) {
-//					// type.setStartX(noteDrawer.getStartX());
-//					type.drawActual(actualLast, spacing, fontSize);
-//				}
-//			}
-//			else if(this.ActualCounter >= 2) {
-//				System.out.println("yes"); 
-//			}
-//		}
-//		this.ActualCounter = 0; 
 
+	private String getLastType(Note note, List<Note> noteList) {
+		String lastType = ""; 
+		int index = noteList.indexOf(note); 
+		for(int i = index; i> 0; i--) {
+			Note last = noteList.get(i-1); 
+			if(!noteHasGrace(last)&&!noteHasChord(last)) {
+				lastType = last.getType(); 
+				break; 
+			}
+		}
+		return lastType; 
+	}
+
+	private String getNextType(Note note, List<Note> noteList) {
+		String nextType = ""; 
+		int index = noteList.indexOf(note); 
+		for(int i = index; i< noteList.size()-1; i++) {
+			Note next = noteList.get(i+1); 
+			if(!noteHasGrace(next)&&!noteHasChord(next)) {
+				nextType = next.getType(); 
+				break; 
+			}
+		}
+		return nextType; 
 	}
 
 	private void drawDot(Note note, DrawNoteType type, double py) {
