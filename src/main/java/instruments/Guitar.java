@@ -135,6 +135,15 @@ public class Guitar {
 
 	}
 
+	private double getSpaceRequired(Measure measure) {
+		double spaceRequired = 0;
+		List<Note> noteList = measure.getNotesBeforeBackup();
+		spaceRequired += countNoteSpacesRequired(noteList);
+		return spaceRequired;
+	}
+
+
+
 	private void drawMeasureNum(int i) {
 		// TODO Auto-generated method stub
 		String n = Integer.toString(i + 1);
@@ -236,6 +245,7 @@ public class Guitar {
 					line.setStrokeWidth(this.fontSize / 6);
 					line.setStartX(noteDrawer.getStartX() + (this.fontSize));
 					line.setStartY(positionY + y + (this.fontSize / 2));
+					int count = 1; 
 					Loop: for (int i = noteList.indexOf(note); i < noteList.size() - 1; i++) {
 						Note next = noteList.get(i + 1);
 						if (noteHasSlide(next)) {
@@ -246,13 +256,19 @@ public class Guitar {
 								if (nextNum == num && nextType == "stop") {
 									int nextString = note.getNotations().getTechnical().getString();
 									double nextPositionY = getLineCoordinateY(nextString);
-									line.setEndX(noteDrawer.getStartX() + spacing);
+									line.setEndX(noteDrawer.getStartX() + (spacing*(count)));
 									line.setEndY(nextPositionY + y - (this.fontSize / 2));
 									this.pane.getChildren().add(line);
+									if(count > 1) {
+										Text t= new Text(noteDrawer.getStartX() + (this.fontSize),positionY + y - (this.fontSize/2), "gliss" ); 
+										t.setRotate(-20); 
+										this.pane.getChildren().add(t);
+									}
 									break Loop;
 								}
 							}
 						}
+						count++; 
 					}
 				}
 			}
@@ -322,7 +338,6 @@ public class Guitar {
 	}
 
 	private void drawChordTied(Note note, List<Note> noteList, Measure measure) {
-		// TODO Auto-generated method stub
 		List<Tied> tiedList = note.getNotations().getTieds();
 		for (Tied t : tiedList) {
 			String type = t.getType();
@@ -428,7 +443,6 @@ public class Guitar {
 	}
 
 	private boolean noteHasTie(Note note) {
-		// TODO Auto-generated method stub
 		Boolean res = note.getNotations().getTieds() == null ? false : true;
 		return res;
 	}
@@ -494,7 +508,7 @@ public class Guitar {
 		int fret = note.getNotations().getTechnical().getFret();
 		double graceSpacing = 0;
 		if (fret < 10) {
-			graceSpacing = xPosition - (spacing / (4 / num));
+			graceSpacing = xPosition - ((spacing*num) / (4 ));
 		} else {
 			graceSpacing = xPosition - (spacing / (4 / num) + num);
 		}
@@ -574,7 +588,7 @@ public class Guitar {
 			int ActualCounter = getActualNum(note, noteList); 
 			//System.out.println(ActualCounter);
 				int f = note.getNotations().getTechnical().getFret(); 
-				System.out.println("note is: "+ f+" | type: "+current+" | counter is: "+ ActualCounter);
+				//System.out.println("note is: "+ f+" | type: "+current+" | counter is: "+ ActualCounter);
 			//}	
 			drawActualTypes(current, note, noteList, type, py); 
 			if(ActualCounter == 2 &&(current == "eighth" || current == "quarter")) {
@@ -763,6 +777,11 @@ public class Guitar {
 				this.noteTypeCounter--; 
 			}
 			else {
+				if(nextIsLastNote(note, noteList)) {
+					type.drawBeam(spacing);
+					type.setStartY(py + y - 5);
+					type.drawBeam(spacing);
+				}
 				this.noteTypeCounter = 3; 
 			}
 		}
@@ -790,6 +809,16 @@ public class Guitar {
 			
 			this.noteTypeCounter =3; 
 		}
+	}
+
+	private boolean nextIsLastNote(Note note, List<Note> noteList) {
+		// TODO Auto-generated method stub
+		Boolean res = false; 
+		int index = noteList.indexOf(note); 
+		if(index + 1 == noteList.size()-1) {
+			res = true; 
+		}
+		return res;
 	}
 
 	private void drawEighth(Note note, List<Note> noteList, DrawNoteType type, double py) {
