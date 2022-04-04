@@ -12,6 +12,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
@@ -276,6 +280,12 @@ public class DrawDrumsetNote {
 		pane.getChildren().add(line);
 	}
 
+	public void drawDot() {
+		Text dot = new Text(this.startX + 5, this.startY + 3, ".");
+		dot.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 25));
+		pane.getChildren().add(dot);
+	}
+
 	public void drawSingleBeam() {
 		// Beamed eighth notes have one beam connecting them
 		Rectangle beam = new Rectangle(this.startX + 8, this.top - 1, this.spacing, 5);
@@ -341,6 +351,9 @@ public class DrawDrumsetNote {
 			this.drawGrace();
 		} else if (note.getRest() != null) {
 			this.drawRest();
+			if (note.getDots() != null) {
+				this.drawDot();
+			}
 		} else {
 			// If note head exists and is an x, then draw "x", otherwise draw "o"
 			if (note.getNotehead() != null && note.getNotehead().getType().equals("x")) {
@@ -353,6 +366,10 @@ public class DrawDrumsetNote {
 			// If the current note has a tremelo property, draw tremelo
 			if (note.getNotations() != null && note.getNotations().getOrnaments() != null && note.getNotations().getOrnaments().getTremolo() != null) {
 				this.drawTremelo();
+			}
+
+			if (note.getDots() != null) {
+				this.drawDot();
 			}
 
 			// If the note is octave 5 and step A, then it is above the staff and a small line must be drawn in front of it
