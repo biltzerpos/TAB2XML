@@ -199,7 +199,8 @@ public class Drumset {
 			xPositionNote = currentNote.getChord() == null ? this.x + this.spacing / 2 : this.x - this.spacing / 2;
 
 			if (currentNote.getRest() != null) {
-				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionMeasure + 15);
+				yPositionNote = d.getYPositionFromOctaveAndStep(4, "B");
+				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
 				noteDrawer.draw();
 			} else {
 				// y-position of note
