@@ -405,11 +405,21 @@ public class Drumset {
 	
 				if (drumTieCoords.size() == 2) {
 					noteDrawer.drawTie(drumTieCoords);
-					drumTieCoords.clear();
+					if (note.getNotations().getTieds().size() == 2) {
+						drumTieCoords.clear();
+						drumTieCoords.add(new Double[] {xPosition, yPosition});
+					} else {
+						drumTieCoords.clear();
+					}
 				}
 				if (cymbalTieCoords.size() == 2) {
 					noteDrawer.drawTie(cymbalTieCoords);
-					cymbalTieCoords.clear();
+					if (note.getNotations().getTieds().size() == 2) {
+						cymbalTieCoords.clear();
+						cymbalTieCoords.add(new Double[] {xPosition, yPosition});
+					} else {
+						cymbalTieCoords.clear();
+					}
 				}
 			}
 			if (note.getNotations().getSlurs() != null) {
