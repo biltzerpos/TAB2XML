@@ -281,7 +281,7 @@ public class DrawDrumsetNote {
 	}
 
 	public void drawDot() {
-		Text dot = new Text(this.startX + 5, this.startY + 3, ".");
+		Text dot = new Text(this.startX + 8, this.startY + 2, ".");
 		dot.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 25));
 		pane.getChildren().add(dot);
 	}
