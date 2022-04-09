@@ -35,6 +35,22 @@ public class DrawBar {
 		bar1.setEndY(getStartY() + len);
 		pane.getChildren().add(bar1);
 	}
+	public void drawEndBar() {
+		Line bar1 = new Line();
+		bar1.setStartX(getStartX()-5);
+		bar1.setStartY(getStartY());
+		bar1.setEndX(getStartX()-5);
+		bar1.setEndY(getStartY() + len);
+		pane.getChildren().add(bar1);
+		
+		Line bar2 = new Line();
+		bar2.setStartX(getStartX());
+		bar2.setStartY(getStartY());
+		bar2.setEndX(getStartX());
+		bar2.setEndY(getStartY() + len);
+		bar2.setStrokeWidth(3);
+		pane.getChildren().add(bar2);
+	}
 
 	// Getters and setters
 	public Pane getPane() {
@@ -60,5 +76,6 @@ public class DrawBar {
 	public void setStartY(double startY) {
 		this.startY = startY;
 	}
+
 
 }

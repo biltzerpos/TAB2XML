@@ -85,7 +85,7 @@ public class Guitar {
 		List<Measure> tempList = new ArrayList<>();
 		int numOfNotes = 0;
 		double tempSpacing = this.spacing;
-
+		Boolean flag = true; 
 		for (int i = 0; i < measureList.size(); i++) {
 			int spaceRequired = 0;
 			Measure measure = measureList.get(i);
@@ -100,28 +100,33 @@ public class Guitar {
 				x += spacing;
 				spaceRequired += getSpacing();
 			}
+//			if(tempList.size() == 0) {
+//				spaceRequired += spacing; 
+//			}
+
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			spaceRequired += countNoteSpacesRequired(noteList);
 			if (width >= spaceRequired) {
 				tempList.add(measure);
+//				if(tempList.size()> 0) {
+//					spaceRequired += getSpacing()/2;
+//				}
 				numOfNotes += countNotes(noteList);
 				width = width - spaceRequired;
 				if (i == measureList.size() - 1) {
-					drawMeasuresOnSameLine(tempList);
+					drawMeasuresOnSameLine(tempList, tempSpacing);
 				}
 
 			} else {
-				System.out.println("The measure num: " + (i + 1) + " initial spacing: " + this.spacing);
+				//System.out.println("The measure num: " + (i + 1) + " initial spacing: " + this.spacing);
 				double extra = width / numOfNotes;
 				spacing += extra;
 				d.setLength(spacing);
-				drawMeasuresOnSameLine(tempList);
-				System.out.println("the new Spacing: " + this.spacing);
+				drawMeasuresOnSameLine(tempList, tempSpacing);
 				tempList.removeAll(tempList);
 				numOfNotes = 0;
 				spacing = tempSpacing;
 				d.setLength(spacing);
-				System.out.println("reset spacing: " + this.spacing);
 
 				this.x = 0.0;
 				this.y += this.LineSpacing;
@@ -143,6 +148,8 @@ public class Guitar {
 		}
 	}
 
+
+
 	private int countNotes(List<Note> noteList) {
 		int numOfSpace = 0;
 		for (int i = 0; i < noteList.size(); i++) {
@@ -154,20 +161,37 @@ public class Guitar {
 		return numOfSpace;
 	}
 
-	private void drawMeasuresOnSameLine(List<Measure> tempList) {
-		for (Measure m : tempList) {
+	private void drawMeasuresOnSameLine(List<Measure> tempList, double tempSpacing) {
+		
+		for(int i = 0; i<tempList.size(); i++) {
+			Measure m = tempList.get(i); 
+
+			
 			drawMeasureNotes(m);
 			xCoordinates.put(m, x);
 			yCoordinates.put(m, y);
-			drawBar();
+			int index = measureList.indexOf(m); 
+			drawBar(index, i, tempList, tempSpacing);
 		}
 
 	}
 
-	private void drawBar() {
+	private void drawBar(int index, int tempListIndex, List<Measure> tempList, double tempSpacing) {
 		double len = getLastLineCoordinateY() - getFirstLineCoordinateY();
 		DrawBar bar = new DrawBar(this.pane, x, y, len);
-		bar.draw();
+		if(index == measureList.size()-1) {
+			//draw end bar
+			d.setLength(spacing/2);
+			d.draw(x, y); 
+			x+=spacing/2;
+			d.setLength(spacing); 
+			bar.setStartX(x);
+			bar.drawEndBar(); 
+		}
+		else {
+			bar.draw(); 
+			
+		}
 	}
 
 	private void drawMeasureNum(int i) {
