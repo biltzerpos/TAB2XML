@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
+
+import javax.sound.midi.MidiMessage;
+import javax.sound.midi.ShortMessage;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -443,15 +447,15 @@ public class Drumset {
 	}
 	
 	 public void highlightNote() {
-	    	 
+		
+		 ArrayList<Rectangle> r = new ArrayList<Rectangle>(); 
+			ArrayList<Double> noteDuration = new ArrayList<Double>();
+			
 				Note currentNote;
 				double xPositionNote;
 				double yPositionNote;
 				x = 0;
-				y = 0;
-				ArrayList<Rectangle> r = new ArrayList<Rectangle>();
-				ArrayList<Double> noteDuration = new ArrayList<Double>();
-				
+				y = 0;			
 				//iterate thru measures (boxes)
 				for (int i = 0; i < measureList.size(); i++) {
 					Measure measure = measureList.get(i);
@@ -459,8 +463,6 @@ public class Drumset {
 					double w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
 					double yf = getYCoordinatesForGivenMeasure(measureList.get(i));
 					if (yf > y) {
-						System.out.println("Jumped to new Line");
-						// we have moved on to new Line
 						x = 0;
 						w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
 						y = yf;
@@ -481,22 +483,25 @@ public class Drumset {
 						rectangle.setY(yPositionNote);
 						r.add(rectangle); 
 						if (currentNote.getDuration() !=null) {
-						int duration= currentNote.getDuration();
-						double duration2 =1000.0/((double)duration);
-						noteDuration.add(duration2);
-						}
-						System.out.println("Added rectangle"+r.get(i));
+							int duration= currentNote.getDuration();
+							double duration2 =1000.0/((double)duration);
+							noteDuration.add(duration2);
+							if (currentNote.getDots()!=null){
+								double n = 2;
+								for (int m=0;m<currentNote.getDots().size();m++){
+									duration2 += duration2/n;
+									n*=2;	
+								}
+							}
+							noteDuration.add((double) duration2);
+							}
+						
 						this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
-						//if current note is a chord do below
-						
-						//this.x += currentNote.getChord() == null ? this.spacing : 0;
-						//if current note not a chord do
-						
 						}
 				}
 				}
 				
-				HighlightNote note = new HighlightNote(r, noteDuration);
+				HighlightNote note = new HighlightNote(this, r, noteDuration);
 				note.start();
 			
 				ObservableList children = pane.getChildren();
@@ -516,6 +521,15 @@ public class Drumset {
 		 		}
 	     }
 
+	 public Boolean playing;
+	 public void starthighlight() {
+		 this.playing = true;
+	 }
+	 public void stophighlight() {
+		 this.playing=false;
+	 }
+	 
+	
 	// return X coordinates for given measure
 	public double getXCoordinatesForGivenMeasure(Measure measure) {
 		return xCoordinates.get(measure);

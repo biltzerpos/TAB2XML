@@ -9,10 +9,13 @@ import java.util.Optional;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Receiver;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
+import javax.sound.midi.Transmitter;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jfugue.midi.MidiParser;
 import org.jfugue.player.Player;
 
 import converter.Score;
@@ -92,6 +95,7 @@ public class PreviewMusic extends Application {
 	private Sequencer sequencer;
 	private Sequence sequence;
 	int num = 0;
+	private Receiver myReceiver;
 
 
 	public PreviewMusic() throws MidiUnavailableException, InvalidMidiDataException {
@@ -103,11 +107,13 @@ public class PreviewMusic extends Application {
 	public void initialize() throws InvalidMidiDataException {
 		playButton.setOnMousePressed((event) -> {
 			num ++;
+		
 		//	System.out.println("Count: " + num);
 		});
 		TempoSlider.valueProperty().addListener((bservableValue, oldValue, newValue) -> {
 			sequencer.setTempoFactor(newValue.floatValue() / 120f);	
 		});
+		
 	}
 
 	public void setMainViewController(MainViewController mvcInput) {
@@ -266,7 +272,6 @@ public class PreviewMusic extends Application {
 		setMusicLineSpacingValue(200); 
 	}
 	
-
 	public Sequence getMusicString() throws InvalidMidiDataException {
 		this.play = new MusicPlayer(scorePartwise);
 
@@ -286,39 +291,60 @@ public class PreviewMusic extends Application {
 	@FXML
 	public void playHandle() throws InvalidMidiDataException {  
 		String instrument = getInstrument();
+		
+     
 		if (num == 1) {
 			sequencer.setSequence(getMusicString());
+			System.out.println("Preview"+sequencer);
 			if (instrument == "Guitar") {
+				this.guitar.starthighlight();
+				this.guitar.highlightNote();
+				
 			} else if (instrument == "Drumset") {
+				this.drum.starthighlight();
 				this.drum.highlightNote();
+				
 			}
 		}
 		if (sequencer.getTickPosition() == sequencer.getTickLength()) {
 			sequencer.setTickPosition(0);
 			if (instrument == "Guitar") {
+				this.guitar.starthighlight();
+				this.guitar.highlightNote();
 			} else if (instrument == "Drumset") {
-				this.drum.highlightNote();
+				this.drum.starthighlight();
+				this.drum.highlightNote(); 
 			}
 		}
+	
 		sequencer.start();	
 		
-
 	}
 		
 	
 	@FXML
 	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
+		String instrument = getInstrument();
 		if (sequencer.isRunning()) {
 			sequencer.stop();
+			if (instrument == "Guitar") {
+			this.guitar.stophighlight();
+			}
+			else if (instrument == "Drumset") {
+				this.drum.stophighlight();
+			}
+			sequencer.getTickPosition();
 		}
-
-		System.out.println("Pause bottom is clicked");
+	
+		System.out.println("Pause bottom is clicked"+sequencer.getTickPosition());
 	}
 
 	@FXML
 	public void restartMusicHandle() throws InvalidMidiDataException {
 		sequencer.setSequence(getMusicString());
 		sequencer.start();	
+		this.drum.starthighlight();
+		this.drum.highlightNote();
 	}
 	
 	public void closeSequencer() {
@@ -326,7 +352,9 @@ public class PreviewMusic extends Application {
 		System.out.println("closeSequencer");
 	}
 
-
+	public Sequencer getSequencer() {
+		return sequencer;
+	}
 
 	// Method that handles the `print music sheet` button
 	@FXML

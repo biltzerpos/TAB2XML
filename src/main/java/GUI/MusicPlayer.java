@@ -3,6 +3,7 @@ package GUI;
 import java.util.List;
 
 import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
 
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
