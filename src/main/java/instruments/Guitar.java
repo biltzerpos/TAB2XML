@@ -645,7 +645,7 @@ public class Guitar {
 					type.drawActual(actual, spacing, this.fontSize);
 				} else {
 					String actual = Integer.toString(note.getTimeModification().getActualNotes());
-					Text t = new Text(noteDrawer.getStartX() - spacing, py + y + 50, actual);
+					Text t = new Text(noteDrawer.getStartX() - spacing, py + y + (3*fontSize)+20, actual);
 					t.setViewOrder(-1);
 					t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, this.fontSize));
 					this.pane.getChildren().add(t);
@@ -661,7 +661,7 @@ public class Guitar {
 				this.ActualCounter--;
 			} else {
 				String actual = Integer.toString(note.getTimeModification().getActualNotes());
-				Text t = new Text(noteDrawer.getStartX() - spacing, py + y + 50, actual);
+				Text t = new Text(noteDrawer.getStartX() - spacing, py + y + (3*fontSize)+20, actual);
 				t.setViewOrder(-1);
 				t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, this.fontSize));
 				this.pane.getChildren().add(t);

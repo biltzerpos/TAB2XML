@@ -101,7 +101,7 @@ public class DrawNoteType {
 	}
 
 	public void drawActual(int actualLast, double length, int font) {
-		double y1 = startY + 50;
+		double y1 = startY + (3*font)+15;
 		double x = startX - length / 4;
 		// divide the spacing between in the form of |--int--|
 		double totalLength = length + (length / 2);
