@@ -82,7 +82,10 @@ public class Guitar {
 	public void drawGuitar() {
 		Clef clef = getClef();
 		double width = this.pane.getMaxWidth();
-
+		List<Measure> tempList = new ArrayList<>();
+		int numOfNotes = 0; 
+		double tempSpacing = this.spacing; 
+		
 		for (int i = 0; i < measureList.size(); i++) {
 			int spaceRequired = 0;
 			Measure measure = measureList.get(i);
@@ -100,16 +103,27 @@ public class Guitar {
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			spaceRequired += countNoteSpacesRequired(noteList);
 			if (width >= spaceRequired) {
-				drawMeasureNotes(measure);
+				//drawMeasureNotes(measure);
+				tempList.add(measure); 
+				numOfNotes += countNotes(noteList); 
 				width = width - spaceRequired;
-
-			} else {
-				while (width > 0) {
-					d.draw(x, y);
-					width -= spacing;
-					x += spacing;
+				if(i == measureList.size()-1) {
+					drawMeasuresOnSameLine(tempList);
 				}
 
+			} else {
+				System.out.println("The measure num: " + (i+1) + " initial spacing: "+ this.spacing);
+				double extra = width/numOfNotes; 
+				spacing += extra; 
+				d.setLength(spacing); 
+				drawMeasuresOnSameLine(tempList);
+				System.out.println("the new Spacing: " + this.spacing); 
+				tempList.removeAll(tempList);
+				numOfNotes = 0; 
+				spacing = tempSpacing;
+				d.setLength(spacing); 
+				System.out.println("reset spacing: "+ this.spacing); 
+				
 				this.x = 0.0;
 				this.y += this.LineSpacing;
 				width = this.pane.getMaxWidth();
@@ -122,18 +136,45 @@ public class Guitar {
 				drawMeasureNum(i);
 				x += spacing;
 				spaceRequired += getSpacing();
-				drawMeasureNotes(measure);
+				numOfNotes += countNotes(noteList); 
+				tempList.add(measure); 
+				//drawMeasureNotes(measure);
 				width = width - spaceRequired;
 
 			}
 			xCoordinates.put(measure, x);
 			yCoordinates.put(measure, y);
-			double len = getLastLineCoordinateY() - getFirstLineCoordinateY();
-			DrawBar bar = new DrawBar(this.pane, x, y, len);
-			bar.draw();
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
 
+	}
+
+	private int countNotes(List<Note> noteList) {
+		// TODO Auto-generated method stub
+		int numOfSpace = 0;
+		for (int i = 0; i < noteList.size(); i++) {
+			Note n = noteList.get(i);
+			if (!noteHasChord(n) && !noteHasGrace(n)) {
+				numOfSpace++;
+			}
+		}
+		return numOfSpace;
+	}
+
+	private void drawMeasuresOnSameLine(List<Measure> tempList) {
+		// TODO Auto-generated method stub
+		for(Measure m: tempList) {
+			drawMeasureNotes(m);
+			drawBar(); 
+		}
+		
+	}
+
+	private void drawBar() {
+		// TODO Auto-generated method stub
+		double len = getLastLineCoordinateY() - getFirstLineCoordinateY();
+		DrawBar bar = new DrawBar(this.pane, x, y, len);
+		bar.draw();
 	}
 
 	private double getSpaceRequired(Measure measure) {
@@ -165,13 +206,7 @@ public class Guitar {
 
 	// method to count the space required for notes in noteList
 	private int countNoteSpacesRequired(List<Note> noteList) {
-		int numOfSpace = 0;
-		for (int i = 0; i < noteList.size(); i++) {
-			Note n = noteList.get(i);
-			if (!noteHasChord(n)) {
-				numOfSpace++;
-			}
-		}
+		int numOfSpace = countNotes(noteList); 
 		int space = (int) (numOfSpace * getSpacing());
 
 		return space;
@@ -1115,6 +1150,15 @@ public class Guitar {
 	public void setSpacing(double spacing) {
 		this.spacing = spacing;
 	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+	
 
 	// End getters and setters
 }
