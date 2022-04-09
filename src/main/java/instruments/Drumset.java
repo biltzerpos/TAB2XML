@@ -172,7 +172,7 @@ public class Drumset {
 					noteDrawer.draw();
 				}
 
-				this.drawTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
+				this.handleTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
 			} else {
 				yPositionNote = d.getYPositionFromOctaveAndStep(4, "B");
 				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
@@ -243,7 +243,7 @@ public class Drumset {
 					noteDrawer.drawFlag();
 				}
 
-				this.drawTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
+				this.handleTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
 			}
 
 			// If the current note is a chord, increment x position
@@ -398,45 +398,89 @@ public class Drumset {
 		}
 	}
 
-	private void drawTieOrSlur(Note note, DrawDrumsetNote noteDrawer, double xPosition, double yPosition) {
+	/**
+	 * Checks for ties and slurs in the current note and, based on previous tied and slurred notes,
+	 * may draw the tie or slur as a curve between notes.
+	 *
+	 * @param note       - The current note to check for ties
+	 * @param noteDrawer - The DrawDrumsetNote object for the current note
+	 * @param xPosition  - The x-coordinate of the given note
+	 * @param yPosition  - The y-coordinate of the given note
+	 */
+	private void handleTieOrSlur(Note note, DrawDrumsetNote noteDrawer, double xPosition, double yPosition) {
+		// Tied and slurred notes are handled by keeping track of the coordinates of tied and slurred
+		// notes for drums and cymbals (in a class variable), and drawing when there are enough tied or
+		// slurred notes in these variables to be drawn.
+
+		// Check for notations first (because ties and slurs are found in notations)
 		if (note.getNotations() != null) {
+
+			// Check if the note is a tied note
 			if (note.getNotations().getTieds() != null) {
+
+				// Check if the note is a cymbal note
 				if (note.getNotehead() == null) {
+					// If not a cymbal note, add the current coordinates to the drum tie coordinates list
 					drumTieCoords.add(new Double[] {xPosition, yPosition});
 				} else {
+					// If it is a cymbal note, add the current coordinates to the cymbal tie coordinates list
 					cymbalTieCoords.add(new Double[] {xPosition, yPosition});
 				}
-	
+
+				// If the drum tie coordinate list has two elements, then a tie can be drawn
 				if (drumTieCoords.size() == 2) {
+					// Draw the tie
 					noteDrawer.drawTie(drumTieCoords);
+
+					// Check if the current note has more ties
 					if (note.getNotations().getTieds().size() == 2) {
+						// If the current note has two ties, then it is a start and end of a tie.
+						// So we add the note back in the coordinate list for the next tie.
 						drumTieCoords.clear();
 						drumTieCoords.add(new Double[] {xPosition, yPosition});
 					} else {
+						// If the current note only has one tie, then just clear the list because it has been drawn
 						drumTieCoords.clear();
 					}
 				}
+
+				// If the cymbal tie coordinate list has two elements, then a tie can be drawn
 				if (cymbalTieCoords.size() == 2) {
+					// Draw the tie
 					noteDrawer.drawTie(cymbalTieCoords);
+
+					// Check if the current note has more ties
 					if (note.getNotations().getTieds().size() == 2) {
+						// If the current note has two ties, then it is a start and end of a tie.
+						// So we add the note back in the coordinate list for the next tie.
 						cymbalTieCoords.clear();
 						cymbalTieCoords.add(new Double[] {xPosition, yPosition});
 					} else {
+						// If the current note only has one tie, then just clear the list because it has been drawn
 						cymbalTieCoords.clear();
 					}
 				}
 			}
+
+			// Check if the note is a slurred note
 			if (note.getNotations().getSlurs() != null) {
+
+				// Check if the note is a cymbal note
 				if (note.getNotehead() == null) {
+					// If not a cymbal note, add the current coordinates to the drum slur coordinates list
 					drumSlurCoords.add(new Double[] {xPosition, yPosition});
 				} else {
+					// If it is a cymbal note, add the current coordinates to the cymbal slur coordinates list
 					cymbalSlurCoords.add(new Double[] {xPosition, yPosition});
 				}
-	
+
+				// If the drum slur coordinate list has two elements, then a slur can be drawn
 				if (drumSlurCoords.size() == 2) {
 					noteDrawer.drawSlur(drumSlurCoords);
 					drumSlurCoords.clear();
 				}
+
+				// If the cymbal slur coordinate list has two elements, then a slur can be drawn
 				if (cymbalSlurCoords.size() == 2) {
 					noteDrawer.drawSlur(cymbalSlurCoords);
 					cymbalSlurCoords.clear();
