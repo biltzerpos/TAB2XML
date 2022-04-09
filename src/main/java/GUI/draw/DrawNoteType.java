@@ -19,23 +19,25 @@ public class DrawNoteType {
 	private double startY;
 	private double shortStick;
 	private double longStick;
+	private double fontSize; 
 
 	public DrawNoteType() {
 
 	}
 
-	public DrawNoteType(Pane pane, double startX, double startY, double shortStick) {
+	public DrawNoteType(Pane pane, double startX, double startY, double shortStick, double fontSize) {
 		super();
 		this.pane = pane;
 		this.startX = startX;
 		this.startY = startY;
 		this.shortStick = shortStick;
 		this.longStick = 2 * shortStick;
+		this.fontSize = fontSize; 
 
 	}
 
 	public void drawShortLine() {
-		double y1 = startY + 37;
+		double y1 = startY + (2*fontSize)+15;
 		Line l = new Line();
 		l.setStartX(startX);
 		l.setEndX(startX);
@@ -45,7 +47,7 @@ public class DrawNoteType {
 	}
 
 	public void drawLongLine() {
-		double y1 = startY + 37;
+		double y1 = startY + (2*fontSize)+15;
 		Line l = new Line();
 		l.setStartX(startX);
 		l.setEndX(startX);
@@ -56,7 +58,7 @@ public class DrawNoteType {
 	}
 
 	public void drawBeam(double length) {
-		double y1 = startY + 37;
+		double y1 = startY + (2*fontSize)+15;
 		Line l = new Line();
 		l.setStartX(startX);
 		l.setEndX(startX + length);

@@ -594,7 +594,7 @@ public class Guitar {
 		String current = note.getType();
 		double py = getLastLineCoordinateY();
 		double shortStick = this.fontSize + 3;
-		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + 4, py + y, shortStick);
+		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + 4, py + y, shortStick, this.fontSize);
 		if (noteHasActual(note)) {
 			// get the number of the actuals in a row --> 2 or 3
 			int ActualCounter = getActualNum(note, noteList);
