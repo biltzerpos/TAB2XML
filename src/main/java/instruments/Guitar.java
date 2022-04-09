@@ -531,7 +531,7 @@ public class Guitar {
 	private void drawGraceNotes(Note note, List<Note> noteList) {
 		int string = note.getNotations().getTechnical().getString();
 		int num = countGraceSpace(note, noteList);
-		double xPosition = x + spacing / 2;
+		double xPosition = x + spacing / 4;
 		int fret = note.getNotations().getTechnical().getFret();
 		double graceSpacing = 0;
 		if (fret < 10) {
@@ -594,7 +594,7 @@ public class Guitar {
 		String current = note.getType();
 		double py = getLastLineCoordinateY();
 		double shortStick = this.fontSize + 3;
-		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + 4, py + y, shortStick, this.fontSize);
+		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + (this.fontSize/4), py + y, shortStick, this.fontSize);
 		if (noteHasActual(note)) {
 			// get the number of the actuals in a row --> 2 or 3
 			int ActualCounter = getActualNum(note, noteList);
@@ -856,7 +856,7 @@ public class Guitar {
 			int count = countDotNumber(note);
 			double xCenter = noteDrawer.getStartX() + 10;
 			double yCenter = py + y + 10;
-			double radius = spacing / 25;
+			double radius =  this.fontSize / (fontSize/2);
 			while (count > 0) {
 				type.drawDot(xCenter, yCenter, radius);
 				xCenter += 2 * radius + radius;
@@ -910,7 +910,7 @@ public class Guitar {
 										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 4);
 									} else if ((noteHasGrace(note) && !noteHasGrace(next))
 											|| (!noteHasGrace(note) && noteHasGrace(next))) {
-										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 2);
+										slurDrawer.setEndX(noteDrawer.getStartX() + (spacing / 2) +(spacing / 4));
 									} else {
 										slurDrawer.setEndX(noteDrawer.getStartX() + spacing + spacing / 4);
 									}

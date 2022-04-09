@@ -41,7 +41,7 @@ public class DrawNote {
 		this.startY = startY;
 		this.pane = pane;
 		this.font = font;
-		this.graceFontSize = font - 4;
+		this.graceFontSize = font / 4;
 	}
 
 	/**
