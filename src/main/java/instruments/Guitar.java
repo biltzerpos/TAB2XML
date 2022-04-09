@@ -114,7 +114,7 @@ public class Guitar {
 				numOfNotes += countNotes(noteList);
 				width = width - spaceRequired;
 				if (i == measureList.size() - 1) {
-					drawMeasuresOnSameLine(tempList, tempSpacing);
+					drawMeasuresOnSameLine(tempList);
 				}
 
 			} else {
@@ -122,7 +122,7 @@ public class Guitar {
 				double extra = width / numOfNotes;
 				spacing += extra;
 				d.setLength(spacing);
-				drawMeasuresOnSameLine(tempList, tempSpacing);
+				drawMeasuresOnSameLine(tempList);
 				tempList.removeAll(tempList);
 				numOfNotes = 0;
 				spacing = tempSpacing;
@@ -161,7 +161,7 @@ public class Guitar {
 		return numOfSpace;
 	}
 
-	private void drawMeasuresOnSameLine(List<Measure> tempList, double tempSpacing) {
+	private void drawMeasuresOnSameLine(List<Measure> tempList) {
 		
 		for(int i = 0; i<tempList.size(); i++) {
 			Measure m = tempList.get(i); 
@@ -171,12 +171,12 @@ public class Guitar {
 			xCoordinates.put(m, x);
 			yCoordinates.put(m, y);
 			int index = measureList.indexOf(m); 
-			drawBar(index, i, tempList, tempSpacing);
+			drawBar(index, i, tempList);
 		}
 
 	}
 
-	private void drawBar(int index, int tempListIndex, List<Measure> tempList, double tempSpacing) {
+	private void drawBar(int index, int tempListIndex, List<Measure> tempList) {
 		double len = getLastLineCoordinateY() - getFirstLineCoordinateY();
 		DrawBar bar = new DrawBar(this.pane, x, y, len);
 		if(index == measureList.size()-1) {
@@ -328,7 +328,7 @@ public class Guitar {
 			double firstLine = getFirstLineCoordinateY();
 			double xCenter = noteDrawer.getStartX() + this.fontSize / 2;
 			double yCenter = firstLine + y - this.fontSize - (this.harmonic * this.fontSize);
-			double radius = spacing / 25;
+			double radius = this.fontSize / (fontSize/2);
 			Circle circle = new Circle(xCenter, yCenter, radius);
 			circle.setFill(Color.WHITE);
 			circle.setStroke(Color.BLACK);
@@ -476,7 +476,9 @@ public class Guitar {
 	private void drawBend(Note note) {
 		if (noteHasBend(note)) {
 			double firstMusicLine = getFirstLineCoordinateY() + y;
-			DrawBend db = new DrawBend(pane, note, x, y, firstMusicLine);
+			int string = note.getNotations().getTechnical().getString();
+			double positionY = getLineCoordinateY(string) + y;
+			DrawBend db = new DrawBend(pane, note, noteDrawer.getStartX()+(spacing/2), positionY, firstMusicLine, spacing);
 			db.draw();
 		}
 	}
