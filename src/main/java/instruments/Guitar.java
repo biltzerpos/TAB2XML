@@ -142,8 +142,7 @@ public class Guitar {
 				width = width - spaceRequired;
 
 			}
-			xCoordinates.put(measure, x);
-			yCoordinates.put(measure, y);
+			
 			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
 		}
 
@@ -165,6 +164,8 @@ public class Guitar {
 		// TODO Auto-generated method stub
 		for(Measure m: tempList) {
 			drawMeasureNotes(m);
+			xCoordinates.put(m, x);
+			yCoordinates.put(m, y);
 			drawBar(); 
 		}
 		
