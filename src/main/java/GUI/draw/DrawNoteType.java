@@ -19,23 +19,25 @@ public class DrawNoteType {
 	private double startY;
 	private double shortStick;
 	private double longStick;
+	private double fontSize; 
 
 	public DrawNoteType() {
 
 	}
 
-	public DrawNoteType(Pane pane, double startX, double startY, double shortStick) {
+	public DrawNoteType(Pane pane, double startX, double startY, double shortStick, double fontSize) {
 		super();
 		this.pane = pane;
 		this.startX = startX;
 		this.startY = startY;
 		this.shortStick = shortStick;
 		this.longStick = 2 * shortStick;
+		this.fontSize = fontSize; 
 
 	}
 
 	public void drawShortLine() {
-		double y1 = startY + 37;
+		double y1 = startY + (2*fontSize)+15;
 		Line l = new Line();
 		l.setStartX(startX);
 		l.setEndX(startX);
@@ -45,7 +47,7 @@ public class DrawNoteType {
 	}
 
 	public void drawLongLine() {
-		double y1 = startY + 37;
+		double y1 = startY + (2*fontSize)+15;
 		Line l = new Line();
 		l.setStartX(startX);
 		l.setEndX(startX);
@@ -56,7 +58,7 @@ public class DrawNoteType {
 	}
 
 	public void drawBeam(double length) {
-		double y1 = startY + 37;
+		double y1 = startY + (2*fontSize)+15;
 		Line l = new Line();
 		l.setStartX(startX);
 		l.setEndX(startX + length);
@@ -99,12 +101,12 @@ public class DrawNoteType {
 	}
 
 	public void drawActual(int actualLast, double length, int font) {
-		double y1 = startY + 50;
-		double x = startX + length / 4;
+		double y1 = startY + (3*font)+15;
+		double x = startX - length / 4;
 		// divide the spacing between in the form of |--int--|
 		double totalLength = length + (length / 2);
 		double len = (totalLength - font) / 2;
-		double endX = x - len;
+		double endX = x + len;
 
 		Line l = new Line();
 		l.setStartX(x);
@@ -118,15 +120,15 @@ public class DrawNoteType {
 		v1.setStartX(x);
 		v1.setEndX(x);
 		v1.setStartY(y1);
-		v1.setEndY(y1 - 9);
+		v1.setEndY(y1 - font/2);
 		pane.getChildren().add(v1);
 
-		double xFont = endX - font;
-		Text t = new Text(xFont, y1, Integer.toString(actualLast));
+		double xFont = endX + font;
+		Text t = new Text(endX, y1, Integer.toString(actualLast));
 		t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, font));
 		pane.getChildren().add(t);
 
-		double xEnd2 = xFont - len;
+		double xEnd2 = xFont + len;
 		Line l2 = new Line();
 		l2.setStartX(xFont - font / 4);
 		l2.setEndX(xEnd2);
@@ -139,7 +141,7 @@ public class DrawNoteType {
 		v2.setStartX(xEnd2);
 		v2.setEndX(xEnd2);
 		v2.setStartY(y1);
-		v2.setEndY(y1 - 9);
+		v2.setEndY(y1 - font/2);
 		pane.getChildren().add(v2);
 	}
 

@@ -249,7 +249,7 @@ public class PreviewMusic extends Application {
 					getMusicLineSpacingValue());
 			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
-			this.drum = new Drumset(scorePartwise, pane);
+			this.drum = new Drumset(scorePartwise, pane, 50, 0, 0, 0);
 			this.drum.draw();
 		} else if (instrument == "Bass") {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
@@ -451,6 +451,9 @@ public class PreviewMusic extends Application {
 		} else if (instrument == "Bass") {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
 			this.bass.drawBass();
+		} else if (instrument.equals("Drumset")) {
+			this.drum = new Drumset(scorePartwise, pane, this.getNoteSpacingValue(), 0, this.getStaffSpacingValue(), 0);
+			this.drum.draw();
 		}
 
 	}
@@ -466,6 +469,9 @@ public class PreviewMusic extends Application {
 		} else if (instrument == "Bass") {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
 			this.bass.drawBass();
+		} else if (instrument.equals("Drumset")) {
+			this.drum = new Drumset(scorePartwise, pane, 50, 0, 0, 0);
+			this.drum.draw();
 		}
 	}
 

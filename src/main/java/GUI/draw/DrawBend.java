@@ -17,24 +17,26 @@ public class DrawBend {
 	private double startX;
 	private double startY;
 	private double firstML;
+	private double spacing; 
 
-	public DrawBend(Pane pane, Note note, double x, double y, double firstML) {
+	public DrawBend(Pane pane, Note note, double x, double y, double firstML, double spacing) {
 		super();
 		this.note = note;
 		this.pane = pane;
 		this.startX = x;
 		this.startY = y;
 		this.firstML = firstML;
+		this.spacing = spacing; 
 	}
 
 	public void draw() {
 		QuadCurve quadCurve = new QuadCurve();
 
 		// Adding properties to the Quad Curve
-		double x1 = this.startX - 10;
-		double y1 = this.startY + 20;
-		double x2 = x1 + 20;
-		double y2 = this.firstML - 10;
+		double x1 = this.startX;
+		double y1 = this.startY ;
+		double x2 = x1 + (spacing/4);
+		double y2 = this.firstML - (spacing/2);
 		double controlX = x2;
 		double controlY = y1;
 		
@@ -70,6 +72,7 @@ public class DrawBend {
 		quadCurve.setFill(Color.TRANSPARENT);
 		quadCurve.setStroke(Color.BLACK);
 		quadCurve.setStrokeWidth(1);
+		quadCurve.setViewOrder(-1);
 		return quadCurve;
 		
 	}

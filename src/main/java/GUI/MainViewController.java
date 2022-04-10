@@ -72,6 +72,7 @@ public class MainViewController extends Application {
 	@FXML  Button previewButton;
 	@FXML  Button goToline;
 	@FXML  ComboBox<String> cmbScoreType;
+	public PreviewMusic previewController; 
 
 
 	public MainViewController() {
@@ -324,10 +325,10 @@ public class MainViewController extends Application {
 			{
 				FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMusic.fxml"));
 				root = loader.load();
-				PreviewMusic controller = loader.getController();
-				controller.setMainViewController(this);
+				this.previewController = loader.getController();
+				this.previewController.setMainViewController(this);
 				// update method in the PreviewMusic.java is activated
-				controller.update();
+				this.previewController.update();
 				convertWindow = this.openNewWindow(root, "Preview Music Sheet");
 			}
 			else {
@@ -425,6 +426,7 @@ public class MainViewController extends Application {
 		
 		if(o.get() == ButtonType.YES) {
 			stage.close();
+			this.previewController.closeSequencer();
 		}
 		
 	}

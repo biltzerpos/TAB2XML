@@ -46,6 +46,8 @@ public class Guitar {
 	private DrawSlur slurDrawer;
 	private double harmonic;
 	private int ActualCounter;
+	private int six16thActual;
+	private int eight32ndnotes;
 
 	public Guitar() {
 	}
@@ -80,7 +82,10 @@ public class Guitar {
 	public void drawGuitar() {
 		Clef clef = getClef();
 		double width = this.pane.getMaxWidth();
-
+		List<Measure> tempList = new ArrayList<>();
+		int numOfNotes = 0;
+		double tempSpacing = this.spacing;
+		Boolean flag = true; 
 		for (int i = 0; i < measureList.size(); i++) {
 			int spaceRequired = 0;
 			Measure measure = measureList.get(i);
@@ -91,22 +96,37 @@ public class Guitar {
 				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing);
 				dc.setFontSize(this.fontSize + 6);
 				dc.draw(clefSpacing);
+				drawMeasureNum(i);
 				x += spacing;
 				spaceRequired += getSpacing();
 			}
+//			if(tempList.size() == 0) {
+//				spaceRequired += spacing; 
+//			}
+
 			List<Note> noteList = measure.getNotesBeforeBackup();
 			spaceRequired += countNoteSpacesRequired(noteList);
 			if (width >= spaceRequired) {
-				drawMeasureNum(i);
-				drawMeasureNotes(measure);
+				tempList.add(measure);
+//				if(tempList.size()> 0) {
+//					spaceRequired += getSpacing()/2;
+//				}
+				numOfNotes += countNotes(noteList);
 				width = width - spaceRequired;
+				if (i == measureList.size() - 1) {
+					drawMeasuresOnSameLine(tempList);
+				}
 
 			} else {
-				while (width > 0) {
-					d.draw(x, y);
-					width -= spacing;
-					x += spacing;
-				}
+				//System.out.println("The measure num: " + (i + 1) + " initial spacing: " + this.spacing);
+				double extra = width / numOfNotes;
+				spacing += extra;
+				d.setLength(spacing);
+				drawMeasuresOnSameLine(tempList);
+				tempList.removeAll(tempList);
+				numOfNotes = 0;
+				spacing = tempSpacing;
+				d.setLength(spacing);
 
 				this.x = 0.0;
 				this.y += this.LineSpacing;
@@ -117,32 +137,71 @@ public class Guitar {
 				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing);
 				dc.setFontSize(this.fontSize + 6);
 				dc.draw(clefSpacing);
+				drawMeasureNum(i);
 				x += spacing;
 				spaceRequired += getSpacing();
-				drawMeasureNum(i);
-				drawMeasureNotes(measure);
+				numOfNotes += countNotes(noteList);
+				tempList.add(measure);
 				width = width - spaceRequired;
 
 			}
-			xCoordinates.put(measure, x);
-			yCoordinates.put(measure, y);
-			double len = getLastLineCoordinateY() - getFirstLineCoordinateY();
-			DrawBar bar = new DrawBar(this.pane, x, y, len);
-			bar.draw();
-			// System.out.println("Measure:" + measure + "X:" + x + "Y:" + y + pane);
+		}
+	}
+
+
+
+	private int countNotes(List<Note> noteList) {
+		int numOfSpace = 0;
+		for (int i = 0; i < noteList.size(); i++) {
+			Note n = noteList.get(i);
+			if (!noteHasChord(n) && !noteHasGrace(n)) {
+				numOfSpace++;
+			}
+		}
+		return numOfSpace;
+	}
+
+	private void drawMeasuresOnSameLine(List<Measure> tempList) {
+		
+		for(int i = 0; i<tempList.size(); i++) {
+			Measure m = tempList.get(i); 
+
+			
+			drawMeasureNotes(m);
+			xCoordinates.put(m, x);
+			yCoordinates.put(m, y);
+			int index = measureList.indexOf(m); 
+			drawBar(index, i, tempList);
 		}
 
 	}
 
+	private void drawBar(int index, int tempListIndex, List<Measure> tempList) {
+		double len = getLastLineCoordinateY() - getFirstLineCoordinateY();
+		DrawBar bar = new DrawBar(this.pane, x, y, len);
+		if(index == measureList.size()-1) {
+			//draw end bar
+			d.setLength(spacing/2);
+			d.draw(x, y); 
+			x+=spacing/2;
+			d.setLength(spacing); 
+			bar.setStartX(x);
+			bar.drawEndBar(); 
+		}
+		else {
+			bar.draw(); 
+			
+		}
+	}
+
 	private void drawMeasureNum(int i) {
-		// TODO Auto-generated method stub
 		String n = Integer.toString(i + 1);
 		Text num = new Text();
 		num.setX(x);
 		num.setY(getFirstLineCoordinateY() + y - this.fontSize);
 		num.setText(n);
 		num.setViewOrder(-1);
-		num.setFont(Font.font("Comic Sans MS", FontPosture.REGULAR, this.fontSize - 2));
+		num.setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, this.fontSize));
 		this.pane.getChildren().add(num);
 	}
 
@@ -154,13 +213,7 @@ public class Guitar {
 
 	// method to count the space required for notes in noteList
 	private int countNoteSpacesRequired(List<Note> noteList) {
-		int numOfSpace = 0;
-		for (int i = 0; i < noteList.size(); i++) {
-			Note n = noteList.get(i);
-			if (!noteHasChord(n)) {
-				numOfSpace++;
-			}
-		}
+		int numOfSpace = countNotes(noteList);
 		int space = (int) (numOfSpace * getSpacing());
 
 		return space;
@@ -174,7 +227,9 @@ public class Guitar {
 
 	private void drawMeasureNotes(Measure measure) {
 		this.noteTypeCounter = 3;
-		this.ActualCounter = 0; 
+		this.ActualCounter = 2;
+		this.six16thActual = 5;
+		this.eight32ndnotes = 7;
 		List<Note> noteList = measure.getNotesBeforeBackup();
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
@@ -200,7 +255,6 @@ public class Guitar {
 				drawNoteWithoutGrace(note, noteList);
 
 			}
-			// drawSlur(note, noteList);
 
 		} else if (noteHasChord(note)) {
 			if (noteHasGrace(note)) {
@@ -209,7 +263,6 @@ public class Guitar {
 				drawChordWithoutGrace(note, noteList);
 
 			}
-			// drawSlur(note, noteList);
 		}
 		drawSlur(note, noteList);
 		drawTie(note, noteList, measure);
@@ -233,6 +286,7 @@ public class Guitar {
 					line.setStrokeWidth(this.fontSize / 6);
 					line.setStartX(noteDrawer.getStartX() + (this.fontSize));
 					line.setStartY(positionY + y + (this.fontSize / 2));
+					int count = 1;
 					Loop: for (int i = noteList.indexOf(note); i < noteList.size() - 1; i++) {
 						Note next = noteList.get(i + 1);
 						if (noteHasSlide(next)) {
@@ -243,13 +297,20 @@ public class Guitar {
 								if (nextNum == num && nextType == "stop") {
 									int nextString = note.getNotations().getTechnical().getString();
 									double nextPositionY = getLineCoordinateY(nextString);
-									line.setEndX(noteDrawer.getStartX() + spacing);
+									line.setEndX(noteDrawer.getStartX() + (spacing * (count)));
 									line.setEndY(nextPositionY + y - (this.fontSize / 2));
 									this.pane.getChildren().add(line);
+									if (count > 1) {
+										Text t = new Text(noteDrawer.getStartX() + (this.fontSize),
+												positionY + y - (this.fontSize / 2), "gliss");
+										t.setRotate(-20);
+										this.pane.getChildren().add(t);
+									}
 									break Loop;
 								}
 							}
 						}
+						count++;
 					}
 				}
 			}
@@ -258,18 +319,16 @@ public class Guitar {
 	}
 
 	private boolean noteHasSlide(Note note) {
-		// TODO Auto-generated method stub
 		Boolean res = note.getNotations().getSlides() == null ? false : true;
 		return res;
 	}
 
 	private void drawHarmonic(Note note, List<Note> noteList) {
-		// TODO Auto-generated method stub
 		if (noteHasHarmonic(note)) {
 			double firstLine = getFirstLineCoordinateY();
 			double xCenter = noteDrawer.getStartX() + this.fontSize / 2;
 			double yCenter = firstLine + y - this.fontSize - (this.harmonic * this.fontSize);
-			double radius = spacing / 25;
+			double radius = this.fontSize / (fontSize/2);
 			Circle circle = new Circle(xCenter, yCenter, radius);
 			circle.setFill(Color.WHITE);
 			circle.setStroke(Color.BLACK);
@@ -291,26 +350,16 @@ public class Guitar {
 	}
 
 	private boolean noteHasHarmonic(Note note) {
-		// TODO Auto-generated method stub
 		Boolean res = note.getNotations().getTechnical().getHarmonic() == null ? false : true;
 		return res;
 	}
 
 	private void drawTie(Note note, List<Note> noteList, Measure measure) {
-		// TODO Auto-generated method stub
 		if (noteHasTie(note)) {
 			slurDrawer.setStrokeWidth(this.fontSize);
 			if (!noteHasChord(note)) {
 				drawRegualrTied(note, noteList, measure);
 			} else {
-//				int f = note.getNotations().getTechnical().getFret();
-//				List<Tied> tiedList = note.getNotations().getTieds();
-//				for (Tied t : tiedList) {
-//					String type = t.getType();
-//					if (type == "start") {
-//						// System.out.println(f +" "+ type + "\n");
-//					}
-//				}
 				drawChordTied(note, noteList, measure);
 			}
 
@@ -319,7 +368,6 @@ public class Guitar {
 	}
 
 	private void drawChordTied(Note note, List<Note> noteList, Measure measure) {
-		// TODO Auto-generated method stub
 		List<Tied> tiedList = note.getNotations().getTieds();
 		for (Tied t : tiedList) {
 			String type = t.getType();
@@ -335,7 +383,6 @@ public class Guitar {
 					Note next = noteList.get(i + 1);
 					if (noteHasTie(next)) {
 						if (noteHasChord(next)) {
-							// int n = next.getNotations().getTechnical().getFret();
 							List<Tied> nextList = next.getNotations().getTieds();
 							for (Tied nt : nextList) {
 								String nextType = nt.getType();
@@ -353,13 +400,11 @@ public class Guitar {
 					List<Note> nextNoteList = nextMeasure.getNotesBeforeBackup();
 					loop1: for (Note n : nextNoteList) {
 						if (noteHasTie(n) && noteHasChord(n)) {
-							// int n1 = n.getNotations().getTechnical().getFret();
 							List<Tied> tiedList2 = n.getNotations().getTieds();
 							for (Tied nt : tiedList2) {
 								String nextType = nt.getType();
 								if (nextType == "stop") {
 									slurDrawer.setEndX(noteDrawer.getStartX() + spacing);
-									// System.out.println(f +" "+ type + " | "+ n1 + " "+ nextType +"\n");
 									break loop1;
 								}
 							}
@@ -372,7 +417,6 @@ public class Guitar {
 	}
 
 	private void drawRegualrTied(Note note, List<Note> noteList, Measure measure) {
-		// TODO Auto-generated method stub
 		List<Tied> tiedList = note.getNotations().getTieds();
 		for (Tied t : tiedList) {
 			String type = t.getType();
@@ -412,7 +456,6 @@ public class Guitar {
 								String nextType = nt.getType();
 								if (nextType == "stop") {
 									slurDrawer.setEndX(noteDrawer.getStartX() + spacing);
-									// System.out.println(f +" "+ type + " | "+ n1 + " "+ nextType +"\n");
 									break loop1;
 								}
 							}
@@ -425,7 +468,6 @@ public class Guitar {
 	}
 
 	private boolean noteHasTie(Note note) {
-		// TODO Auto-generated method stub
 		Boolean res = note.getNotations().getTieds() == null ? false : true;
 		return res;
 	}
@@ -434,7 +476,9 @@ public class Guitar {
 	private void drawBend(Note note) {
 		if (noteHasBend(note)) {
 			double firstMusicLine = getFirstLineCoordinateY() + y;
-			DrawBend db = new DrawBend(pane, note, x, y, firstMusicLine);
+			int string = note.getNotations().getTechnical().getString();
+			double positionY = getLineCoordinateY(string) + y;
+			DrawBend db = new DrawBend(pane, note, noteDrawer.getStartX()+(spacing/2), positionY, firstMusicLine, spacing);
 			db.draw();
 		}
 	}
@@ -487,11 +531,11 @@ public class Guitar {
 	private void drawGraceNotes(Note note, List<Note> noteList) {
 		int string = note.getNotations().getTechnical().getString();
 		int num = countGraceSpace(note, noteList);
-		double xPosition = x + spacing / 2;
+		double xPosition = x + spacing / 4;
 		int fret = note.getNotations().getTechnical().getFret();
 		double graceSpacing = 0;
 		if (fret < 10) {
-			graceSpacing = xPosition - (spacing / (4 / num));
+			graceSpacing = xPosition - ((spacing * num) / (4));
 		} else {
 			graceSpacing = xPosition - (spacing / (4 / num) + num);
 		}
@@ -501,7 +545,6 @@ public class Guitar {
 		noteDrawer.setStartX(graceSpacing);
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
-		// drawSlur(note, noteList);
 	}
 
 	// draw regular notes (no grace, no chords)
@@ -520,7 +563,6 @@ public class Guitar {
 
 		drawBend(note);
 		drawType(note, noteList);
-		// drawSlur(note, noteList);
 
 	}
 
@@ -534,16 +576,10 @@ public class Guitar {
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawFret();
 		drawBend(note);
-		/*
-		 * double py = getLastLineCoordinateY(); DrawNoteType type = new
-		 * DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
-		 * type.drawType(); drawType(note, noteList);
-		 */
 	}
 
 	// draw grace notes that have chords
 	private void drawChordsWithGraceNotes(Note note, List<Note> noteList) {
-		// TODO Auto-generated method stub
 		int string = note.getNotations().getTechnical().getString();
 		double positionY = getLineCoordinateY(string);
 		noteDrawer.setPane(pane);
@@ -552,150 +588,275 @@ public class Guitar {
 		noteDrawer.setStartY(positionY + 3 + y);
 		noteDrawer.drawGuitarGrace();
 		drawBend(note);
-		// drawSlur(note, noteList);
-		/*
-		 * double py = getLastLineCoordinateY(); DrawNoteType type = new
-		 * DrawNoteType(pane, note, noteDrawer.getStartX() + 7, py + y);
-		 * type.drawType();
-		 */
 	}
 
 	private void drawType(Note note, List<Note> noteList) {
 		String current = note.getType();
-		String lastType = "";
-		int index = noteList.indexOf(note);
-		// int actualCurrent = note.getTimeModification().getActualNotes();
-		int actualLast = 0;
-		int l = 0; 
-		for (int i = index; i > 0; i--) {
-			Note last = noteList.get(i - 1);
-			if (last != null && !noteHasChord(last) && !noteHasGrace(last)) {
-				l = last.getNotations().getTechnical().getFret(); 
-				lastType = last.getType();
-				if (noteHasActual(last)) {
-					actualLast = last.getTimeModification().getActualNotes();
-				}
-				
-					break;
-				
-			}
-		}
 		double py = getLastLineCoordinateY();
-		double shortStick = 15;
-		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + 4, py + y, shortStick);
-
-		switch (current) {
-		case "half":
-			type.drawShortLine();
-			drawDot(note, type, py + shortStick);
-			break;
-		case "quarter":
-			type.drawLongLine();
-			drawDot(note, type, py);
-			break;
-		case "eighth":
-			type.drawLongLine();
-			drawDot(note, type, py);
-			if (lastType == "eighth" && actualLast <= 0) {
-				if (this.noteTypeCounter > 0) {
-					type.drawBeam(-spacing);
-					this.noteTypeCounter--;
-				} else {
-					this.noteTypeCounter = 3;
-				}
-			} else if (lastType == "16th") {
-				type.drawBeam(-spacing);
-			} else {
-				type.drawBeam(spacing / 4);
+		double shortStick = this.fontSize + 3;
+		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + (this.fontSize/4), py + y, shortStick, this.fontSize);
+		if (noteHasActual(note)) {
+			// get the number of the actuals in a row --> 2 or 3
+			int ActualCounter = getActualNum(note, noteList);
+			drawActualTypes(current, note, noteList, type, py);
+		} else {
+			if (current == "half") {
+				type.drawShortLine();
+				drawDot(note, type, py + shortStick);
 			}
-			break;
-		case "16th":
-			type.drawLongLine();
-			if (lastType == "16th") {
-				if (this.noteTypeCounter > 0) {
-					type.drawBeam(-spacing);
-					type.setStartY(py + y - 5);
-					type.drawBeam(-spacing);
-					this.noteTypeCounter--;
-				} else {
-					this.noteTypeCounter = 3;
-				}
-			} else if (lastType == "eighth") {
-				//System.out.println(this.noteTypeCounter);
-				if (this.noteTypeCounter == 3) {
-					type.drawBeam(-spacing);
-					type.setStartY(py + y - 5);
-					type.drawBeam(-spacing / 2);
-				} else {
-					type.drawBeam(-spacing);
-				}
+			if (current == "quarter") {
+				type.drawLongLine();
+				drawDot(note, type, py);
+			}
+			if (current == "eighth") {
+				drawEighth(note, noteList, type, py);
+			}
+			if (current == "16th") {
+				draw16th(note, noteList, type, py);
+			}
+			if (current == "32nd") {
+				draw32ndnotes(note, noteList, type, py);
+			}
+		}
+	}
 
-			} else {
+	private void drawActualTypes(String current, Note note, List<Note> noteList, DrawNoteType type, double py) {
+		String nextType = getNextType(note, noteList);
+		String lastType = getLastType(note, noteList);
+		if (current == "quarter") {
+			type.drawLongLine();
+			drawDot(note, type, py);
+			if (nextType == "eighth") {
+				int actual = note.getTimeModification().getActualNotes();
+				type.drawActual(actual, spacing, this.fontSize);
+			}
+
+		} else if (current == "eighth") {
+			type.drawLongLine();
+			Boolean nextIsActual = nextHasActual(note, noteList);
+			if (nextIsActual == false && lastType != "eighth") {
 				type.drawBeam(spacing / 4);
+			} else {
+				if (nextType == "eighth" && this.ActualCounter > 0 && nextIsActual == true) {
+					type.drawBeam(spacing);
+					this.ActualCounter--;
+				} else if (nextType == "quarter" && nextIsActual == true) {
+					int actual = note.getTimeModification().getActualNotes();
+					type.drawActual(actual, spacing, this.fontSize);
+				} else {
+					String actual = Integer.toString(note.getTimeModification().getActualNotes());
+					Text t = new Text(noteDrawer.getStartX() - spacing, py + y + (3*fontSize)+20, actual);
+					t.setViewOrder(-1);
+					t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, this.fontSize));
+					this.pane.getChildren().add(t);
+					this.ActualCounter = 2;
+				}
+			}
+		} else if (current == "16th") {
+			type.drawLongLine();
+			if (nextType == "16th" && this.ActualCounter > 0) {
+				type.drawBeam(spacing);
 				type.setStartY(py + y - 5);
-				type.drawBeam(spacing / 4);
-			}
-		case "32nd":
-		/*
-				 * else if (lastType == "eighth") { System.out.println(this.noteTypeCounter);
-				 * if(this.noteTypeCounter == 3) { type.drawBeam(-spacing); type.setStartY(py +
-				 * y - 5); type.drawBeam(-spacing/2); } else { type.drawBeam(-spacing); }
-				 * 
-				 * } else { type.drawBeam(spacing / 4); type.setStartY(py + y - 5);
-				 * type.drawBeam(spacing / 4); }
-				 */
-
-			break;
-		}
-		
-		if(current =="32nd") {
-			int f = note.getNotations().getTechnical().getFret(); 
-			//System.out.println("Current note: "+f+ " has type: "+ current+" | Last note is: "+ l+" | counter is: " + this.noteTypeCounter); 
-			type.drawLongLine();
-			if (lastType == "32nd") {
-				if (this.noteTypeCounter > 0) {
-					type.drawBeam(-spacing);
-					type.setStartY(py + y - 5);
-					type.drawBeam(-spacing);
-					type.setStartY(py + y - 10);
-					type.drawBeam(-spacing);
-					this.noteTypeCounter--;
-					//System.out.println("The last note is 32nd, counter now is: "+this.noteTypeCounter); 
+				type.drawBeam(spacing);
+				this.ActualCounter--;
 			} else {
-					//type.drawBeam(-spacing);
-					this.noteTypeCounter = 3;
-					//System.out.println("The last note is not 32nd, counter now is: "+this.noteTypeCounter); 
+				String actual = Integer.toString(note.getTimeModification().getActualNotes());
+				Text t = new Text(noteDrawer.getStartX() - spacing, py + y + (3*fontSize)+20, actual);
+				t.setViewOrder(-1);
+				t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, this.fontSize));
+				this.pane.getChildren().add(t);
+				this.ActualCounter = 2;
+			}
+			if (this.six16thActual > 0) {
+				type.drawBeam(spacing);
+				this.six16thActual--;
+			} else {
+				this.six16thActual = 5;
+			}
+		}
+	}
+
+	private Boolean nextHasActual(Note note, List<Note> noteList) {
+		Boolean res = false;
+		for (int i = noteList.indexOf(note); i < noteList.size() - 1; i++) {
+			Note next = noteList.get(i + 1);
+			if (!noteHasGrace(next) && !noteHasChord(next)) {
+				if (noteHasActual(next)) {
+					res = true;
+					break;
+				} else {
+					break;
 				}
 			}
-			else {
-				this.noteTypeCounter = 3; 
+		}
+		return res;
+	}
+
+	private int getActualNum(Note note, List<Note> noteList) {
+		int res = 0;
+		for (int i = noteList.indexOf(note); i < noteList.size(); i++) {
+			Note next = noteList.get(i);
+			if (!noteHasChord(next)) {
+				if (noteHasActual(next)) {
+					res++;
+				} else {
+					break;
+				}
 			}
 		}
+		return res;
+	}
 
-//		if (noteHasActual(note)) {
-//			System.out.println(this.ActualCounter);
-//			if (this.ActualCounter < 2 ) {
-//				int currentActual = note.getTimeModification().getActualNotes();
-//				if (currentActual == actualLast) {
-//					// type.setStartX(noteDrawer.getStartX());
-//					type.drawActual(actualLast, spacing, fontSize);
-//				}
-//			}
-//			else if(this.ActualCounter >= 2) {
-//				System.out.println("yes"); 
-//			}
-//		}
-//		this.ActualCounter = 0; 
+	private void draw32ndnotes(Note note, List<Note> noteList, DrawNoteType type, double py) {
+		type.drawLongLine();
+		drawDot(note, type, py);
+		String nextType = getNextType(note, noteList);
+		String lastType = getLastType(note, noteList);
+		if (nextType == "32nd") {
+			if (this.noteTypeCounter > 0) {
+				type.drawBeam(spacing);
+				type.setStartY(py + y - 5);
+				type.drawBeam(spacing);
+				type.setStartY(py + y - 10);
+				type.drawBeam(spacing);
+				this.noteTypeCounter--;
+			} else {
+				this.noteTypeCounter = 3;
+			}
+			if (this.eight32ndnotes > 0) {
+				type.drawBeam(spacing);
+				this.eight32ndnotes--;
+			} else {
+				this.eight32ndnotes = 8;
+			}
+		} else {
+			if (lastType != "32nd") {
+				if (lastType != "16th") {
+					type.drawBeam(spacing / 4);
+					type.setStartY(py + y - 5);
+					type.drawBeam(spacing / 4);
+				} else {
+					type.setStartY(py + y - 10);
+					type.drawBeam(-spacing / 2);
+				}
+			}
+
+			this.noteTypeCounter = 3;
+		}
 
 	}
 
+	private void draw16th(Note note, List<Note> noteList, DrawNoteType type, double py) {
+		type.drawLongLine();
+		drawDot(note, type, py);
+		String nextType = getNextType(note, noteList);
+		String lastType = getLastType(note, noteList);
+		if (nextType == "16th") {
+			if (this.noteTypeCounter > 0) {
+				type.drawBeam(spacing);
+				type.setStartY(py + y - 5);
+				type.drawBeam(spacing);
+				this.noteTypeCounter--;
+			} else {
+				if (nextIsLastNote(note, noteList)) {
+					type.drawBeam(spacing);
+					type.setStartY(py + y - 5);
+					type.drawBeam(spacing);
+				}
+				this.noteTypeCounter = 3;
+			}
+		} else if (nextType == "eighth") {
+			type.drawBeam(spacing);
+		} else if (nextType == "32nd") {
+			type.drawBeam(spacing);
+			type.setStartY(py + y - 5);
+			type.drawBeam(spacing);
+		} else {
+			if (lastType != "16th") {
+				if (lastType != "eighth") {
+					type.drawBeam(spacing / 4);
+					type.setStartY(py + y - 5);
+					type.drawBeam(spacing / 4);
+				} else {
+					type.drawBeam(-spacing / 2);
+					type.setStartY(py + y - 5);
+					type.drawBeam(-spacing / 2);
+				}
+			}
+
+			this.noteTypeCounter = 3;
+		}
+	}
+
+	private boolean nextIsLastNote(Note note, List<Note> noteList) {
+		Boolean res = false;
+		int index = noteList.indexOf(note);
+		if (index + 1 == noteList.size() - 1) {
+			res = true;
+		}
+		return res;
+	}
+
+	private void drawEighth(Note note, List<Note> noteList, DrawNoteType type, double py) {
+		type.drawLongLine();
+		drawDot(note, type, py);
+		String nextType = getNextType(note, noteList);
+		String lastType = getLastType(note, noteList);
+		if (nextType == "eighth") {
+			if (this.noteTypeCounter > 0) {
+				type.drawBeam(spacing);
+				this.noteTypeCounter--;
+			} else {
+				this.noteTypeCounter = 3;
+			}
+		} else if (nextType == "16th" && this.noteTypeCounter > 0) {
+			type.drawBeam(spacing);
+			this.noteTypeCounter = 3;
+		} else {
+			if (lastType != "eighth") {
+				if (nextType == "16th") {
+					type.drawBeam(spacing);
+				} else {
+					type.drawBeam(spacing / 4);
+				}
+			}
+
+			this.noteTypeCounter = 3;
+		}
+	}
+
+	private String getLastType(Note note, List<Note> noteList) {
+		String lastType = "";
+		int index = noteList.indexOf(note);
+		for (int i = index; i > 0; i--) {
+			Note last = noteList.get(i - 1);
+			if (!noteHasGrace(last) && !noteHasChord(last)) {
+				lastType = last.getType();
+				break;
+			}
+		}
+		return lastType;
+	}
+
+	private String getNextType(Note note, List<Note> noteList) {
+		String nextType = "";
+		int index = noteList.indexOf(note);
+		for (int i = index; i < noteList.size() - 1; i++) {
+			Note next = noteList.get(i + 1);
+			if (!noteHasGrace(next) && !noteHasChord(next)) {
+				nextType = next.getType();
+				break;
+			}
+		}
+		return nextType;
+	}
+
 	private void drawDot(Note note, DrawNoteType type, double py) {
-		// TODO Auto-generated method stub
 		if (noteHasDot(note)) {
 			int count = countDotNumber(note);
 			double xCenter = noteDrawer.getStartX() + 10;
 			double yCenter = py + y + 10;
-			double radius = spacing / 25;
+			double radius =  this.fontSize / (fontSize/2);
 			while (count > 0) {
 				type.drawDot(xCenter, yCenter, radius);
 				xCenter += 2 * radius + radius;
@@ -710,7 +871,6 @@ public class Guitar {
 	}
 
 	private int countDotNumber(Note note) {
-		// TODO Auto-generated method stub
 		int res = 0;
 		List<Dot> dotList = note.getDots();
 		for (int i = 0; i < dotList.size(); i++) {
@@ -722,15 +882,12 @@ public class Guitar {
 
 	// returns true if note has a dot
 	private boolean noteHasDot(Note note) {
-		// TODO Auto-generated method stub
 		Boolean res = note.getDots() == null ? false : true;
 		return res;
 	}
 
 	private void drawSlur(Note note, List<Note> noteList) {
 		if (noteHasSlur(note)) {
-			// int f = note.getNotations().getTechnical().getFret();
-			// System.out.println(f +"\n");
 			int string = note.getNotations().getTechnical().getString();
 			double positionY = getLineCoordinateY(string);
 			List<Slur> slurList = note.getNotations().getSlurs();
@@ -748,13 +905,12 @@ public class Guitar {
 							for (Slur ns : nextSlurs) {
 								int nsNum = ns.getNumber();
 								String nsType = ns.getType();
-								// String placement = "";
 								if (nsType == "stop" && nsNum == num) {
 									if (noteHasGrace(next)) {
 										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 4);
 									} else if ((noteHasGrace(note) && !noteHasGrace(next))
 											|| (!noteHasGrace(note) && noteHasGrace(next))) {
-										slurDrawer.setEndX(noteDrawer.getStartX() + spacing / 2);
+										slurDrawer.setEndX(noteDrawer.getStartX() + (spacing / 2) +(spacing / 4));
 									} else {
 										slurDrawer.setEndX(noteDrawer.getStartX() + spacing + spacing / 4);
 									}
@@ -769,9 +925,6 @@ public class Guitar {
 										slurDrawer.setStartY(positionY - fontSize + y);
 										slurDrawer.setPlace(-1);
 									}
-									// int c = note.getNotations().getTechnical().getFret();
-									// int n = next.getNotations().getTechnical().getFret();
-									// System.out.println("grace between: "+ c+ " and "+ n);
 									slurDrawer.draw();
 									break lookForStop;
 								}
@@ -802,7 +955,7 @@ public class Guitar {
 			pane.getChildren().remove(rect);
 		}
 	}
-	
+
 	public void highlightMeasureArea(Measure measure) {
 		double x = 0;
 		double y = 0;
@@ -838,11 +991,11 @@ public class Guitar {
 				rectangle.setStyle("-fx-stroke: red;");
 				pane.getChildren().add(rectangle);
 				Object b4 = pane.getParent().getParent().getParent().getParent();
-				if(b4 instanceof ScrollPane) {
-					ScrollPane sp = (ScrollPane)b4;
+				if (b4 instanceof ScrollPane) {
+					ScrollPane sp = (ScrollPane) b4;
 					double rectBounds = rectangle.getBoundsInLocal().getMaxY();
 					double thisBounds = pane.getBoundsInLocal().getMaxY();
-					double val = rectBounds/thisBounds;
+					double val = rectBounds / thisBounds;
 					sp.setVvalue(val);
 				}
 			}
@@ -922,6 +1075,14 @@ public class Guitar {
 
 	public void setSpacing(double spacing) {
 		this.spacing = spacing;
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
 	}
 
 	// End getters and setters

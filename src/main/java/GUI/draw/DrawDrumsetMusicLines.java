@@ -145,11 +145,6 @@ public class DrawDrumsetMusicLines extends Node {
 				break;
 		}
 
-//		System.out.println("-----");
-//		System.out.println(octave);
-//		System.out.println(step);
-//		System.out.println(yPosition);
-//		System.out.println("-----");
 		return yPosition;
 	}
 

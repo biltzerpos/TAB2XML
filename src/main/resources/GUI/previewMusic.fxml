@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
@@ -15,17 +14,17 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="450.0" minWidth="640.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PreviewMusic">
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="450.0" minWidth="640.0" prefHeight="800.0" prefWidth="1300.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PreviewMusic">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="690.0" BorderPane.alignment="CENTER">
+      <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane layoutY="13.0" prefHeight="597.0" prefWidth="690.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="32.0">
+            <AnchorPane layoutY="13.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="32.0">
                <children>
                   <ScrollPane pannable="true" stylesheets="@scrollPane_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <AnchorPane fx:id="anchorPane" style="-fx-background-color: white;">
                            <children>
-                              <Pane fx:id="pane" maxWidth="600.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0" />
+                              <Pane fx:id="pane" maxWidth="900.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="-785.0" AnchorPane.topAnchor="50.0" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -161,18 +160,14 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT">
-                     <children>
-                        <Label prefWidth="120.0" text="Justify:" />
-                        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Yes" textFill="#f7f6f6" />
-                        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefWidth="70.0" text="No" textFill="#f7f1f1" />
-                     </children>
-                  </HBox>
                   <HBox alignment="CENTER" spacing="15.0">
                      <children>
                         <Button fx:id="defaultButton" mnemonicParsing="false" onAction="#defaultSetting" prefWidth="100.0" text="Default Setting" />
                         <Button fx:id="applyButton" mnemonicParsing="false" onAction="#ApplySettings" prefWidth="100.0" text="Apply" />
                      </children>
+                     <padding>
+                        <Insets top="30.0" />
+                     </padding>
                   </HBox>
                   <Separator prefWidth="200.0">
                      <VBox.margin>
