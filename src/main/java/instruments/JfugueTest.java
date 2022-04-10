@@ -72,11 +72,11 @@ public class JfugueTest {
 //		return result;
 //	}
 
-//	public static void main(String[] args) {
-//		Player player = new Player();
-//		Pattern vocals = new Pattern();
-//		
-////		vocals.add("G4qi G3s A3is B2is D+F+A+C");
+	public static void main(String[] args) {
+		Player player = new Player();
+		Pattern vocals = new Pattern("V0 I[Guitar]  A3.h+E3.h+A2.h G5s E5s D5s C#5s E5s D5s A#4s A4s C5s A#4s G4s E4s E4h D4.i+A#3.i+G3.i");
+//		Pattern vocals = new Pattern("V0 I[Guitar]  A3h.+E3h.+A2h. G5s E5s D5s C#5s E5s D5s A#4s A4s C5s A#4s G4s E4s E4h D4i.+A#3i.+G3i.");
+	
 ////		vocals.add("G5is E5i | G5s E5q | G5q E5i D5q C5h");
 ////		vocals.add("G5is E5i Ri | G5s Ris E5q Rs | G5q E5i Rs D5q rs C5h Rs");
 ////		vocals.add("Rh G5is E5i Ri | G5s Ris E5q Rs | G5q E5i Rs D5q rs C5h Rs "
@@ -86,7 +86,6 @@ public class JfugueTest {
 ////		vocals.add("Rh G5is E5i Ri | G5s Ris E5q Rs | G5q E5i Rs D5q rs C5h Rs");
 ////		
 //	    vocals.add("E2i B2i E3i G3i B3i E4i B3i G3i  E4w+B3w+G3w+E3w+B2w+E2w");   // Guitar example
-//		vocals.setInstrument("GUITAR");
 //		
 ////		vocals.add("V9 [Acoustic_Snare] V9 [Lo_Mid_Tom] V9 [Hand_Clap]+[Crash_Cymbal_1]");  // Drum note
 //		
@@ -95,8 +94,8 @@ public class JfugueTest {
 ////		cp.setKey("C");
 ////		cp.distribute("7");
 //
-//		player.play(vocals);
+		player.play(vocals);
 //
-//	}
+	}
 
 }
