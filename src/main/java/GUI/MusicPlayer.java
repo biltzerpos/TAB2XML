@@ -86,7 +86,7 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Guitar: " + vocals.toString());
+		//System.out.println("Guitar: " + vocals.toString());
 
 		return player.getSequence(vocals.toString());
 	}
@@ -137,7 +137,7 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Drum: " + vocals.toString());
+		//System.out.println("Drum: " + vocals.toString());
 
 		return player.getSequence(vocals.toString());
 	}
@@ -155,7 +155,7 @@ public class MusicPlayer {
 				}
 				if (j.getNotesBeforeBackup() != null) {
 					for (Note n : j.getNotesBeforeBackup()) {
-						String format = "%s%s%s";
+						String format = "%s%s%s%s";
 						String ns = new String();
 						
 						if (n.getRest() != null) {
@@ -174,10 +174,10 @@ public class MusicPlayer {
 						String tie = getDurationWithTies(dur, n);
 						String chord = createChord(n.getChord());
 
-						vocals.append(String.format(format, chord, ns, tie));
+						vocals.append(String.format(format, chord, ns, tie, getDot(n)));
 
 						if(addRepeat) {
-							repeat.append(String.format(format, chord, ns, tie));
+							repeat.append(String.format(format, chord, ns, tie, getDot(n)));
 						}
 
 					}
@@ -192,7 +192,7 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Bass: " + vocals.toString());
+		//System.out.println("Bass: " + vocals.toString());
 
 		return player.getSequence(vocals.toString());
 	}

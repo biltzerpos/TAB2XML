@@ -74,7 +74,7 @@ public class JfugueTest {
 
 	public static void main(String[] args) {
 		Player player = new Player();
-		Pattern vocals = new Pattern("V0 I[Guitar]  A3.h+E3.h+A2.h G5s E5s D5s C#5s E5s D5s A#4s A4s C5s A#4s G4s E4s E4h D4.i+A#3.i+G3.i");
+		Pattern vocals = new Pattern("T180 V0 I[SLAP_BASS_1]  B1q B2i F#2i B1q F#1q A1q B1q D2q B1q B2i F#2i B1q F#1q A1q B1q D2q B1q B2i F#2i B1q F#1q A1q B1q D2q B1q B2i F#2i B1q F#1q A1q B1q D2q B1q B2i F#2i B1q F#1q A1q B1q D2q B1q B2i F#2i B1q F#1q A1q B1q D2q B1q B2i F#2i B1q F#1q A1q B1q D2q B1q B2i F#2i B1q F#1q A1q B1q D2q F#2q F#2q F#2i C#2i F#1q A1q C#2q F#2q F2q E2i B1i E1q G1q A1q B1q D2q B1q B2i F#2i B1q F#1q A1q B1q D2q\r\n");
 //		Pattern vocals = new Pattern("V0 I[Guitar]  A3h.+E3h.+A2h. G5s E5s D5s C#5s E5s D5s A#4s A4s C5s A#4s G4s E4s E4h D4i.+A#3i.+G3i.");
 	
 ////		vocals.add("G5is E5i | G5s E5q | G5q E5i D5q C5h");
