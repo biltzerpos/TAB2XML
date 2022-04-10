@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sound.midi.Sequence;
 
+import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
 
@@ -20,6 +21,7 @@ public class MusicPlayer {
 
 	private ScorePartwise scorePartwise;
 	private List<Measure> measureList;
+	private Pattern pattern;
 	
 	
 	public MusicPlayer() {
@@ -82,8 +84,9 @@ public class MusicPlayer {
 			}
 		}
 
-		//System.out.println("Guitar: " + vocals.toString());
+		System.out.println("Guitar: " + vocals.toString());
 
+		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
 	}
 	
@@ -133,8 +136,9 @@ public class MusicPlayer {
 			}
 		}
 
-		//System.out.println("Drum: " + vocals.toString());
+		System.out.println("Drum: " + vocals.toString());
 
+		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
 	}
 	
@@ -188,8 +192,9 @@ public class MusicPlayer {
 			}
 		}
 
-		//System.out.println("Bass: " + vocals.toString());
+		System.out.println("Bass: " + vocals.toString());
 
+		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
 	}
 
@@ -328,8 +333,10 @@ public class MusicPlayer {
     	return null;
 		
     }
-
-
+	// for testing purposes
+	public Pattern getPattern() {
+		return pattern;
+	}
 
 
 
