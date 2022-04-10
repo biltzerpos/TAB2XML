@@ -42,6 +42,7 @@ public class Drumset {
 	private List<Double[]> cymbalSlurCoords;
 
 	private double spacing;
+	private double minimumSpacing;
 
 	public Drumset(ScorePartwise scorePartwise, Pane pane) {
 		super();
@@ -55,6 +56,7 @@ public class Drumset {
 		this.x = 0;
 		this.y = 0;
 
+		this.minimumSpacing = 30;
 		this.spacing = 30;
 
 		this.drumTieCoords = new ArrayList<Double[]>();
@@ -333,44 +335,16 @@ public class Drumset {
 	}
 
 	/**
-	 * Draw the sheet music for drums.
+	 * Draws a staff (which consists of a group of measure(s)).
+	 * This should take up one line in the sheet music.
+	 *
+	 * @param staff    - The list of measures to be drawn
+	 * @param d        - DrawDrumsetMusicLines drawer
+	 * @param drumClef - DrawClef drawer
 	 */
-	public void draw() {
-
-		// Initialize x and y coordinates
-		this.x = 0;
-		this.y = 0;
-
-		double width = this.pane.getMaxWidth();
-
-		// Draw the initial music lines
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing);
-		d.draw(this.x, this.y);
-
-		DrawClef drumclef = new DrawClef(this.pane, clef, x + 25, 0);
-		drumclef.drawDrumClef1();
-		drumclef.drawDrumClef2();
-
-		this.x += this.spacing;
-
+	private void drawStaff(List<Measure> staff, DrawDrumsetMusicLines d, DrawClef drumClef) {
 		// Iterate through the list of measures
-		for (Measure measure : measureList) {
-			// If the current line is getting too long, then make a new line
-			// and draw a drum clef for the new line.
-			if (this.x + this.getMeasureLength(measure) > width) {
-				this.x = 0;
-				this.y += 100;
-
-				// Draw music lines for drum clef, then draw drum clef and incremement x
-				d.draw(this.x, this.y);
-
-				drumclef = new DrawClef(this.pane, clef, x + 20, this.y);
-				drumclef.drawDrumClef1();
-				drumclef.drawDrumClef2();
-
-				this.x += this.spacing;
-			}
-
+		for (Measure measure : staff) {
 			// If the measure has a time signature, then draw it
 			if (measure.getAttributes() != null && measure.getAttributes().getTime() != null) {
 				// Draw music lines for the time signature
@@ -378,7 +352,7 @@ public class Drumset {
 				this.x += this.spacing;
 
 				// Draw the time signature
-				drumclef.drawTimeSignature(
+				drumClef.drawTimeSignature(
 					measure.getAttributes().getTime().getBeats(),
 					measure.getAttributes().getTime().getBeats(),
 					this.x - this.spacing / 2,
@@ -389,12 +363,86 @@ public class Drumset {
 			// Draw the current measure
 			this.drawMeasure(measure);
 
+			// Add to lists for go-to measure
 			xCoordinates.put(measure, this.x);
 			yCoordinates.put(measure, this.y - 30);
 
 			// Draw bar line after every measure
 			DrawDrumsetBar bar = new DrawDrumsetBar(this.pane);
 			bar.draw(this.x, this.y);
+		}
+	}
+
+	/**
+	 * Draw the sheet music for drums.
+	 */
+	public void draw() {
+		this.x = 0;
+		this.y = 0;
+
+		double paneWidth = this.pane.getMaxWidth();
+
+		DrawDrumsetMusicLines d;
+		DrawClef drumclef;
+
+		this.x += this.spacing;
+
+		// The length of the current staff (pixels)
+		double staffLength = this.minimumSpacing;
+		// The number of non chord or grace notes (number of notes that take up a unique space in the staff)
+		int noteSpaces = 1;
+		// The measures in the current staff
+		List<Measure> staff = new ArrayList<Measure>();
+
+		Measure measure;
+
+		// Iterate through the measures
+		for (int i = 0; i < this.measureList.size(); i++) {
+			// Get the current measure
+			measure = this.measureList.get(i);
+
+			// Add the current measure to the staff list, and add its note spaces
+			// and length to the counters
+			staff.add(measure);
+			noteSpaces += this.getMeasureLength(measure);
+			staffLength = noteSpaces * this.minimumSpacing;
+
+			// If the current measure is the last measure in the score,
+			// or if the next measure will cause the staff to span greater than the pane width,
+			// then draw the measure, otherwise keep iterating.
+			if (i == this.measureList.size() - 1
+				|| staffLength + this.getMeasureLength(measureList.get(i+1)) * this.minimumSpacing > paneWidth
+			) {
+				// Calculate the extra spacing to be added to the minimum spacing
+				// (this makes the notes justified).
+				double spacingPadding = (paneWidth - staffLength) / noteSpaces;
+				this.spacing = this.minimumSpacing + spacingPadding;
+
+				this.x = 0;
+
+				// Draw initial music lines
+				d = new DrawDrumsetMusicLines(this.pane, this.spacing);
+				d.draw(this.x, this.y);
+
+				// Draw drum clef
+				drumclef = new DrawClef(this.pane, clef, x + 20, this.y);
+				drumclef.drawDrumClef1();
+				drumclef.drawDrumClef2();
+
+				// Increment x-position
+				this.x += this.spacing;
+
+				// Draw staff
+				this.drawStaff(staff, d, drumclef);
+
+				// Reset staff list and counters
+				staff.clear();
+				noteSpaces = 1;
+				staffLength = this.minimumSpacing;
+
+				// Increment y-position
+				this.y += 100;
+			}
 		}
 	}
 
@@ -495,17 +543,20 @@ public class Drumset {
 	 *
 	 * @return The length of the measure in pixels.
 	 */
-	private double getMeasureLength(Measure measure) {
+	private int getMeasureLength(Measure measure) {
 		List<Note> notes = measure.getNotesBeforeBackup();
 		int length = 0;
 
-		if (notes == null) {
-			return 0;
+		// Check if measure has time signature
+		if (measure.getAttributes() != null && measure.getAttributes().getTime() != null) {
+			length += 1;
 		}
 
-		for (Note note : notes) {
-			if (note.getChord() == null && note.getGrace() == null) {
-				length += this.spacing;
+		if (notes != null) {
+			for (Note note : notes) {
+				if (note.getChord() == null && note.getGrace() == null) {
+					length += 1;
+				}
 			}
 		}
 
