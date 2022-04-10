@@ -61,8 +61,7 @@ BD|o-------o-------|o-------o-------|
 		Pattern drum = getDrumString(input);
 
 		assertEquals(drum.toString(), "V9  [Crash_Cymbal_1]i+[Bass_Drum]i [Closed_Hi_Hat]i [Closed_Hi_Hat]i+[Acoustic_Snare]i [Closed_Hi_Hat]i [Closed_Hi_Hat]i+[Bass_Drum]i [Closed_Hi_Hat]i [Closed_Hi_Hat]i+[Acoustic_Snare]i [Closed_Hi_Hat]i [Acoustic_Snare]s+[Bass_Drum]s [Acoustic_Snare]s [Acoustic_Snare]s [Acoustic_Snare]s [Lo_Mid_Tom]s [Lo_Mid_Tom]s [Lo_Tom]s [Lo_Tom]s [Crash_Cymbal_1]h+[Bass_Drum]h");
-		//Drum: V9  [Crash_Cymbal_1]i+[Bass_Drum]i [Closed_Hi_Hat]i [Closed_Hi_Hat]i+[Acoustic_Snare]i [Closed_Hi_Hat]i [Closed_Hi_Hat]i+[Bass_Drum]i [Closed_Hi_Hat]i [Closed_Hi_Hat]i+[Acoustic_Snare]i [Closed_Hi_Hat]i [Acoustic_Snare]s+[Bass_Drum]s [Acoustic_Snare]s [Acoustic_Snare]s [Acoustic_Snare]s [Lo_Mid_Tom]s [Lo_Mid_Tom]s [Lo_Tom]s [Lo_Tom]s [Crash_Cymbal_1]h+[Bass_Drum]h
-	}
+		}
 	
 	private Pattern getBassString(String input) throws TXMLException {
 
