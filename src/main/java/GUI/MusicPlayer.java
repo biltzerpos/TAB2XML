@@ -56,7 +56,7 @@ public class MusicPlayer {
 							ns = "R";
 						} else {
 							if (n.getGrace() != null) {
-								ns = "s";
+								ns = "q";
 							}else {
 								int octave = n.getPitch().getOctave();
 								ns = n.getPitch().getStep() + getAlter(n)+ octave;
