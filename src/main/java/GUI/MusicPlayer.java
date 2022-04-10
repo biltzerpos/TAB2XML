@@ -4,11 +4,9 @@ import java.util.List;
 
 import javax.sound.midi.Sequence;
 
-import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
-import javafx.fxml.FXML;
-import javafx.scene.layout.Pane;
+
 import models.Part;
 import models.ScorePartwise;
 import models.measure.Measure;
@@ -21,8 +19,6 @@ import models.measure.note.notations.Tied;
 public class MusicPlayer {
 
 	private ScorePartwise scorePartwise;
-	@FXML
-	private Pane pane;
 	private List<Measure> measureList;
 	
 	
@@ -311,15 +307,6 @@ public class MusicPlayer {
 	public void setScorePartwise(ScorePartwise scorePartwise) {
 		this.scorePartwise = scorePartwise;
 	}
-
-	public Pane getPane() {
-		return pane;
-	}
-
-	public void setPane(Pane pane) {
-		this.pane = pane;
-	}
-
 
 	// returns a list of measures
 	public List<Measure> getMeasureList() {

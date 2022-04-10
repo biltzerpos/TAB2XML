@@ -11,11 +11,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.jfugue.player.Player;
-
-import converter.Score;
 import instruments.Guitar;
 import instruments.Drumset;
 import instruments.Bass;
