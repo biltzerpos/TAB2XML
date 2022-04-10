@@ -193,7 +193,7 @@ public class MusicPlayer {
 		return player.getSequence(vocals.toString());
 	}
 
-	// returns string representation of a drum duration for a given note
+	// returns string representation of a duration for a given note
 	private String addDuration(Note note) {
 		String res = "";
 		String type = note.getType();
@@ -215,7 +215,7 @@ public class MusicPlayer {
 		} else if (type.equals("128th")) {
 			res = "o";
 		} else {
-			res = "q"; // Make it default for now
+			res = "q"; // Make it default
 		}
 
 		return res;
@@ -294,7 +294,7 @@ public class MusicPlayer {
 		} else if(Id == "P1-I45"){
 			fullName = "Pedal_Hi_Hat";
 		} else {
-			fullName = "Bass_Drum"; // Make it default for now
+			fullName = "Bass_Drum"; // Make it default
 		}
 
 		return fullName;

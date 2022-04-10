@@ -306,7 +306,7 @@ public class PreviewMusic extends Application {
 
 	public void closeSequencer() {
 		this.sequencer.close();
-		System.out.println("closeSequencer");
+		//System.out.println("closeSequencer");
 	}
 
 	// Method that handles the `print music sheet` button
