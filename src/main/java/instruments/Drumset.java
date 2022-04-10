@@ -48,6 +48,16 @@ public class Drumset {
 	private double staffSpacing;
 	private double musicLineSpacing;
 
+	/**
+	 * Constructor for the Drumset class.
+	 *
+	 * @param scorePartwise   - The scorePartwise object to be drawn
+	 * @param pane            - The pane to be draw to
+	 * @param minimumSpacing  - The minimum spacing between notes
+	 * @param fontSize        - The size of the notes
+	 * @param staffSpacing    - The space between staffs
+	 * @param musicLineSpaing - The space between music lines in a staff
+	 */
 	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double staffSpacing, double musicLineSpaing) {
 		super();
 		this.scorePartwise = scorePartwise;
@@ -64,7 +74,7 @@ public class Drumset {
 		this.spacing = minimumSpacing;
 
 		this.fontSize = fontSize;
-		this.staffSpacing = staffSpacing;
+		this.staffSpacing = staffSpacing + 100;
 		this.musicLineSpacing = musicLineSpaing;
 
 		this.drumTieCoords = new ArrayList<Double[]>();
@@ -449,7 +459,7 @@ public class Drumset {
 				staffLength = this.minimumSpacing;
 
 				// Increment y-position
-				this.y += 100;
+				this.y += this.staffSpacing;
 			}
 		}
 	}
