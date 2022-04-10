@@ -44,7 +44,11 @@ public class Drumset {
 	private double spacing;
 	private double minimumSpacing;
 
-	public Drumset(ScorePartwise scorePartwise, Pane pane) {
+	private double fontSize;
+	private double staffSpacing;
+	private double musicLineSpacing;
+
+	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double staffSpacing, double musicLineSpaing) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
@@ -56,8 +60,12 @@ public class Drumset {
 		this.x = 0;
 		this.y = 0;
 
-		this.minimumSpacing = 30;
-		this.spacing = 30;
+		this.minimumSpacing = minimumSpacing;
+		this.spacing = minimumSpacing;
+
+		this.fontSize = fontSize;
+		this.staffSpacing = staffSpacing;
+		this.musicLineSpacing = musicLineSpaing;
 
 		this.drumTieCoords = new ArrayList<Double[]>();
 		this.cymbalTieCoords = new ArrayList<Double[]>();
