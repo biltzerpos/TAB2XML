@@ -162,8 +162,7 @@ public class MusicPlayer {
 							ns = "R";
 						} else {
 							if (n.getGrace() != null) {
-								n.getGrace();
-								continue;
+								ns = "q";
 							}else {
 								int octave = n.getPitch().getOctave();
 								ns = n.getPitch().getStep() + getAlter(n)+ octave;
@@ -261,7 +260,13 @@ public class MusicPlayer {
 		}
 		return res;
 	}
-	
+	public String getDot(Note note) {
+		String str = "";
+		if(note.getDots() != null){
+			str = ".";
+		}
+		return str;
+	}
 	
 	private String getDrumNoteFullName(String Id) {
 		String fullName = "";
