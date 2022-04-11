@@ -70,6 +70,7 @@ public class Guitar {
 		this.noteDrawer = new DrawNote();
 		this.noteDrawer.setFont(this.fontSize);
 		this.noteDrawer.setGraceFontSize(this.fontSize - 4);
+		this.noteDrawer.setFontType(fontName);
 		this.d = new DrawMusicLines(this.pane, noteSpacing, staffSpacing);
 		this.slurDrawer = new DrawSlur();
 		this.slurDrawer.setPane(this.pane);
@@ -206,7 +207,7 @@ public class Guitar {
 		num.setY(getFirstLineCoordinateY() + y - this.fontSize);
 		num.setText(n);
 		num.setViewOrder(-1);
-		num.setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, this.fontSize));
+		num.setFont(Font.font(this.font, FontPosture.ITALIC, this.fontSize));
 		this.pane.getChildren().add(num);
 	}
 
@@ -308,6 +309,7 @@ public class Guitar {
 									if (count > 1) {
 										Text t = new Text(noteDrawer.getStartX() + (this.fontSize),
 												positionY + y - (this.fontSize / 2), "gliss");
+										t.setFont(Font.font(this.font, FontPosture.REGULAR, this.fontSize/1.2));
 										t.setRotate(-20);
 										this.pane.getChildren().add(t);
 									}
@@ -483,7 +485,7 @@ public class Guitar {
 			double firstMusicLine = getFirstLineCoordinateY() + y;
 			int string = note.getNotations().getTechnical().getString();
 			double positionY = getLineCoordinateY(string) + y;
-			DrawBend db = new DrawBend(pane, note, noteDrawer.getStartX()+(spacing/2), positionY, firstMusicLine, spacing);
+			DrawBend db = new DrawBend(pane, note, noteDrawer.getStartX()+(spacing/2), positionY, firstMusicLine, spacing, this.font, this.fontSize);
 			db.draw();
 		}
 	}
@@ -599,7 +601,7 @@ public class Guitar {
 		String current = note.getType();
 		double py = getLastLineCoordinateY();
 		double shortStick = this.fontSize + 3;
-		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + (this.fontSize/4), py + y, shortStick, this.fontSize);
+		DrawNoteType type = new DrawNoteType(pane, noteDrawer.getStartX() + (this.fontSize/4), py + y, shortStick, this.fontSize, this.font);
 		if (noteHasActual(note)) {
 			// get the number of the actuals in a row --> 2 or 3
 			int ActualCounter = getActualNum(note, noteList);
@@ -652,7 +654,7 @@ public class Guitar {
 					String actual = Integer.toString(note.getTimeModification().getActualNotes());
 					Text t = new Text(noteDrawer.getStartX() - spacing, py + y + (3*fontSize)+20, actual);
 					t.setViewOrder(-1);
-					t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, this.fontSize));
+					t.setFont(Font.font(this.font, FontWeight.BOLD, FontPosture.ITALIC, this.fontSize));
 					this.pane.getChildren().add(t);
 					this.ActualCounter = 2;
 				}
@@ -668,7 +670,7 @@ public class Guitar {
 				String actual = Integer.toString(note.getTimeModification().getActualNotes());
 				Text t = new Text(noteDrawer.getStartX() - spacing, py + y + (3*fontSize)+20, actual);
 				t.setViewOrder(-1);
-				t.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, this.fontSize));
+				t.setFont(Font.font(this.font, FontWeight.BOLD, FontPosture.ITALIC, this.fontSize));
 				this.pane.getChildren().add(t);
 				this.ActualCounter = 2;
 			}
