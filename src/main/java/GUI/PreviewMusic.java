@@ -349,34 +349,124 @@ public class PreviewMusic extends Application {
 				double ml = 0; 
 				double ns = 0; 
 				double ss = 0; 
-				if(newSpacing <= 12) {
-					noteSpacing.setMin(20);
-					noteSpacing.setMax(25);
-					ns = getNoteSpacingValue(); 
-					if(ns <=25) {
-						noteSpacing.setValue(ns);
-					}else {
-						noteSpacing.setValue(25);
+//				if(newSpacing <= 12) {
+//					noteSpacing.setMin(20);
+//					noteSpacing.setMax(25);
+//					ns = getNoteSpacingValue(); 
+//					if(ns <=25) {
+//						noteSpacing.setValue(ns);
+//					}else {
+//						noteSpacing.setValue(25);
+//					}
+//				}
+//				if(newSpacing > 12 && newSpacing <=25) {
+//					StaffSpacingSlider.setMin(15);
+//					StaffSpacingSlider.setMax(30);
+//					ss = getStaffSpacingValue(); 
+//					if( ss >=15 && ss <= 30) {
+//					StaffSpacingSlider.setValue(ss);
+//					}else {
+//						StaffSpacingSlider.setValue(15);
+//					}
+//				}
+//				if(newSpacing > 20) {
+//					noteSpacing.setMin(30);
+//					ns = getNoteSpacingValue(); 
+//					if(ns >= 30) {
+//						noteSpacing.setValue(ss);
+//					}
+//					else {
+//						noteSpacing.setValue(30);
+//					}
+//				}
+//				else {
+//					noteSpacing.setMin(20);
+//					noteSpacing.setMax(60);
+//					ns = getNoteSpacingValue(); 
+//					if(ns <=60) {
+//						noteSpacing.setValue(ns);
+//					}else {
+//						noteSpacing.setValue(30);
+//					}
+//				}
+				if(newSpacing > 14) {
+					StaffSpacingSlider.setMin(15); 
+					ss = StaffSpacingSlider.getValue(); 
+					if(ss>=15) {
+						StaffSpacingSlider.setValue(ss); 
+					}
+					else {
+						StaffSpacingSlider.setValue(15); 
 					}
 				}
-				if(newSpacing > 12 && newSpacing <=25) {
-					StaffSpacingSlider.setMin(15);
-					StaffSpacingSlider.setMax(30);
-					ss = getStaffSpacingValue(); 
-					if( ss >=15 && ss <= 30) {
-					StaffSpacingSlider.setValue(ss);
-					}else {
-						StaffSpacingSlider.setValue(15);
+				if(newSpacing > 15) {
+					musicLineSlider.setMin(220); 
+					ml = musicLineSlider.getValue(); 
+					if(ml >= 220) {
+						musicLineSlider.setValue(ml); 
+					}
+					else {
+						musicLineSlider.setValue(220);
 					}
 				}
-				else {
-					noteSpacing.setMin(20);
-					noteSpacing.setMax(60);
-					ns = getNoteSpacingValue(); 
-					if(ns <=60) {
-						noteSpacing.setValue(ns);
-					}else {
-						noteSpacing.setValue(30);
+				if(newSpacing>17) {
+					StaffSpacingSlider.setMin(20); 
+					ss = StaffSpacingSlider.getValue(); 
+					if(ss>=20) {
+						StaffSpacingSlider.setValue(ss); 
+					}
+					else {
+						StaffSpacingSlider.setValue(20); 
+					}
+				}
+				if(newSpacing > 20) {
+					musicLineSlider.setMin(270); 
+					ml = musicLineSlider.getValue(); 
+					if(ml >= 270) {
+						musicLineSlider.setValue(ml); 
+					}
+					else {
+						musicLineSlider.setValue(270);
+					}
+				}
+				if(newSpacing>23) {
+					StaffSpacingSlider.setMin(25); 
+					ss = StaffSpacingSlider.getValue(); 
+					if(ss>=25) {
+						StaffSpacingSlider.setValue(ss); 
+					}
+					else {
+						StaffSpacingSlider.setValue(25); 
+					}
+					
+					noteSpacing.setMin(35); 
+					ns = noteSpacing.getValue(); 
+					if(ns >= 35) {
+						noteSpacing.setValue(ns); 
+					}
+					else {
+						noteSpacing.setValue(35); 
+					}
+				}
+				if(newSpacing > 25) {
+					musicLineSlider.setMin(320); 
+					ml = musicLineSlider.getValue(); 
+					if(ml >= 320) {
+						musicLineSlider.setValue(ml); 
+					}
+					else {
+						musicLineSlider.setValue(320);
+					}
+				}
+				if(newSpacing>27) {
+					
+					noteSpacing.setMin(40); 
+					ns = noteSpacing.getValue(); 
+					if(ns >= 40) {
+						noteSpacing.setValue(ns); 
+					}
+					else {
+						noteSpacing.setValue(40); 
 					}
 				}
 			}});
