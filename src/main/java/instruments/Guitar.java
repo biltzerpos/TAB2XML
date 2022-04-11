@@ -48,12 +48,13 @@ public class Guitar {
 	private int ActualCounter;
 	private int six16thActual;
 	private int eight32ndnotes;
+	private String font; 
 
 	public Guitar() {
 	}
 
 	public Guitar(ScorePartwise scorePartwise, Pane pane, int noteSpacing, int font, int StaffSpacing,
-			int LineSpacing) {
+			int LineSpacing, String fontName) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
@@ -73,6 +74,7 @@ public class Guitar {
 		this.slurDrawer = new DrawSlur();
 		this.slurDrawer.setPane(this.pane);
 		this.harmonic = 0;
+		this.font = fontName; 
 	}
 
 	/*
@@ -93,7 +95,7 @@ public class Guitar {
 			if (x == 0) {
 				d.draw(x, y);
 				double clefSpacing = this.staffSpacing + (this.staffSpacing / 2);
-				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing);
+				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing, this.font);
 				dc.setFontSize(this.fontSize + 6);
 				dc.draw(clefSpacing);
 				drawMeasureNum(i);
@@ -134,7 +136,7 @@ public class Guitar {
 
 				d.draw(x, y);
 				double clefSpacing = this.staffSpacing + (this.staffSpacing / 2);
-				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing);
+				DrawClef dc = new DrawClef(this.pane, clef, x, y + clefSpacing, this.font);
 				dc.setFontSize(this.fontSize + 6);
 				dc.draw(clefSpacing);
 				drawMeasureNum(i);
@@ -143,6 +145,9 @@ public class Guitar {
 				numOfNotes += countNotes(noteList);
 				tempList.add(measure);
 				width = width - spaceRequired;
+				if (i == measureList.size() - 1) {
+					drawMeasuresOnSameLine(tempList);
+				}
 
 			}
 		}
