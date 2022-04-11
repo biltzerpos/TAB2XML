@@ -291,7 +291,6 @@ public class PreviewMusic extends Application {
 	@FXML
 	public void playHandle() throws InvalidMidiDataException {  
 		String instrument = getInstrument();
-		
      
 		if (num == 1) {
 			sequencer.setSequence(getMusicString());
@@ -305,6 +304,11 @@ public class PreviewMusic extends Application {
 				this.drum.highlightNote();
 				
 			}
+			else if (instrument == "Bass") {
+				this.bass.starthighlight();
+				this.bass.highlightNote();
+				
+			}
 		}
 		if (sequencer.getTickPosition() == sequencer.getTickLength()) {
 			sequencer.setTickPosition(0);
@@ -314,6 +318,11 @@ public class PreviewMusic extends Application {
 			} else if (instrument == "Drumset") {
 				this.drum.starthighlight();
 				this.drum.highlightNote(); 
+			}
+			else if (instrument == "Bass") {
+				this.bass.starthighlight();
+				this.bass.highlightNote();
+				
 			}
 		}
 	
@@ -333,6 +342,9 @@ public class PreviewMusic extends Application {
 			else if (instrument == "Drumset") {
 				this.drum.stophighlight();
 			}
+			else if (instrument == "Bass") {
+				this.drum.stophighlight();
+			}
 			sequencer.getTickPosition();
 		}
 	
@@ -343,8 +355,19 @@ public class PreviewMusic extends Application {
 	public void restartMusicHandle() throws InvalidMidiDataException {
 		sequencer.setSequence(getMusicString());
 		sequencer.start();	
-		this.drum.starthighlight();
-		this.drum.highlightNote();
+		String instrument = getInstrument();
+		if (instrument == "Guitar") {
+			this.guitar.starthighlight();
+			this.guitar.highlightNote();
+		} 
+		else if (instrument == "Drumset") {
+			this.drum.starthighlight();
+			this.drum.highlightNote();
+		}
+		else if (instrument == "Bass") {
+			this.bass.starthighlight();
+			this.bass.highlightNote();	
+		}
 	}
 	
 	public void closeSequencer() {

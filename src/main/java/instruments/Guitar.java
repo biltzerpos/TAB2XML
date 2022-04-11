@@ -902,7 +902,6 @@ public class Guitar {
 							rectangle.setTranslateY(yPositionNote-15);
 							rectangle.setFill(Color.TRANSPARENT);
 							pane.getChildren().add(rectangle);
-							
 							r.add(rectangle);                
 							this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
 							if (currentNote.getDuration() !=null) {
