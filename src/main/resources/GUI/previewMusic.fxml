@@ -20,7 +20,7 @@
          <children>
             <AnchorPane layoutY="13.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="32.0">
                <children>
-                  <ScrollPane pannable="true" stylesheets="@scrollPane_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ScrollPane fitToWidth="true" pannable="true" stylesheets="@scrollPane_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <AnchorPane fx:id="anchorPane" style="-fx-background-color: white;">
                            <children>
@@ -99,7 +99,7 @@
                         </VBox>
                         <VBox prefWidth="150.0">
                            <children>
-                              <Slider fx:id="noteSpacing" blockIncrement="5.0" majorTickUnit="5.0" max="60.0" min="20.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" value="40.0" />
+                              <Slider fx:id="noteSpacing" blockIncrement="5.0" majorTickUnit="5.0" max="60.0" min="20.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" value="30.0" />
                            </children>
                         </VBox>
                      </children>
@@ -113,7 +113,7 @@
                         </VBox>
                         <VBox prefWidth="150.0">
                            <children>
-                              <Slider fx:id="musicLineSlider" blockIncrement="50.0" majorTickUnit="10.0" max="300.0" min="120.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="150.0" />
+                              <Slider fx:id="musicLineSlider" blockIncrement="50.0" majorTickUnit="50.0" max="420.0" min="120.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="170.0" />
                            </children>
                         </VBox>
                      </children>
@@ -127,21 +127,7 @@
                         </VBox>
                         <VBox prefWidth="150.0">
                            <children>
-                              <ChoiceBox prefHeight="0.0" prefWidth="150.0" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="282.0">
-                     <children>
-                        <VBox alignment="CENTER_LEFT" prefWidth="110.0">
-                           <children>
-                              <Label text="Font Style: " />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER_LEFT" prefWidth="150.0">
-                           <children>
-                              <ChoiceBox prefHeight="0.0" prefWidth="150.0" />
+                              <ChoiceBox fx:id="fontChoice" prefHeight="0.0" prefWidth="150.0" stylesheets="@styles.css" />
                            </children>
                         </VBox>
                      </children>
@@ -155,7 +141,7 @@
                         </VBox>
                         <VBox prefWidth="150.0">
                            <children>
-                              <Slider fx:id="FontSizeSlider" blockIncrement="1.0" majorTickUnit="1.0" max="0.0" minorTickCount="0" prefWidth="150.0" snapToTicks="true" stylesheets="@styles.css" />
+                              <Slider fx:id="FontSizeSlider" blockIncrement="1.0" majorTickUnit="2.0" max="30.0" min="10.0" minorTickCount="1" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" value="12.0" />
                            </children>
                         </VBox>
                      </children>

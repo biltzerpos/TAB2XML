@@ -43,4 +43,13 @@
 
 .slider .axis { -fx-tick-label-fill: white; }
 
+.choice-box > .label { -fx-text-fill: black; }
+.choice-box {
+  -fx-mark-color: black; 
+}
+.choice-box .menu-item:focused { 
+	-fx-background-color: rgb(50,50,50);
+}
+.choice-box .menu-item:focused > .label { -fx-text-fill: white; }
+
 
