@@ -37,6 +37,9 @@ public class Drumset {
 	private HashMap<Measure, Double> xCoordinates;
 	private HashMap<Measure, Double> yCoordinates;
 
+	private List<Rectangle> hightlightRectanlges;
+	private List<Double> noteDurations;
+
 	private double x;
 	private double y;
 
@@ -65,12 +68,20 @@ public class Drumset {
 	 */
 	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double musicLineSpacing, double staffSpacing) {
 		super();
+
 		this.scorePartwise = scorePartwise;
+
 		this.pane = pane;
+
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
+
 		this.clef = this.scorePartwise.getParts().get(0).getMeasures().get(0).getAttributes().getClef();
-		xCoordinates = new HashMap<>();
-		yCoordinates = new HashMap<>();
+
+		this.xCoordinates = new HashMap<>();
+		this.yCoordinates = new HashMap<>();
+
+		this.hightlightRectanlges = new ArrayList<Rectangle>();
+		this.noteDurations = new ArrayList<Double>();
 
 		this.x = 0;
 		this.y = 0;
@@ -102,6 +113,8 @@ public class Drumset {
 		Note currentNote, nextNote;
 		DrawDrumsetNote noteDrawer;
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize + this.musicLineSpacing);
+
+		Rectangle currentHighlightRectangle;
 
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
@@ -207,6 +220,20 @@ public class Drumset {
 				noteDrawer.draw();
 			}
 
+			// Adding the current note to the highlight rectangle list and duration list.
+			if (currentNote != null && currentNote.getDuration() != null) {
+				// Make the rectangle to be hightlighted
+				currentHighlightRectangle = new Rectangle(this.x, this.y, this.spacing, 5 * (10 * this.fontSize + 2 * this.musicLineSpacing));
+				currentHighlightRectangle.setFill(Color.TRANSPARENT);
+
+				// Add the rectangle to the pane
+				pane.getChildren().add(currentHighlightRectangle);
+
+				// Add the rectangle and duration to the rectangle and duration lists
+				this.hightlightRectanlges.add(currentHighlightRectangle);
+				this.noteDurations.add(1000.0 / currentNote.getDuration());
+			}
+
 			// If the current note is not a chord, increment x position
 			this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
 		}
@@ -223,6 +250,8 @@ public class Drumset {
 		Note currentNote;
 		DrawDrumsetNote noteDrawer;
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize + this.musicLineSpacing);
+
+		Rectangle currentHighlightRectangle;
 
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
@@ -272,6 +301,20 @@ public class Drumset {
 				}
 
 				this.handleTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
+			}
+
+			// Adding the current note to the highlight rectangle list and duration list.
+			if (currentNote != null && currentNote.getDuration() != null) {
+				// Make the rectangle to be hightlighted
+				currentHighlightRectangle = new Rectangle(this.x, this.y, this.spacing, 5 * (10 * this.fontSize + 2 * this.musicLineSpacing));
+				currentHighlightRectangle.setFill(Color.TRANSPARENT);
+
+				// Add the rectangle to the pane
+				pane.getChildren().add(currentHighlightRectangle);
+
+				// Add the rectangle and duration to the rectangle and duration lists
+				this.hightlightRectanlges.add(currentHighlightRectangle);
+				this.noteDurations.add(1000.0 / currentNote.getDuration());
 			}
 
 			// If the current note is a chord, increment x position
@@ -665,81 +708,33 @@ public class Drumset {
 			y = yf;
 		}
 	}
-	
-	 public void highlightNote() {
-			
-		 ArrayList<Rectangle> r = new ArrayList<Rectangle>(); 
-			ArrayList<Double> noteDuration = new ArrayList<Double>();
-			
-				Note currentNote;
-				double xPositionNote;
-				double yPositionNote;
-				x = 0;
-				y = 0;			
-				//iterate thru measures (boxes)
-				for (int i = 0; i < measureList.size(); i++) {
-					Measure measure = measureList.get(i);
-					List<Note> noteList = measure.getNotesBeforeBackup();
-					double w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
-					double yf = getYCoordinatesForGivenMeasure(measureList.get(i));
-					if (yf > y) {
-						x = 0;
-						w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
-						y = yf;
-					}
-				
-					if (noteList !=null) {
-					//iterate thru each note inside each measure
-					for (int j = 0; j < noteList.size(); j++) {
-						Rectangle rectangle = new Rectangle();
-						rectangle.setWidth(13);
-						rectangle.setHeight(90);
-						rectangle.setFill(Color.TRANSPARENT);
-						pane.getChildren().add(rectangle);
-						currentNote = noteList.get(j);
-						xPositionNote = currentNote.getChord() == null ? this.x + this.spacing / 2 : this.x - this.spacing / 2;
-						yPositionNote = getYCoordinatesForGivenMeasure(measureList.get(i));
-						rectangle.setX(xPositionNote-2);
-						rectangle.setY(yPositionNote);
-						r.add(rectangle); 
-						if (currentNote.getDuration() !=null) {
-							int duration= currentNote.getDuration();
-							double duration2 =1000.0/((double)duration);
-							noteDuration.add(duration2);
-							if (currentNote.getDots()!=null){
-								double n = 2;
-								for (int m=0;m<currentNote.getDots().size();m++){
-									duration2 += duration2/n;
-									n*=2;	
-								}
-							}
-							noteDuration.add((double) duration2);
-							}
-						
-						this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
-						}
-				}
-				}
-				
-				HighlightNote note = new HighlightNote(this, r, noteDuration);
-				note.start();
-			
-				ObservableList children = pane.getChildren();
-		 		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
-		 		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
-		 			Object object = (Object) iterator.next();
-		 			if (object instanceof Rectangle) {
-		 				if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
-		 					removeRect.add((Rectangle) object);
-		 				}
-		 			}
-		 		}
 
-		 		for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
-		 			Rectangle rect = (Rectangle) iterator.next();
-		 			pane.getChildren().remove(rect);
-		 		}
-	     }
+	public void highlightNote() {
+		ArrayList<Rectangle> r = (ArrayList<Rectangle>) this.hightlightRectanlges;
+		ArrayList<Double> noteDuration = (ArrayList<Double>) this.noteDurations;
+
+		HighlightNote note = new HighlightNote(this, r, noteDuration);
+		note.start();
+
+		ObservableList children = pane.getChildren();
+		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
+
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Object object = (Object) iterator.next();
+
+			if (object instanceof Rectangle) {
+				if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
+					removeRect.add((Rectangle) object);
+				}
+			}
+		}
+
+		for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
+			Rectangle rect = (Rectangle) iterator.next();
+			pane.getChildren().remove(rect);
+		}
+	}
+
 	 public Boolean playing;
 	
 	 public void starthighlight() {
