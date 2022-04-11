@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
@@ -15,11 +14,10 @@ import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
-import models.measure.note.Notehead;
+import GUI.HighlightNote;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawDrumsetBar;
 import GUI.draw.DrawDrumsetMusicLines;
-import GUI.draw.DrawNote;
 import GUI.draw.DrawDrumsetNote;
 
 public class Drumset {
@@ -32,6 +30,9 @@ public class Drumset {
 	private HashMap<Measure, Double> xCoordinates;
 	private HashMap<Measure, Double> yCoordinates;
 
+	private List<Rectangle> hightlightRectanlges;
+	private List<Double> noteDurations;
+
 	private double x;
 	private double y;
 
@@ -40,23 +41,53 @@ public class Drumset {
 
 	private List<Double[]> drumSlurCoords;
 	private List<Double[]> cymbalSlurCoords;
-	private String font; 
 
 	private double spacing;
+	private double minimumSpacing;
 
-	public Drumset(ScorePartwise scorePartwise, Pane pane) {
+	private double fontSize;
+	private double staffSpacing;
+	private double musicLineSpacing;
+
+	/**
+	 * Constructor for the Drumset class.
+	 *
+	 * @param scorePartwise   - The scorePartwise object to be drawn
+	 * @param pane            - The pane to be draw to
+	 * @param minimumSpacing  - The minimum spacing between notes
+	 * @param fontSize        - The size of the notes
+	 * @param musicLineSpaing - The space between music lines in a staff
+	 * @param staffSpacing    - The space between staffs
+	 */
+	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double musicLineSpacing, double staffSpacing) {
 		super();
+
 		this.scorePartwise = scorePartwise;
+
 		this.pane = pane;
+
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
+
 		this.clef = this.scorePartwise.getParts().get(0).getMeasures().get(0).getAttributes().getClef();
-		xCoordinates = new HashMap<>();
-		yCoordinates = new HashMap<>();
+
+		this.xCoordinates = new HashMap<>();
+		this.yCoordinates = new HashMap<>();
+
+		this.hightlightRectanlges = new ArrayList<Rectangle>();
+		this.noteDurations = new ArrayList<Double>();
 
 		this.x = 0;
 		this.y = 0;
 
-		this.spacing = 30;
+		this.minimumSpacing = minimumSpacing + musicLineSpacing;
+		this.spacing = this.minimumSpacing;
+
+		this.fontSize = fontSize / 10 + (fontSize - 10) / 10;
+
+		this.musicLineSpacing = musicLineSpacing - 10;
+
+		this.staffSpacing = ((this.fontSize >= 1) ? 100 * this.fontSize : 75 + this.fontSize * 10)
+			+ (musicLineSpacing - 10) * 5 + staffSpacing - 100;
 
 		this.drumTieCoords = new ArrayList<Double[]>();
 		this.cymbalTieCoords = new ArrayList<Double[]>();
@@ -74,12 +105,14 @@ public class Drumset {
 	private void drawGroupedNotes(List<Note> notes) {
 		Note currentNote, nextNote;
 		DrawDrumsetNote noteDrawer;
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing);
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize + this.musicLineSpacing);
+
+		Rectangle currentHighlightRectangle;
 
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
 		// Draw initial music lines
-		d.draw(this.x, this.y);
+		d.drawInitial(this.x, this.y);
 
 		for (int i = 0; i < notes.size(); i++) {
 			// Get current note
@@ -117,7 +150,7 @@ public class Drumset {
 						currentNote.getUnpitched().getDisplayStep());
 	
 				// Set note drawer for the current note
-				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
+				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, this.fontSize, xPositionNote, yPositionNote);
 	
 				if (currentNote.getChord() != null || currentNote.getGrace() != null) {
 					// If the note is a chord or grace note, then the beam will already have been
@@ -173,11 +206,25 @@ public class Drumset {
 					noteDrawer.draw();
 				}
 
-				this.drawTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
+				this.handleTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
 			} else {
 				yPositionNote = d.getYPositionFromOctaveAndStep(4, "B");
-				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
+				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, this.fontSize, xPositionNote, yPositionNote);
 				noteDrawer.draw();
+			}
+
+			// Adding the current note to the highlight rectangle list and duration list.
+			if (currentNote != null && currentNote.getDuration() != null) {
+				// Make the rectangle to be hightlighted
+				currentHighlightRectangle = new Rectangle(this.x, this.y, this.spacing, 5 * (10 * this.fontSize + 2 * this.musicLineSpacing));
+				currentHighlightRectangle.setFill(Color.TRANSPARENT);
+
+				// Add the rectangle to the pane
+				pane.getChildren().add(currentHighlightRectangle);
+
+				// Add the rectangle and duration to the rectangle and duration lists
+				this.hightlightRectanlges.add(currentHighlightRectangle);
+				this.noteDurations.add(1000.0 / currentNote.getDuration());
 			}
 
 			// If the current note is not a chord, increment x position
@@ -195,12 +242,14 @@ public class Drumset {
 	private void drawUngroupedNotes(List<Note> notes) {
 		Note currentNote;
 		DrawDrumsetNote noteDrawer;
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing);
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize + this.musicLineSpacing);
+
+		Rectangle currentHighlightRectangle;
 
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
 		// Draw initial music lines
-		d.draw(this.x, this.y);
+		d.drawInitial(this.x, this.y);
 
 		for (int i = 0; i < notes.size(); i++) {
 			currentNote = notes.get(i);
@@ -222,7 +271,7 @@ public class Drumset {
 
 			if (currentNote.getRest() != null) {
 				yPositionNote = d.getYPositionFromOctaveAndStep(4, "B");
-				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
+				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, this.fontSize, xPositionNote, yPositionNote);
 				noteDrawer.draw();
 			} else {
 				// y-position of note
@@ -232,7 +281,7 @@ public class Drumset {
 						currentNote.getUnpitched().getDisplayStep());
 	
 				// Set note drawer for the current note
-				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, xPositionNote, yPositionNote);
+				noteDrawer = new DrawDrumsetNote(this.pane, currentNote, yPositionMeasure, this.spacing, this.fontSize, xPositionNote, yPositionNote);
 	
 				// Draw the note
 				noteDrawer.draw();
@@ -244,7 +293,21 @@ public class Drumset {
 					noteDrawer.drawFlag();
 				}
 
-				this.drawTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
+				this.handleTieOrSlur(currentNote, noteDrawer, xPositionNote, yPositionNote);
+			}
+
+			// Adding the current note to the highlight rectangle list and duration list.
+			if (currentNote != null && currentNote.getDuration() != null) {
+				// Make the rectangle to be hightlighted
+				currentHighlightRectangle = new Rectangle(this.x, this.y, this.spacing, 5 * (10 * this.fontSize + 2 * this.musicLineSpacing));
+				currentHighlightRectangle.setFill(Color.TRANSPARENT);
+
+				// Add the rectangle to the pane
+				pane.getChildren().add(currentHighlightRectangle);
+
+				// Add the rectangle and duration to the rectangle and duration lists
+				this.hightlightRectanlges.add(currentHighlightRectangle);
+				this.noteDurations.add(1000.0 / currentNote.getDuration());
 			}
 
 			// If the current note is a chord, increment x position
@@ -331,47 +394,26 @@ public class Drumset {
 			durationSum = 0;
 		}
 
+		// Add to lists for go-to measure
+		xCoordinates.put(measure, this.x);
+		yCoordinates.put(measure, this.y - 30);
+
+		// Draw bar line after every measure
+		DrawDrumsetBar bar = new DrawDrumsetBar(this.pane, 10 * this.fontSize + 2 * this.musicLineSpacing);
+		bar.draw(this.x, this.y);
 	}
 
 	/**
-	 * Draw the sheet music for drums.
+	 * Draws a staff (which consists of a group of measure(s)).
+	 * This should take up one line in the sheet music.
+	 *
+	 * @param staff    - The list of measures to be drawn
+	 * @param d        - DrawDrumsetMusicLines drawer
+	 * @param drumClef - DrawClef drawer
 	 */
-	public void draw() {
-
-		// Initialize x and y coordinates
-		this.x = 0;
-		this.y = 0;
-
-		double width = this.pane.getMaxWidth();
-
-		// Draw the initial music lines
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing);
-		d.draw(this.x, this.y);
-
-		DrawClef drumclef = new DrawClef(this.pane, clef, x + 25, 0, this.font);
-		drumclef.drawDrumClef1();
-		drumclef.drawDrumClef2();
-
-		this.x += this.spacing;
-
+	private void drawStaff(List<Measure> staff, DrawDrumsetMusicLines d, DrawClef drumClef) {
 		// Iterate through the list of measures
-		for (Measure measure : measureList) {
-			// If the current line is getting too long, then make a new line
-			// and draw a drum clef for the new line.
-			if (this.x + this.getMeasureLength(measure) > width) {
-				this.x = 0;
-				this.y += 100;
-
-				// Draw music lines for drum clef, then draw drum clef and incremement x
-				d.draw(this.x, this.y);
-
-				drumclef = new DrawClef(this.pane, clef, x + 20, this.y, this.font);
-				drumclef.drawDrumClef1();
-				drumclef.drawDrumClef2();
-
-				this.x += this.spacing;
-			}
-
+		for (Measure measure : staff) {
 			// If the measure has a time signature, then draw it
 			if (measure.getAttributes() != null && measure.getAttributes().getTime() != null) {
 				// Draw music lines for the time signature
@@ -379,65 +421,176 @@ public class Drumset {
 				this.x += this.spacing;
 
 				// Draw the time signature
-				drumclef.drawTimeSignature(
+				drumClef.drawTimeSignature(
 					measure.getAttributes().getTime().getBeats(),
 					measure.getAttributes().getTime().getBeats(),
 					this.x - this.spacing / 2,
-					this.y
+					this.y,
+					this.fontSize,
+					this.musicLineSpacing
 				);
 			}
 
 			// Draw the current measure
 			this.drawMeasure(measure);
-
-			xCoordinates.put(measure, this.x);
-			yCoordinates.put(measure, this.y - 30);
-
-			// Draw bar line after every measure
-			DrawDrumsetBar bar = new DrawDrumsetBar(this.pane);
-			bar.draw(this.x, this.y);
 		}
 	}
 
-	private void drawTieOrSlur(Note note, DrawDrumsetNote noteDrawer, double xPosition, double yPosition) {
+	/**
+	 * Draw the sheet music for drums.
+	 */
+	public void draw() {
+		this.x = 0;
+		this.y = 0;
+
+		double paneWidth = this.pane.getMaxWidth();
+
+		DrawDrumsetMusicLines d;
+		DrawClef drumClef;
+
+		this.x += this.spacing;
+
+		// The length of the current staff (pixels)
+		double staffLength = this.minimumSpacing;
+		// The number of non chord or grace notes (number of notes that take up a unique space in the staff)
+		int noteSpaces = 1;
+		// The measures in the current staff
+		List<Measure> staff = new ArrayList<Measure>();
+
+		Measure measure;
+
+		// Iterate through the measures
+		for (int i = 0; i < this.measureList.size(); i++) {
+			// Get the current measure
+			measure = this.measureList.get(i);
+
+			// Add the current measure to the staff list, and add its note spaces
+			// and length to the counters
+			staff.add(measure);
+			noteSpaces += this.getMeasureLength(measure);
+			staffLength = noteSpaces * this.minimumSpacing;
+
+			// If the current measure is the last measure in the score,
+			// or if the next measure will cause the staff to span greater than the pane width,
+			// then draw the measure, otherwise keep iterating.
+			if (i == this.measureList.size() - 1
+				|| staffLength + this.getMeasureLength(measureList.get(i+1)) * this.minimumSpacing > paneWidth
+			) {
+				// Calculate the extra spacing to be added to the minimum spacing
+				// (this makes the notes justified).
+				double spacingPadding = (paneWidth - staffLength) / noteSpaces;
+				this.spacing = this.minimumSpacing + spacingPadding;
+
+				this.x = 0;
+
+				// Draw music lines for clef
+				d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize + this.musicLineSpacing);
+				d.draw(this.x, this.y);
+
+				// Draw drum clef
+				drumClef = new DrawClef(this.pane, d.getYPositionFromOctaveAndStep(5, "D"), d.getYPositionFromOctaveAndStep(4, "G"));
+				drumClef.drawDrumClef();
+
+				// Increment x-position
+				this.x += this.spacing;
+
+				// Draw staff
+				this.drawStaff(staff, d, drumClef);
+
+				// Reset staff list and counters
+				staff.clear();
+				noteSpaces = 1;
+				staffLength = this.minimumSpacing;
+
+				// Increment y-position
+				this.y += this.staffSpacing;
+			}
+		}
+	}
+
+	/**
+	 * Checks for ties and slurs in the current note and, based on previous tied and slurred notes,
+	 * may draw the tie or slur as a curve between notes.
+	 *
+	 * @param note       - The current note to check for ties
+	 * @param noteDrawer - The DrawDrumsetNote object for the current note
+	 * @param xPosition  - The x-coordinate of the given note
+	 * @param yPosition  - The y-coordinate of the given note
+	 */
+	private void handleTieOrSlur(Note note, DrawDrumsetNote noteDrawer, double xPosition, double yPosition) {
+		// Tied and slurred notes are handled by keeping track of the coordinates of tied and slurred
+		// notes for drums and cymbals (in a class variable), and drawing when there are enough tied or
+		// slurred notes in these variables to be drawn.
+
+		// Check for notations first (because ties and slurs are found in notations)
 		if (note.getNotations() != null) {
+
+			// Check if the note is a tied note
 			if (note.getNotations().getTieds() != null) {
+
+				// Check if the note is a cymbal note
 				if (note.getNotehead() == null) {
+					// If not a cymbal note, add the current coordinates to the drum tie coordinates list
 					drumTieCoords.add(new Double[] {xPosition, yPosition});
 				} else {
+					// If it is a cymbal note, add the current coordinates to the cymbal tie coordinates list
 					cymbalTieCoords.add(new Double[] {xPosition, yPosition});
 				}
-	
+
+				// If the drum tie coordinate list has two elements, then a tie can be drawn
 				if (drumTieCoords.size() == 2) {
+					// Draw the tie
 					noteDrawer.drawTie(drumTieCoords);
+
+					// Check if the current note has more ties
 					if (note.getNotations().getTieds().size() == 2) {
+						// If the current note has two ties, then it is a start and end of a tie.
+						// So we add the note back in the coordinate list for the next tie.
 						drumTieCoords.clear();
 						drumTieCoords.add(new Double[] {xPosition, yPosition});
 					} else {
+						// If the current note only has one tie, then just clear the list because it has been drawn
 						drumTieCoords.clear();
 					}
 				}
+
+				// If the cymbal tie coordinate list has two elements, then a tie can be drawn
 				if (cymbalTieCoords.size() == 2) {
+					// Draw the tie
 					noteDrawer.drawTie(cymbalTieCoords);
+
+					// Check if the current note has more ties
 					if (note.getNotations().getTieds().size() == 2) {
+						// If the current note has two ties, then it is a start and end of a tie.
+						// So we add the note back in the coordinate list for the next tie.
 						cymbalTieCoords.clear();
 						cymbalTieCoords.add(new Double[] {xPosition, yPosition});
 					} else {
+						// If the current note only has one tie, then just clear the list because it has been drawn
 						cymbalTieCoords.clear();
 					}
 				}
 			}
+
+			// Check if the note is a slurred note
 			if (note.getNotations().getSlurs() != null) {
+
+				// Check if the note is a cymbal note
 				if (note.getNotehead() == null) {
+					// If not a cymbal note, add the current coordinates to the drum slur coordinates list
 					drumSlurCoords.add(new Double[] {xPosition, yPosition});
 				} else {
+					// If it is a cymbal note, add the current coordinates to the cymbal slur coordinates list
 					cymbalSlurCoords.add(new Double[] {xPosition, yPosition});
 				}
-	
+
+				// If the drum slur coordinate list has two elements, then a slur can be drawn
 				if (drumSlurCoords.size() == 2) {
 					noteDrawer.drawSlur(drumSlurCoords);
 					drumSlurCoords.clear();
 				}
+
+				// If the cymbal slur coordinate list has two elements, then a slur can be drawn
 				if (cymbalSlurCoords.size() == 2) {
 					noteDrawer.drawSlur(cymbalSlurCoords);
 					cymbalSlurCoords.clear();
@@ -452,17 +605,20 @@ public class Drumset {
 	 *
 	 * @return The length of the measure in pixels.
 	 */
-	private double getMeasureLength(Measure measure) {
+	private int getMeasureLength(Measure measure) {
 		List<Note> notes = measure.getNotesBeforeBackup();
 		int length = 0;
 
-		if (notes == null) {
-			return 0;
+		// Check if measure has time signature
+		if (measure.getAttributes() != null && measure.getAttributes().getTime() != null) {
+			length += 1;
 		}
 
-		for (Note note : notes) {
-			if (note.getChord() == null && note.getGrace() == null) {
-				length += this.spacing;
+		if (notes != null) {
+			for (Note note : notes) {
+				if (note.getChord() == null && note.getGrace() == null) {
+					length += 1;
+				}
 			}
 		}
 
@@ -546,6 +702,43 @@ public class Drumset {
 		}
 	}
 
+	public void highlightNote() {
+		ArrayList<Rectangle> r = (ArrayList<Rectangle>) this.hightlightRectanlges;
+		ArrayList<Double> noteDuration = (ArrayList<Double>) this.noteDurations;
+
+		HighlightNote note = new HighlightNote(this, r, noteDuration);
+		note.start();
+
+		ObservableList children = pane.getChildren();
+		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
+
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Object object = (Object) iterator.next();
+
+			if (object instanceof Rectangle) {
+				if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
+					removeRect.add((Rectangle) object);
+				}
+			}
+		}
+
+		for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
+			Rectangle rect = (Rectangle) iterator.next();
+			pane.getChildren().remove(rect);
+		}
+	}
+
+	 public Boolean playing;
+	
+	 public void starthighlight() {
+		 this.playing = true;
+	 }
+	
+	 public void stophighlight() {
+		 this.playing=false;
+	 }
+	 
+	
 	// return X coordinates for given measure
 	public double getXCoordinatesForGivenMeasure(Measure measure) {
 		return xCoordinates.get(measure);

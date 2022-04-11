@@ -56,7 +56,7 @@ class DrawBarTest {
 
 		// see if the bar is set to the new value for startX
 		assertEquals(expected, actual);
-		// check that this new value is not equal to teh old value
+		// check that this new value is not equal to the old value
 		assertNotEquals(x, actual);
 	}
 
@@ -80,5 +80,6 @@ class DrawBarTest {
 		// check that this new value is not equal to the old value
 		assertNotEquals(y, actual);
 	}
+
 
 }

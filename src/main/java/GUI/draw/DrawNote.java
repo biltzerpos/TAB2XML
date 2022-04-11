@@ -59,6 +59,7 @@ public class DrawNote {
 	/**
 	 * this method draws note based on given Fret of guitar
 	 */
+	
 	public void drawFret() {
 		int fret = note.getNotations().getTechnical().getFret();
 		Text text = new Text(getStartX(), getStartY(), Integer.toString(fret));
@@ -88,6 +89,7 @@ public class DrawNote {
 		pane.getChildren().add(text);
 	}
 
+	
 	public void drawGuitarGrace() {
 		int f = getGraceFontSize();
 		int fret = note.getNotations().getTechnical().getFret();
@@ -102,6 +104,7 @@ public class DrawNote {
 			topInput.setHeight(f);
 			topInput.setWidth(f);
 			topInput.setPaint(Color.WHITE);
+			
 		} else {
 			topInput.setX(getStartX() - (f / 6));
 			topInput.setY(getStartY() - (f - 2));
