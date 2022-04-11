@@ -98,7 +98,7 @@ public class Drumset {
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
 		// Draw initial music lines
-		d.draw(this.x, this.y);
+		d.drawInitial(this.x, this.y);
 
 		for (int i = 0; i < notes.size(); i++) {
 			// Get current note
@@ -219,7 +219,7 @@ public class Drumset {
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
 		// Draw initial music lines
-		d.draw(this.x, this.y);
+		d.drawInitial(this.x, this.y);
 
 		for (int i = 0; i < notes.size(); i++) {
 			currentNote = notes.get(i);
@@ -437,7 +437,7 @@ public class Drumset {
 
 				this.x = 0;
 
-				// Draw initial music lines
+				// Draw music lines for clef
 				d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize);
 				d.draw(this.x, this.y);
 

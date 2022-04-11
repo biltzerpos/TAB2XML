@@ -75,6 +75,33 @@ public class DrawDrumsetMusicLines extends Node {
 	}
 
 	/**
+	 * Draws the initial sheet music lines for a group of notes.
+	 * The initial lines are always invisible, so that when visible lines are drawn,
+	 * they are not drawn twice in the same position.
+	 * This allows for calculation of an initial note's position without having the lines drawn yet.
+	 *
+	 * @param x The x-coordinate of the initial music lines
+	 * @param y The y-coordinate of the initial music lines
+	 */
+	public void drawInitial(double x, double y) {
+		this.addLine(x, y, false);
+
+		y += this.separator;
+
+		for (int i = 1; i < 6; i++) {
+			this.addLine(x, y, false);
+
+        	y += this.separator;
+
+			this.addLine(x, y, false);
+
+        	y += this.separator;
+    	}
+
+		this.addLine(x, y, false);
+	}
+
+	/**
 	 * Draws an individual line.
 	 *
 	 * @param x       The x-coordinate of the line
