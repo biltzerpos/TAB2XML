@@ -994,7 +994,7 @@ public class Guitar {
 				y = yf;
 			}
 			if (measure.equals(measureList.get(i))) {
-				Rectangle rectangle = new Rectangle(x, yf, w, 50);
+				Rectangle rectangle = new Rectangle(x, yf, w, this.staffSpacing * 5);
 				rectangle.setFill(Color.TRANSPARENT);
 				rectangle.setStyle("-fx-stroke: red;");
 				pane.getChildren().add(rectangle);
