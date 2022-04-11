@@ -9,14 +9,28 @@ public class DrawDrumsetBar {
 	@FXML private Pane pane; 
 	private double startX; 
 	private double startY;
+	private double separator;
 
 	public DrawDrumsetBar() {}
 
-	public DrawDrumsetBar(Pane pane) {
+	/**
+	 * Constructor for the DrawDrumsetBar class.
+	 *
+	 * @param pane      - The pane for which the bar will be drawn on.
+	 * @param separator - The length between two music lines
+	 */
+	public DrawDrumsetBar(Pane pane, double separator) {
 		super();
 		this.pane = pane;
+		this.separator = separator;
 	}
 
+	/**
+	 * Draw a bar at the specified position.
+	 *
+	 * @param x - The x-coordinate at which to draw the bar
+	 * @param y - The y-coordinate at which to draw the bar
+	 */
 	public void draw(double x, double y) {
 		Line barLine = new Line();
 
@@ -24,9 +38,9 @@ public class DrawDrumsetBar {
 		// drums is white (invisible to the user), so the barline should start at the second line
 		// (which is at y + 10).
 		barLine.setStartX(x);
-		barLine.setStartY(y + 10);
+		barLine.setStartY(y + this.separator);
 		barLine.setEndX(x);
-		barLine.setEndY(y + 50);
+		barLine.setEndY(y + 5 * this.separator);
 
     	pane.getChildren().add(barLine);
 	}

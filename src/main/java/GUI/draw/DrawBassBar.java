@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
-// This class draws a simple vertical bar (for Guitar)
+// This class draws a simple vertical bar
 public class DrawBassBar {
 
 	@FXML

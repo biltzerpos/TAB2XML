@@ -30,6 +30,7 @@ public class DrawDrumsetNote {
 	private Note note;
 	@FXML private Pane pane;
 	private double spacing;
+	private double c;
 
 	// Quarter rest SVG courtesy of Wikimedia Commons
 	// https://commons.wikimedia.org/wiki/File:QuarterRest.svg
@@ -47,7 +48,7 @@ public class DrawDrumsetNote {
 	// https://commons.wikimedia.org/wiki/File:32nd_rest.svg
 	private final String thirtySecondRestSVG = "M 553.789,69.863 C 553.273,69.964 552.871,70.324 552.695,70.82 C 552.652,70.98 552.652,71.019 552.652,71.238 C 552.652,71.456 552.652,71.538 552.695,71.656 C 552.832,72.097 553.113,72.433 553.551,72.632 C 553.848,72.792 553.988,72.812 554.406,72.812 C 554.926,72.812 555.363,72.734 556.063,72.515 C 556.242,72.452 556.379,72.413 556.379,72.413 C 556.398,72.413 556.219,73.113 555.98,73.949 C 555.684,75.124 555.563,75.503 555.523,75.62 C 555.363,75.921 555.023,76.378 554.805,76.577 C 554.605,76.757 554.488,76.796 554.289,76.718 C 554.109,76.62 554.047,76.519 553.93,75.98 C 553.828,75.581 553.75,75.363 553.59,75.202 C 553.172,74.745 552.453,74.687 551.898,75.046 C 551.637,75.222 551.438,75.503 551.32,75.8 C 551.277,75.96 551.277,75.999 551.277,76.218 C 551.277,76.519 551.301,76.679 551.438,76.917 C 551.637,77.316 552.055,77.636 552.535,77.753 C 552.754,77.816 553.313,77.816 553.691,77.753 C 554.008,77.695 554.387,77.593 554.766,77.476 C 554.945,77.417 555.086,77.374 555.086,77.374 C 555.086,77.394 554.289,80.425 554.246,80.484 C 554.09,80.824 553.77,81.242 553.531,81.48 C 553.273,81.738 553.133,81.781 552.914,81.699 C 552.734,81.601 552.672,81.499 552.555,80.96 C 552.453,80.562 552.375,80.343 552.215,80.187 C 551.797,79.726 551.078,79.667 550.523,80.027 C 550.262,80.206 550.063,80.484 549.945,80.785 C 549.902,80.941 549.902,80.984 549.902,81.202 C 549.902,81.421 549.902,81.499 549.945,81.62 C 550.082,82.058 550.363,82.398 550.801,82.597 C 551.121,82.757 551.238,82.777 551.676,82.777 C 551.996,82.777 552.098,82.777 552.355,82.734 C 552.715,82.675 553.094,82.558 553.512,82.437 L 553.77,82.335 L 553.77,82.398 C 553.75,82.476 552.074,88.773 552.055,88.812 C 552.035,88.894 552.395,89.05 552.613,89.05 C 552.832,89.05 553.152,88.913 553.172,88.812 C 553.191,88.792 554.148,84.667 555.344,79.648 C 557.477,70.562 557.477,70.542 557.438,70.48 C 557.375,70.402 557.277,70.363 557.156,70.363 C 557.016,70.382 556.957,70.441 556.816,70.679 C 556.539,71.16 556.219,71.577 556.043,71.718 C 555.922,71.796 555.82,71.796 555.664,71.738 C 555.484,71.636 555.422,71.538 555.305,70.999 C 555.184,70.46 555.043,70.222 554.746,70.023 C 554.469,69.843 554.109,69.785 553.789,69.863 z";
 
-	public DrawDrumsetNote(Pane pane, Note note, double top, double spacing, double x, double y) {
+	public DrawDrumsetNote(Pane pane, Note note, double top, double spacing, double size, double x, double y) {
 		super();
 		this.note = note;
 		this.x = x;
@@ -55,6 +56,7 @@ public class DrawDrumsetNote {
 		this.y = y + 3;
 		this.pane = pane;
 		this.spacing = spacing;
+		this.c = size;
 	}
 
 	/**
@@ -62,12 +64,12 @@ public class DrawDrumsetNote {
 	 */
 	public void drawX() {
 		// Center coordinates of the "x"
-		double xCenterX = this.x + 3;
-		double xCenterY = this.y - 3;
+		double xCenterX = this.x + 3 * c;
+		double xCenterY = this.y - 3 * c;
 
 		// Draw to crossing line to make the "x"
-		Line topLeftToBottomRight = new Line(xCenterX - 4, xCenterY + 4, xCenterX + 4, xCenterY - 4);
-		Line topRightToBottomLeft = new Line(xCenterX + 4, xCenterY + 4, xCenterX - 4, xCenterY - 4);
+		Line topLeftToBottomRight = new Line(xCenterX - 4 * c, xCenterY + 4 * c, xCenterX + 4 * c, xCenterY - 4 * c);
+		Line topRightToBottomLeft = new Line(xCenterX + 4 * c, xCenterY + 4 * c, xCenterX - 4 * c, xCenterY - 4 * c);
 
 		topLeftToBottomRight.setId("drum-note-x-2");
 		topRightToBottomLeft.setId("drum-note-x-1");
@@ -83,8 +85,8 @@ public class DrawDrumsetNote {
 	    	pane.getChildren().add(topRightToBottomLeft);
 
 	    	// Create and add the  white "x"
-			topLeftToBottomRight = new Line(xCenterX - 4, xCenterY + 4, xCenterX + 4, xCenterY - 4);
-			topRightToBottomLeft = new Line(xCenterX + 4, xCenterY + 4, xCenterX - 4, xCenterY - 4);
+			topLeftToBottomRight = new Line(xCenterX - 4 * c, xCenterY + 4 * c, xCenterX + 4 * c, xCenterY - 4 * c);
+			topRightToBottomLeft = new Line(xCenterX + 4 * c, xCenterY + 4 * c, xCenterX - 4 * c, xCenterY - 4 * c);
 			topLeftToBottomRight.setStroke(Color.WHITE);
 			topRightToBottomLeft.setStroke(Color.WHITE);
 			topLeftToBottomRight.setStrokeWidth(1.5);
@@ -102,13 +104,13 @@ public class DrawDrumsetNote {
 		// Only draw the stem if the note is not a whole note
 		if (!note.getType().equals("whole")) {
 			// Drawing the stem
-			Line stem = new Line(this.x + 8, this.y - 8, this.x + 8, this.top);
+			Line stem = new Line(this.x + 8 * c, this.y - 8 * c, this.x + 8 * c, this.top);
 			stem.setStrokeWidth(1.5);
 	    	pane.getChildren().add(stem);
 		}
 
     	Blend blend = new Blend(); 
-		ColorInput topInput = new ColorInput(this.x - 3, this.y - 7, 14, 8, Color.WHITE); 
+		ColorInput topInput = new ColorInput(this.x - 3 * c, this.y - 7 * c, 14 * c, 8 * c, Color.WHITE); 
 		blend.setTopInput(topInput); 
 		blend.setMode(BlendMode.OVERLAY);
 	}
@@ -121,17 +123,17 @@ public class DrawDrumsetNote {
 		Ellipse ellipse;
 		if (!note.getType().equals("whole")) {
 			// If the not is not a whole not, then it is rotated slightly
-			ellipse = new Ellipse(this.x + 3, this.y - 2, 6.0, 4.5);
+			ellipse = new Ellipse(this.x + 3 * c, this.y - 2 * c, 6.0 * c, 4.5 * c);
 			ellipse.setRotate(330);
 		} else {
 			// Whole notes are horizontal
-			ellipse = new Ellipse(this.x + 3, this.y - 3, 6.0, 5.0);
+			ellipse = new Ellipse(this.x + 3 * c, this.y - 3 * c, 6.0 * c, 5.0 * c);
 		}
 		ellipse.setId("drum-note-o");
 		ellipse.toFront();
 
 		Blend blend = new Blend();
-		ColorInput topInput = new ColorInput(this.x - 3, this.y - 7, 14, 8, Color.WHITE);
+		ColorInput topInput = new ColorInput(this.x - 3 * c, this.y - 7 * c, 14 * c, 8 * c, Color.WHITE);
 		blend.setTopInput(topInput);
 		blend.setMode(BlendMode.OVERLAY);
 
@@ -144,14 +146,14 @@ public class DrawDrumsetNote {
     		// The black ellipse was already drawn, so we just need to draw the white ellipse.
 
     		// Draw white ellipse to screen
-    		ellipse = new Ellipse(this.x + 3, this.y - 2, 4.5, 1.5);
+    		ellipse = new Ellipse(this.x + 3 * c, this.y - 2 * c, 4.5 * c, 1.5 * c);
     		ellipse.setFill(Color.WHITE);
     		ellipse.setRotate(330);
     		ellipse.toFront();
         	pane.getChildren().add(ellipse);
 
         	// Half notes have stems, so draw stem
-    		Line stem = new Line(this.x + 8, this.y - 5, this.x + 8, this.top);
+    		Line stem = new Line(this.x + 8 * c, this.y - 5 * c, this.x + 8 * c, this.top);
     		stem.setStrokeWidth(1.5);
         	pane.getChildren().add(stem);
     	} else if (note.getType().equals("whole")) {
@@ -159,14 +161,14 @@ public class DrawDrumsetNote {
     		// The black ellipse was already drawn, so we just draw a white ellipse on top of it to give it an outlines effect.
 
     		// Draw white ellipse to the screen
-    		ellipse = new Ellipse(this.x + 3, this.y - 3, 2.5, 4.0);
+    		ellipse = new Ellipse(this.x + 3 * c, this.y - 3 * c, 2.5 * c, 4.0 * c);
     		ellipse.setFill(Color.WHITE);
     		ellipse.setRotate(345);
     		ellipse.toFront();
         	pane.getChildren().add(ellipse);
     	} else {
     		// All other notes have stems, so draw stem
-    		Line stem = new Line(this.x + 8, this.y - 5, this.x + 8, this.top);
+    		Line stem = new Line(this.x + 8 * c, this.y - 5 * c, this.x + 8 * c, this.top);
     		stem.setStrokeWidth(1.5);
         	pane.getChildren().add(stem);
     	}
@@ -179,42 +181,42 @@ public class DrawDrumsetNote {
 		Shape rest;
 
 		if (this.note.getType().equals("whole")) {
-			Rectangle halfRest = new Rectangle(this.x, this.y - 3, 10, 5);
+			Rectangle halfRest = new Rectangle(this.x, this.y - 3 * c, 10 * c, 5 * c);
 			rest = halfRest;
 		} else if (this.note.getType().equals("half")) {
-			Rectangle halfRest = new Rectangle(this.x, this.y - 8, 10, 5);
+			Rectangle halfRest = new Rectangle(this.x, this.y - 8 * c, 10 * c, 5 * c);
 			rest = halfRest;
 		} else if (this.note.getType().equals("quarter")) {
 			SVGPath quarterRest = new SVGPath();
 			quarterRest.setContent(this.quarterRestSVG);
 			quarterRest.setLayoutX(this.x - 260);
 			quarterRest.setLayoutY(this.y - 50);
-			quarterRest.setScaleX(0.5);
-			quarterRest.setScaleY(0.5);
+			quarterRest.setScaleX(0.7 * c);
+			quarterRest.setScaleY(0.7 * c);
 			rest = quarterRest;
 		} else if (this.note.getType().equals("eighth")) {
 			SVGPath eighthRest = new SVGPath();
 			eighthRest.setContent(this.eighthRestSVG);
 			eighthRest.setLayoutX(this.x - 525);
 			eighthRest.setLayoutY(this.y - 80);
-			eighthRest.setScaleX(2);
-			eighthRest.setScaleY(2);
+			eighthRest.setScaleX(2 * c);
+			eighthRest.setScaleY(2 * c);
 			rest = eighthRest;
 		} else if (this.note.getType().equals("16th")) {
 			SVGPath sixteenthRest = new SVGPath();
 			sixteenthRest.setContent(this.sixteenthRestSVG);
 			sixteenthRest.setLayoutX(this.x - 540);
 			sixteenthRest.setLayoutY(this.y - 85);
-			sixteenthRest.setScaleX(1.5);
-			sixteenthRest.setScaleY(1.5);
+			sixteenthRest.setScaleX(1.5 * c);
+			sixteenthRest.setScaleY(1.5 * c);
 			rest = sixteenthRest;
 		} else {
 			SVGPath thirtysecondRest = new SVGPath();
 			thirtysecondRest.setContent(this.thirtySecondRestSVG);
 			thirtysecondRest.setLayoutX(this.x - 550);
 			thirtysecondRest.setLayoutY(this.y - 85);
-			thirtysecondRest.setScaleX(1.5);
-			thirtysecondRest.setScaleY(1.5);
+			thirtysecondRest.setScaleX(1.5 * c);
+			thirtysecondRest.setScaleY(1.5 * c);
 			rest = thirtysecondRest;
 		}
 
@@ -227,13 +229,13 @@ public class DrawDrumsetNote {
 	 * @param coordList - A list containing two arrays with x and y coordinates of the notes to be tied.
 	 */
 	public void drawTie(List<Double[]> coordList) {
-		double x1 = coordList.get(0)[0] + 12;
-		double y1 = coordList.get(0)[1] + (this.note.getNotehead() == null ? 5 : -5);
-		double x2 = coordList.get(1)[0] - 5;
-		double y2 = coordList.get(1)[1] + (this.note.getNotehead() == null ? 5 : -5);
+		double x1 = coordList.get(0)[0] + 12 * c;
+		double y1 = coordList.get(0)[1] + (this.note.getNotehead() == null ? 5 * c : -5 * c);
+		double x2 = coordList.get(1)[0] - 5 * c;
+		double y2 = coordList.get(1)[1] + (this.note.getNotehead() == null ? 5 * c : -5 * c);
 
 		double controlX = (x2 + x1) / 2;
-		double controlY = this.note.getNotehead() == null ? y1 + 10 : y1 - 10;
+		double controlY = this.note.getNotehead() == null ? y1 + 10 * c : y1 - 10 * c;
 
 		QuadCurve quadCurve = new QuadCurve(x1, y1, controlX, controlY, x2, y2);
 
@@ -251,13 +253,13 @@ public class DrawDrumsetNote {
 	 * @param coordList - A list containing two arrays with x and y coordinates of the notes to be tied.
 	 */
 	public void drawSlur(List<Double[]> coordList) {
-		double x1 = coordList.get(0)[0] - 15;
-		double y1 = coordList.get(0)[1] + (this.note.getNotehead() == null ? 8 : -8);
+		double x1 = coordList.get(0)[0] - 15 * c;
+		double y1 = coordList.get(0)[1] + (this.note.getNotehead() == null ? 8 * c : -8 * c);
 		double x2 = coordList.get(1)[0];
-		double y2 = coordList.get(1)[1] + (this.note.getNotehead() == null ? 8 : -8);
+		double y2 = coordList.get(1)[1] + (this.note.getNotehead() == null ? 8 * c : -8 * c);
 
 		double controlX = (x2 + x1) / 2;
-		double controlY = this.note.getNotehead() == null ? y1 + 7 : y1 - 7;
+		double controlY = this.note.getNotehead() == null ? y1 + 7 * c : y1 - 7 * c;
 
 		QuadCurve quadCurve = new QuadCurve(x1, y1, controlX, controlY, x2, y2);
 
@@ -275,14 +277,14 @@ public class DrawDrumsetNote {
 	public void drawGrace() {
 		// The note is drawn with an ellipse
 		Ellipse ellipse;
-		ellipse = new Ellipse(this.x - 15, this.y - 3, 6.0, 4.5);
+		ellipse = new Ellipse(this.x - 15 * c, this.y - 3 * c, 6.0 * c, 4.5 * c);
 		ellipse.setRotate(330);
 		ellipse.setId("drum-note-o");
 		ellipse.toFront();
 
-		Line stem = new Line(this.x - 10, this.y - 5, this.x - 10, this.y - 20);
+		Line stem = new Line(this.x - 10 * c, this.y - 5 * c, this.x - 10 * c, this.y - 20 * c);
 		stem.setStrokeWidth(1.5);
-		Line flag = new Line(this.x - 10, this.y - 20, this.x - 3, this.y - 15);
+		Line flag = new Line(this.x - 10 * c, this.y - 20 * c, this.x - 3 * c, this.y - 15 * c);
 		flag.setStrokeWidth(1.5);
 
     	pane.getChildren().add(ellipse);
@@ -294,7 +296,7 @@ public class DrawDrumsetNote {
 	 * Draws tremelo on a note.
 	 */
 	public void drawTremelo() {
-		Line line = new Line(this.x  + 5, this.y - 15, this.x + 10, this.y - 18);
+		Line line = new Line(this.x + 5 * c, this.y - 15 * c, this.x + 10 * c, this.y - 18 * c);
 		line.setStrokeWidth(5);
 		pane.getChildren().add(line);
 	}
@@ -303,7 +305,7 @@ public class DrawDrumsetNote {
 	 * Draws a dot next to a note.
 	 */
 	public void drawDot() {
-		Text dot = new Text(this.x + 8, this.y + 2, ".");
+		Text dot = new Text(this.x + 8 * c, this.y + 2 * c, ".");
 		dot.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 25));
 		pane.getChildren().add(dot);
 	}
@@ -313,7 +315,7 @@ public class DrawDrumsetNote {
 	 */
 	public void drawSingleBeam() {
 		// Beamed eighth notes have one beam connecting them
-		Rectangle beam = new Rectangle(this.x + 8, this.top - 1, this.spacing, 5);
+		Rectangle beam = new Rectangle(this.x + 8 * c, this.top - 1 * c, this.spacing, 5 * c);
 		pane.getChildren().add(beam);
 	}
 
@@ -326,7 +328,7 @@ public class DrawDrumsetNote {
 		this.drawSingleBeam();
 
 		// Draw second beam below the first beam
-		Rectangle beam = new Rectangle(this.x + 8, this.top + 7, this.spacing, 5);
+		Rectangle beam = new Rectangle(this.x + 8 * c, this.top + 7 * c, this.spacing, 5 * c);
 		pane.getChildren().add(beam);
 	}
 
@@ -339,7 +341,7 @@ public class DrawDrumsetNote {
 		this.drawDoubleBeam();
 
 		// Draw third beam below the second beam
-		Rectangle beam = new Rectangle(this.x + 8, this.top + 15, this.spacing, 5);
+		Rectangle beam = new Rectangle(this.x + 8 * c, this.top + 15 * c, this.spacing, 5 * c);
 		pane.getChildren().add(beam);
 	}
 
@@ -348,32 +350,32 @@ public class DrawDrumsetNote {
 	 */
 	public void drawFlag() {
 		if (note.getType().equals("eighth")) {
-			Line flag = new Line(this.x + 8, this.top, this.x + 20, this.top + 20);
+			Line flag = new Line(this.x + 8 * c, this.top, this.x + 20 * c, this.top + 20 * c);
 			flag.setStrokeWidth(1.5);
 
 	    	pane.getChildren().add(flag);
 		} else if (note.getType().equals("16th")) {
-			Line flag = new Line(this.x + 8, this.top, this.x + 20, this.top + 20);
+			Line flag = new Line(this.x + 8 * c, this.top, this.x + 20 * c, this.top + 20 * c);
 			flag.setStrokeWidth(1.5);
 
 	    	pane.getChildren().add(flag);
 
-			flag = new Line(this.x + 8, this.top + 15, this.x + 20, this.top + 35);
+			flag = new Line(this.x + 8 * c, this.top + 15 * c, this.x + 20 * c, this.top + 35 * c);
 			flag.setStrokeWidth(1.5);
 
 	    	pane.getChildren().add(flag);
 		} else if (note.getType().equals("32nd")) {
-			Line flag = new Line(this.x + 8, this.top, this.x + 20, this.top + 20);
+			Line flag = new Line(this.x + 8 * c, this.top, this.x + 20 * c, this.top + 20 * c);
 			flag.setStrokeWidth(1.5);
 	
 	    	pane.getChildren().add(flag);
 	
-			flag = new Line(this.x + 8, this.top + 15, this.x + 20, this.top + 35);
+			flag = new Line(this.x + 8 * c, this.top + 15 * c, this.x + 20 * c, this.top + 35 * c);
 			flag.setStrokeWidth(1.5);
 	
 	    	pane.getChildren().add(flag);
 
-			flag = new Line(this.x + 8, this.top + 30, this.x + 20, this.top + 50);
+			flag = new Line(this.x + 8 * c, this.top + 30 * c, this.x + 20 * c, this.top + 50 * c);
 			flag.setStrokeWidth(1.5);
 	
 	    	pane.getChildren().add(flag);
@@ -411,7 +413,7 @@ public class DrawDrumsetNote {
 
 			// If the note is octave 5 and step A, then it is above the staff and a small line must be drawn in front of it
 			if (note.getUnpitched().getDisplayOctave() == 5 && note.getUnpitched().getDisplayStep().equals("A")) {
-				pane.getChildren().add(new Line(this.x - 5, this.y - 3, this.x + 11, this.y - 3));
+				pane.getChildren().add(new Line(this.x - 5 * c, this.y - 3 * c, this.x + 11 * c, this.y - 3 * c));
 			}
 		}
 	}

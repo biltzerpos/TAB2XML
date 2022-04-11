@@ -11,11 +11,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.jfugue.player.Player;
-
-import converter.Score;
 import instruments.Guitar;
 import instruments.Drumset;
 import instruments.Bass;
@@ -249,7 +245,7 @@ public class PreviewMusic extends Application {
 					getMusicLineSpacingValue());
 			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
-			this.drum = new Drumset(scorePartwise, pane, 50, 0, 0, 0);
+			this.drum = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
 			this.drum.draw();
 		} else if (instrument == "Bass") {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
@@ -283,11 +279,38 @@ public class PreviewMusic extends Application {
 	// Method that handles `play note` button
 	@FXML
 	public void playHandle() throws InvalidMidiDataException {
+		String instrument = getInstrument();
 		if (num == 1) {
 			sequencer.setSequence(getMusicString());
+			if (instrument == "Guitar") {
+				this.guitar.starthighlight();
+				this.guitar.highlightNote();
+				
+			} else if (instrument == "Drumset") {
+				this.drum.starthighlight();
+				this.drum.highlightNote();
+				
+			}
+			else if (instrument == "Bass") {
+				this.bass.starthighlight();
+				this.bass.highlightNote();
+				
+			}
 		}
 		if (sequencer.getTickPosition() == sequencer.getTickLength()) {
 			sequencer.setTickPosition(0);
+			if (instrument == "Guitar") {
+				this.guitar.starthighlight();
+				this.guitar.highlightNote();
+			} else if (instrument == "Drumset") {
+				this.drum.starthighlight();
+				this.drum.highlightNote(); 
+			}
+			else if (instrument == "Bass") {
+				this.bass.starthighlight();
+				this.bass.highlightNote();
+				
+			}
 		}
 		sequencer.start();
 
@@ -295,8 +318,18 @@ public class PreviewMusic extends Application {
 
 	@FXML
 	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
+		String instrument = getInstrument();
 		if (sequencer.isRunning()) {
 			sequencer.stop();
+			if (instrument == "Guitar") {
+				this.guitar.stophighlight();
+				}
+				else if (instrument == "Drumset") {
+					this.drum.stophighlight();
+				}
+				else if (instrument == "Bass") {
+					this.drum.stophighlight();
+				}
 		}
 
 		System.out.println("Pause bottom is clicked");
@@ -306,11 +339,24 @@ public class PreviewMusic extends Application {
 	public void restartMusicHandle() throws InvalidMidiDataException {
 		sequencer.setSequence(getMusicString());
 		sequencer.start();
+		String instrument = getInstrument();
+		if (instrument == "Guitar") {
+			this.guitar.starthighlight();
+			this.guitar.highlightNote();
+		} 
+		else if (instrument == "Drumset") {
+			this.drum.starthighlight();
+			this.drum.highlightNote();
+		}
+		else if (instrument == "Bass") {
+			this.bass.starthighlight();
+			this.bass.highlightNote();	
+		}
 	}
 
 	public void closeSequencer() {
 		this.sequencer.close();
-		System.out.println("closeSequencer");
+		//System.out.println("closeSequencer");
 	}
 
 	// Method that handles the `print music sheet` button
@@ -452,7 +498,7 @@ public class PreviewMusic extends Application {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
 			this.bass.drawBass();
 		} else if (instrument.equals("Drumset")) {
-			this.drum = new Drumset(scorePartwise, pane, this.getNoteSpacingValue(), 0, this.getStaffSpacingValue(), 0);
+			this.drum = new Drumset(scorePartwise, pane, this.getNoteSpacingValue(), this.getFontSize(), this.getStaffSpacingValue(), this.getMusicLineSpacingValue());
 			this.drum.draw();
 		}
 
@@ -470,7 +516,7 @@ public class PreviewMusic extends Application {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
 			this.bass.drawBass();
 		} else if (instrument.equals("Drumset")) {
-			this.drum = new Drumset(scorePartwise, pane, 50, 0, 0, 0);
+			this.drum = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
 			this.drum.draw();
 		}
 	}

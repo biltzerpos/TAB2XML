@@ -12,6 +12,7 @@ public class DrawDrumsetMusicLines extends Node {
 
 	@FXML private Pane pane;
 	private double length;
+	private double separator;
 	private MLine musicLine;
 	private List<Line> musicLineList;
 
@@ -24,11 +25,21 @@ public class DrawDrumsetMusicLines extends Node {
 		this.length = 40;
 	}
 
-	public DrawDrumsetMusicLines(Pane pane, double spacing) {
+	/**
+	 * Constructor for the DrawDrumsetMusicLines class.
+	 *
+	 * @param pane      - The pane on which the music lines will be drawn
+	 * @param spacing   - The spacing between notes
+	 * @param separator - Half of the length between two music lines
+	 *                    (it is half because invisible lines are drawn halfway
+	 *                    between visible lines to simplify note placement)
+	 */
+	public DrawDrumsetMusicLines(Pane pane, double spacing, double separator) {
 		super();
 		this.pane = pane;
 		this.musicLineList = new ArrayList<Line>();
 		this.length = spacing;
+		this.separator = separator;
 	}
 
 	/**
@@ -43,23 +54,50 @@ public class DrawDrumsetMusicLines extends Node {
 		// (because the user should only see 5 lines).
 		this.addLine(x, y, false);
 
-		y += 5;
+		y += this.separator;
 
 		for (int i = 1; i < 6; i++) {
 			// Above every visible line, draw an invisible line.
 			// We do this so that we can place notes in between lines easily.
 			this.addLine(x, y, false);
 
-        	y += 5;
+        	y += this.separator;
 
         	// Draw the visible line
 			this.addLine(x, y, true);
 
-        	y += 5;
+        	y += this.separator;
     	}
 
 		// Make the last line invisible.
 		// We do this so that we can draw notes below the staff without the user seeing the line.
+		this.addLine(x, y, false);
+	}
+
+	/**
+	 * Draws the initial sheet music lines for a group of notes.
+	 * The initial lines are always invisible, so that when visible lines are drawn,
+	 * they are not drawn twice in the same position.
+	 * This allows for calculation of an initial note's position without having the lines drawn yet.
+	 *
+	 * @param x The x-coordinate of the initial music lines
+	 * @param y The y-coordinate of the initial music lines
+	 */
+	public void drawInitial(double x, double y) {
+		this.addLine(x, y, false);
+
+		y += this.separator;
+
+		for (int i = 1; i < 6; i++) {
+			this.addLine(x, y, false);
+
+        	y += this.separator;
+
+			this.addLine(x, y, false);
+
+        	y += this.separator;
+    	}
+
 		this.addLine(x, y, false);
 	}
 
