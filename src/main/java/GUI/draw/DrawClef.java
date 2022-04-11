@@ -8,7 +8,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import models.measure.attributes.Clef;
-import models.measure.note.Note;
 
 //This class draw an exctracted clef on a given pane
 public class DrawClef {
@@ -19,17 +18,18 @@ public class DrawClef {
 	private double x;
 	private double y;
 	private double fontSize;
-
+	private String font; 
 	private double drumClefTopPosition;
 	private double drumClefBottomPosition;
 
 	// Constructor 1
-	public DrawClef(Pane pane, Clef clef, double x, double y) {
+	public DrawClef(Pane pane, Clef clef, double x, double y, String font) {
 		super();
 		this.clef = clef;
 		this.pane = pane;
 		this.x = x;
 		this.y = y;
+		this.font = font; 
 	}
 
 	// constructor 2
@@ -109,7 +109,7 @@ public class DrawClef {
 			char c = name.charAt(i);
 			String s = Character.toString(c);
 			Text text = new Text(this.x, this.y, s);
-			text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, getFontSize()));
+			text.setFont(Font.font(this.font, FontWeight.BOLD, FontPosture.REGULAR, getFontSize()));
 			pane.getChildren().add(text);
 			y += spacing;
 		}
@@ -174,5 +174,14 @@ public class DrawClef {
 	public void setFontSize(double font) {
 		this.fontSize = font; 
 	}
+
+	public String getFont() {
+		return font;
+	}
+
+	public void setFont(String font) {
+		this.font = font;
+	}
+	
 
 }

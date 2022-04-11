@@ -5,13 +5,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
-
 import instruments.Guitar;
 import instruments.Drumset;
 import instruments.Bass;
@@ -20,7 +18,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
@@ -30,11 +27,11 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Scale;
@@ -43,8 +40,6 @@ import javafx.stage.Window;
 import javafx.stage.Stage;
 import models.ScorePartwise;
 import models.measure.Measure;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 
 public class PreviewMusic extends Application {
 
@@ -87,6 +82,8 @@ public class PreviewMusic extends Application {
 	private Sequencer sequencer;
 	private Sequence sequence;
 	int num = 0;
+	@FXML private ChoiceBox<String> fontChoice; 
+	private String fontChoiceValue; 
 
 	public PreviewMusic() throws MidiUnavailableException, InvalidMidiDataException {
 		sequencer = MidiSystem.getSequencer();
@@ -120,40 +117,28 @@ public class PreviewMusic extends Application {
 		 */
 		scorePartwise = mvc.converter.getScorePartwise();
 		/*
-		 * The value for the menus are set here: Range of the font size 8 - 30 and font
-		 * is 1/2 notespacing. Range of staff spacing: 10 - 30 Range of the note
+		 * The value for the menus are set here: Range of the font size 10 - 30 and font
+		 *  Range of staff spacing: 10 - 30 Range of the note
 		 * spacing: 20-60 Range of the music Line spacing: 120 - 300
 		 */
-		// initial Font size slider values:
-		FontSizeSlider.setMax(12);
-		FontSizeSlider.setMin(8);
-		FontSizeSlider.setValue(12);
-		FontSizeSlider.setShowTickLabels(true);
-		FontSizeSlider.setShowTickMarks(true);
+		// initial Font choices:
+		/*    Verdana, Helvetica, Times New Roman, Comic Sans MS, Impact
+    			,Lucida Sans Unicode*/
+		fontChoice.getItems().add("Verdana"); 
+		fontChoice.getItems().add("Helvetica");
+		fontChoice.getItems().add("Times New Roman");
+		fontChoice.getItems().add("Comic Sans MS");
+		fontChoice.getItems().add("Impact");
+		fontChoice.getItems().add("Lucida Sans Unicode");
+		fontChoice.setValue("Comic Sans MS");
+		
+		fontChoice.setOnAction((event) -> {
+		    int selectedIndex = fontChoice.getSelectionModel().getSelectedIndex();
+		    Object selectedItem = fontChoice.getSelectionModel().getSelectedItem();
 
-		// Changing the staff spacing slider affects the note spacing, font size, and
-		// music line sliders
-
-		// staff spacing = 10:
-		// Font max = 12
-		// MusicLine spacing min = 120
-		// noteSpacing Max = 25
-		// staff spacing = 15:
-		// Font max = 17
-		// MusicLine spacing min = 150
-		// noteSpacing Max = 35
-		// staff spacing = 20:
-		// Font max = 22
-		// MusicLine spacing min = 180
-		// noteSpacing Max = 45
-		// staff spacing = 25:
-		// Font max = 27
-		// MusicLine spacing min = 210
-		// noteSpacing Max = 55
-		// staff spacing = 30:
-		// Font max = 30
-		// MusicLine spacing min = 240
-		// noteSpacing Max = 60
+		    System.out.println("Selection made: [" + selectedIndex + "] " + selectedItem);
+		    System.out.println("   ChoiceBox.getValue(): " + fontChoice.getValue());
+		});
 
 		StaffSpacingSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
@@ -161,88 +146,336 @@ public class PreviewMusic extends Application {
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				StaffSpacingSlider.setValue((double) newValue);
 				int newSpacing = (int) StaffSpacingSlider.getValue();
+				double fs = 0; 
+				//double ns = 0; 
+				double ml = 0; 
 				switch (newSpacing) {
 				case 10:
 					FontSizeSlider.setMax(12);
-					FontSizeSlider.setValue(10);
+					FontSizeSlider.setMin(10);
+					fs = getFontSize();
+					if(10 <= fs && fs<= 12) {
+						FontSizeSlider.setValue(fs);
+					}
+					else {
+						FontSizeSlider.setValue(12);
+					}
 
-					noteSpacing.setMax(25);
-					noteSpacing.setValue(noteSpacing.getMin());
+//					noteSpacing.setMax(60);
+//					noteSpacing.setMin(20);
+//					ns = getNoteSpacingValue();
+//					noteSpacing.setValue(ns);
 
 					musicLineSlider.setMin(120);
-					musicLineSlider.setValue(musicLineSlider.getMin());
+					ml = getMusicLineSpacingValue(); 
+					if(ml >= 120) {
+						musicLineSlider.setValue(ml);
+					}
+					else {
+						musicLineSlider.setValue(120);
+					}
 					break;
 				case 15:
-					FontSizeSlider.setMax(17);
-					FontSizeSlider.setValue(12);
+					FontSizeSlider.setMax(16);
+					FontSizeSlider.setMin(10);
+					fs = getFontSize();
+					if(10 <= fs && fs<= 16) {
+						FontSizeSlider.setValue(fs);
+					}
+					else {
+						FontSizeSlider.setValue(12);
+					}
 
-					noteSpacing.setMax(35);
-					noteSpacing.setValue(noteSpacing.getMin());
+//					noteSpacing.setMax(60);
+//					noteSpacing.setMin(20);
+//					ns = getNoteSpacingValue();
+//					noteSpacing.setValue(ns);
 
-					musicLineSlider.setMin(150);
-					musicLineSlider.setValue(musicLineSlider.getMin());
+					musicLineSlider.setMin(170);
+					ml = getMusicLineSpacingValue();
+					if(ml >= 170) {
+						musicLineSlider.setValue(ml);
+					}
+					else {
+						musicLineSlider.setValue(170);
+					}
 					break;
 				case 20:
 					FontSizeSlider.setMax(22);
-					FontSizeSlider.setValue(12);
+					FontSizeSlider.setMin(10);
+					fs = getFontSize();
+					if(10 <= fs && fs<= 22) {
+						FontSizeSlider.setValue(fs);
+					}
+					else {
+						FontSizeSlider.setValue(12);
+					}
 
-					noteSpacing.setMax(45);
-					noteSpacing.setValue(noteSpacing.getMin());
+//					noteSpacing.setMax(60);
+//					noteSpacing.setMin(20);
+//					ns = getNoteSpacingValue();
+//					noteSpacing.setValue(ns);
 
-					musicLineSlider.setMin(180);
-					musicLineSlider.setValue(musicLineSlider.getMin());
+					musicLineSlider.setMin(170);
+					ml = getMusicLineSpacingValue();
+					if(ml >= 170) {
+						musicLineSlider.setValue(ml);
+					}
+					else {
+						musicLineSlider.setValue(170);
+					}
 					break;
 				case 25:
-					FontSizeSlider.setMax(27);
-					FontSizeSlider.setValue(12);
+					FontSizeSlider.setMax(26);
+					FontSizeSlider.setMin(10);
+					fs = getFontSize();
+					if(10 <= fs && fs<= 26) {
+						FontSizeSlider.setValue(fs);
+					}
+					else {
+						FontSizeSlider.setValue(12);
+					}
 
-					noteSpacing.setMax(55);
-					noteSpacing.setValue(noteSpacing.getMin());
+//					noteSpacing.setMax(60);
+//					noteSpacing.setMin(20);
+//					ns = getNoteSpacingValue();
+//					noteSpacing.setValue(ns);
 
-					musicLineSlider.setMin(210);
-					musicLineSlider.setValue(musicLineSlider.getMin());
+					musicLineSlider.setMin(220);
+					ml = getMusicLineSpacingValue();
+					if(ml >= 220) {
+						musicLineSlider.setValue(ml);
+					}
+					else {
+						musicLineSlider.setValue(220);
+					}
 					break;
+					
 				case 30:
 					FontSizeSlider.setMax(30);
-					FontSizeSlider.setValue(12);
+					FontSizeSlider.setMin(10);
+					fs = getFontSize();
+					if(10 <= fs && fs<= 30) {
+						FontSizeSlider.setValue(fs);
+					}
+					else {
+						FontSizeSlider.setValue(12);
+					}
 
-					noteSpacing.setMax(60);
-					noteSpacing.setValue(noteSpacing.getMin());
+//					noteSpacing.setMax(60);
+//					noteSpacing.setMin(20);
+//					ns = getNoteSpacingValue();
+//					noteSpacing.setValue(ns);
 
-					musicLineSlider.setMin(240);
-					musicLineSlider.setValue(musicLineSlider.getMin());
+					musicLineSlider.setMin(220);
+					ml = getMusicLineSpacingValue();
+					if(ml >= 220) {
+						musicLineSlider.setValue(ml);
+					}
+					else {
+						musicLineSlider.setValue(220);
+					}
 					break;
 				}
-				FontSizeSlider.setShowTickLabels(true);
-				FontSizeSlider.setShowTickMarks(true);
-				musicLineSlider.setShowTickLabels(true);
-				musicLineSlider.setShowTickMarks(true);
+				
 			}
 
 		});
 
-		// Linking noteSpace slider to the output: changing note Space slider affects
-		// the
-		// range for the Font Size
-		noteSpacing.valueProperty().addListener(new ChangeListener<Number>() {
+		musicLineSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				noteSpacing.setValue((double) newValue);
-				double newMax = noteSpacing.getValue() / 2;
-				FontSizeSlider.setMax(Math.floor(newMax));
-				FontSizeSlider.setMin(8);
-				FontSizeSlider.setValue((newMax + 8) / 2);
-				FontSizeSlider.setShowTickLabels(true);
-				FontSizeSlider.setShowTickMarks(true);
+				// TODO Auto-generated method stub
+				musicLineSlider.setValue((double) newValue);
+				int newSpacing = (int) musicLineSlider.getValue();
+				double fs = 0; 
+				//double ns = 0; 
+				double ss = 0; 
+				switch (newSpacing) {
+				case 120:
+					StaffSpacingSlider.setMin(10);
+					StaffSpacingSlider.setMax(10.00001);
+					StaffSpacingSlider.setValue(10);
+					
+					FontSizeSlider.setMin(10);
+					FontSizeSlider.setMax(10.00001);
+					FontSizeSlider.setValue(10);
+					
+					break; 
+				case 170:
+					StaffSpacingSlider.setMin(10);
+					StaffSpacingSlider.setMax(20);
+					ss = getStaffSpacingValue(); 
+					if( ss <= 20) {
+					StaffSpacingSlider.setValue(ss);
+					}else {
+						StaffSpacingSlider.setValue(10);
+					}
+					
+					FontSizeSlider.setMin(10);
+					FontSizeSlider.setMax(20);
+					fs = getFontSize(); 
+					if(fs <= 20) {
+						FontSizeSlider.setValue(fs);
+					}else {
+					FontSizeSlider.setValue(10);}
+					
+					break; 
+				default:
+					StaffSpacingSlider.setMin(10);
+					StaffSpacingSlider.setMax(30);
+					ss = getStaffSpacingValue(); 
+					StaffSpacingSlider.setValue(ss);
+					
+					FontSizeSlider.setMin(10);
+					FontSizeSlider.setMax(30);
+					fs = getFontSize(); 
+					
+						FontSizeSlider.setValue(fs);
+					break;
+				}
+			}});
+		
 
-			}
-		});
+		FontSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				// TODO Auto-generated method stub
+				FontSizeSlider.setValue((double) newValue);
+				int newSpacing = (int) FontSizeSlider.getValue();
+				double ml = 0; 
+				double ns = 0; 
+				double ss = 0; 
+//				if(newSpacing <= 12) {
+//					noteSpacing.setMin(20);
+//					noteSpacing.setMax(25);
+//					ns = getNoteSpacingValue(); 
+//					if(ns <=25) {
+//						noteSpacing.setValue(ns);
+//					}else {
+//						noteSpacing.setValue(25);
+//					}
+//				}
+//				if(newSpacing > 12 && newSpacing <=25) {
+//					StaffSpacingSlider.setMin(15);
+//					StaffSpacingSlider.setMax(30);
+//					ss = getStaffSpacingValue(); 
+//					if( ss >=15 && ss <= 30) {
+//					StaffSpacingSlider.setValue(ss);
+//					}else {
+//						StaffSpacingSlider.setValue(15);
+//					}
+//				}
+//				if(newSpacing > 20) {
+//					noteSpacing.setMin(30);
+//					ns = getNoteSpacingValue(); 
+//					if(ns >= 30) {
+//						noteSpacing.setValue(ss);
+//					}
+//					else {
+//						noteSpacing.setValue(30);
+//					}
+//				}
+//				else {
+//					noteSpacing.setMin(20);
+//					noteSpacing.setMax(60);
+//					ns = getNoteSpacingValue(); 
+//					if(ns <=60) {
+//						noteSpacing.setValue(ns);
+//					}else {
+//						noteSpacing.setValue(30);
+//					}
+//				}
+				if(newSpacing > 14) {
+					StaffSpacingSlider.setMin(15); 
+					ss = StaffSpacingSlider.getValue(); 
+					if(ss>=15) {
+						StaffSpacingSlider.setValue(ss); 
+					}
+					else {
+						StaffSpacingSlider.setValue(15); 
+					}
+				}
+				if(newSpacing > 15) {
+					musicLineSlider.setMin(220); 
+					ml = musicLineSlider.getValue(); 
+					if(ml >= 220) {
+						musicLineSlider.setValue(ml); 
+					}
+					else {
+						musicLineSlider.setValue(220);
+					}
+				}
+				if(newSpacing>17) {
+					StaffSpacingSlider.setMin(20); 
+					ss = StaffSpacingSlider.getValue(); 
+					if(ss>=20) {
+						StaffSpacingSlider.setValue(ss); 
+					}
+					else {
+						StaffSpacingSlider.setValue(20); 
+					}
+				}
+				if(newSpacing > 20) {
+					musicLineSlider.setMin(270); 
+					ml = musicLineSlider.getValue(); 
+					if(ml >= 270) {
+						musicLineSlider.setValue(ml); 
+					}
+					else {
+						musicLineSlider.setValue(270);
+					}
+				}
+				if(newSpacing>23) {
+					StaffSpacingSlider.setMin(25); 
+					ss = StaffSpacingSlider.getValue(); 
+					if(ss>=25) {
+						StaffSpacingSlider.setValue(ss); 
+					}
+					else {
+						StaffSpacingSlider.setValue(25); 
+					}
+					
+					noteSpacing.setMin(35); 
+					ns = noteSpacing.getValue(); 
+					if(ns >= 35) {
+						noteSpacing.setValue(ns); 
+					}
+					else {
+						noteSpacing.setValue(35); 
+					}
+				}
+				if(newSpacing > 25) {
+					musicLineSlider.setMin(320); 
+					ml = musicLineSlider.getValue(); 
+					if(ml >= 320) {
+						musicLineSlider.setValue(ml); 
+					}
+					else {
+						musicLineSlider.setValue(320);
+					}
+				}
+				if(newSpacing>27) {
+					
+					noteSpacing.setMin(40); 
+					ns = noteSpacing.getValue(); 
+					if(ns >= 40) {
+						noteSpacing.setValue(ns); 
+					}
+					else {
+						noteSpacing.setValue(40); 
+					}
+				}
+			}});
+
 
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
-			setDefault();
+			//setDefault();
 			this.guitar = new Guitar(scorePartwise, pane, getNoteSpacingValue(), getFontSize(), getStaffSpacingValue(),
-					getMusicLineSpacingValue());
+					getMusicLineSpacingValue(), getFontChoiceValue());
 			this.guitar.drawGuitar();
 		} else if (instrument == "Drumset") {
 			this.drum = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
@@ -251,14 +484,6 @@ public class PreviewMusic extends Application {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
 			this.bass.drawBass();
 		}
-	}
-
-	private void setDefault() {
-		// TODO Auto-generated method stub
-		setNoteSpacingValue(40);
-		setFontSize(12);
-		setStaffSpacingValue(10);
-		setMusicLineSpacingValue(200);
 	}
 
 	public Sequence getMusicString() throws InvalidMidiDataException {
@@ -369,11 +594,6 @@ public class PreviewMusic extends Application {
 
 		double pagePrintableWidth = layout.getPrintableWidth();
 		double pagePrintableHeight = layout.getPrintableHeight();
-		// Elmira: Something (most likely the structure of Guitar) cause problem with
-		// scaling
-		// As a quick fix I multiplied the width of the anchorPane by 1.5. @Irsa, if you
-		// find a better fix
-		// (or decide this fix is good enough) delete this comment.
 		final double scaleX = pagePrintableWidth / (1.5 * screenshot.getWidth());
 		final double scaleY = pagePrintableHeight / screenshot.getHeight();
 		final ImageView print_node = new ImageView(screenshot);
@@ -492,7 +712,7 @@ public class PreviewMusic extends Application {
 		String instrument = getInstrument();
 		if (instrument == "Guitar") {
 			this.guitar = new Guitar(scorePartwise, pane, getNoteSpacingValue(), getFontSize(), getStaffSpacingValue(),
-					getMusicLineSpacingValue());
+					getMusicLineSpacingValue(), getFontChoiceValue());
 			this.guitar.drawGuitar();
 		} else if (instrument == "Bass") {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
@@ -510,7 +730,10 @@ public class PreviewMusic extends Application {
 		String instrument = getInstrument();
 
 		if (instrument == "Guitar") {
-			this.guitar = new Guitar(scorePartwise, pane, 40, 12, 10, 200);
+			//this.guitar = new Guitar(scorePartwise, pane, 30, 12, 10, 170);
+			setDefaultSliders(); 
+			this.guitar = new Guitar(scorePartwise, pane, getNoteSpacingValue(), getFontSize(), getStaffSpacingValue(),
+					getMusicLineSpacingValue(), getFontChoiceValue());
 			this.guitar.drawGuitar();
 		} else if (instrument == "Bass") {
 			this.bass = new Bass(scorePartwise, pane, 50, 12, 10, 150);
@@ -519,6 +742,32 @@ public class PreviewMusic extends Application {
 			this.drum = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
 			this.drum.draw();
 		}
+	}
+
+	private void setDefaultSliders() {
+		// TODO Auto-generated method stub
+		//staff slider:
+		this.StaffSpacingSlider.setMin(10);
+		this.StaffSpacingSlider.setMax(30);
+		this.StaffSpacingSlider.setValue(10);
+		
+		// noteSpacing slider
+		this.noteSpacing.setMin(20);
+		this.noteSpacing.setMax(60);
+		this.noteSpacing.setValue(30);
+		
+		// musicLine slider
+		this.musicLineSlider.setMin(120);
+		this.musicLineSlider.setMax(420);
+		this.musicLineSlider.setValue(170);
+		
+		//fontSizeSlider
+		this.FontSizeSlider.setMin(10);
+		this.FontSizeSlider.setMax(30);
+		this.FontSizeSlider.setValue(12);
+		
+		// font choice
+		this.fontChoice.setValue("Comic Sans MS");
 	}
 
 	public int getNoteSpacingValue() {
@@ -555,6 +804,24 @@ public class PreviewMusic extends Application {
 
 	public void setMusicLineSpacingValue(int musicLineSpacingValue) {
 		this.musicLineSpacingValue = musicLineSpacingValue;
+	}
+
+	public ChoiceBox<String> getFontChoice() {
+		return fontChoice;
+	}
+
+	public void setFontChoice(ChoiceBox<String> fontChoice) {
+		this.fontChoice = fontChoice;
+	}
+	
+
+	public String getFontChoiceValue() {
+		this.fontChoiceValue = fontChoice.getValue(); 
+		return fontChoiceValue;
+	}
+
+	public void setFontChoiceValue(String fontChoiceValue) {
+		this.fontChoiceValue = fontChoiceValue;
 	}
 
 	@Override

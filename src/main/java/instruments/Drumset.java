@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TreeMap;
-
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.ShortMessage;
-
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
@@ -19,12 +14,10 @@ import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
-import models.measure.note.Notehead;
 import GUI.HighlightNote;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawDrumsetBar;
 import GUI.draw.DrawDrumsetMusicLines;
-import GUI.draw.DrawNote;
 import GUI.draw.DrawDrumsetNote;
 
 public class Drumset {

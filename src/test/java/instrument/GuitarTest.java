@@ -23,6 +23,7 @@ public class GuitarTest extends ApplicationTest{
 	private ScorePartwise scorePartwise; 
 	private Guitar g;
 	private Measure m1;
+	private String f; 
 	
 	@BeforeEach 
 	public void setUp() throws Exception
@@ -39,7 +40,7 @@ public class GuitarTest extends ApplicationTest{
 		Score score = new Score(input);
 		MusicXMLCreator mxlc = new MusicXMLCreator(score);
 		scorePartwise = mxlc.getScorePartwise();
-		g = new Guitar(scorePartwise, null, 50, 50, 50, 50);
+		g = new Guitar(scorePartwise, null, 50, 50, 50, 50, f);
 		m1 = g.getMeasureList().get(0);
 		
 	}
@@ -138,7 +139,7 @@ public class GuitarTest extends ApplicationTest{
 		Score score1 = new Score(input1);
 		MusicXMLCreator mxlc1 = new MusicXMLCreator(score1);
 		ScorePartwise scorePartwise1 = mxlc1.getScorePartwise();
-		Guitar g1 = new Guitar(scorePartwise1, null, 50, 50, 12, 30);
+		Guitar g1 = new Guitar(scorePartwise1, null, 50, 50, 12, 30, f);
 		List<Measure> newList = g1.getMeasureList();
 		
 		//setting the meaasure of the g to newList

@@ -24,6 +24,7 @@ public class DrawNote {
 	private Note note;
 	private int font;
 	private int graceFontSize;
+	private String fontType; 
 
 	/**
 	 * constructor
@@ -34,7 +35,7 @@ public class DrawNote {
 	/**
 	 * Constructor for guitar.
 	 */
-	public DrawNote(Pane pane, Note note, double startX, double startY, int font) {
+	public DrawNote(Pane pane, Note note, double startX, double startY, int font, String fontType) {
 		super();
 		this.note = note;
 		this.startX = startX;
@@ -42,6 +43,7 @@ public class DrawNote {
 		this.pane = pane;
 		this.font = font;
 		this.graceFontSize = font / 4;
+		this.fontType = fontType;
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class DrawNote {
 	public void drawFret() {
 		int fret = note.getNotations().getTechnical().getFret();
 		Text text = new Text(getStartX(), getStartY(), Integer.toString(fret));
-		text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, this.font));
+		text.setFont(Font.font(this.fontType, FontWeight.BOLD, FontPosture.REGULAR, this.font));
 		// for background
 		Blend blend = new Blend();
 		ColorInput topInput = new ColorInput();
@@ -92,7 +94,7 @@ public class DrawNote {
 		int f = getGraceFontSize();
 		int fret = note.getNotations().getTechnical().getFret();
 		Text text = new Text(getStartX(), getStartY(), Integer.toString(fret));
-		text.setFont(Font.font("Comic Sans MS", FontPosture.REGULAR, f));
+		text.setFont(Font.font(this.fontType, FontPosture.REGULAR, f));
 		// for background
 		Blend blend = new Blend();
 		ColorInput topInput = new ColorInput();
@@ -231,5 +233,14 @@ public class DrawNote {
 	public void setGraceFontSize(int graceFontSize) {
 		this.graceFontSize = graceFontSize;
 	}
+
+	public String getFontType() {
+		return fontType;
+	}
+
+	public void setFontType(String fontType) {
+		this.fontType = fontType;
+	}
+	
 
 }
