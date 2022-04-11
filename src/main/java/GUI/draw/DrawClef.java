@@ -92,13 +92,14 @@ public class DrawClef {
 	 * @param beatType  - The beat type of the time signature (bottom number)
 	 * @param xPosition - The x-position of the time signature
 	 * @param yPosition - The y-position of the top of the measure
+	 * @param fontSize  - The font size of the drum notes
 	 */
-	public void drawTimeSignature(int beats, int beatType, double xPosition, double yPosition) {
-		Text beatsText = new Text(xPosition - 5, yPosition + 30, Integer.toString(beats));
-		Text beatTypeText = new Text(xPosition - 5, yPosition + 50, Integer.toString(beatType));
+	public void drawTimeSignature(int beats, int beatType, double xPosition, double yPosition, double fontSize) {
+		Text beatsText = new Text(xPosition - 5 * fontSize, yPosition + 30 * fontSize, Integer.toString(beats));
+		Text beatTypeText = new Text(xPosition - 5 * fontSize, yPosition + 50 * fontSize, Integer.toString(beatType));
 
-		beatsText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
-		beatTypeText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+		beatsText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, fontSize * 30));
+		beatTypeText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, fontSize * 30));
 
 		pane.getChildren().add(beatsText);
 		pane.getChildren().add(beatTypeText);

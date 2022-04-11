@@ -381,7 +381,8 @@ public class Drumset {
 					measure.getAttributes().getTime().getBeats(),
 					measure.getAttributes().getTime().getBeats(),
 					this.x - this.spacing / 2,
-					this.y
+					this.y,
+					this.fontSize
 				);
 			}
 
