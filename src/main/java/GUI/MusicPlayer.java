@@ -84,7 +84,7 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Guitar: " + vocals.toString());
+		//System.out.println("Guitar: " + vocals.toString());
 
 		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
@@ -136,7 +136,7 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Drum: " + vocals.toString());
+		//System.out.println("Drum: " + vocals.toString());
 
 		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
@@ -192,7 +192,7 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Bass: " + vocals.toString());
+		//System.out.println("Bass: " + vocals.toString());
 
 		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
