@@ -9,12 +9,14 @@ public class DrawDrumsetBar {
 	@FXML private Pane pane; 
 	private double startX; 
 	private double startY;
+	private double separator;
 
 	public DrawDrumsetBar() {}
 
-	public DrawDrumsetBar(Pane pane) {
+	public DrawDrumsetBar(Pane pane, double separator) {
 		super();
 		this.pane = pane;
+		this.separator = separator;
 	}
 
 	public void draw(double x, double y) {
@@ -24,9 +26,9 @@ public class DrawDrumsetBar {
 		// drums is white (invisible to the user), so the barline should start at the second line
 		// (which is at y + 10).
 		barLine.setStartX(x);
-		barLine.setStartY(y + 10);
+		barLine.setStartY(y + this.separator);
 		barLine.setEndX(x);
-		barLine.setEndY(y + 50);
+		barLine.setEndY(y + 5 * this.separator);
 
     	pane.getChildren().add(barLine);
 	}

@@ -12,6 +12,7 @@ public class DrawDrumsetMusicLines extends Node {
 
 	@FXML private Pane pane;
 	private double length;
+	private double separator;
 	private MLine musicLine;
 	private List<Line> musicLineList;
 
@@ -24,11 +25,12 @@ public class DrawDrumsetMusicLines extends Node {
 		this.length = 40;
 	}
 
-	public DrawDrumsetMusicLines(Pane pane, double spacing) {
+	public DrawDrumsetMusicLines(Pane pane, double spacing, double separator) {
 		super();
 		this.pane = pane;
 		this.musicLineList = new ArrayList<Line>();
 		this.length = spacing;
+		this.separator = separator;
 	}
 
 	/**
@@ -43,19 +45,19 @@ public class DrawDrumsetMusicLines extends Node {
 		// (because the user should only see 5 lines).
 		this.addLine(x, y, false);
 
-		y += 5;
+		y += this.separator;
 
 		for (int i = 1; i < 6; i++) {
 			// Above every visible line, draw an invisible line.
 			// We do this so that we can place notes in between lines easily.
 			this.addLine(x, y, false);
 
-        	y += 5;
+        	y += this.separator;
 
         	// Draw the visible line
 			this.addLine(x, y, true);
 
-        	y += 5;
+        	y += this.separator;
     	}
 
 		// Make the last line invisible.
