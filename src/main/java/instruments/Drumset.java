@@ -79,7 +79,7 @@ public class Drumset {
 		this.x = 0;
 		this.y = 0;
 
-		this.minimumSpacing = minimumSpacing + musicLineSpacing;
+		this.minimumSpacing = minimumSpacing;
 		this.spacing = this.minimumSpacing;
 
 		this.fontSize = fontSize / 10 + (fontSize - 10) / 10;
@@ -434,6 +434,11 @@ public class Drumset {
 			// Draw the current measure
 			this.drawMeasure(measure);
 		}
+
+		this.drumTieCoords.clear();
+		this.cymbalTieCoords.clear();
+		this.drumSlurCoords.clear();
+		this.cymbalSlurCoords.clear();
 	}
 
 	/**
