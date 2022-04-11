@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
+
+import javax.sound.midi.MidiMessage;
+import javax.sound.midi.ShortMessage;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +20,7 @@ import models.measure.Measure;
 import models.measure.attributes.Clef;
 import models.measure.note.Note;
 import models.measure.note.Notehead;
+import GUI.HighlightNote;
 import GUI.draw.DrawClef;
 import GUI.draw.DrawDrumsetBar;
 import GUI.draw.DrawDrumsetMusicLines;
@@ -660,7 +665,92 @@ public class Drumset {
 			y = yf;
 		}
 	}
+	
+	 public void highlightNote() {
+			
+		 ArrayList<Rectangle> r = new ArrayList<Rectangle>(); 
+			ArrayList<Double> noteDuration = new ArrayList<Double>();
+			
+				Note currentNote;
+				double xPositionNote;
+				double yPositionNote;
+				x = 0;
+				y = 0;			
+				//iterate thru measures (boxes)
+				for (int i = 0; i < measureList.size(); i++) {
+					Measure measure = measureList.get(i);
+					List<Note> noteList = measure.getNotesBeforeBackup();
+					double w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
+					double yf = getYCoordinatesForGivenMeasure(measureList.get(i));
+					if (yf > y) {
+						x = 0;
+						w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
+						y = yf;
+					}
+				
+					if (noteList !=null) {
+					//iterate thru each note inside each measure
+					for (int j = 0; j < noteList.size(); j++) {
+						Rectangle rectangle = new Rectangle();
+						rectangle.setWidth(13);
+						rectangle.setHeight(90);
+						rectangle.setFill(Color.TRANSPARENT);
+						pane.getChildren().add(rectangle);
+						currentNote = noteList.get(j);
+						xPositionNote = currentNote.getChord() == null ? this.x + this.spacing / 2 : this.x - this.spacing / 2;
+						yPositionNote = getYCoordinatesForGivenMeasure(measureList.get(i));
+						rectangle.setX(xPositionNote-2);
+						rectangle.setY(yPositionNote);
+						r.add(rectangle); 
+						if (currentNote.getDuration() !=null) {
+							int duration= currentNote.getDuration();
+							double duration2 =1000.0/((double)duration);
+							noteDuration.add(duration2);
+							if (currentNote.getDots()!=null){
+								double n = 2;
+								for (int m=0;m<currentNote.getDots().size();m++){
+									duration2 += duration2/n;
+									n*=2;	
+								}
+							}
+							noteDuration.add((double) duration2);
+							}
+						
+						this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
+						}
+				}
+				}
+				
+				HighlightNote note = new HighlightNote(this, r, noteDuration);
+				note.start();
+			
+				ObservableList children = pane.getChildren();
+		 		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
+		 		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+		 			Object object = (Object) iterator.next();
+		 			if (object instanceof Rectangle) {
+		 				if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
+		 					removeRect.add((Rectangle) object);
+		 				}
+		 			}
+		 		}
 
+		 		for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
+		 			Rectangle rect = (Rectangle) iterator.next();
+		 			pane.getChildren().remove(rect);
+		 		}
+	     }
+	 public Boolean playing;
+	
+	 public void starthighlight() {
+		 this.playing = true;
+	 }
+	
+	 public void stophighlight() {
+		 this.playing=false;
+	 }
+	 
+	
 	// return X coordinates for given measure
 	public double getXCoordinatesForGivenMeasure(Measure measure) {
 		return xCoordinates.get(measure);

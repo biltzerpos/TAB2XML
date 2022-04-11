@@ -279,11 +279,38 @@ public class PreviewMusic extends Application {
 	// Method that handles `play note` button
 	@FXML
 	public void playHandle() throws InvalidMidiDataException {
+		String instrument = getInstrument();
 		if (num == 1) {
 			sequencer.setSequence(getMusicString());
+			if (instrument == "Guitar") {
+				this.guitar.starthighlight();
+				this.guitar.highlightNote();
+				
+			} else if (instrument == "Drumset") {
+				this.drum.starthighlight();
+				this.drum.highlightNote();
+				
+			}
+			else if (instrument == "Bass") {
+				this.bass.starthighlight();
+				this.bass.highlightNote();
+				
+			}
 		}
 		if (sequencer.getTickPosition() == sequencer.getTickLength()) {
 			sequencer.setTickPosition(0);
+			if (instrument == "Guitar") {
+				this.guitar.starthighlight();
+				this.guitar.highlightNote();
+			} else if (instrument == "Drumset") {
+				this.drum.starthighlight();
+				this.drum.highlightNote(); 
+			}
+			else if (instrument == "Bass") {
+				this.bass.starthighlight();
+				this.bass.highlightNote();
+				
+			}
 		}
 		sequencer.start();
 
@@ -291,8 +318,18 @@ public class PreviewMusic extends Application {
 
 	@FXML
 	public void pauseMusic() throws MidiUnavailableException, InvocationTargetException {
+		String instrument = getInstrument();
 		if (sequencer.isRunning()) {
 			sequencer.stop();
+			if (instrument == "Guitar") {
+				this.guitar.stophighlight();
+				}
+				else if (instrument == "Drumset") {
+					this.drum.stophighlight();
+				}
+				else if (instrument == "Bass") {
+					this.drum.stophighlight();
+				}
 		}
 
 		System.out.println("Pause bottom is clicked");
@@ -302,6 +339,19 @@ public class PreviewMusic extends Application {
 	public void restartMusicHandle() throws InvalidMidiDataException {
 		sequencer.setSequence(getMusicString());
 		sequencer.start();
+		String instrument = getInstrument();
+		if (instrument == "Guitar") {
+			this.guitar.starthighlight();
+			this.guitar.highlightNote();
+		} 
+		else if (instrument == "Drumset") {
+			this.drum.starthighlight();
+			this.drum.highlightNote();
+		}
+		else if (instrument == "Bass") {
+			this.bass.starthighlight();
+			this.bass.highlightNote();	
+		}
 	}
 
 	public void closeSequencer() {
