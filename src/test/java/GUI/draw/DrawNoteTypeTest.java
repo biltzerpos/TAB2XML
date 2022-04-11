@@ -24,6 +24,7 @@ public class DrawNoteTypeTest {
 	private Pane p = new Pane();
 	private final double x = 10.0;
 	private final double y = 40.00;
+	String f; 
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -39,12 +40,14 @@ public class DrawNoteTypeTest {
 		Score score = new Score(input);
 		MusicXMLCreator mxlc = new MusicXMLCreator(score);
 		ScorePartwise scorePartwise = mxlc.getScorePartwise();
-		Guitar g = new Guitar(scorePartwise, null, 50, 4, 6, 20);
+		Guitar g = new Guitar(scorePartwise, null, 50, 4, 6, 20, f);
 		Measure m1 = g.getMeasureList().get(0);
 		List<Note> noteList = m1.getNotesBeforeBackup();
 		Note n = noteList.get(0);
 
-		this.dNT = new DrawNoteType(p, x, y, 6, 15);
+
+		this.dNT = new DrawNoteType(p, x, y, 15, 3, f);
+
 	}
 
 	// tests the getPane Method o make sure the method returns the expected pane

@@ -14,10 +14,11 @@ class DrawClefTest {
 	private Clef c = new Clef("TAB", 5);
 	private final double x = 30.00;
 	private final double y = 40.00;
+	private String f; 
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		this.dClef = new DrawClef(p, c, x, y);
+		this.dClef = new DrawClef(p, c, x, y, f);
 	}
 
 	// Tests getClef() method of DrawClef class to make sure method returns the

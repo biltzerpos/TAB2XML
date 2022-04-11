@@ -40,6 +40,7 @@ public class Drumset {
 
 	private List<Double[]> drumSlurCoords;
 	private List<Double[]> cymbalSlurCoords;
+	private String font; 
 
 	private double spacing;
 
@@ -347,7 +348,7 @@ public class Drumset {
 		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing);
 		d.draw(this.x, this.y);
 
-		DrawClef drumclef = new DrawClef(this.pane, clef, x + 25, 0);
+		DrawClef drumclef = new DrawClef(this.pane, clef, x + 25, 0, this.font);
 		drumclef.drawDrumClef1();
 		drumclef.drawDrumClef2();
 
@@ -364,7 +365,7 @@ public class Drumset {
 				// Draw music lines for drum clef, then draw drum clef and incremement x
 				d.draw(this.x, this.y);
 
-				drumclef = new DrawClef(this.pane, clef, x + 20, this.y);
+				drumclef = new DrawClef(this.pane, clef, x + 20, this.y, this.font);
 				drumclef.drawDrumClef1();
 				drumclef.drawDrumClef2();
 
