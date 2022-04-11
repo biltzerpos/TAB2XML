@@ -16,10 +16,11 @@ public class DrawDrumsetBarTest {
 		private Pane p = new Pane();
 		private final double x = 20.0;
 		private final double y = 20.0;
+		private double separator=2.0;
 
 		@BeforeEach
 		public void setUp() throws Exception {
-			this.bar = new DrawDrumsetBar(p);
+			this.bar = new DrawDrumsetBar(p,separator);
 		}
 
 		@Test

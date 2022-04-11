@@ -34,7 +34,7 @@ public class DrawBassClef {
 	}
 
 	//DrumClef
-	public void drawDrumClef1() {
+	public void drawBassClef1() {
 
 		Rectangle r1 = new Rectangle();
 		r1.setWidth(3);
@@ -45,7 +45,7 @@ public class DrawBassClef {
 		
 	}
 
-	public void drawDrumClef2() {
+	public void drawBassClef2() {
 
 		Rectangle r1 = new Rectangle();
 		r1.setWidth(3);

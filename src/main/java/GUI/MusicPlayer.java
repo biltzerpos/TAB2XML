@@ -3,13 +3,11 @@ package GUI;
 import java.util.List;
 
 import javax.sound.midi.Sequence;
-import javax.sound.midi.Sequencer;
 
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
-import javafx.fxml.FXML;
-import javafx.scene.layout.Pane;
+
 import models.Part;
 import models.ScorePartwise;
 import models.measure.Measure;
@@ -22,9 +20,8 @@ import models.measure.note.notations.Tied;
 public class MusicPlayer {
 
 	private ScorePartwise scorePartwise;
-	@FXML
-	private Pane pane;
 	private List<Measure> measureList;
+	private Pattern pattern;
 	
 	
 	public MusicPlayer() {
@@ -50,15 +47,14 @@ public class MusicPlayer {
 				}
 				if (j.getNotesBeforeBackup() != null) {
 					for (Note n : j.getNotesBeforeBackup()) {
-						String format = "%s%s%s";
+						String format = "%s%s%s%s";
 						String ns = new String();
 						
 						if (n.getRest() != null) {
 							ns = "R";
 						} else {
 							if (n.getGrace() != null) {
-								n.getGrace();
-								continue;
+								ns = "q";
 							}else {
 								int octave = n.getPitch().getOctave();
 								ns = n.getPitch().getStep() + getAlter(n)+ octave;
@@ -70,10 +66,10 @@ public class MusicPlayer {
 						String tie = getDurationWithTies(dur, n);
 						String chord = createChord(n.getChord());
 
-						vocals.append(String.format(format, chord, ns, tie));
+						vocals.append(String.format(format, chord, ns, tie, getDot(n)));
 
 						if(addRepeat) {
-							repeat.append(String.format(format, chord, ns, tie));
+							repeat.append(String.format(format, chord, ns, tie, getDot(n)));
 						}
 
 					}
@@ -88,8 +84,9 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Guitar: " + vocals.toString());
+		//System.out.println("Guitar: " + vocals.toString());
 
+		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
 	}
 	
@@ -139,8 +136,9 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Drum: " + vocals.toString());
+		//System.out.println("Drum: " + vocals.toString());
 
+		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
 	}
 	
@@ -157,15 +155,14 @@ public class MusicPlayer {
 				}
 				if (j.getNotesBeforeBackup() != null) {
 					for (Note n : j.getNotesBeforeBackup()) {
-						String format = "%s%s%s";
+						String format = "%s%s%s%s";
 						String ns = new String();
 						
 						if (n.getRest() != null) {
 							ns = "R";
 						} else {
 							if (n.getGrace() != null) {
-								n.getGrace();
-								continue;
+								ns = "q";
 							}else {
 								int octave = n.getPitch().getOctave();
 								ns = n.getPitch().getStep() + getAlter(n)+ octave;
@@ -177,10 +174,10 @@ public class MusicPlayer {
 						String tie = getDurationWithTies(dur, n);
 						String chord = createChord(n.getChord());
 
-						vocals.append(String.format(format, chord, ns, tie));
+						vocals.append(String.format(format, chord, ns, tie, getDot(n)));
 
 						if(addRepeat) {
-							repeat.append(String.format(format, chord, ns, tie));
+							repeat.append(String.format(format, chord, ns, tie, getDot(n)));
 						}
 
 					}
@@ -195,12 +192,13 @@ public class MusicPlayer {
 			}
 		}
 
-		System.out.println("Bass: " + vocals.toString());
+		//System.out.println("Bass: " + vocals.toString());
 
+		this.pattern = new Pattern(vocals.toString());
 		return player.getSequence(vocals.toString());
 	}
 
-	// returns string representation of a drum duration for a given note
+	// returns string representation of a duration for a given note
 	private String addDuration(Note note) {
 		String res = "";
 		String type = note.getType();
@@ -222,7 +220,7 @@ public class MusicPlayer {
 		} else if (type.equals("128th")) {
 			res = "o";
 		} else {
-			res = "q"; // Make it default for now
+			res = "q"; // Make it default
 		}
 
 		return res;
@@ -263,7 +261,13 @@ public class MusicPlayer {
 		}
 		return res;
 	}
-	
+	public String getDot(Note note) {
+		String str = "";
+		if(note.getDots() != null){
+			str = ".";
+		}
+		return str;
+	}
 	
 	private String getDrumNoteFullName(String Id) {
 		String fullName = "";
@@ -295,7 +299,7 @@ public class MusicPlayer {
 		} else if(Id == "P1-I45"){
 			fullName = "Pedal_Hi_Hat";
 		} else {
-			fullName = "Bass_Drum"; // Make it default for now
+			fullName = "Bass_Drum"; // Make it default
 		}
 
 		return fullName;
@@ -308,15 +312,6 @@ public class MusicPlayer {
 	public void setScorePartwise(ScorePartwise scorePartwise) {
 		this.scorePartwise = scorePartwise;
 	}
-
-	public Pane getPane() {
-		return pane;
-	}
-
-	public void setPane(Pane pane) {
-		this.pane = pane;
-	}
-
 
 	// returns a list of measures
 	public List<Measure> getMeasureList() {
@@ -338,8 +333,10 @@ public class MusicPlayer {
     	return null;
 		
     }
-
-
+	// for testing purposes
+	public Pattern getPattern() {
+		return pattern;
+	}
 
 
 

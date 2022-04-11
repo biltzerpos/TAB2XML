@@ -424,6 +424,21 @@ public class Bass {
 		return res;
 	}
 
+	public void clearHighlightMeasureArea() {
+		ObservableList<?> children = pane.getChildren();
+		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
+		for (Iterator<?> iterator = children.iterator(); iterator.hasNext();) {
+			Object object = (Object) iterator.next();
+			if (object instanceof Rectangle) {
+				removeRect.add((Rectangle) object);
+			}
+		}
+		for (Iterator<Rectangle> iterator = removeRect.iterator(); iterator.hasNext();) {
+			Rectangle rect = (Rectangle) iterator.next();
+			pane.getChildren().remove(rect);
+		}
+	}
+	
 	public void highlightMeasureArea(Measure measure) {
 		double x = 0;
 		double y = 0;
@@ -553,6 +568,7 @@ public class Bass {
 		}
 		return res;
 	}
+
 	
 	public void highlightNote() {
 		
@@ -622,16 +638,16 @@ public class Bass {
 
 }}
 
-BassHighlight note = new BassHighlight(this, r, noteDuration);
-note.start();
+			BassHighlight note = new BassHighlight(this, r, noteDuration);
+				note.start();
 
-ObservableList children = pane.getChildren();
-	ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
-	for (Iterator iterator = children.iterator(); iterator.hasNext();) {
-		Object object = (Object) iterator.next();
-		if (object instanceof Rectangle) {
-			if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
-				removeRect.add((Rectangle) object);
+				ObservableList children = pane.getChildren();
+				ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
+				for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+					Object object = (Object) iterator.next();
+					if (object instanceof Rectangle) {
+						if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
+							removeRect.add((Rectangle) object);
 			}
 		}
 	}
@@ -651,7 +667,7 @@ ObservableList children = pane.getChildren();
 	public void stophighlight() {
 		 this.playing=false;
 	}
-	// Getters and setters
+
 
 	public ScorePartwise getScorePartwise() {
 		return scorePartwise;
