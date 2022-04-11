@@ -13,12 +13,23 @@ public class DrawDrumsetBar {
 
 	public DrawDrumsetBar() {}
 
+	/**
+	 * Constructor for the DrawDrumsetBar class.
+	 *
+	 * @param pane      - The pane for which the bar will be drawn on.
+	 * @param separator - The length between two music lines
+	 */
 	public DrawDrumsetBar(Pane pane, double separator) {
 		super();
 		this.pane = pane;
 		this.separator = separator;
 	}
 
+	/**
+	 * Draw a bar at the specified position.
+	 * @param x - The x-coordinate at which to draw the bar
+	 * @param y - The y-coordinate at which to draw the bar
+	 */
 	public void draw(double x, double y) {
 		Line barLine = new Line();
 

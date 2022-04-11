@@ -25,6 +25,15 @@ public class DrawDrumsetMusicLines extends Node {
 		this.length = 40;
 	}
 
+	/**
+	 * Constructor for the DrawDrumsetMusicLines class.
+	 *
+	 * @param pane      - The pane on which the music lines will be drawn
+	 * @param spacing   - The spacing between notes
+	 * @param separator - Half of the length between two music lines
+	 *                    (it is half because invisible lines are drawn halfway
+	 *                    between visible lines to simplify note placement)
+	 */
 	public DrawDrumsetMusicLines(Pane pane, double spacing, double separator) {
 		super();
 		this.pane = pane;
