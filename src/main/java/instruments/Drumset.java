@@ -55,10 +55,10 @@ public class Drumset {
 	 * @param pane            - The pane to be draw to
 	 * @param minimumSpacing  - The minimum spacing between notes
 	 * @param fontSize        - The size of the notes
-	 * @param staffSpacing    - The space between staffs
 	 * @param musicLineSpaing - The space between music lines in a staff
+	 * @param staffSpacing    - The space between staffs
 	 */
-	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double staffSpacing, double musicLineSpaing) {
+	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double musicLineSpacing, double staffSpacing) {
 		super();
 		this.scorePartwise = scorePartwise;
 		this.pane = pane;
@@ -70,12 +70,15 @@ public class Drumset {
 		this.x = 0;
 		this.y = 0;
 
-		this.minimumSpacing = minimumSpacing;
-		this.spacing = minimumSpacing;
+		this.minimumSpacing = minimumSpacing + musicLineSpacing;
+		this.spacing = this.minimumSpacing;
 
 		this.fontSize = fontSize / 10 + (fontSize - 10) / 10;
-		this.staffSpacing = (this.fontSize >= 1) ? 100 * this.fontSize : 75 + this.fontSize * 10;
-		this.musicLineSpacing = musicLineSpaing;
+
+		this.musicLineSpacing = musicLineSpacing - 10;
+
+		this.staffSpacing = ((this.fontSize >= 1) ? 100 * this.fontSize : 75 + this.fontSize * 10)
+			+ (musicLineSpacing - 10) * 5 + staffSpacing - 100;
 
 		this.drumTieCoords = new ArrayList<Double[]>();
 		this.cymbalTieCoords = new ArrayList<Double[]>();
@@ -93,7 +96,7 @@ public class Drumset {
 	private void drawGroupedNotes(List<Note> notes) {
 		Note currentNote, nextNote;
 		DrawDrumsetNote noteDrawer;
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize);
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize + this.musicLineSpacing);
 
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
@@ -214,7 +217,7 @@ public class Drumset {
 	private void drawUngroupedNotes(List<Note> notes) {
 		Note currentNote;
 		DrawDrumsetNote noteDrawer;
-		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize);
+		DrawDrumsetMusicLines d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize + this.musicLineSpacing);
 
 		double yPositionMeasure, xPositionNote, yPositionNote;
 
@@ -355,7 +358,7 @@ public class Drumset {
 		yCoordinates.put(measure, this.y - 30);
 
 		// Draw bar line after every measure
-		DrawDrumsetBar bar = new DrawDrumsetBar(this.pane, 10 * this.fontSize);
+		DrawDrumsetBar bar = new DrawDrumsetBar(this.pane, 10 * this.fontSize + 2 * this.musicLineSpacing);
 		bar.draw(this.x, this.y);
 	}
 
@@ -382,7 +385,8 @@ public class Drumset {
 					measure.getAttributes().getTime().getBeats(),
 					this.x - this.spacing / 2,
 					this.y,
-					this.fontSize
+					this.fontSize,
+					this.musicLineSpacing
 				);
 			}
 
@@ -439,7 +443,7 @@ public class Drumset {
 				this.x = 0;
 
 				// Draw music lines for clef
-				d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize);
+				d = new DrawDrumsetMusicLines(this.pane, this.spacing, 5 * this.fontSize + this.musicLineSpacing);
 				d.draw(this.x, this.y);
 
 				// Draw drum clef

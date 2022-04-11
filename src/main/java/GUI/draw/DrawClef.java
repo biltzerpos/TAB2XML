@@ -118,18 +118,19 @@ public class DrawClef {
 	/**
 	 * Draw the time signature.
 	 *
-	 * @param beats     - The beats of the time signature (top number)
-	 * @param beatType  - The beat type of the time signature (bottom number)
-	 * @param xPosition - The x-position of the time signature
-	 * @param yPosition - The y-position of the top of the measure
-	 * @param fontSize  - The font size of the drum notes
+	 * @param beats            - The beats of the time signature (top number)
+	 * @param beatType         - The beat type of the time signature (bottom number)
+	 * @param xPosition        - The x-position of the time signature
+	 * @param yPosition        - The y-position of the top of the measure
+	 * @param fontSize         - The font size of the drum notes
+	 * @param musicLineSpacing - The extra spacing between music lines
 	 */
-	public void drawTimeSignature(int beats, int beatType, double xPosition, double yPosition, double fontSize) {
-		Text beatsText = new Text(xPosition - 5 * fontSize, yPosition + 30 * fontSize, Integer.toString(beats));
-		Text beatTypeText = new Text(xPosition - 5 * fontSize, yPosition + 50 * fontSize, Integer.toString(beatType));
+	public void drawTimeSignature(int beats, int beatType, double xPosition, double yPosition, double fontSize, double musicLineSpacing) {
+		Text beatsText = new Text(xPosition - 5 * fontSize, yPosition + 30 * fontSize + 5 * musicLineSpacing, Integer.toString(beats));
+		Text beatTypeText = new Text(xPosition - 5 * fontSize, yPosition + 50 * fontSize + 7 * musicLineSpacing, Integer.toString(beatType));
 
-		beatsText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, fontSize * 30));
-		beatTypeText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, fontSize * 30));
+		beatsText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, fontSize * 30 + musicLineSpacing * 2));
+		beatTypeText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, fontSize * 30 + musicLineSpacing * 2));
 
 		pane.getChildren().add(beatsText);
 		pane.getChildren().add(beatTypeText);

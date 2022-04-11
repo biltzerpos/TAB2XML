@@ -27,6 +27,7 @@ public class DrawDrumsetBar {
 
 	/**
 	 * Draw a bar at the specified position.
+	 *
 	 * @param x - The x-coordinate at which to draw the bar
 	 * @param y - The y-coordinate at which to draw the bar
 	 */
