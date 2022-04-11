@@ -401,7 +401,7 @@ public class Drumset {
 		double paneWidth = this.pane.getMaxWidth();
 
 		DrawDrumsetMusicLines d;
-		DrawClef drumclef;
+		DrawClef drumClef;
 
 		this.x += this.spacing;
 
@@ -443,15 +443,14 @@ public class Drumset {
 				d.draw(this.x, this.y);
 
 				// Draw drum clef
-				drumclef = new DrawClef(this.pane, clef, x + 20, this.y);
-				drumclef.drawDrumClef1();
-				drumclef.drawDrumClef2();
+				drumClef = new DrawClef(this.pane, d.getYPositionFromOctaveAndStep(5, "D"), d.getYPositionFromOctaveAndStep(4, "G"));
+				drumClef.drawDrumClef();
 
 				// Increment x-position
 				this.x += this.spacing;
 
 				// Draw staff
-				this.drawStaff(staff, d, drumclef);
+				this.drawStaff(staff, d, drumClef);
 
 				// Reset staff list and counters
 				staff.clear();

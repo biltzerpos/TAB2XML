@@ -18,7 +18,10 @@ public class DrawClef {
 	private Pane pane;
 	private double x;
 	private double y;
-	private double fontSize; 
+	private double fontSize;
+
+	private double drumClefTopPosition;
+	private double drumClefBottomPosition;
 
 	// Constructor 1
 	public DrawClef(Pane pane, Clef clef, double x, double y) {
@@ -34,29 +37,56 @@ public class DrawClef {
 
 	}
 
-	//DrumClef
-	public void drawDrumClef1() {
+	/**
+	 * Constructor for draw clef class for drumset.
+	 *
+	 * @param pane                   - The pane on which the clef will be drawn
+	 * @param drumClefTopPosition    - The y-coordinate of the top of the clef
+	 *                                 (should be octave 5, note "D")
+	 * @param drumClefBottomPosition - The y-coordinate of the bottom of the clef
+	 *                                 (should be octave 4, note "E")
+	 */
+	public DrawClef(Pane pane, double drumClefTopPosition, double drumClefBottomPosition) {
+		this.pane = pane;
+		this.drumClefTopPosition = drumClefTopPosition;
+		this.drumClefBottomPosition = drumClefBottomPosition;
+	}
+
+	/**
+	 * Draws the drum clef.
+	 */
+	public void drawDrumClef() {
+		this.drawDrumClef1();
+		this.drawDrumClef2();
+	}
+
+	/**
+	 * Draws the left rectangle of the drum clef.
+	 */
+	private void drawDrumClef1() {
 
 		Rectangle r1 = new Rectangle();
 		r1.setWidth(5);
-		r1.setHeight(20);
+		r1.setHeight(this.drumClefBottomPosition - this.drumClefTopPosition);
 		r1.setTranslateX(10);
-		r1.setTranslateY(this.y + 20);
+		r1.setTranslateY(this.drumClefTopPosition);
 		pane.getChildren().add(r1);
-		
+
 	}
 
-	public void drawDrumClef2() {
+	/**
+	 * Draws the right rectangle of the drum clef.
+	 */
+	private void drawDrumClef2() {
 
 		Rectangle r1 = new Rectangle();
 		r1.setWidth(5);
-		r1.setHeight(20);
+		r1.setHeight(this.drumClefBottomPosition - this.drumClefTopPosition);
 		r1.setTranslateX(18);
-		r1.setTranslateY(this.y + 20);
+		r1.setTranslateY(this.drumClefTopPosition);
 		pane.getChildren().add(r1);
-		
-	}
 
+	}
 
 	// the method called for the drawing the clef on Pane.
 
