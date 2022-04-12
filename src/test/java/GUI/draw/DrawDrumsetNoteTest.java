@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
@@ -139,6 +140,40 @@ public class DrawDrumsetNoteTest {
 		    }
 
 		    assertTrue(foundRestSVG, "Rest note SVG not found");
+		} catch (TXMLException e) {
+			fail("TXMLException thrown\n" + e.getMessage());
+		}
+	}
+
+	@Test
+	void testDrawBeam() {
+		try {
+			String input = """
+								Quarter rest and 32nd notes
+				C |R-----------------------X---X---|X-------------------------------|
+				F |------------ddddddddddd---------|--------------------------------|
+				B |------------------------o---o---|o-------------------------------|
+			""";
+	
+		    Pane pane = new Pane();
+	
+		    Score score = new Score(input);
+	
+		    ScorePartwise scorePartwise = score.getModel();
+	
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
+	
+		    drumsetDrawer.draw();
+
+		    int numberOfBeams = 0;
+
+		    for (int i = 0; i < pane.getChildren().size(); i++) {
+		    	if (pane.getChildren().get(i) instanceof  Rectangle) {
+		    		numberOfBeams++;
+		    	}
+		    }
+
+		    assertEquals(40, numberOfBeams, "20 beams should have been drawn, but " + numberOfBeams + " beams were drawn instead");
 		} catch (TXMLException e) {
 			fail("TXMLException thrown\n" + e.getMessage());
 		}
