@@ -10,6 +10,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import models.ScorePartwise;
 import models.measure.Measure;
 import models.measure.attributes.Clef;
@@ -412,6 +416,15 @@ public class Drumset {
 	 * @param drumClef - DrawClef drawer
 	 */
 	private void drawStaff(List<Measure> staff, DrawDrumsetMusicLines d, DrawClef drumClef) {
+		// Check if the first measure of the staff is defined
+		if (staff.size() > 0 && staff.get(0) != null) {
+			// Insert the measure number above the staff
+			Text measureNumber = new Text(10, this.y, Integer.toString(staff.get(0).getNumber()));
+			measureNumber.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
+
+			pane.getChildren().add(measureNumber);
+		}
+
 		// Iterate through the list of measures
 		for (Measure measure : staff) {
 			// If the measure has a time signature, then draw it
