@@ -635,9 +635,11 @@ public class Drumset {
 		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
 		for (Iterator<?> iterator = children.iterator(); iterator.hasNext();) {
 			Object object = (Object) iterator.next();
-			// ONLY REMOVE RECTANGLES IF THEY ARE RED,
-			if (((Rectangle) object).getStyle().equals("-fx-stroke: red;")) {
-				removeRect.add((Rectangle) object);
+			if (object instanceof Rectangle) {
+				// ONLY REMOVE RECTANGLES IF THEY ARE RED,
+				if (((Rectangle) object).getStyle().equals("-fx-stroke: red;")) {
+					removeRect.add((Rectangle) object);
+				}
 			}
 		}
 		for (Iterator<Rectangle> iterator = removeRect.iterator(); iterator.hasNext();) {
