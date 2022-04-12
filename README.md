@@ -254,7 +254,7 @@ Unavailable functionalities: Pausing the playing capability
 		Clicking on "Preview Sheet Music" opens a new window with a Music score 
 		corresponding to the input tablature displayed on the screen.
 		<p align="center">
-			<img src="Documents/UserManual/imgs/guitarTabOutput1.jpg" style="width:70%; ">
+			<img src="Documents/UserManual/imgs/guitarTabOutput1.png" style="width:70%; ">
 		</p> 
 		You can 3 buttons on the bottom right and a input field and a button on the 
 		bottom left coreners allowing different functionalities:
@@ -306,7 +306,7 @@ it does for the Guitar tablatures.
 Following the same steps as the guitar example, but with the example drum tablature, this is the output:
 
 <p align="center">
-	<img src="Documents/UserManual/imgs/drumTabOutput1.jpg" style="width:70%; ">
+	<img src="Documents/UserManual/imgs/drumTabOutput1.png" style="width:70%; ">
 </p> 
 
 For further details refer to `Documents/UserManual/EECS2311_Group6_TAB2XML_UserManual.pdf`.
@@ -319,7 +319,7 @@ it does for the Guitar and DrumSet tablatures.
 Following the same steps as the guitar example, but with the example bass tablature, this is the output:
 
 <p align="center">
-	<img src="Documents/UserManual/imgs/bassTabOutput1.jpg" style="width:70%; ">
+	<img src="Documents/UserManual/imgs/bassTabOutput1.png" style="width:70%; ">
 </p> 
 
 For further details refer to `Documents/UserManual/EECS2311_Group6_TAB2XML_UserManual.pdf`.
