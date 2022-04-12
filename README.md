@@ -45,8 +45,8 @@ easier. Your can also watch the instruction video [here](https://youtu.be/e4EMPc
 	</p>
   </li>
   <li>
-  	In the Package Explorer (usually on the left-hand side) select �Import projects� 
- 	. You can also open the import window by clicking on File &#8594; import�	
+  	In the Package Explorer (usually on the left-hand side) select "Import projects" 
+ 	. You can also open the import window by clicking on File &#8594; import...	
  	<p align="center">
 		<img src="Documents/UserManual/imgs/installation2.png" style="width:70%; ">
 	</p>
@@ -58,7 +58,7 @@ easier. Your can also watch the instruction video [here](https://youtu.be/e4EMPc
 	</p>
   </li>
   <li>
-  	Then select �Clone URI� &#8594; Next.	
+  	Then select "Clone URI" &#8594; Next.	
   	<p align="center">
 		<img src="Documents/UserManual/imgs/installation4.png" style="width:70%; ">
 	</p>
@@ -112,7 +112,7 @@ easier. Your can also watch the instruction video [here](https://youtu.be/e4EMPc
  
 ### Executing the program
 
-We Run this project through Gradle. To do this we need to open the �Gradle Task window� 
+We Run this project through Gradle. To do this we need to open the "Gradle Task window" 
 by Window &#8594; show view &#8594; others &#8594; search for the Gradle task in the search bar &#8594; open. 
 It will take a while for Gradle to build the project. At the end, the project folder will
  be displayed in the Gradle Task window 
@@ -153,8 +153,8 @@ methods you can try to fix these errors:
 		<p align="center">
 			<img src="Documents/UserManual/imgs/error3.png" style="width:70%; ">
 		</p>
-		select Filters, and uncheck the �resources�, �Gradle build folder�, and 
-		�Gradle subprojects� so that they are visible 
+		select Filters, and uncheck the "resources", "Gradle build folder", and 
+		"Gradle subprojects" so that they are visible 
 		<p align="center">
 			<img src="Documents/UserManual/imgs/error4.png" style="width:70%; ">
 		</p>
@@ -246,12 +246,12 @@ Unavailable functionalities: Pausing the playing capability
 			<img src="Documents/UserManual/imgs/using2.png" style="width:70%; ">
 		</p> 
 		Entering the input in the correct format enables the buttons at the bottom. 
-		You can use �Show MusicXML� and �Save MusicXML� to view and save the MusicXML 
+		You can use "Show MusicXML" and "Save MusicXML" to view and save the MusicXML 
 		created using input tablature. For the purpose of this documentation, 
 		we focus on the new update:previewing the music sheets. 		
 	</li>
 	<li> 
-		Clicking on �Preview Sheet Music� opens a new window with a Music score 
+		Clicking on "Preview Sheet Music" opens a new window with a Music score 
 		corresponding to the input tablature displayed on the screen.
 		<p align="center">
 			<img src="Documents/UserManual/imgs/guitarTabOutput1.jpg" style="width:70%; ">
@@ -263,13 +263,13 @@ Unavailable functionalities: Pausing the playing capability
 	
 <ul>
 	<li>
-		Playing the notes: Clicking on the �Play Notes� button plays the notes from 
+		Playing the notes: Clicking on the "Play Notes" button plays the notes from 
 		beginning to end. Pause and playing from the specific measure will be 
 		available in future releases.  Please note that while the notes are being 
 		played, the other functionalities are not usable.
 	</li> 
 	<li>
-		Printing Music Sheet: Clicking on the �Print Music Sheet� button 
+		Printing Music Sheet: Clicking on the "Print Music Sheet" button 
 		opens a print dialogue window where you can either select to print 
 		the music sheet using your preferred printer or save it as a PDF file.
 		<ul>
