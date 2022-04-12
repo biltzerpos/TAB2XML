@@ -40,6 +40,9 @@ public class Bass {
 	private String repetitions;
 	private DrawBassNote noteDrawer;
 	
+	private List<Rectangle> highlightRectangles;
+	private List<Double> noteDurations;
+	
 	private int fontSize;
 	private int staffSpacing;
 	private DrawSlur slurDrawer;
@@ -59,6 +62,9 @@ public class Bass {
 		this.LineSpacing = LineSpacing; //send it in as 150
 		this.fontSize = font; //send it in as 12
 		this.staffSpacing = staffSpacing; //send it as 50
+		
+		this.highlightRectangles = new ArrayList<Rectangle>();
+		this.noteDurations = new ArrayList<Double>();
 		
 		xCoordinates = new HashMap<>();
 		yCoordinates = new HashMap<>();
@@ -404,6 +410,23 @@ public class Bass {
 				count--;
 			}
 		}
+		Rectangle currentHighlightRectangle;
+if (note != null && note.getDuration() != null) {
+			
+			currentHighlightRectangle = new Rectangle(this.x, this.y-10, this.spacing, ( this.fontSize + LineSpacing)/2.5);
+			currentHighlightRectangle.setFill(Color.TRANSPARENT);
+
+			// Add the rectangle to the pane
+			pane.getChildren().add(currentHighlightRectangle);
+
+			// Add the rectangle and duration to the rectangle and duration lists
+			this.highlightRectangles.add(currentHighlightRectangle);
+			int duration= note.getDuration();
+			double duration2 =1000.0/((double)duration);
+			this.noteDurations.add((double) duration2);
+			System.out.println();
+			System.out.println(note.getDuration());
+		}
 	}
 
 	private int countDotNumber(Note note) {
@@ -571,94 +594,31 @@ public class Bass {
 
 	
 	public void highlightNote() {
+		ArrayList<Rectangle> r = (ArrayList<Rectangle>) this.highlightRectangles;
+		ArrayList<Double> noteDuration = (ArrayList<Double>) this.noteDurations;
 		
-		Note currentNote;
-		double xPositionNote=0;
-		double yPositionNote=0;
-		x = 0;
-		y = 0;
-		ArrayList<Rectangle> r = new ArrayList<Rectangle>();
-		ArrayList<Double> noteDuration = new ArrayList<Double>();
-		
-		for (int i = 0; i < measureList.size(); i++) {
-			Measure measure = measureList.get(i);
-			List<Note> noteList = measure.getNotesBeforeBackup();
-			double w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
-			double yf = getYCoordinatesForGivenMeasure(measureList.get(i));
-			if (yf > y) {
-				x = 0;
-				w = getXCoordinatesForGivenMeasure(measureList.get(i)) - x;
-				y = yf;
-			}
-			
-			for (int j = 0; j < noteList.size(); j++) {
-				currentNote = noteList.get(j);
-				yPositionNote = getYCoordinatesForGivenMeasure(measureList.get(i));
-				xPositionNote = getXCoordinatesForGivenMeasure(measureList.get(i));
-				if (!noteHasChord(currentNote)) {
-					if (noteHasGrace(currentNote)) {
-						int num = countGraceSpace(currentNote, noteList);
-						xPositionNote = noteDrawer.getStartX() + spacing / 2;
-						int fret = currentNote.getNotations().getTechnical().getFret();
-						double graceSpacing = 0;
-						if (fret < 10) {
-							graceSpacing = xPositionNote - (spacing / (4 / num));
-						} else {
-							graceSpacing = xPositionNote - (spacing / (4 / num) + num);
-						}
-						xPositionNote = graceSpacing;
-					}
-					else {
-							xPositionNote = x+spacing/2;		
-					}
-				}
-				else if (noteHasChord(currentNote)) {
-					if (noteHasGrace(currentNote)) {
-						xPositionNote = noteDrawer.getStartX();
-					} else {
-						xPositionNote = noteDrawer.getStartX();
-					}
-				}
-				Rectangle rectangle = new Rectangle();
-				rectangle.setWidth(15);
-				rectangle.setHeight(70);
-				
-				//rectangle.setStyle("-fx-stroke: red;");
-				rectangle.setTranslateX(xPositionNote-2);
-				rectangle.setTranslateY(yPositionNote-15);
-				rectangle.setFill(Color.TRANSPARENT);
-				pane.getChildren().add(rectangle);
-				r.add(rectangle);                
-				this.x += currentNote.getChord() == null && currentNote.getGrace() == null ? this.spacing : 0;
-				if (currentNote.getDuration() !=null) {
-					int duration= currentNote.getDuration();
-					double duration2 =1000.0/((double)duration);
-					noteDuration.add(duration2);
-				}
+		BassHighlight note = new BassHighlight(this, r, noteDuration);
+		note.start();
 
-}}
+		ObservableList children = pane.getChildren();
+		ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
 
-			BassHighlight note = new BassHighlight(this, r, noteDuration);
-				note.start();
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Object object = (Object) iterator.next();
 
-				ObservableList children = pane.getChildren();
-				ArrayList<Rectangle> removeRect = new ArrayList<Rectangle>();
-				for (Iterator iterator = children.iterator(); iterator.hasNext();) {
-					Object object = (Object) iterator.next();
-					if (object instanceof Rectangle) {
-						if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
-							removeRect.add((Rectangle) object);
+			if (object instanceof Rectangle) {
+				if (((Rectangle) object).getStyle().equals("-fx-stroke: TRANSPARENT;")) {
+					removeRect.add((Rectangle) object);
+				}
 			}
 		}
+
+		for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
+			Rectangle rect = (Rectangle) iterator.next();
+			pane.getChildren().remove(rect);
+		}
 	}
-
-	for (Iterator iterator = removeRect.iterator(); iterator.hasNext();) {
-		Rectangle rect = (Rectangle) iterator.next();
-		pane.getChildren().remove(rect);
-	}
-
-}
-
+	
 	public Boolean playing;
 	
 	public void starthighlight() {

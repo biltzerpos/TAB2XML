@@ -25,7 +25,7 @@ import GUI.draw.DrawDrumsetMusicLines;
 import GUI.draw.DrawDrumsetNote;
 
 public class Drumset {
-
+	private double tempo;
 	private ScorePartwise scorePartwise;
 	@FXML
 	private Pane pane;
@@ -63,10 +63,14 @@ public class Drumset {
 	 * @param musicLineSpaing - The space between music lines in a staff
 	 * @param staffSpacing    - The space between staffs
 	 */
-	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double musicLineSpacing, double staffSpacing) {
+
+	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double musicLineSpacing, double staffSpacing, double tempo) {
+
 		super();
 
 		this.scorePartwise = scorePartwise;
+
+
 
 		this.pane = pane;
 
@@ -83,6 +87,7 @@ public class Drumset {
 		this.x = 0;
 		this.y = 0;
 
+
 		this.minimumSpacing = minimumSpacing;
 		this.spacing = this.minimumSpacing;
 
@@ -98,6 +103,24 @@ public class Drumset {
 
 		this.drumSlurCoords = new ArrayList<Double[]>();
 		this.cymbalSlurCoords = new ArrayList<Double[]>();
+
+		this.minimumSpacing = minimumSpacing + musicLineSpacing;
+		this.spacing = this.minimumSpacing;
+
+		this.fontSize = fontSize / 10 + (fontSize - 10) / 10;
+
+		this.musicLineSpacing = musicLineSpacing - 10;
+
+		this.staffSpacing = ((this.fontSize >= 1) ? 100 * this.fontSize : 75 + this.fontSize * 10)
+			+ (musicLineSpacing - 10) * 5 + staffSpacing - 100;
+
+		this.drumTieCoords = new ArrayList<Double[]>();
+		this.cymbalTieCoords = new ArrayList<Double[]>();
+
+		this.drumSlurCoords = new ArrayList<Double[]>();
+		this.cymbalSlurCoords = new ArrayList<Double[]>();
+		this.tempo=tempo;
+
 	}
 
 	/**
@@ -228,7 +251,8 @@ public class Drumset {
 
 				// Add the rectangle and duration to the rectangle and duration lists
 				this.hightlightRectanlges.add(currentHighlightRectangle);
-				this.noteDurations.add(1000.0 / currentNote.getDuration());
+
+				this.noteDurations.add(60000.0/ (currentNote.getDuration()*tempo));
 			}
 
 			// If the current note is not a chord, increment x position
@@ -311,7 +335,10 @@ public class Drumset {
 
 				// Add the rectangle and duration to the rectangle and duration lists
 				this.hightlightRectanlges.add(currentHighlightRectangle);
-				this.noteDurations.add(1000.0 / currentNote.getDuration());
+				int duration= currentNote.getDuration();
+				double duration2 =1000.0/((double)duration);
+				double duration3= duration2*60/tempo;
+				this.noteDurations.add((double) duration3);
 			}
 
 			// If the current note is a chord, increment x position
@@ -776,6 +803,54 @@ public class Drumset {
 	// returns a list of measures
 	public List<Measure> getMeasureList() {
 		return measureList;
+	}
+
+	public ScorePartwise getScorePartwise() {
+		return this.scorePartwise;
+	}
+
+	public void setScorePartwise(ScorePartwise scorePartwise) {
+		this.scorePartwise = scorePartwise;
+	}
+
+	public Pane getPane() {
+		return this.pane;
+	}
+
+	public void setPane(Pane pane) {
+		this.pane = pane;
+	}
+
+	public double getFontSize() {
+		return this.fontSize;
+	}
+
+	public void setFontSize(double fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public double getSpacing() {
+		return this.spacing;
+	}
+
+	public void setSpacing(double spacing) {
+		this.spacing = spacing;
+	}
+
+	public double getMusicLineSpacing() {
+		return this.musicLineSpacing;
+	}
+
+	public void setMusicLineSpacing(double fontSize) {
+		this.musicLineSpacing = fontSize;
+	}
+
+	public double getStaffSpacing() {
+		return this.staffSpacing;
+	}
+
+	public void setStaffSpacing(double staffSpacing) {
+		this.staffSpacing= staffSpacing;
 	}
 
 }
