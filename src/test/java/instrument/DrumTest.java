@@ -48,9 +48,9 @@ public class DrumTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100, 0);
 	
-		    assertEquals(50.0, drumsetDrawer.getSpacing(), "spacing should be 50.0, but was " + drumsetDrawer.getSpacing() + " instead");
+		    assertEquals(60.0, drumsetDrawer.getSpacing(), "spacing should be 6S0.0, but was " + drumsetDrawer.getSpacing() + " instead");
 		    assertEquals(1.0, drumsetDrawer.getFontSize(), "font size should be 1.0, but was " + drumsetDrawer.getFontSize() + " instead");
 		    assertEquals(0.0, drumsetDrawer.getMusicLineSpacing(), "music line spacing should be 0.0, but was " + drumsetDrawer.getMusicLineSpacing() + " instead");
 		    assertEquals(100.0, drumsetDrawer.getStaffSpacing(), "staff spacing should be 100.0, but was " + drumsetDrawer.getStaffSpacing() + " instead");
@@ -77,9 +77,9 @@ public class DrumTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150, 0);
 	
-		    assertEquals(35.0, drumsetDrawer.getSpacing(), "spacing should be 35.0, but was " + drumsetDrawer.getSpacing() + " instead");
+		    assertEquals(55.0, drumsetDrawer.getSpacing(), "spacing should be 55.0, but was " + drumsetDrawer.getSpacing() + " instead");
 		    assertEquals(1.4, drumsetDrawer.getFontSize(), "font size should be 1.4, but was " + drumsetDrawer.getFontSize() + " instead");
 		    assertEquals(10.0, drumsetDrawer.getMusicLineSpacing(), "music line spacing should be 10.0, but was " + drumsetDrawer.getMusicLineSpacing() + " instead");
 		    assertEquals(240.0, drumsetDrawer.getStaffSpacing(), "staff spacing should be 240.0, but was " + drumsetDrawer.getStaffSpacing() + " instead");
@@ -106,7 +106,7 @@ public class DrumTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150, 0);
 	
 		    assertEquals(scorePartwise, drumsetDrawer.getScorePartwise(), "ScorePartwise object not properly set");
 		} catch (TXMLException e) {
@@ -132,7 +132,7 @@ public class DrumTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150, 0);
 	
 		    assertEquals(pane, drumsetDrawer.getPane(), "Pane object not properly set");
 		} catch (TXMLException e) {
@@ -158,7 +158,7 @@ public class DrumTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150, 0);
 	
 		    assertEquals(scorePartwise.getParts().get(0).getMeasures(), drumsetDrawer.getMeasureList(), "Measure list not properly set");
 		} catch (TXMLException e) {
@@ -184,7 +184,7 @@ public class DrumTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150, 0);
 	
 		    assertEquals(scorePartwise.getParts().get(0).getMeasures().get(0).getAttributes().getClef(), drumsetDrawer.getClef(), "Measure list not properly set");
 		} catch (TXMLException e) {

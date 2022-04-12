@@ -48,7 +48,7 @@ public class DrawDrumsetNoteTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100, 0);
 
 		    drumsetDrawer.draw();
 
@@ -84,7 +84,7 @@ public class DrawDrumsetNoteTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100, 0);
 
 		    drumsetDrawer.draw();
 
@@ -128,7 +128,7 @@ public class DrawDrumsetNoteTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100, 0);
 	
 		    drumsetDrawer.draw();
 
@@ -162,7 +162,7 @@ public class DrawDrumsetNoteTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100, 0);
 	
 		    drumsetDrawer.draw();
 
@@ -199,7 +199,7 @@ public class DrawDrumsetNoteTest {
 	
 		    ScorePartwise scorePartwise = score.getModel();
 	
-		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100, 0);
 	
 		    drumsetDrawer.draw();
 
