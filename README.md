@@ -45,8 +45,8 @@ easier. Your can also watch the instruction video [here](https://youtu.be/e4EMPc
 	</p>
   </li>
   <li>
-  	In the Package Explorer (usually on the left-hand side) select “Import projects” 
- 	. You can also open the import window by clicking on File &#8594; import…	
+  	In the Package Explorer (usually on the left-hand side) select ï¿½Import projectsï¿½ 
+ 	. You can also open the import window by clicking on File &#8594; importï¿½	
  	<p align="center">
 		<img src="Documents/UserManual/imgs/installation2.png" style="width:70%; ">
 	</p>
@@ -58,7 +58,7 @@ easier. Your can also watch the instruction video [here](https://youtu.be/e4EMPc
 	</p>
   </li>
   <li>
-  	Then select “Clone URI” &#8594; Next.	
+  	Then select ï¿½Clone URIï¿½ &#8594; Next.	
   	<p align="center">
 		<img src="Documents/UserManual/imgs/installation4.png" style="width:70%; ">
 	</p>
@@ -112,7 +112,7 @@ easier. Your can also watch the instruction video [here](https://youtu.be/e4EMPc
  
 ### Executing the program
 
-We Run this project through Gradle. To do this we need to open the “Gradle Task window” 
+We Run this project through Gradle. To do this we need to open the ï¿½Gradle Task windowï¿½ 
 by Window &#8594; show view &#8594; others &#8594; search for the Gradle task in the search bar &#8594; open. 
 It will take a while for Gradle to build the project. At the end, the project folder will
  be displayed in the Gradle Task window 
@@ -153,8 +153,8 @@ methods you can try to fix these errors:
 		<p align="center">
 			<img src="Documents/UserManual/imgs/error3.png" style="width:70%; ">
 		</p>
-		select Filters, and uncheck the “resources”, “Gradle build folder”, and 
-		“Gradle subprojects” so that they are visible 
+		select Filters, and uncheck the ï¿½resourcesï¿½, ï¿½Gradle build folderï¿½, and 
+		ï¿½Gradle subprojectsï¿½ so that they are visible 
 		<p align="center">
 			<img src="Documents/UserManual/imgs/error4.png" style="width:70%; ">
 		</p>
@@ -172,7 +172,7 @@ methods you can try to fix these errors:
 
 The current version works only with the following two examples:
 
-#### Guitar tab:
+#### Guitar tab example:
 <pre style="font-family:courier;">
 |-----------0-----|-0---------------|
 |---------0---0---|-0---------------|
@@ -181,7 +181,8 @@ The current version works only with the following two examples:
 |---2-------------|-2---------------|
 |-0---------------|-0---------------|
 </pre>
-#### Drum tab: 
+
+#### Drum tab example: 
 <pre style="font-family:courier;">
 CC|x---------------|--------x-------|
 HH|--x-x-x-x-x-x-x-|----------------|
@@ -191,10 +192,28 @@ MT|----------------|------oo--------|
 BD|o-------o-------|o-------o-------|
 </pre>
 
+#### Bass tab example: 
+<pre style="font-family:courier;">
+G|---------------|
+D|-4-4-4-------4-|
+A|------4----4---|
+E|-------2-5-----|
+</pre>
+
 Additionally, you can use the following files under src/test/resources/system:
 
-* bendTest1.txt (for Guitar)
-* Ex38.txt (for Guitar)
+* `bendTest1.txt` (for Guitar)
+* `capricho.txt` (for Guitar)
+* `ex38.txt` (for Guitar)
+* `graceTest1.txt` (for Guitar)
+* `graceTest2.txt` (for Guitar)
+* `money.txt` (for Bass)
+* `parabola.txt` (for Drums)
+* `push.txt` (for Drums)
+* `repeat.txt` (for Drums)
+* `restTest1.txt` (for Drums)
+* `tieTest1.txt` (for Guitar)
+* `timingTest1.txt` (for Drums)
 
 ### Instrument: Guitar
 
@@ -227,15 +246,15 @@ Unavailable functionalities: Pausing the playing capability
 			<img src="Documents/UserManual/imgs/using2.png" style="width:70%; ">
 		</p> 
 		Entering the input in the correct format enables the buttons at the bottom. 
-		You can use “Show MusicXML” and “Save MusicXML” to view and save the MusicXML 
+		You can use ï¿½Show MusicXMLï¿½ and ï¿½Save MusicXMLï¿½ to view and save the MusicXML 
 		created using input tablature. For the purpose of this documentation, 
 		we focus on the new update:previewing the music sheets. 		
 	</li>
 	<li> 
-		Clicking on “Preview Sheet Music” opens a new window with a Music score 
+		Clicking on ï¿½Preview Sheet Musicï¿½ opens a new window with a Music score 
 		corresponding to the input tablature displayed on the screen.
 		<p align="center">
-			<img src="Documents/UserManual/imgs/using3.png" style="width:70%; ">
+			<img src="Documents/UserManual/imgs/guitarTabOutput1.jpg" style="width:70%; ">
 		</p> 
 		You can 3 buttons on the bottom right and a input field and a button on the 
 		bottom left coreners allowing different functionalities:
@@ -244,13 +263,13 @@ Unavailable functionalities: Pausing the playing capability
 	
 <ul>
 	<li>
-		Playing the notes: Clicking on the “Play Notes” button plays the notes from 
+		Playing the notes: Clicking on the ï¿½Play Notesï¿½ button plays the notes from 
 		beginning to end. Pause and playing from the specific measure will be 
 		available in future releases.  Please note that while the notes are being 
 		played, the other functionalities are not usable.
 	</li> 
 	<li>
-		Printing Music Sheet: Clicking on the “Print Music Sheet” button 
+		Printing Music Sheet: Clicking on the ï¿½Print Music Sheetï¿½ button 
 		opens a print dialogue window where you can either select to print 
 		the music sheet using your preferred printer or save it as a PDF file.
 		<ul>
@@ -282,8 +301,28 @@ open side by side.
 ### Instrument: DrumSet
 
 The Application support the same functionalities and features for Drumset as 
-it does for the Guitar tablatures. for further details refer to `Documents/UserManual/EECS2311_Group6_TAB2XML_UserManual.pdf`
+it does for the Guitar tablatures.
 
+Following the same steps as the guitar example, but with the example drum tablature, this is the output:
+
+<p align="center">
+	<img src="Documents/UserManual/imgs/drumTabOutput1.jpg" style="width:70%; ">
+</p> 
+
+For further details refer to `Documents/UserManual/EECS2311_Group6_TAB2XML_UserManual.pdf`.
+
+### Instrument: Bass
+
+The Application support the same functionalities and features for Bass as 
+it does for the Guitar and DrumSet tablatures.
+
+Following the same steps as the guitar example, but with the example bass tablature, this is the output:
+
+<p align="center">
+	<img src="Documents/UserManual/imgs/bassTabOutput1.jpg" style="width:70%; ">
+</p> 
+
+For further details refer to `Documents/UserManual/EECS2311_Group6_TAB2XML_UserManual.pdf`.
 
 ## Authors
 
