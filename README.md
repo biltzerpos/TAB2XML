@@ -265,8 +265,7 @@ Unavailable functionalities: Pausing the playing capability
 	<li>
 		Playing the notes: Clicking on the "Play Notes" button plays the notes from 
 		beginning to end. Pause and playing from the specific measure will be 
-		available in future releases.  Please note that while the notes are being 
-		played, the other functionalities are not usable.
+		available in future releases.
 	</li> 
 	<li>
 		Printing Music Sheet: Clicking on the "Print Music Sheet" button 
@@ -288,6 +287,10 @@ Unavailable functionalities: Pausing the playing capability
 	<li>
 		Closing the preview window: by clicking on the close button or the `x` on 
 		top right corner, you can close the preview window 
+	</li>
+	<li>
+		Personalizing the output: The output can be personalized by changing the note
+		spacing, the font size, the staff spacing, and the music line spacing.
 	</li>
 </ul>
 
