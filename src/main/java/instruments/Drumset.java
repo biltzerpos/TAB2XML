@@ -778,4 +778,52 @@ public class Drumset {
 		return measureList;
 	}
 
+	public ScorePartwise getScorePartwise() {
+		return this.scorePartwise;
+	}
+
+	public void setScorePartwise(ScorePartwise scorePartwise) {
+		this.scorePartwise = scorePartwise;
+	}
+
+	public Pane getPane() {
+		return this.pane;
+	}
+
+	public void setPane(Pane pane) {
+		this.pane = pane;
+	}
+
+	public double getFontSize() {
+		return this.fontSize;
+	}
+
+	public void setFontSize(double fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public double getSpacing() {
+		return this.spacing;
+	}
+
+	public void setSpacing(double spacing) {
+		this.spacing = spacing;
+	}
+
+	public double getMusicLineSpacing() {
+		return this.musicLineSpacing;
+	}
+
+	public void setMusicLineSpacing(double fontSize) {
+		this.musicLineSpacing = fontSize;
+	}
+
+	public double getStaffSpacing() {
+		return this.staffSpacing;
+	}
+
+	public void setStaffSpacing(double staffSpacing) {
+		this.staffSpacing= staffSpacing;
+	}
+
 }
