@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.Node;
@@ -154,7 +155,7 @@ public class DrawDrumsetNoteTest {
 				F |------------ddddddddddd---------|--------------------------------|
 				B |------------------------o---o---|o-------------------------------|
 			""";
-	
+
 		    Pane pane = new Pane();
 	
 		    Score score = new Score(input);
@@ -178,4 +179,42 @@ public class DrawDrumsetNoteTest {
 			fail("TXMLException thrown\n" + e.getMessage());
 		}
 	}
+
+	@Test
+	void testDrawTie() {
+		try {
+			String input = """
+			  6/4                      13/8
+			  C |X---------------------X-|X-------------------------|
+			  S |------------------------|--------------------o-----|
+			  t |------------------------|---------------------o-o--|
+			  T |------------------------|----------------------o-oo|
+			  B |o---------------------o-|o-------------------------|
+			    |1 + 2 + 3 + 4 + 5 + 6 + |1+2+3+4+5+6+7+8+9+0+1+2+3+|
+			""";
+
+		    Pane pane = new Pane();
+	
+		    Score score = new Score(input);
+	
+		    ScorePartwise scorePartwise = score.getModel();
+	
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 50, 10, 10, 100);
+	
+		    drumsetDrawer.draw();
+
+		    int numberOfTies = 0;
+
+		    for (int i = 0; i < pane.getChildren().size(); i++) {
+		    	if (pane.getChildren().get(i) instanceof  QuadCurve) {
+		    		numberOfTies++;
+		    	}
+		    }
+
+		    assertEquals(6, numberOfTies , "6 ties should have been drawn, but " + numberOfTies + " ties were drawn instead");
+		} catch (TXMLException e) {
+			fail("TXMLException thrown\n" + e.getMessage());
+		}
+	}
+
 }
