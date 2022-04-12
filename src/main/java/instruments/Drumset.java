@@ -778,6 +778,10 @@ public class Drumset {
 		return measureList;
 	}
 
+	public Clef getClef() {
+		return this.clef;
+	}
+
 	public ScorePartwise getScorePartwise() {
 		return this.scorePartwise;
 	}

@@ -140,4 +140,56 @@ public class DrumTest {
 		}
 	}
 
+	@Test
+	void testMeasureList() {
+		try {
+		    String input ="""
+				CC|x---------------|--------x-------|
+				HH|--x-x-x-x-x-x-x-|----------------|
+				SD|----o-------o---|oooo------------|
+				HT|----------------|----oo----------|
+				MT|----------------|------oo--------|
+				BD|o-------o-------|o-------o-------|
+		    """;
+	
+		    Pane pane = new Pane();
+	
+		    Score score = new Score(input);
+	
+		    ScorePartwise scorePartwise = score.getModel();
+	
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150);
+	
+		    assertEquals(scorePartwise.getParts().get(0).getMeasures(), drumsetDrawer.getMeasureList(), "Measure list not properly set");
+		} catch (TXMLException e) {
+			fail("TXMLException thrown\n" + e.getMessage());
+		}
+	}
+
+	@Test
+	void testClef() {
+		try {
+		    String input ="""
+				CC|x---------------|--------x-------|
+				HH|--x-x-x-x-x-x-x-|----------------|
+				SD|----o-------o---|oooo------------|
+				HT|----------------|----oo----------|
+				MT|----------------|------oo--------|
+				BD|o-------o-------|o-------o-------|
+		    """;
+	
+		    Pane pane = new Pane();
+	
+		    Score score = new Score(input);
+	
+		    ScorePartwise scorePartwise = score.getModel();
+	
+		    Drumset drumsetDrawer = new Drumset(scorePartwise, pane, 35, 12, 20, 150);
+	
+		    assertEquals(scorePartwise.getParts().get(0).getMeasures().get(0).getAttributes().getClef(), drumsetDrawer.getClef(), "Measure list not properly set");
+		} catch (TXMLException e) {
+			fail("TXMLException thrown\n" + e.getMessage());
+		}
+	}
+
 }
