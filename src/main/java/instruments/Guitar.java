@@ -703,6 +703,23 @@ public class Guitar {
 				this.six16thActual = 5;
 			}
 		}
+		Rectangle currentHighlightRectangle;
+		if (note != null && note.getDuration() != null) {
+					
+					currentHighlightRectangle = new Rectangle(this.x, this.y-10, this.spacing, ( this.fontSize + LineSpacing)/2.5);
+					currentHighlightRectangle.setFill(Color.TRANSPARENT);
+
+					// Add the rectangle to the pane
+					pane.getChildren().add(currentHighlightRectangle);
+
+					// Add the rectangle and duration to the rectangle and duration lists
+					this.highlightRectangles.add(currentHighlightRectangle);
+					int duration= note.getDuration();
+					double duration2 =1000.0/((double)duration);
+					this.noteDurations.add((double) duration2);
+					System.out.println();
+					System.out.println(note.getDuration());
+				}
 	}
 
 	private Boolean nextHasActual(Note note, List<Note> noteList) {

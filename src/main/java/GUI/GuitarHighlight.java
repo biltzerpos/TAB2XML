@@ -34,7 +34,7 @@ public class GuitarHighlight extends Thread {
 			r.get(i).setStyle("-fx-stroke: red;");
 			if (dur.get(i) != null) {
 				try {
-					Thread.sleep(dur.get(i).intValue()*2);
+					Thread.sleep(dur.get(i).intValue());
 					//System.out.println("Sleeping for"+dur.get(i).intValue());
 				} catch (InterruptedException e) {
 					e.printStackTrace();

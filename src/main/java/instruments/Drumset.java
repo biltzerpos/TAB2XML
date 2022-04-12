@@ -21,7 +21,7 @@ import GUI.draw.DrawDrumsetMusicLines;
 import GUI.draw.DrawDrumsetNote;
 
 public class Drumset {
-
+	private double tempo;
 	private ScorePartwise scorePartwise;
 	@FXML
 	private Pane pane;
@@ -59,11 +59,11 @@ public class Drumset {
 	 * @param musicLineSpaing - The space between music lines in a staff
 	 * @param staffSpacing    - The space between staffs
 	 */
-	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double musicLineSpacing, double staffSpacing) {
+	public Drumset(ScorePartwise scorePartwise, Pane pane, double minimumSpacing, double fontSize, double musicLineSpacing, double staffSpacing, double tempo) {
 		super();
 
 		this.scorePartwise = scorePartwise;
-
+		
 		this.pane = pane;
 
 		this.measureList = this.scorePartwise.getParts().get(0).getMeasures();
@@ -94,6 +94,7 @@ public class Drumset {
 
 		this.drumSlurCoords = new ArrayList<Double[]>();
 		this.cymbalSlurCoords = new ArrayList<Double[]>();
+		this.tempo=tempo;
 	}
 
 	/**
@@ -224,7 +225,9 @@ public class Drumset {
 
 				// Add the rectangle and duration to the rectangle and duration lists
 				this.hightlightRectanlges.add(currentHighlightRectangle);
-				this.noteDurations.add(1000.0 / currentNote.getDuration());
+				double duration = 1000.0/currentNote.getDuration();
+			
+				this.noteDurations.add(60000.0/ (currentNote.getDuration()*tempo));
 			}
 
 			// If the current note is not a chord, increment x position
@@ -307,7 +310,11 @@ public class Drumset {
 
 				// Add the rectangle and duration to the rectangle and duration lists
 				this.hightlightRectanlges.add(currentHighlightRectangle);
-				this.noteDurations.add(1000.0 / currentNote.getDuration());
+				int duration= currentNote.getDuration();
+				double duration2 =1000.0/((double)duration);
+				double duration3= duration2*60/tempo;
+				this.noteDurations.add((double) duration3);
+				//System.out.println((double) duration3);
 			}
 
 			// If the current note is a chord, increment x position
